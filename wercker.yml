@@ -9,6 +9,11 @@ build:
     - script:
         name: go build
         code: |
+          go get ./...
+
+    - script:
+        name: go build
+        code: |
           go build ./...
 
     - script:
