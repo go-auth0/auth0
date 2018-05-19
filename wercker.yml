@@ -4,7 +4,8 @@ build:
 
   steps:
 
-    - setup-go-workspace
+    - wercker/setup-go-workspace:
+        package-dir: github.com/yieldr/go-auth0
 
     - script:
         name: go get
@@ -19,4 +20,7 @@ build:
     - script:
         name: go test
         code: |
-          go test ./...
+          go test ./... -coverprofile=c.out
+
+    - yieldr/test-reporter:
+        id: $CODECLIMATE_REPO_TOKEN

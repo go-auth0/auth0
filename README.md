@@ -2,6 +2,8 @@
 
 [![GoDoc](https://godoc.org/github.com/yieldr/go-auth0?status.svg)](http://godoc.org/github.com/yieldr/go-auth0)
 [![wercker status](https://app.wercker.com/status/f2c3f70b3219eada66488b8c527f19f9/s/master "wercker status")](https://app.wercker.com/project/byKey/f2c3f70b3219eada66488b8c527f19f9)
+[![Maintainability](https://api.codeclimate.com/v1/badges/3610191501844db862e8/maintainability)](https://codeclimate.com/github/yieldr/go-auth0/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/3610191501844db862e8/test_coverage)](https://codeclimate.com/github/yieldr/go-auth0/test_coverage)
 
 ## Documentation
 
