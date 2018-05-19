@@ -28,18 +28,15 @@ func (r *ClientGrantManager) Create(g *ClientGrant) (err error) {
 
 func (r *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 	var gs []*ClientGrant
-
 	err := r.m.get(r.m.getURI("client-grants"), &gs)
 	if err != nil {
 		return nil, err
 	}
-
 	for _, g := range gs {
 		if g.ID == id {
 			return g, nil
 		}
 	}
-
 	return nil, &managementError{
 		StatusCode: 404,
 		Err:        "Not Found",

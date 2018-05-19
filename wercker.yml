@@ -7,7 +7,7 @@ build:
     - setup-go-workspace
 
     - script:
-        name: go build
+        name: go get
         code: |
           go get ./...
 

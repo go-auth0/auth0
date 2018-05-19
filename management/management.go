@@ -74,6 +74,12 @@ type Management struct {
 	// CustomDomain manages Auth0 Custom Domains.
 	CustomDomain *CustomDomainManager
 
+	// RuleManager manages Auth0 Rules.
+	Rule *RuleManager
+
+	// RuleManager manages Auth0 Rules Configs.
+	RuleConfig *RuleConfigManager
+
 	domain   string
 	basePath string
 	timeout  time.Duration
@@ -90,7 +96,7 @@ func New(domain, clientID, clientSecret string) (*Management, error) {
 		domain:   domain,
 		basePath: "api/v2",
 		timeout:  1 * time.Minute,
-		debug:    true,
+		// debug:    true,
 	}
 
 	config := Config{
@@ -141,6 +147,8 @@ func New(domain, clientID, clientSecret string) (*Management, error) {
 	m.Connection = NewConnectionManager(m)
 	m.CustomDomain = NewCustomDomainManager(m)
 	m.ResourceServer = NewResourceServerManager(m)
+	m.Rule = NewRuleManager(m)
+	m.RuleConfig = NewRuleConfigManager(m)
 
 	return m, nil
 }
@@ -217,6 +225,39 @@ func (m *Management) post(uri string, v interface{}) error {
 	return json.NewDecoder(res.Body).Decode(v)
 }
 
+func (m *Management) put(uri string, v interface{}) error {
+
+	var payload bytes.Buffer
+	json.NewEncoder(&payload).Encode(v)
+
+	req, _ := http.NewRequest("PUT", uri, &payload)
+	req.Header.Add("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
+	defer cancel()
+
+	res, err := m.http.Do(req.WithContext(ctx))
+	if err != nil {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+			return err
+		}
+	}
+	defer res.Body.Close()
+
+	if m.debug {
+		m.dump(req, res)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return newError(res.Body)
+	}
+
+	return json.NewDecoder(res.Body).Decode(v)
+}
+
 func (m *Management) patch(uri string, v interface{}) error {
 
 	var payload bytes.Buffer
@@ -285,7 +326,7 @@ func (m *Management) dump(req *http.Request, res *http.Response) {
 	fmt.Printf("%s\n%s\b", b1, b2)
 }
 
-type ManagementError interface {
+type Error interface {
 	Status() int
 	error
 }
