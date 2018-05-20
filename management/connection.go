@@ -3,7 +3,7 @@ package management
 type Connection struct {
 
 	// A generated string identifying the connection.
-	ID string `json:"id,omitempty,omitempty"`
+	ID string `json:"id,omitempty"`
 
 	// The name of the connection. Must start and end with an alphanumeric
 	// character and can only contain alphanumeric characters and '-'. Max

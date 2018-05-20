@@ -13,12 +13,12 @@ type CustomDomain struct {
 	Type string `json:"type,omitempty"`
 
 	// Primary is true if the domain was marked as "primary", false otherwise.
-	Primary string `json:"primary,omitempty"`
+	Primary bool `json:"primary,omitempty"`
 
 	// The custom domain configuration status. Can be any of the following:
 	//
 	// "disabled", "pending", "pending_verification" or "ready"
-	Status string `json:"status,omitempty,omitempty"`
+	Status string `json:"status,omitempty"`
 
 	// The custom domain verification method. The only allowed value is "txt".
 	VerificationMethod string `json:"verification_method,omitempty"`

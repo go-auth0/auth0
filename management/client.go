@@ -19,7 +19,7 @@ type Client struct {
 	AppType string `json:"app_type,omitempty"`
 
 	// The URL of the client logo (recommended size: 150x150)
-	LogoURI string `json:"logo_uri,omitempty,omitempty"`
+	LogoURI string `json:"logo_uri,omitempty"`
 
 	// Whether this client a first party client or not
 	IsFirstParty bool `json:"is_first_party,omitempty"`
