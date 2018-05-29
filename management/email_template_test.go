@@ -1,6 +1,9 @@
 package management
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+)
 
 func TestEmailTemplate(t *testing.T) {
 
@@ -35,7 +38,9 @@ func TestEmailTemplate(t *testing.T) {
 	t.Run("Create", func(t *testing.T) {
 		err = m.EmailTemplate.Create(et)
 		if err != nil {
-			t.Fatal(err)
+			if err, ok := err.(Error); ok && err.Status() != http.StatusConflict {
+				t.Fatal(err)
+			}
 		}
 		t.Logf("%v\n", et)
 	})
