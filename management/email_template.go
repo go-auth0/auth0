@@ -49,9 +49,9 @@ func (em *EmailTemplateManager) Read(template string) (*EmailTemplate, error) {
 }
 
 func (em *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
-	return em.m.put(em.m.getURI("email-templates", template), e)
+	return em.m.patch(em.m.getURI("email-templates", template), e)
 }
 
-func (em *EmailTemplateManager) Delete(template string) (err error) {
-	return em.m.delete(em.m.getURI("email-templates", template))
+func (em *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
+	return em.m.put(em.m.getURI("email-templates", template), e)
 }
