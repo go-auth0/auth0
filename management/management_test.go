@@ -1,6 +1,8 @@
 package management
 
-import "os"
+import (
+	"os"
+)
 
 var m *Management
 
