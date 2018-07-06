@@ -1,6 +1,10 @@
 package management
 
-import "os"
+import (
+	"net/url"
+	"os"
+	"testing"
+)
 
 var m *Management
 
@@ -15,5 +19,69 @@ func init() {
 	m, err = New(Auth0Domain, Auth0ClientID, Auth0ClientSecret)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func TestOptionFields(t *testing.T) {
+	v := make(url.Values)
+	WithFields("foo", "bar")(v)
+
+	fields := v.Get("fields")
+	if fields != "foo,bar" {
+		t.Errorf("Expected %q, but got %q", fields, "foo,bar")
+	}
+
+	includeFields := v.Get("include_fields")
+	if includeFields != "true" {
+		t.Errorf("Expected %q, but got %q", includeFields, "true")
+	}
+
+	WithoutFields("foo", "bar")(v)
+
+	includeFields = v.Get("include_fields")
+	if includeFields != "false" {
+		t.Errorf("Expected %q, but got %q", includeFields, "true")
+	}
+}
+
+func TestOptionPage(t *testing.T) {
+	v := make(url.Values)
+	Page(3)(v)
+	PerPage(10)(v)
+
+	page := v.Get("page")
+	if page != "3" {
+		t.Errorf("Expected %q, but got %q", page, "3")
+	}
+
+	perPage := v.Get("per_page")
+	if perPage != "10" {
+		t.Errorf("Expected %q, but got %q", perPage, "3")
+	}
+}
+
+func TestOptionTotals(t *testing.T) {
+	v := make(url.Values)
+	IncludeTotals(true)(v)
+
+	includeTotals := v.Get("include_totals")
+	if includeTotals != "true" {
+		t.Errorf("Expected %q, but got %q", includeTotals, "true")
+	}
+}
+
+func TestOptionParameter(t *testing.T) {
+	v := make(url.Values)
+	Parameter("foo", "123")(v)
+	Parameter("bar", "xyz")(v)
+
+	foo := v.Get("foo")
+	if foo != "123" {
+		t.Errorf("Expected %q, but got %q", foo, "123")
+	}
+
+	bar := v.Get("bar")
+	if bar != "xyz" {
+		t.Errorf("Expected %q, but got %q", bar, "xyz")
 	}
 }
