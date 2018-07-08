@@ -88,8 +88,11 @@ type Management struct {
 	// EmailTemplate manages Auth0 Email Templates.
 	EmailTemplate *EmailTemplateManager
 
-	// User  manages Auth0 User resources.
+	// User manages Auth0 User resources.
 	User *UserManager
+
+	// Tenant manages your Auth0 Tenant.
+	Tenant *TenantManager
 
 	domain   string
 	basePath string
@@ -163,6 +166,7 @@ func New(domain, clientID, clientSecret string) (*Management, error) {
 	m.EmailTemplate = NewEmailTemplateManager(m)
 	m.Email = NewEmailManager(m)
 	m.User = NewUserManager(m)
+	m.Tenant = NewTenantManager(m)
 
 	return m, nil
 }
