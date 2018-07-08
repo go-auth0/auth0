@@ -17,7 +17,7 @@ The Auth0 Management API is meant to be used by back-end servers or trusted part
 
 Initialize your client class with an API v2 token and a domain.
 
-```
+```go
 import "github.com/yieldr/go-auth0/management"
 
 m, err := management.New("<auth0-domain>", "<auth0-client-id>", "<auth0-client-secret>")
@@ -28,7 +28,7 @@ if err != nil {
 
 With an authenticated management client we can now interact with the Auth0 Management API.
 
-```
+```go
 c := &Client{
 	Name: "Client Name",
 	Description: "Long description of client",
