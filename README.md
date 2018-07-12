@@ -60,4 +60,4 @@ Following is a list of supported Auth0 resources.
 - [ ] [Guardian](https://auth0.com/docs/api/management/v2#!/Guardian/get_factors)
 - [ ] [Jobs](https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id)
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
-- [ ] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
+- [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
