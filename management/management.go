@@ -97,6 +97,9 @@ type Management struct {
 	// Ticket creates verify email or change password tickets.
 	Ticket *TicketManager
 
+	// Stat is used to retrieve usage statistics.
+	Stat *StatManager
+
 	domain   string
 	basePath string
 	timeout  time.Duration
@@ -171,6 +174,7 @@ func New(domain, clientID, clientSecret string) (*Management, error) {
 	m.User = NewUserManager(m)
 	m.Tenant = NewTenantManager(m)
 	m.Ticket = NewTicketManager(m)
+	m.Stat = NewStatManager(m)
 
 	return m, nil
 }

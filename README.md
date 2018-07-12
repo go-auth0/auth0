@@ -59,5 +59,6 @@ Following is a list of supported Auth0 resources.
 - [x] [Emails](https://auth0.com/docs/api/management/v2#!/Emails/get_provider)
 - [ ] [Guardian](https://auth0.com/docs/api/management/v2#!/Guardian/get_factors)
 - [ ] [Jobs](https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id)
+- [x] [Stats](https://auth0.com/docs/api/management/v2#!/Stats/get_active_users)
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
 - [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
