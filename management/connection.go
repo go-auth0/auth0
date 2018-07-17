@@ -61,14 +61,18 @@ type ConnectionOptions struct {
 	// Options for password dictionary policy.
 	PasswordDictionary map[string]interface{} `json:"password_dictionary,omitempty"`
 
-	APIEnableUsers   bool `json:"api_enable_users,omitempty"`
-	BasicProfile     bool `json:"basic_profile,omitempty"`
-	ExtAdmin         bool `json:"ext_admin,omitempty"`
-	ExtIsSuspended   bool `json:"ext_is_suspended,omitempty"`
-	ExtAgreedTerms   bool `json:"ext_agreed_terms,omitempty"`
-	ExtGroups        bool `json:"ext_groups,omitempty"`
-	ExtAssignedPlans bool `json:"ext_assigned_plans,omitempty"`
-	ExtProfile       bool `json:"ext_profile,omitempty"`
+	APIEnableUsers              bool `json:"api_enable_users,omitempty"`
+	BasicProfile                bool `json:"basic_profile,omitempty"`
+	ExtAdmin                    bool `json:"ext_admin,omitempty"`
+	ExtIsSuspended              bool `json:"ext_is_suspended,omitempty"`
+	ExtAgreedTerms              bool `json:"ext_agreed_terms,omitempty"`
+	ExtGroups                   bool `json:"ext_groups,omitempty"`
+	ExtAssignedPlans            bool `json:"ext_assigned_plans,omitempty"`
+	ExtProfile                  bool `json:"ext_profile,omitempty"`
+	EnableDatabaseCustomization bool `json:"enableDatabaseCustomization,omitempty"`
+	BrutForceProtection         bool `json:"brut_force_protection,omitempty"`
+	ImportMode                  bool `json:"import_mode,omitempty"`
+	DisableSignup               bool `json:"disable_signup,omitempty"`
 
 	// Options for adding parameters in the request to the upstream IdP.
 	UpstreamParams interface{} `json:"upstream_params,omitempty"`
