@@ -1,7 +1,6 @@
 package management
 
 type Connection struct {
-
 	// A generated string identifying the connection.
 	ID string `json:"id,omitempty"`
 
@@ -44,7 +43,6 @@ type Connection struct {
 
 // ConnectionOptions general options
 type ConnectionOptions struct {
-
 	// Options for validation.
 	Validation map[string]interface{} `json:"validation,omitempty"`
 
@@ -70,7 +68,7 @@ type ConnectionOptions struct {
 	ExtAssignedPlans            bool `json:"ext_assigned_plans,omitempty"`
 	ExtProfile                  bool `json:"ext_profile,omitempty"`
 	EnableDatabaseCustomization bool `json:"enableDatabaseCustomization,omitempty"`
-	BrutForceProtection         bool `json:"brut_force_protection,omitempty"`
+	BruteForceProtection        bool `json:"brute_force_protection,omitempty"`
 	ImportMode                  bool `json:"import_mode,omitempty"`
 	DisableSignup               bool `json:"disable_signup,omitempty"`
 
