@@ -16,7 +16,7 @@ var (
 
 func init() {
 	var err error
-	m, err = New(Auth0Domain, Auth0ClientID, Auth0ClientSecret)
+	m, err = New(Auth0Domain, Auth0ClientID, Auth0ClientSecret, WithDebug(true))
 	if err != nil {
 		panic(err)
 	}
