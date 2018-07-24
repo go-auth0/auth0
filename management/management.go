@@ -237,7 +237,6 @@ func (m *Management) get(uri string, v interface{}) error {
 
 func (m *Management) post(uri string, v interface{}) error {
 	return m.request("POST", uri, v)
-
 }
 
 func (m *Management) put(uri string, v interface{}) error {
