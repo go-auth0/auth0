@@ -151,7 +151,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		Expiry:      time.Now().Add(time.Duration(auth.Token.ExpiresIn) * time.Second),
 	})
 
-	m.http = RetryClient(oauth2.NewClient(context.Background(), ts))
+	m.http = wrapRetry(oauth2.NewClient(context.Background(), ts))
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
