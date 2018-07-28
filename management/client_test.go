@@ -33,6 +33,15 @@ func TestClient(t *testing.T) {
 		t.Logf("%v\n", c)
 	})
 
+	t.Run("List", func(t *testing.T) {
+		var cs []*Client
+		cs, err = m.Client.List()
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", cs)
+	})
+
 	t.Run("Update", func(t *testing.T) {
 		id := c.ClientID
 		c.ClientID = "" // read-only
@@ -40,6 +49,19 @@ func TestClient(t *testing.T) {
 		err = m.Client.Update(id, c)
 		if err != nil {
 			t.Error(err)
+		}
+		t.Logf("%v\n", c)
+	})
+
+	t.Run("RotateSecret", func(t *testing.T) {
+		id := c.ClientID
+		secret := c.ClientSecret
+		c, err = m.Client.RotateSecret(id)
+		if err != nil {
+			t.Error(err)
+		}
+		if secret == c.ClientSecret {
+			t.Errorf("expected secret to change but didn't")
 		}
 		t.Logf("%v\n", c)
 	})

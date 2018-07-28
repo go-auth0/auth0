@@ -83,6 +83,9 @@ type Management struct {
 	// CustomDomain manages Auth0 Custom Domains.
 	CustomDomain *CustomDomainManager
 
+	// Grant manages Auth0 Grants.
+	Grant *GrantManager
+
 	// RuleManager manages Auth0 Rules.
 	Rule *RuleManager
 
@@ -157,6 +160,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.ClientGrant = NewClientGrantManager(m)
 	m.Connection = NewConnectionManager(m)
 	m.CustomDomain = NewCustomDomainManager(m)
+	m.Grant = NewGrantManager(m)
 	m.ResourceServer = NewResourceServerManager(m)
 	m.Rule = NewRuleManager(m)
 	m.RuleConfig = NewRuleConfigManager(m)
