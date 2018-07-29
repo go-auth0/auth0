@@ -16,6 +16,13 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// Auth embeds a Config and Token structs so it can be used to authenticate our
+// http client.
+type Auth struct {
+	AuthConfig
+	Token
+}
+
 // AuthConfig is the payload used to receive an Auth0 management token. This token
 // is a JWT, it contains specific granted permissions (known as scopes), and it
 // is signed with a application API key and secret for the entire tenant.
@@ -53,13 +60,6 @@ type Token struct {
 	ExpiresIn   int    `json:"expires_in"`
 	Scope       string `json:"scope"`
 	TokenType   string `json:"token_type"`
-}
-
-// Auth embeds a Config and Token structs so it can be used to authenticate our
-// http client.
-type Auth struct {
-	AuthConfig
-	Token
 }
 
 // Management is an Auth0 management client used to interact with the Auth0
