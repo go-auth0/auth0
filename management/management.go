@@ -86,6 +86,9 @@ type Management struct {
 	// Grant manages Auth0 Grants.
 	Grant *GrantManager
 
+	// Log reads Auth0 Logs.
+	Log *LogManager
+
 	// RuleManager manages Auth0 Rules.
 	Rule *RuleManager
 
@@ -154,13 +157,14 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		Expiry:      time.Now().Add(time.Duration(auth.Token.ExpiresIn) * time.Second),
 	})
 
-	m.http = wrapRetry(oauth2.NewClient(context.Background(), ts))
+	m.http = wrapUserAgent(wrapRetry(oauth2.NewClient(context.Background(), ts)))
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
 	m.Connection = NewConnectionManager(m)
 	m.CustomDomain = NewCustomDomainManager(m)
 	m.Grant = NewGrantManager(m)
+	m.Log = NewLogManager(m)
 	m.ResourceServer = NewResourceServerManager(m)
 	m.Rule = NewRuleManager(m)
 	m.RuleConfig = NewRuleConfigManager(m)
