@@ -84,6 +84,13 @@ type ConnectionOptions struct {
 	WaadCommonEndpoint bool          `json:"waad_common_endpoint,omitempty"`
 	AppID              string        `json:"app_id,omitempty"`
 	AppDomain          string        `json:"app_domain,omitempty"`
+
+	// Scripts for the connction
+	// Allowed keys are: "get_user", "login", "create", "verify", "change_password" or "delete".
+	CustomScripts map[string]interface{} `json:"validation,omitempty"`
+	// configuration variables that can be used in custom scripts
+	Configuration map[string]interface{} `json:"validation,omitempty"`
+
 }
 
 type ConnectionManager struct {
