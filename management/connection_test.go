@@ -36,12 +36,26 @@ func TestConnection(t *testing.T) {
 		c.ID = ""       // read-only
 		c.Name = ""     // read-only
 		c.Strategy = "" // read-only
+		c.Options = &ConnectionOptions{
+			CustomScripts: map[string]interface{}{"get_user": "function(email, callback) { return callback(null) }"},
+			Configuration: map[string]interface{}{"foo": "bar"},
+		}
+
+		cc := c // make a copy so we can compare later
 
 		err = m.Connection.Update(id, c)
 		if err != nil {
 			t.Error(err)
 		}
 		t.Logf("%v\n", c)
+
+		if c.Options.CustomScripts["get_user"] != cc.Options.CustomScripts["get_user"] {
+			t.Fatal(`unexpected result for "get_user" custom script`)
+		}
+
+		if _, exist := c.Options.Configuration["foo"]; !exist {
+			t.Fatal(`missing key "foo"`)
+		}
 	})
 
 	t.Run("Delete", func(t *testing.T) {
