@@ -359,3 +359,76 @@ func Parameter(key, value string) reqOption {
 		v.Set(key, value)
 	}
 }
+
+// Bool returns a pointer to the bool value passed in.
+func Bool(b bool) *bool { return &b }
+
+// BoolValue returns the value of the bool pointer passed in or false if the
+// pointer is nil.
+func BoolValue(b *bool) bool {
+	if b != nil {
+		return *b
+	}
+	return false
+}
+
+// BoolValue is similar to BoolValue but it also reports whether the value was
+// present.
+func BoolValueOk(b *bool) (bool, bool) {
+	if b != nil {
+		return *b, true
+	}
+	return false, false
+}
+
+// Int returns a pointer to the int value passed in.
+func Int(i int) *int {
+	return &i
+}
+
+// IntValue returns the value of the int pointer passed in or 0 if the pointer
+// is nil.
+func IntValue(i *int) int {
+	if i != nil {
+		return *i
+	}
+	return 0
+}
+
+// IntValueOk is similar to IntValue but it also reports whether the value was
+// present.
+func IntValueOk(i *int) (int, bool) {
+	if i != nil {
+		return *i, true
+	}
+	return 0, false
+}
+
+// String returns a pointer to the string value passed in.
+func String(s string) *string {
+	return &s
+}
+
+// String returns a pointer to the string value passed in formatted using
+// fmt.Sprintf.
+func Stringf(s string, v ...interface{}) *string {
+	return String(fmt.Sprintf(s, v...))
+}
+
+// StringValue returns the value of the string pointer passed in or "" if the
+// pointer is nil.
+func StringValue(v *string) string {
+	if v != nil {
+		return *v
+	}
+	return ""
+}
+
+// StringValueOk is similar to StringValue but it also reports whether the value
+// was present.
+func StringValueOk(v *string) (string, bool) {
+	if v != nil {
+		return *v, true
+	}
+	return "", false
+}
