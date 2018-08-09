@@ -3,19 +3,21 @@ package management
 import (
 	"net/http"
 	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestEmailTemplate(t *testing.T) {
 
 	e := &Email{
-		Name:               "smtp",
-		Enabled:            true,
-		DefaultFromAddress: "no-reply@example.com",
+		Name:               auth0.String("smtp"),
+		Enabled:            auth0.Bool(true),
+		DefaultFromAddress: auth0.String("no-reply@example.com"),
 		Credentials: &EmailCredentials{
-			SMTPHost: "smtp.example.com",
-			SMTPPort: 587,
-			SMTPUser: "user",
-			SMTPPass: "pass",
+			SMTPHost: auth0.String("smtp.example.com"),
+			SMTPPort: auth0.Int(587),
+			SMTPUser: auth0.String("user"),
+			SMTPPass: auth0.String("pass"),
 		},
 	}
 
@@ -26,13 +28,13 @@ func TestEmailTemplate(t *testing.T) {
 	defer m.Email.Delete()
 
 	et := &EmailTemplate{
-		Template:  "verify_email",
-		Body:      "<html><body><h1>Verify your email</h1></body></html>",
-		From:      "me@example.com",
-		ResultURL: "https://www.example.com/verify-email",
-		Subject:   "Verify your email",
-		Syntax:    "liquid",
-		Enabled:   true,
+		Template:  auth0.String("verify_email"),
+		Body:      auth0.String("<html><body><h1>Verify your email</h1></body></html>"),
+		From:      auth0.String("me@example.com"),
+		ResultURL: auth0.String("https://www.example.com/verify-email"),
+		Subject:   auth0.String("Verify your email"),
+		Syntax:    auth0.String("liquid"),
+		Enabled:   auth0.Bool(true),
 	}
 
 	t.Run("Create", func(t *testing.T) {
@@ -46,7 +48,7 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		et, err = m.EmailTemplate.Read(et.Template)
+		et, err = m.EmailTemplate.Read(auth0.StringValue(et.Template))
 		if err != nil {
 			t.Error(err)
 		}
@@ -54,8 +56,12 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		e.Enabled = true
-		err = m.EmailTemplate.Update(et.Template, et)
+
+		et.Subject = auth0.String("Let's get you verified!")
+		et.Body = auth0.String("<html><body><h1>Let's get you verified!</h1></body></html>")
+		et.From = auth0.String("someone@example.com")
+
+		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), et)
 		if err != nil {
 			t.Error(err)
 		}
@@ -63,8 +69,8 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		et.Enabled = false
-		err = m.EmailTemplate.Update(et.Template, et)
+		et.Enabled = auth0.Bool(false)
+		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), et)
 		if err != nil {
 			t.Error(err)
 		}

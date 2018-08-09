@@ -1,18 +1,22 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestEmail(t *testing.T) {
 
 	e := &Email{
-		Name:               "smtp",
-		Enabled:            true,
-		DefaultFromAddress: "no-reply@example.com",
+		Name:               auth0.String("smtp"),
+		Enabled:            auth0.Bool(true),
+		DefaultFromAddress: auth0.String("no-reply@example.com"),
 		Credentials: &EmailCredentials{
-			SMTPHost: "smtp.example.com",
-			SMTPPort: 587,
-			SMTPUser: "user",
-			SMTPPass: "pass",
+			SMTPHost: auth0.String("smtp.example.com"),
+			SMTPPort: auth0.Int(587),
+			SMTPUser: auth0.String("user"),
+			SMTPPass: auth0.String("pass"),
 		},
 	}
 
@@ -35,7 +39,10 @@ func TestEmail(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		e.Enabled = true
+
+		e.Enabled = auth0.Bool(false)
+		e.DefaultFromAddress = auth0.String("info@example.com")
+
 		err = m.Email.Update(e)
 		if err != nil {
 			t.Error(err)

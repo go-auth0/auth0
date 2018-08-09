@@ -17,7 +17,10 @@ func TestStat(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		for _, sd := range s {
+		for i, sd := range s {
+			if i > 2 {
+				break
+			}
 			t.Logf("%v\n", sd)
 		}
 	})

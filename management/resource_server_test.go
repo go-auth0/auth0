@@ -1,21 +1,22 @@
 package management
 
 import (
-	"fmt"
 	"testing"
 	"time"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestResourceServer(t *testing.T) {
 
 	s := &ResourceServer{
-		Name:             fmt.Sprintf("Test Resource Server (%s)", time.Now().Format(time.StampMilli)),
-		Identifier:       "https://api.example.com/",
-		SigningAlgorithm: "HS256",
+		Name:             auth0.Stringf("Test Resource Server (%s)", time.Now().Format(time.StampMilli)),
+		Identifier:       auth0.String("https://api.example.com/"),
+		SigningAlgorithm: auth0.String("HS256"),
 		Scopes: []*ResourceServerScope{
 			{
-				Value:       "create:resource",
-				Description: "Create Resource",
+				Value:       auth0.String("create:resource"),
+				Description: auth0.String("Create Resource"),
 			},
 		},
 	}
@@ -31,7 +32,7 @@ func TestResourceServer(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		s, err = m.ResourceServer.Read(s.ID)
+		s, err = m.ResourceServer.Read(auth0.StringValue(s.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -39,15 +40,19 @@ func TestResourceServer(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := s.ID
-		s.ID = ""         // read-only
-		s.Identifier = "" // read-only
-		s.AllowOfflineAccess = true
-		s.SigningAlgorithm = "RS256"
-		s.SkipConsentForVerifiableFirstPartyClients = true
+
+		id := auth0.StringValue(s.ID)
+
+		s.ID = nil         // read-only
+		s.Identifier = nil // read-only
+
+		s.AllowOfflineAccess = auth0.Bool(true)
+		s.SigningAlgorithm = auth0.String("RS256")
+		s.SkipConsentForVerifiableFirstPartyClients = auth0.Bool(true)
+
 		s.Scopes = append(s.Scopes, &ResourceServerScope{
-			Value:       "update:resource",
-			Description: "Update Resource",
+			Value:       auth0.String("update:resource"),
+			Description: auth0.String("Update Resource"),
 		})
 
 		err = m.ResourceServer.Update(id, s)
@@ -58,7 +63,7 @@ func TestResourceServer(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.ResourceServer.Delete(s.ID)
+		err = m.ResourceServer.Delete(auth0.StringValue(s.ID))
 		if err != nil {
 			t.Error(err)
 		}

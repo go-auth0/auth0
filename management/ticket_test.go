@@ -1,25 +1,32 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestTicket(t *testing.T) {
 
 	var err error
 
 	u := &User{
-		Connection: "Username-Password-Authentication",
-		Email:      "chuck@chucknorris.com",
-		Password:   "I have a password and its a secret",
+		Connection: auth0.String("Username-Password-Authentication"),
+		Email:      auth0.String("chuck@chucknorris.com"),
+		Password:   auth0.String("I have a password and its a secret"),
 	}
 	m.User.Create(u)
-	defer m.User.Delete(u.ID)
+
+	userID := auth0.StringValue(u.ID)
+
+	defer m.User.Delete(userID)
 
 	t.Run("VerifyEmail", func(t *testing.T) {
 
 		v := &Ticket{
-			ResultURL: "https://example.com/verify-email",
-			UserID:    u.ID,
-			TTLSec:    3600,
+			ResultURL: auth0.String("https://example.com/verify-email"),
+			UserID:    auth0.String(userID),
+			TTLSec:    auth0.Int(3600),
 		}
 
 		v, err = m.Ticket.VerifyEmail(v)
@@ -27,15 +34,15 @@ func TestTicket(t *testing.T) {
 			t.Error(err)
 		}
 
-		t.Logf("%#v\n", v)
+		t.Logf("%v\n", v)
 	})
 
 	t.Run("ChangePassword", func(t *testing.T) {
 
 		v := &Ticket{
-			ResultURL: "https://example.com/verify-email",
-			UserID:    u.ID,
-			TTLSec:    3600,
+			ResultURL: auth0.String("https://example.com/change-password"),
+			UserID:    auth0.String(userID),
+			TTLSec:    auth0.Int(3600),
 		}
 
 		v, err = m.Ticket.ChangePassword(v)
@@ -43,6 +50,6 @@ func TestTicket(t *testing.T) {
 			t.Error(err)
 		}
 
-		t.Logf("%#v\n", v)
+		t.Logf("%v\n", v)
 	})
 }

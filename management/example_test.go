@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	auth0 "github.com/yieldr/go-auth0"
 	"github.com/yieldr/go-auth0/management"
 )
 
@@ -20,16 +21,16 @@ func ExampleUser() {
 	}
 
 	u := &management.User{
-		Connection: "Username-Password-Authentication",
-		Email:      "smith@example.com",
-		Password:   "F4e3DA1a6cDD",
+		Connection: auth0.String("Username-Password-Authentication"),
+		Email:      auth0.String("smith@example.com"),
+		Password:   auth0.String("F4e3DA1a6cDD"),
 	}
 
 	err = m.User.Create(u)
 	if err != nil {
 		fmt.Printf("Failed creating user. %s", err)
 	}
-	defer m.User.Delete(u.ID)
+	defer m.User.Delete(auth0.StringValue(u.ID))
 
 	fmt.Printf("User created!")
 	// Output: User created!

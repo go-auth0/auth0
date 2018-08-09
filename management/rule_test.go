@@ -1,13 +1,17 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestRule(t *testing.T) {
 
 	r := &Rule{
-		Name:    "test-rule",
-		Script:  "function (user, context, callback) { callback(null, user, context); }",
-		Enabled: false,
+		Name:    auth0.String("test-rule"),
+		Script:  auth0.String("function (user, context, callback) { callback(null, user, context); }"),
+		Enabled: auth0.Bool(false),
 	}
 
 	var err error
@@ -21,7 +25,7 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		r, err = m.Rule.Read(r.ID)
+		r, err = m.Rule.Read(auth0.StringValue(r.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -29,9 +33,11 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := r.ID
-		r.ID = "" // read-only
-		r.Enabled = true
+		id := auth0.StringValue(r.ID)
+
+		r.ID = nil // read-only
+		r.Order = auth0.Int(5)
+		r.Enabled = auth0.Bool(true)
 
 		err = m.Rule.Update(id, r)
 		if err != nil {
@@ -41,7 +47,7 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Rule.Delete(r.ID)
+		err = m.Rule.Delete(auth0.StringValue(r.ID))
 		if err != nil {
 			t.Error(err)
 		}

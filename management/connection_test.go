@@ -1,16 +1,17 @@
 package management
 
 import (
-	"fmt"
 	"testing"
 	"time"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestConnection(t *testing.T) {
 
 	c := &Connection{
-		Name:     fmt.Sprintf("Test-Connection-%d", time.Now().Unix()),
-		Strategy: "auth0",
+		Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
+		Strategy: auth0.String("auth0"),
 	}
 
 	var err error
@@ -24,7 +25,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.Connection.Read(c.ID)
+		c, err = m.Connection.Read(auth0.StringValue(c.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -32,12 +33,22 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := c.ID
-		c.ID = ""       // read-only
-		c.Name = ""     // read-only
-		c.Strategy = "" // read-only
+
+		id := auth0.StringValue(c.ID)
+
+		c.ID = nil       // read-only
+		c.Name = nil     // read-only
+		c.Strategy = nil // read-only
+
 		c.Options = &ConnectionOptions{
-			CustomScripts: map[string]interface{}{"get_user": "function(email, callback) { return callback(null) }"},
+
+			ExtAdmin:       auth0.Bool(true),
+			ExtGroups:      auth0.Bool(true),
+			ExtProfile:     auth0.Bool(true),
+			ExtIsSuspended: auth0.Bool(false), // try some zero values
+			ExtAgreedTerms: auth0.Bool(false),
+
+			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
 			Configuration: map[string]interface{}{"foo": "bar"},
 		}
 
@@ -47,6 +58,7 @@ func TestConnection(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
+
 		t.Logf("%v\n", c)
 
 		if c.Options.CustomScripts["get_user"] != cc.Options.CustomScripts["get_user"] {
@@ -59,7 +71,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Connection.Delete(c.ID)
+		err = m.Connection.Delete(auth0.StringValue(c.ID))
 		if err != nil {
 			t.Error(err)
 		}

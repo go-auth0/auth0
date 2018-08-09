@@ -2,7 +2,8 @@ package management
 
 import (
 	"testing"
-	"time"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestLog(t *testing.T) {
@@ -20,7 +21,7 @@ func TestLog(t *testing.T) {
 
 		for i, log := range logs {
 
-			t.Logf("%s - %s [%s]\n", log.ID, log.Date.Format(time.RFC3339), log.TypeName())
+			t.Logf("%v\n", log)
 
 			// Save the first log for reading later
 			if i == 0 {
@@ -30,26 +31,22 @@ func TestLog(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-
-		log, err := m.Log.Read(firstLog.ID)
+		log, err := m.Log.Read(auth0.StringValue(firstLog.ID))
 		if err != nil {
 			t.Error(err)
 		}
-
-		t.Logf("%s - %s [%s]\n", log.ID, log.Date.Format(time.RFC3339), log.TypeName())
+		t.Logf("%v\n", log)
 	})
 
 	t.Run("Search", func(t *testing.T) {
-
 		// Search by type "Success Exchange" and limit results to 5 entries
 		logs, err := m.Log.List(Parameter("q", `type:"seacft"`), PerPage(5))
 		if err != nil {
 			t.Error(err)
 		}
-
 		for _, log := range logs {
-			t.Logf("%s - %s [%s]\n", log.ID, log.Date.Format(time.RFC3339), log.TypeName())
-			if log.Type != "seacft" {
+			t.Logf("%v\n", log)
+			if auth0.StringValue(log.Type) != "seacft" {
 				t.Error("unexpected log type found")
 			}
 		}

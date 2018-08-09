@@ -9,14 +9,14 @@ import (
 var m *Management
 
 var (
-	Auth0Domain       = os.Getenv("AUTH0_DOMAIN")
-	Auth0ClientID     = os.Getenv("AUTH0_CLIENT_ID")
-	Auth0ClientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
+	auth0Domain       = os.Getenv("AUTH0_DOMAIN")
+	auth0ClientID     = os.Getenv("AUTH0_CLIENT_ID")
+	auth0ClientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
 )
 
 func init() {
 	var err error
-	m, err = New(Auth0Domain, Auth0ClientID, Auth0ClientSecret, WithDebug(true))
+	m, err = New(auth0Domain, auth0ClientID, auth0ClientSecret, WithDebug(true))
 	if err != nil {
 		panic(err)
 	}
