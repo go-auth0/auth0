@@ -13,6 +13,24 @@ func TestClient(t *testing.T) {
 		Name: fmt.Sprintf("Test Client (%s)",
 			time.Now().Format(time.StampMilli)),
 		Description: "This is just a test client.",
+		Callbacks: []interface{}{"https://example.com/saml"},
+		Addons: &Addons{
+			Samlp: &Samlp{
+				Audience: "https://example.com/saml",
+				Mappings: &SamlMappings{
+					Email: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+					Name: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+				},
+				CreateUpnClaim: false,
+				PassthroughClaimsWithNoMapping: false,
+				MapUnknownClaimsAsIs: false,
+				MapIdentities: false,
+				NameIdentifierFormat: "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
+				NameIdentifierProbes: []string{
+					"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+				},
+			},
+		},
 	}
 
 	var err error

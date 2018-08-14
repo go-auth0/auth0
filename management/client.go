@@ -65,7 +65,7 @@ type Client struct {
 	CustomLoginPage        string                 `json:"custom_login_page,omitempty"`
 	CustomLoginPagePreview string                 `json:"custom_login_page_preview,omitempty"`
 	FormTemplate           string                 `json:"form_template,omitempty"`
-	Addons                 map[string]interface{} `json:"addons,omitempty"`
+	Addons                 *Addons                `json:"addons,omitempty"`
 
 	// Defines the requested authentication method for the token endpoint.
 	// Possible values are:
@@ -89,6 +89,37 @@ type ClientJWTConfiguration struct {
 
 	// Algorithm used to sign JWTs. Can be "HS256" or "RS256"
 	Algorithm string `json:"alg,omitempty"`
+}
+
+type Addons struct {
+	Aws                  map[string]string `json:"aws,omitempty"`
+	AzureBlob            map[string]string `json:"azure_blob,omitempty"`
+	AzureSb              map[string]string `json:"azure_sb,omitempty"`
+	Rms                  map[string]string `json:"rms,omitempty"`
+	MsCRM                map[string]string `json:"msscrm,omitempty"`
+	Slack                map[string]string `json:"slack,omitempty"`
+	Sentry               map[string]string `json:"sentry,omitempty"`
+	Box                  map[string]string `json:"box,omitempty"`
+	CloudBees            map[string]string `json:"cloudbees,omitempty"`
+	Concur               map[string]string `json:"concur,omitempty"`
+	Dropbox              map[string]string `json:"dropbox,omitempty"`
+	EchoSign             map[string]string `json:"echosign,omitempty"`
+	Egnyte               map[string]string `json:"egnyte,omitempty"`
+	Firebase             map[string]string `json:"firebase,omitempty"`
+	NewRelic             map[string]string `json:"newrelic,omitempty"`
+	Office365            map[string]string `json:"office365,omitempty"`
+	Salesforce           map[string]string `json:"salesforce,omitempty"`
+	SalesforceApi        map[string]string `json:"salesforce_api,omitempty"`
+	SalseforceSandboxApi map[string]string `json:"salesforce_sandbox_api,omitempty"`
+	Samlp                *Samlp            `json:"samlp,omitempty"`
+	Layer                map[string]string `json:"layer,omitempty"`
+	SapApi               map[string]string `json:"sap_api,omitempty"`
+	Sharepoint           map[string]string `json:"sharepoint,omitempty"`
+	SpringCm             map[string]string `json:"springcm,omitempty"`
+	Wams                 map[string]string `json:"wams,omitempty"`
+	WsFed                map[string]string `json:"wsfed,omitempty"`
+	Zendesk              map[string]string `json:"zendesk,omitempty"`
+	Zoom                 map[string]string `json:"zoom,omitempty"`
 }
 
 type ClientManager struct {
