@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -129,7 +130,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		domain:   domain,
 		basePath: "api/v2",
 		timeout:  1 * time.Minute,
-		debug:    false,
+		debug:    debugFromEnv(),
 	}
 
 	for _, option := range options {
@@ -263,6 +264,11 @@ func (m *Management) dump(req *http.Request, res *http.Response) {
 	b1, _ := httputil.DumpRequest(req, true)
 	b2, _ := httputil.DumpResponse(res, true)
 	log.Printf("%s\n%s\b\n", b1, b2)
+}
+
+func debugFromEnv() bool {
+	v := os.Getenv("AUTH0_DEBUG")
+	return v == "1" || v == "true" || v == "on"
 }
 
 type apiOption func(*Management)
