@@ -13,55 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"golang.org/x/oauth2"
 )
-
-// Auth embeds a Config and Token structs so it can be used to authenticate our
-// http client.
-type Auth struct {
-	AuthConfig
-	Token
-}
-
-// AuthConfig is the payload used to receive an Auth0 management token. This token
-// is a JWT, it contains specific granted permissions (known as scopes), and it
-// is signed with a application API key and secret for the entire tenant.
-//
-// 	{
-// 	  "audience": "https://YOUR_AUTH0_DOMAIN/api/v2/",
-// 	  "client_id": "YOUR_CLIENT_ID",
-// 	  "client_secret": "YOUR_CLIENT_SECRET",
-// 	  "grant_type": "client_credentials"
-// 	}
-//
-// See: https://auth0.com/docs/api/management/v2/tokens#1-get-a-token
-//
-type AuthConfig struct {
-	Audience     string `json:"audience"`
-	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
-	GrantType    string `json:"grant_type"`
-}
-
-// Token is the response body from the request to receive an Auth0 management
-// token.
-//
-// 	{
-// 	  "access_token": "eyJ...Ggg",
-// 	  "expires_in": 86400,
-// 	  "scope": "read:clients create:clients read:client_keys",
-// 	  "token_type": "Bearer"
-// 	}
-//
-// See: https://auth0.com/docs/api/management/v2/tokens#2-use-the-token
-//
-type Token struct {
-	AccessToken string `json:"access_token"`
-	ExpiresIn   int    `json:"expires_in"`
-	Scope       string `json:"scope"`
-	TokenType   string `json:"token_type"`
-}
 
 // Management is an Auth0 management client used to interact with the Auth0
 // Management API v2.
@@ -136,28 +88,12 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	auth := &Auth{
-		AuthConfig{
-			Audience:     "https://" + domain + "/api/v2/",
-			ClientID:     clientID,
-			ClientSecret: clientSecret,
-			GrantType:    "client_credentials",
-		},
-		Token{},
-	}
-
-	err := m.post("https://"+domain+"/oauth/token", auth)
+	c, err := newClient(domain, clientID, clientSecret)
 	if err != nil {
 		return nil, err
 	}
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{
-		AccessToken: auth.Token.AccessToken,
-		TokenType:   auth.Token.TokenType,
-		Expiry:      time.Now().Add(time.Duration(auth.Token.ExpiresIn) * time.Second),
-	})
-
-	m.http = wrapUserAgent(wrapRetry(oauth2.NewClient(context.Background(), ts)))
+	m.http = wrapUserAgent(wrapRetry(c))
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
