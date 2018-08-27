@@ -61,6 +61,19 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", uu)
 	})
 
+	t.Run("Update App Metadata", func(t *testing.T) {
+		uu := &User{
+			AppMetadata: map[string]interface{}{
+				"foo": "bar",
+			},
+		}
+		err = m.User.Update(u.ID, uu)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", uu)
+	})
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(u.ID)
 		if err != nil {
