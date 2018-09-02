@@ -6,9 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"net/http/httputil"
 	"net/url"
 	"strconv"
 	"strings"
@@ -88,12 +86,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	c, err := newClient(domain, clientID, clientSecret)
-	if err != nil {
-		return nil, err
-	}
-
-	m.http = wrapUserAgent(wrapRetry(c))
+	m.http = newClient(domain, clientID, clientSecret)
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
@@ -159,10 +152,6 @@ func (m *Management) request(method, uri string, v interface{}) error {
 		}
 	}
 
-	if m.debug {
-		m.dump(req, res)
-	}
-
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
 		return newError(res.Body)
 	}
@@ -193,12 +182,6 @@ func (m *Management) patch(uri string, v interface{}) error {
 
 func (m *Management) delete(uri string) error {
 	return m.request("DELETE", uri, nil)
-}
-
-func (m *Management) dump(req *http.Request, res *http.Response) {
-	b1, _ := httputil.DumpRequest(req, true)
-	b2, _ := httputil.DumpResponse(res, true)
-	log.Printf("%s\n%s\b\n", b1, b2)
 }
 
 type apiOption func(*Management)
