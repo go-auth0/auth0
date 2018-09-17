@@ -50,7 +50,8 @@ func TestConnection(t *testing.T) {
 
 			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
 			Configuration: map[string]interface{}{"foo": "bar"},
-			RequiresUsername: true,
+
+			RequiresUsername: auth0.Bool(true),
 		}
 
 		cc := c // make a copy so we can compare later
