@@ -65,6 +65,20 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", uu)
 	})
 
+	t.Run("Update App Metadata", func(t *testing.T) {
+		uu := &User{
+			Connection: auth0.String("Username-Password-Authentication"),
+			AppMetadata: map[string]interface{}{
+				"foo": "bar",
+			},
+		}
+		err = m.User.Update(auth0.StringValue(u.ID), uu)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", uu)
+	})
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(auth0.StringValue(u.ID))
 		if err != nil {

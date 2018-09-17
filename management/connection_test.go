@@ -50,6 +50,7 @@ func TestConnection(t *testing.T) {
 
 			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
 			Configuration: map[string]interface{}{"foo": "bar"},
+			RequiresUsername: true,
 		}
 
 		cc := c // make a copy so we can compare later
@@ -67,6 +68,10 @@ func TestConnection(t *testing.T) {
 
 		if _, exist := c.Options.Configuration["foo"]; !exist {
 			t.Fatal(`missing key "foo"`)
+		}
+
+		if c.Options.RequiresUsername != cc.Options.RequiresUsername {
+			t.Fatalf("expected requires_username to be %v but got %v", cc.Options.RequiresUsername, c.Options.RequiresUsername)
 		}
 	})
 
