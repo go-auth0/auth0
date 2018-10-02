@@ -41,7 +41,6 @@ func TestConnection(t *testing.T) {
 		c.Strategy = nil // read-only
 
 		c.Options = &ConnectionOptions{
-
 			ExtAdmin:       auth0.Bool(true),
 			ExtGroups:      auth0.Bool(true),
 			ExtProfile:     auth0.Bool(true),
