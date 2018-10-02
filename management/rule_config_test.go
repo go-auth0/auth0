@@ -1,11 +1,15 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestRuleConfig(t *testing.T) {
 
 	key := "foo"
-	r := &RuleConfig{Value: "bar"}
+	r := &RuleConfig{Value: auth0.String("bar")}
 
 	var err error
 
@@ -14,8 +18,9 @@ func TestRuleConfig(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if r.Key != key {
-			t.Errorf("key mismatch %q != %q", r.Key, key)
+		rkey := auth0.StringValue(r.Key)
+		if rkey != key {
+			t.Errorf("key mismatch %q != %q", rkey, key)
 		}
 		t.Logf("%v\n", r)
 	})
@@ -29,8 +34,8 @@ func TestRuleConfig(t *testing.T) {
 	})
 
 	t.Run("Upsert", func(t *testing.T) {
-		r.Key = ""
-		r.Value = "baz"
+		r.Key = nil // read-only
+		r.Value = auth0.String("baz")
 		err = m.RuleConfig.Upsert(key, r)
 		if err != nil {
 			t.Error(err)

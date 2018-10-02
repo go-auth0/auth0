@@ -1,6 +1,10 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestTenant(t *testing.T) {
 
@@ -12,14 +16,14 @@ func TestTenant(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%#v\n", tn)
+		t.Logf("%v\n", tn)
 	})
 
 	t.Run("Update", func(t *testing.T) {
 		err = m.Tenant.Update(&Tenant{
-			FriendlyName: "My Example Tenant",
-			SupportURL:   "https://support.example.com",
-			SupportEmail: "support@example.com",
+			FriendlyName: auth0.String("My Example Tenant"),
+			SupportURL:   auth0.String("https://support.example.com"),
+			SupportEmail: auth0.String("support@example.com"),
 		})
 		if err != nil {
 			t.Error(err)

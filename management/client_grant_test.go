@@ -1,9 +1,10 @@
 package management
 
 import (
-	"fmt"
 	"testing"
 	"time"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestClientGrant(t *testing.T) {
@@ -14,27 +15,27 @@ func TestClientGrant(t *testing.T) {
 	// first we must create them.
 
 	c := &Client{
-		Name: fmt.Sprintf("Test Client - Client Grant (%s)",
+		Name: auth0.Stringf("Test Client - Client Grant (%s)",
 			time.Now().Format(time.StampMilli)),
 	}
 	err = m.Client.Create(c)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.Client.Delete(c.ClientID)
+	defer m.Client.Delete(auth0.StringValue(c.ClientID))
 
 	s := &ResourceServer{
-		Name: fmt.Sprintf("Test Client Grant (%s)",
+		Name: auth0.Stringf("Test Client Grant (%s)",
 			time.Now().Format(time.StampMilli)),
-		Identifier: "https://api.example.com/client-grant",
+		Identifier: auth0.String("https://api.example.com/client-grant"),
 		Scopes: []*ResourceServerScope{
 			{
-				Value:       "create:resource",
-				Description: "Create Resource",
+				Value:       auth0.String("create:resource"),
+				Description: auth0.String("Create Resource"),
 			},
 			{
-				Value:       "update:resource",
-				Description: "Update Resource",
+				Value:       auth0.String("update:resource"),
+				Description: auth0.String("Update Resource"),
 			},
 		},
 	}
@@ -42,7 +43,7 @@ func TestClientGrant(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.ResourceServer.Delete(s.ID)
+	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
 
 	g := &ClientGrant{
 		ClientID: c.ClientID,
@@ -59,7 +60,7 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		g, err = m.ClientGrant.Read(g.ID)
+		g, err = m.ClientGrant.Read(auth0.StringValue(g.ID))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -67,10 +68,10 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := g.ID
-		g.ID = ""
-		g.Audience = "" // read-only
-		g.ClientID = "" // read-only
+		id := auth0.StringValue(g.ID)
+		g.ID = nil
+		g.Audience = nil // read-only
+		g.ClientID = nil // read-only
 		g.Scope = append(g.Scope, "update:resource")
 
 		err = m.ClientGrant.Update(id, g)
@@ -81,7 +82,7 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.ClientGrant.Delete(g.ID)
+		err = m.ClientGrant.Delete(auth0.StringValue(g.ID))
 		if err != nil {
 			t.Fatal(err)
 		}

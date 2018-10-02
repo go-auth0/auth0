@@ -3,14 +3,16 @@ package management
 import (
 	"net/http"
 	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestCustomDomain(t *testing.T) {
 
 	c := &CustomDomain{
-		Domain:             "auth.example.com",
-		Type:               "auth0_managed_certs",
-		VerificationMethod: "txt",
+		Domain:             auth0.String("auth.example.com"),
+		Type:               auth0.String("auth0_managed_certs"),
+		VerificationMethod: auth0.String("txt"),
 	}
 
 	var err error
@@ -28,7 +30,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.CustomDomain.Read(c.ID)
+		c, err = m.CustomDomain.Read(auth0.StringValue(c.ID))
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 				t.Skip(err)
@@ -40,9 +42,11 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := c.ID
-		c.ID = "" // read-only
-		c.Domain = "id.example.com"
+		id := auth0.StringValue(c.ID)
+
+		c.ID = nil // read-only
+		c.Domain = auth0.String("id.example.com")
+
 		err = m.CustomDomain.Update(id, c)
 		if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 			t.Skip(err)
@@ -53,7 +57,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.CustomDomain.Delete(c.ID)
+		err = m.CustomDomain.Delete(auth0.StringValue(c.ID))
 		if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 			t.Skip(err)
 		} else {

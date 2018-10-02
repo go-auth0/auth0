@@ -1,18 +1,22 @@
 package management
 
-import "testing"
+import (
+	"testing"
+
+	auth0 "github.com/yieldr/go-auth0"
+)
 
 func TestUser(t *testing.T) {
 
 	u := &User{
-		Connection: "Username-Password-Authentication",
-		Email:      "chuck@chucknorris.com",
-		Password:   "Passwords hide their Chuck",
+		Connection: auth0.String("Username-Password-Authentication"),
+		Email:      auth0.String("chuck@chucknorris.com"),
+		Password:   auth0.String("Passwords hide their Chuck"),
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
 		},
-		EmailVerified: true,
-		VerifyEmail:   false,
+		EmailVerified: auth0.Bool(true),
+		VerifyEmail:   auth0.Bool(false),
 		AppMetadata: map[string]interface{}{
 			"facts": []string{
 				"count_to_infinity_twice",
@@ -34,7 +38,7 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		u, err = m.User.Read(u.ID)
+		u, err = m.User.Read(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -51,10 +55,10 @@ func TestUser(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 		uu := &User{
-			Connection: "Username-Password-Authentication",
-			Password:   "I don't need one",
+			Connection: auth0.String("Username-Password-Authentication"),
+			Password:   auth0.String("I don't need one"),
 		}
-		err = m.User.Update(u.ID, uu)
+		err = m.User.Update(auth0.StringValue(u.ID), uu)
 		if err != nil {
 			t.Error(err)
 		}
@@ -63,11 +67,12 @@ func TestUser(t *testing.T) {
 
 	t.Run("Update App Metadata", func(t *testing.T) {
 		uu := &User{
+			Connection: auth0.String("Username-Password-Authentication"),
 			AppMetadata: map[string]interface{}{
 				"foo": "bar",
 			},
 		}
-		err = m.User.Update(u.ID, uu)
+		err = m.User.Update(auth0.StringValue(u.ID), uu)
 		if err != nil {
 			t.Error(err)
 		}
@@ -75,7 +80,7 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.User.Delete(u.ID)
+		err = m.User.Delete(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -85,9 +90,21 @@ func TestUser(t *testing.T) {
 
 		// Create some users we can search for
 		allUsers := []*User{
-			{Email: "alice@example.com", Password: "5301111b-b31b-47c4-bf3d-0c26ea57bdf4", Connection: "Username-Password-Authentication"},
-			{Email: "bob@example.com", Password: "bcfc3bca-8cd3-4b74-a474-402420f34f85", Connection: "Username-Password-Authentication"},
-			{Email: "charlie@example.com", Password: "80140c2a-b5c1-490c-a4bf-b0623114d5fd", Connection: "Username-Password-Authentication"},
+			{
+				Email:      auth0.String("alice@example.com"),
+				Password:   auth0.String("5301111b-b31b-47c4-bf3d-0c26ea57bdf4"),
+				Connection: auth0.String("Username-Password-Authentication"),
+			},
+			{
+				Email:      auth0.String("bob@example.com"),
+				Password:   auth0.String("bcfc3bca-8cd3-4b74-a474-402420f34f85"),
+				Connection: auth0.String("Username-Password-Authentication"),
+			},
+			{
+				Email:      auth0.String("charlie@example.com"),
+				Password:   auth0.String("80140c2a-b5c1-490c-a4bf-b0623114d5fd"),
+				Connection: auth0.String("Username-Password-Authentication"),
+			},
 		}
 		for _, user := range allUsers {
 			err = m.User.Create(user)
@@ -111,7 +128,7 @@ func TestUser(t *testing.T) {
 
 		// Finally clean up
 		for _, user := range allUsers {
-			m.User.Delete(user.ID)
+			m.User.Delete(auth0.StringValue(user.ID))
 		}
 	})
 }

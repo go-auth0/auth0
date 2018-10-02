@@ -1,18 +1,19 @@
 package management
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 	"time"
+
+	auth0 "github.com/yieldr/go-auth0"
 )
 
 func TestClient(t *testing.T) {
 
 	c := &Client{
-		Name: fmt.Sprintf("Test Client (%s)",
+		Name: auth0.Stringf("Test Client (%s)",
 			time.Now().Format(time.StampMilli)),
-		Description: "This is just a test client.",
+		Description: auth0.String("This is just a test client."),
 	}
 
 	var err error
@@ -26,7 +27,7 @@ func TestClient(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.Client.Read(c.ClientID)
+		c, err = m.Client.Read(auth0.StringValue(c.ClientID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -43,18 +44,22 @@ func TestClient(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		id := c.ClientID
-		c.ClientID = "" // read-only
-		c.Description = strings.Replace(c.Description, "just", "more than", 1)
+		id := auth0.StringValue(c.ClientID)
+
+		c.ClientID = nil                       // read-only
+		c.JWTConfiguration.SecretEncoded = nil // read-only
+		c.Description = auth0.String(strings.Replace(auth0.StringValue(c.Description), "just", "more than", 1))
+
 		err = m.Client.Update(id, c)
 		if err != nil {
 			t.Error(err)
 		}
+
 		t.Logf("%v\n", c)
 	})
 
 	t.Run("RotateSecret", func(t *testing.T) {
-		id := c.ClientID
+		id := auth0.StringValue(c.ClientID)
 		secret := c.ClientSecret
 		c, err = m.Client.RotateSecret(id)
 		if err != nil {
@@ -67,7 +72,7 @@ func TestClient(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Client.Delete(c.ClientID)
+		err = m.Client.Delete(auth0.StringValue(c.ClientID))
 		if err != nil {
 			t.Error(err)
 		}
