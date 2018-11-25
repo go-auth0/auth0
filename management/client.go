@@ -46,7 +46,7 @@ type Client struct {
 	JWTConfiguration  *ClientJWTConfiguration `json:"jwt_configuration,omitempty"`
 
 	// Client signing keys
-	SigningKeys   []map[string]string `json:"-"`
+	SigningKeys   []map[string]string `json:"signing_keys,omitempty"`
 	EncryptionKey map[string]string   `json:"encryption_key,omitempty"`
 	SSO           *bool               `json:"sso,omitempty"`
 
@@ -86,6 +86,14 @@ type Client struct {
 func (c *Client) String() string {
 	b, _ := json.MarshalIndent(c, "", "  ")
 	return string(b)
+}
+
+// MarshalJSON encodes the client structure to JSON excluding the signing_keys field
+func (c *Client) MarshalJSON()([]byte, error) {
+	copy := *c
+	copy.SigningKeys = nil
+	// Marshal copy here, not &copy, to avoid recursion
+	return json.Marshal(copy)
 }
 
 type ClientJWTConfiguration struct {
