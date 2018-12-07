@@ -96,8 +96,8 @@ type ConnectionOptions struct {
 	AppID              *string       `json:"app_id,omitempty"`
 	AppDomain          *string       `json:"app_domain,omitempty"`
 
-	// Scripts for the connction
-	// Allowed keys are: "get_user", "login", "create", "verify", "change_password" or "delete".
+	// Scripts for the connection
+	// Allowed keys are: "get_user", "login", "create", "verify", "change_password", "delete" or "change_email".
 	CustomScripts map[string]interface{} `json:"customScripts,omitempty"`
 	// configuration variables that can be used in custom scripts
 	Configuration map[string]interface{} `json:"configuration,omitempty"`
