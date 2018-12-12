@@ -32,6 +32,9 @@ type User struct {
 	// The last time the user is updated.
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 
+	// The last time the user has logged in.
+	LastLogin *time.Time `json:"last_login,omitempty"`
+
 	// UserMetadata holds data that the user has read/write access to (e.g.
 	// color_preference, blog_url, etc).
 	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
