@@ -88,14 +88,6 @@ func (c *Client) String() string {
 	return string(b)
 }
 
-// MarshalJSON encodes the client structure to JSON excluding the signing_keys field
-func (c *Client) MarshalJSON()([]byte, error) {
-	copy := *c
-	copy.SigningKeys = nil
-	// Marshal copy here, not &copy, to avoid recursion
-	return json.Marshal(copy)
-}
-
 type ClientJWTConfiguration struct {
 	// The amount of seconds the JWT will be valid (affects exp claim)
 	LifetimeInSeconds *int `json:"lifetime_in_seconds,omitempty"`
