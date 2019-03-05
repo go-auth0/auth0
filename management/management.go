@@ -126,11 +126,11 @@ func (m *Management) q(options []reqOption) string {
 	return "?" + v.Encode()
 }
 
-func (m *Management) request(method, uri string, v interface{}) error {
+func (m *Management) request(method, uri string, in, out interface{}) error {
 
 	var payload bytes.Buffer
-	if v != nil {
-		json.NewEncoder(&payload).Encode(v)
+	if in != nil {
+		json.NewEncoder(&payload).Encode(in)
 	}
 	req, _ := http.NewRequest(method, uri, &payload)
 	req.Header.Add("Content-Type", "application/json")
@@ -158,30 +158,30 @@ func (m *Management) request(method, uri string, v interface{}) error {
 
 	if res.StatusCode != http.StatusNoContent {
 		defer res.Body.Close()
-		return json.NewDecoder(res.Body).Decode(v)
+		return json.NewDecoder(res.Body).Decode(out)
 	}
 
 	return nil
 }
 
 func (m *Management) get(uri string, v interface{}) error {
-	return m.request("GET", uri, v)
+	return m.request("GET", uri, v, v)
 }
 
 func (m *Management) post(uri string, v interface{}) error {
-	return m.request("POST", uri, v)
+	return m.request("POST", uri, v, v)
 }
 
 func (m *Management) put(uri string, v interface{}) error {
-	return m.request("PUT", uri, v)
+	return m.request("PUT", uri, v, v)
 }
 
 func (m *Management) patch(uri string, v interface{}) error {
-	return m.request("PATCH", uri, v)
+	return m.request("PATCH", uri, v, v)
 }
 
 func (m *Management) delete(uri string) error {
-	return m.request("DELETE", uri, nil)
+	return m.request("DELETE", uri, nil, nil)
 }
 
 type apiOption func(*Management)
