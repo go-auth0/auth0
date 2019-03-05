@@ -13,6 +13,10 @@ func TestResourceServer(t *testing.T) {
 		Name:             auth0.Stringf("Test Resource Server (%s)", time.Now().Format(time.StampMilli)),
 		Identifier:       auth0.String("https://api.example.com/"),
 		SigningAlgorithm: auth0.String("HS256"),
+
+		TokenLifetime:       auth0.Int(7200),
+		TokenLifetimeForWeb: auth0.Int(3600),
+
 		Scopes: []*ResourceServerScope{
 			{
 				Value:       auth0.String("create:resource"),
@@ -49,6 +53,9 @@ func TestResourceServer(t *testing.T) {
 		s.AllowOfflineAccess = auth0.Bool(true)
 		s.SigningAlgorithm = auth0.String("RS256")
 		s.SkipConsentForVerifiableFirstPartyClients = auth0.Bool(true)
+
+		s.TokenLifetime = auth0.Int(7200)
+		s.TokenLifetimeForWeb = auth0.Int(5400)
 
 		s.Scopes = append(s.Scopes, &ResourceServerScope{
 			Value:       auth0.String("update:resource"),
