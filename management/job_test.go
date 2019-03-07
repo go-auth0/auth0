@@ -23,7 +23,7 @@ func TestJob(t *testing.T) {
 
 	defer m.User.Delete(userID)
 
-	t.Run("verification email", func(t *testing.T) {
+	t.Run("VerifyEmail", func(t *testing.T) {
 		job := &Job{
 			UserID: auth0.String(userID),
 		}
