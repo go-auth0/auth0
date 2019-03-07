@@ -28,9 +28,7 @@ func TestJob(t *testing.T) {
 			UserID: auth0.String(userID),
 		}
 
-		err = m.Job.VerifyEmail(
-			job,
-		)
+		err = m.Job.VerifyEmail(job)
 		if err != nil {
 			t.Error(err)
 		}
