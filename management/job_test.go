@@ -24,10 +24,9 @@ func TestJob(t *testing.T) {
 	defer m.User.Delete(userID)
 
 	t.Run("verification email", func(t *testing.T) {
-
-		_, err = m.Job.SendVerificationEmail(
-			VerificationEmailJob{
-				UserID: userID,
+		err = m.Job.VerificationEmail(
+			&Job{
+				UserID: auth0.String(userID),
 			},
 		)
 		if err != nil {

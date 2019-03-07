@@ -2,16 +2,14 @@ package management
 
 import "time"
 
-type VerificationEmailJob struct {
-	UserID   string `json:"user_id"`
-	ClientID string `json:"cliend_id,omitempty"`
-}
+type Job struct {
+	ID        *string    `json:"id,omitempty"`
+	Status    *string    `json:"status,omitempty"`
+	Type      *string    `json:"type,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 
-type VerificationEmailJobResponse struct {
-	ID        string    `json:"id"`
-	Status    string    `json:"status"`
-	Type      string    `json:"type"`
-	CreatedAt time.Time `json:"created_at"`
+	UserID   *string `json:"user_id,omitempty"`
+	ClientID *string `json:"cliend_id,omitempty"`
 }
 
 type JobManager struct {
@@ -22,8 +20,6 @@ func NewJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 
-func (jm *JobManager) SendVerificationEmail(j VerificationEmailJob) (VerificationEmailJobResponse, error) {
-	res := VerificationEmailJobResponse{}
-	err := jm.m.request("POST", jm.m.uri("jobs/verification-email"), j, &res)
-	return res, err
+func (jm *JobManager) VerificationEmail(j *Job) error {
+	return jm.m.post(jm.m.uri("jobs/verification-email"), j)
 }
