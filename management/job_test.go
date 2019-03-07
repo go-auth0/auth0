@@ -24,13 +24,19 @@ func TestJob(t *testing.T) {
 	defer m.User.Delete(userID)
 
 	t.Run("verification email", func(t *testing.T) {
+		job := &Job{
+			UserID: auth0.String(userID),
+		}
+
 		err = m.Job.VerificationEmail(
-			&Job{
-				UserID: auth0.String(userID),
-			},
+			job,
 		)
 		if err != nil {
 			t.Error(err)
+		}
+
+		if auth0.StringValue(job.Type) != "verification_email" {
+			t.Errorf("expected job type to be verification_email, got %s", auth0.StringValue(job.Type))
 		}
 	})
 }
