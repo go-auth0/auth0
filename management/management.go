@@ -54,6 +54,9 @@ type Management struct {
 	// User manages Auth0 User resources.
 	User *UserManager
 
+	// Job manages Auth0 jobs.
+	Job *JobManager
+
 	// Tenant manages your Auth0 Tenant.
 	Tenant *TenantManager
 
@@ -100,6 +103,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.EmailTemplate = NewEmailTemplateManager(m)
 	m.Email = NewEmailManager(m)
 	m.User = NewUserManager(m)
+	m.Job = NewJobManager(m)
 	m.Tenant = NewTenantManager(m)
 	m.Ticket = NewTicketManager(m)
 	m.Stat = NewStatManager(m)
