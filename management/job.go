@@ -20,6 +20,6 @@ func NewJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 
-func (jm *JobManager) VerificationEmail(j *Job) error {
+func (jm *JobManager) VerifyEmail(j *Job) error {
 	return jm.m.post(jm.m.uri("jobs/verification-email"), j)
 }
