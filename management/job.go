@@ -4,13 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
-	"os"
-	"path/filepath"
 	"strconv"
 	"time"
 
@@ -48,8 +44,8 @@ type Job struct {
 	// predefined fields will be exported.
 	Fields []map[string]interface{} `json:"fields,omitempty"`
 
-	// File containing a list of users. Used when importing users in bulk.
-	Users *string `json:"users,omitempty"`
+	// A list of users. Used when importing users in bulk.
+	Users []map[string]interface{} `json:"users,omitempty"`
 	// If false, users will only be inserted. If there are already user(s) with
 	// the same emails as one or more of those being inserted, they will fail.
 	// If this value is set to true and the user being imported already exists,
@@ -109,24 +105,18 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 		mp.WriteField("send_completion_email", strconv.FormatBool(auth0.BoolValue(j.SendCompletionEmail)))
 	}
 	if j.Users != nil {
-		fname := auth0.StringValue(j.Users)
-
-		f, err := os.Open(fname)
+		b, err := json.Marshal(j.Users)
 		if err != nil {
 			return err
 		}
-		defer f.Close()
-
 		h := textproto.MIMEHeader{}
-		h.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s"`, "users", filepath.Base(fname)))
+		h.Set("Content-Disposition", `form-data; name="users"; filename="users.json"`)
 		h.Set("Content-Type", "application/json")
-
 		w, err := mp.CreatePart(h)
 		if err != nil {
 			return err
 		}
-
-		io.Copy(w, f)
+		w.Write(b)
 	}
 	mp.Close()
 
