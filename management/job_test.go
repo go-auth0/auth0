@@ -1,8 +1,9 @@
 package management
 
 import (
-	"github.com/yieldr/go-auth0"
 	"testing"
+
+	"github.com/yieldr/go-auth0"
 )
 
 func TestJob(t *testing.T) {
@@ -23,6 +24,8 @@ func TestJob(t *testing.T) {
 
 	defer m.User.Delete(userID)
 
+	var jobID string
+
 	t.Run("VerifyEmail", func(t *testing.T) {
 		job := &Job{
 			UserID: auth0.String(userID),
@@ -33,8 +36,18 @@ func TestJob(t *testing.T) {
 			t.Error(err)
 		}
 
+		jobID = auth0.StringValue(job.ID) // save for use in subsequent tests
+
 		if auth0.StringValue(job.Type) != "verification_email" {
 			t.Errorf("expected job type to be verification_email, got %s", auth0.StringValue(job.Type))
 		}
+	})
+
+	t.Run("Read", func(t *testing.T) {
+		job, err := m.Job.Read(jobID)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Log(job)
 	})
 }
