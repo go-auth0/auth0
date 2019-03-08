@@ -1,6 +1,7 @@
 package management
 
 import (
+	"io/ioutil"
 	"testing"
 
 	"github.com/yieldr/go-auth0"
@@ -50,4 +51,44 @@ func TestJob(t *testing.T) {
 		}
 		t.Log(job)
 	})
+
+	t.Run("ExportUsers", func(t *testing.T) {
+		job := &Job{
+			ConnectionID: auth0.String("con_C2Imdps0x50qqvYF"),
+			Format:       auth0.String("json"),
+			Limit:        auth0.Int(5),
+			Fields: []map[string]interface{}{
+				{"name": "name"},
+				{"name": "email"},
+				{"name": "identities[0].connection"},
+			},
+		}
+		err := m.Job.ExportUsers(job)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Log(job)
+	})
+
+	t.Run("ImportUsers", func(t *testing.T) {
+
+		f, err := ioutil.TempFile("", "auth0_users_*.json")
+		if err != nil {
+			t.Error(err)
+		}
+		f.Write([]byte(`[{"email": "alex@example.com", "email_verified": true}]`))
+
+		job := &Job{
+			ConnectionID:        auth0.String("con_C2Imdps0x50qqvYF"),
+			Upsert:              auth0.Bool(true),
+			Users:               auth0.String(f.Name()),
+			SendCompletionEmail: auth0.Bool(true),
+		}
+		err = m.Job.ImportUsers(job)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Log(job)
+	})
+
 }
