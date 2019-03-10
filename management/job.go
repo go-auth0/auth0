@@ -126,11 +126,11 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	ctx, cancel := context.WithTimeout(context.Background(), jm.m.timeout)
 	defer cancel()
 
-	if m.http == nil {
-		m.http = http.DefaultClient
+	if jm.m.http == nil {
+		jm.m.http = http.DefaultClient
 	}
 
-	res, err := m.http.Do(req.WithContext(ctx))
+	res, err := jm.m.http.Do(req.WithContext(ctx))
 	if err != nil {
 		select {
 		case <-ctx.Done():
