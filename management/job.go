@@ -123,7 +123,7 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	req, _ := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
 	req.Header.Add("Content-Type", mp.FormDataContentType())
 
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), jm.m.timeout)
 	defer cancel()
 
 	if m.http == nil {
