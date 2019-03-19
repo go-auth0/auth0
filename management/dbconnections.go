@@ -8,7 +8,7 @@ type DBConnectionsChangePassword struct {
 	ClientID *string `json:"clientID,omitempty"`
 
 	// The user's email address.
-	Email *string `json:"email`
+	Email *string `json:"email"`
 
 	// The new password. See the next paragraph for the case when a password can be set.
 	Password *string `json:"password,omitempty"`
