@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -32,6 +33,9 @@ type Management struct {
 
 	// CustomDomain manages Auth0 Custom Domains.
 	CustomDomain *CustomDomainManager
+
+	// DBConnections Auth0 dbconnections resources
+	DBConnections *DBConnectionsManager
 
 	// Grant manages Auth0 Grants.
 	Grant *GrantManager
@@ -71,7 +75,8 @@ type Management struct {
 	timeout  time.Duration
 	debug    bool
 
-	http *http.Client
+	http      *http.Client
+	plainHTTP *http.Client
 }
 
 // New creates a new Auth0 Management client by authenticating using the
@@ -90,6 +95,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	}
 
 	m.http = newClient(domain, clientID, clientSecret, m.debug)
+	m.plainHTTP = newPlainClient(m.debug)
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
@@ -107,6 +113,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Tenant = NewTenantManager(m)
 	m.Ticket = NewTicketManager(m)
 	m.Stat = NewStatManager(m)
+	m.DBConnections = NewDBConnectionsManager(m)
 
 	return m, nil
 }
@@ -119,6 +126,14 @@ func (m *Management) uri(path ...string) string {
 	}).String()
 }
 
+func (m *Management) plainURI(path ...string) string {
+	return (&url.URL{
+		Scheme: "https",
+		Host:   m.domain,
+		Path:   strings.Join(path, "/"),
+	}).String()
+}
+
 func (m *Management) q(options []reqOption) string {
 	if len(options) == 0 {
 		return ""
@@ -128,6 +143,46 @@ func (m *Management) q(options []reqOption) string {
 		option(v)
 	}
 	return "?" + v.Encode()
+}
+
+func (m *Management) plainHTTPRequest(method, uri string, v interface{}) ([]byte, error) {
+
+	var payload bytes.Buffer
+	if v != nil {
+		json.NewEncoder(&payload).Encode(v)
+	}
+	req, err := http.NewRequest(method, uri, &payload)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
+	defer cancel()
+
+	if m.plainHTTP == nil {
+		m.plainHTTP = http.DefaultClient
+	}
+
+	res, err := m.plainHTTP.Do(req.WithContext(ctx))
+	if err != nil {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+			return nil, err
+		}
+	}
+
+	defer res.Body.Close()
+	resp, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		err = newManagementError(res.StatusCode, string(resp), string(resp))
+	}
+	return resp, err
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
@@ -214,6 +269,14 @@ type managementError struct {
 	StatusCode int    `json:"statusCode"`
 	Err        string `json:"error"`
 	Message    string `json:"message"`
+}
+
+func newManagementError(status int, err string, message string) error {
+	m := &managementError{}
+	m.StatusCode = status
+	m.Err = err
+	m.Message = message
+	return m
 }
 
 func newError(r io.Reader) error {

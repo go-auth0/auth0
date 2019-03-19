@@ -86,3 +86,18 @@ func newClient(domain, clientID, clientSecret string, debug bool) *http.Client {
 
 	return c
 }
+
+func newPlainClient(debug bool) *http.Client {
+
+	c := &http.Client{
+		Timeout: time.Minute * 1,
+	}
+	c = wrapRetryClient(c)
+	c = wrapUserAgentClient(c)
+
+	if debug {
+		c = wrapDebugClient(c)
+	}
+
+	return c
+}
