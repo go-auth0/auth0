@@ -5,7 +5,7 @@ import "encoding/json"
 type DBConnectionsChangePassword struct {
 
 	// The client_id of your client. We strongly recommend including a Client ID so that the email template knows from which client the request was triggered.
-	ClientID *string `json:"clientID,omitempty"`
+	ClientID *string `json:"client_id,omitempty"`
 
 	// The user's email address.
 	Email *string `json:"email"`
