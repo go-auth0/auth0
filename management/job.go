@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	auth0 "github.com/yieldr/go-auth0"
+	"gopkg.in/auth0.v1"
 )
 
 type Job struct {

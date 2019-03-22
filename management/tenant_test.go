@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	auth0 "github.com/yieldr/go-auth0"
+	"gopkg.in/auth0.v1"
 )
 
 func TestTenant(t *testing.T) {

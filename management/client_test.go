@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	auth0 "github.com/yieldr/go-auth0"
+	"gopkg.in/auth0.v1"
 )
 
 func TestClient(t *testing.T) {

@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"github.com/yieldr/go-auth0"
+	"gopkg.in/auth0.v1"
 )
 
 func TestJob(t *testing.T) {
@@ -74,7 +74,7 @@ func TestJob(t *testing.T) {
 			ConnectionID:        auth0.String("con_C2Imdps0x50qqvYF"),
 			Upsert:              auth0.Bool(true),
 			SendCompletionEmail: auth0.Bool(false),
-			Users:               []map[string]interface{}{
+			Users: []map[string]interface{}{
 				{"email": "alex@example.com", "email_verified": true},
 			},
 		}

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	auth0 "github.com/yieldr/go-auth0"
-	"github.com/yieldr/go-auth0/management"
+	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v1/management"
 )
 
 var (

@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"gopkg.in/auth0.v1/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -89,7 +91,12 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	m.http = newClient(domain, clientID, clientSecret, m.debug)
+	m.http = client.OAuth2(domain, clientID, clientSecret)
+	m.http = client.WrapUserAgent(m.http)
+	m.http = client.WrapRetry(m.http)
+	if m.debug {
+		m.http = client.WrapDebug(m.http)
+	}
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
