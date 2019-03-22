@@ -13,6 +13,8 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+const UserAgent = "Go-Auth0-SDK/v1"
+
 func WrapRetry(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: rehttp.NewTransport(
@@ -38,7 +40,7 @@ func WrapRetry(c *http.Client) *http.Client {
 func WrapUserAgent(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			req.Header.Set("User-Agent", "Go-Auth0-SDK/v0")
+			req.Header.Set("User-Agent", UserAgent)
 			return c.Transport.RoundTrip(req)
 		}),
 	}
