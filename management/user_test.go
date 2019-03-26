@@ -12,6 +12,7 @@ func TestUser(t *testing.T) {
 		Connection: auth0.String("Username-Password-Authentication"),
 		Email:      auth0.String("chuck@chucknorris.com"),
 		Password:   auth0.String("Passwords hide their Chuck"),
+		Nickname:   auth0.String("Chucky"),
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
 		},

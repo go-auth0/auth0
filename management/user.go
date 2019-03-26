@@ -22,6 +22,9 @@ type User struct {
 	// The user's username. Only valid if the connection requires a username
 	Username *string `json:"username,omitempty"`
 
+	// The user's nickname
+	Nickname *string `json:"nickname,omitempty"`
+
 	// The user's password (mandatory for non SMS connections)
 	Password *string `json:"password,omitempty"`
 
