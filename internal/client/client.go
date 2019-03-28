@@ -31,7 +31,7 @@ func WrapRetry(c *http.Client) *http.Client {
 				if err != nil {
 					resetAtUnix = time.Now().Add(5 * time.Second).Unix()
 				}
-				return time.Unix(resetAtUnix, 0).Sub(time.Now())
+				return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
 			},
 		),
 	}

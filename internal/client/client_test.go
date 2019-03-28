@@ -15,9 +15,10 @@ func TestWrapRetry(t *testing.T) {
 
 	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if first {
+			t.Log(start.Unix())
 			w.Header().Set("X-RateLimit-Limit", "1")
 			w.Header().Set("X-RateLimit-Remaining", "0")
-			w.Header().Set("X-RateLimit-Reset", fmt.Sprint(start.Add(1*time.Second).Unix()))
+			w.Header().Set("X-RateLimit-Reset", fmt.Sprint(start.Add(time.Second).Unix()))
 			w.WriteHeader(http.StatusTooManyRequests)
 			first = !first
 			return
@@ -28,7 +29,7 @@ func TestWrapRetry(t *testing.T) {
 	s := httptest.NewServer(h)
 	defer s.Close()
 
-	c := WrapDebug(WrapRetry(s.Client()))
+	c := WrapRetry(WrapDebug(s.Client()))
 	r, err := c.Get(s.URL)
 	if err != nil {
 		t.Error(err)
@@ -38,8 +39,9 @@ func TestWrapRetry(t *testing.T) {
 		t.Errorf("Expected status code to be %d but got %d", http.StatusOK, r.StatusCode)
 	}
 
-	if time.Since(start) < 10*time.Millisecond {
-		t.Errorf("Time since start is sooner than expected. Expected >= 10ms but got %s", time.Since(start))
+	elapsed := time.Since(start)
+	if elapsed < time.Second {
+		t.Errorf("Time since start is sooner than expected. Expected >= 1s but got %s", elapsed)
 	}
 }
 
