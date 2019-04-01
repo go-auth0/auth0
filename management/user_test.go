@@ -80,6 +80,15 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", uu)
 	})
 
+    t.Run("GetRoles", func(t *testing.T) {
+        var roles []*Role
+        roles, err = m.User.GetRoles(auth0.StringValue(u.ID))
+		if err != nil {
+			t.Error(err)
+		}
+        t.Logf("%v\n", roles)
+    })
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(auth0.StringValue(u.ID))
 		if err != nil {
