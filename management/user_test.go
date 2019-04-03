@@ -28,6 +28,18 @@ func TestUser(t *testing.T) {
 		},
 	}
 
+    r1 := &Role{
+	    Name:        auth0.String("admin"),
+	    Description: auth0.String("Administrator"),
+	}
+    m.Role.Create(r1)
+
+    r2 := &Role{
+	    Name:        auth0.String("user"),
+	    Description: auth0.String("User"),
+	}
+    m.Role.Create(r2)
+
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
@@ -141,4 +153,8 @@ func TestUser(t *testing.T) {
 			m.User.Delete(auth0.StringValue(user.ID))
 		}
 	})
+
+	m.Role.Delete(auth0.StringValue(r1.ID))
+	m.Role.Delete(auth0.StringValue(r2.ID))
+
 }
