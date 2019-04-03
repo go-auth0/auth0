@@ -101,11 +101,26 @@ func TestUser(t *testing.T) {
         t.Logf("%v\n", roles)
     })
 
-	t.Run("Delete", func(t *testing.T) {
-		err = m.User.Delete(auth0.StringValue(u.ID))
+    t.Run("AssignRoles", func(t *testing.T) {
+		roles := []*Role{r1, r2}
+		err = m.User.AssignRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
 			t.Error(err)
+			t.Fatal(err)
 		}
+
+    })
+
+	t.Run("UnassignRoles", func(t *testing.T) {
+		roles := []*Role{r1, r2}
+		err = m.User.UnassignRoles(auth0.StringValue(u.ID), roles...)
+		if err != nil {
+			t.Fatal(err)
+		}
+    })
+
+	t.Run("Delete", func(t *testing.T) {
+		err = m.User.Delete(auth0.StringValue(u.ID))
 	})
 
 	t.Run("Search", func(t *testing.T) {
