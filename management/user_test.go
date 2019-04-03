@@ -28,17 +28,17 @@ func TestUser(t *testing.T) {
 		},
 	}
 
-    r1 := &Role{
-	    Name:        auth0.String("admin"),
-	    Description: auth0.String("Administrator"),
+	r1 := &Role{
+		Name:        auth0.String("admin"),
+		Description: auth0.String("Administrator"),
 	}
-    m.Role.Create(r1)
+	m.Role.Create(r1)
 
-    r2 := &Role{
-	    Name:        auth0.String("user"),
-	    Description: auth0.String("User"),
+	r2 := &Role{
+		Name:        auth0.String("user"),
+		Description: auth0.String("User"),
 	}
-    m.Role.Create(r2)
+	m.Role.Create(r2)
 
 	var err error
 
@@ -92,16 +92,16 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", uu)
 	})
 
-    t.Run("GetRoles", func(t *testing.T) {
-        var roles []*Role
-        roles, err = m.User.GetRoles(auth0.StringValue(u.ID))
+	t.Run("GetRoles", func(t *testing.T) {
+		var roles []*Role
+		roles, err = m.User.GetRoles(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
-        t.Logf("%v\n", roles)
-    })
+		t.Logf("%v\n", roles)
+	})
 
-    t.Run("AssignRoles", func(t *testing.T) {
+	t.Run("AssignRoles", func(t *testing.T) {
 		roles := []*Role{r1, r2}
 		err = m.User.AssignRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
@@ -109,7 +109,7 @@ func TestUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-    })
+	})
 
 	t.Run("UnassignRoles", func(t *testing.T) {
 		roles := []*Role{r1, r2}
@@ -117,7 +117,7 @@ func TestUser(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-    })
+	})
 
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(auth0.StringValue(u.ID))
