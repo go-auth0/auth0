@@ -11,7 +11,7 @@ type Grant struct {
 	ClientID *string `json:"clientID,omitempty"`
 
 	// The id of the user.
-	UserID *string `json:"user_id`
+	UserID *string `json:"user_id"`
 
 	// The grant's audience.
 	Audience *string `json:"audience,omitempty"`
