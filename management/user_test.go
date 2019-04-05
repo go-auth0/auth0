@@ -28,19 +28,25 @@ func TestUser(t *testing.T) {
 		},
 	}
 
+	var err error
+
 	r1 := &Role{
 		Name:        auth0.String("admin"),
 		Description: auth0.String("Administrator"),
 	}
-	m.Role.Create(r1)
+	err = m.Role.Create(r1)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	r2 := &Role{
 		Name:        auth0.String("user"),
 		Description: auth0.String("User"),
 	}
-	m.Role.Create(r2)
-
-	var err error
+	err = m.Role.Create(r2)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
