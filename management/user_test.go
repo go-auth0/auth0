@@ -123,7 +123,7 @@ func TestUser(t *testing.T) {
 		roles := []*Role{r1, r2}
 		err = m.User.UnassignRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 		}
 	})
 
