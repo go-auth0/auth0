@@ -52,7 +52,6 @@ Following is a list of supported Auth0 resources.
 - [x] [Resource Servers (APIs)](https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers)
 - [x] [Roles](https://auth0.com/docs/api/management/v2#!/Roles)
 - [x] [Rules](https://auth0.com/docs/api/management/v2#!/Rules/get_rules)
-- [ ] [Roles](https://auth0.com/docs/api/management/v2#!/Roles/get_roles)
 - [x] [Rules Configs](https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs)
 - [ ] [User Blocks](https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks)
 - [x] [Users](https://auth0.com/docs/api/management/v2#!/Users/get_users)
