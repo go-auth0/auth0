@@ -48,6 +48,9 @@ func TestUser(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	defer m.Role.Delete(auth0.StringValue(r1.ID))
+	defer m.Role.Delete(auth0.StringValue(r2.ID))
+
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
 		if err != nil {
@@ -173,8 +176,4 @@ func TestUser(t *testing.T) {
 			m.User.Delete(auth0.StringValue(user.ID))
 		}
 	})
-
-	m.Role.Delete(auth0.StringValue(r1.ID))
-	m.Role.Delete(auth0.StringValue(r2.ID))
-
 }
