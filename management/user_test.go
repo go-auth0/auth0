@@ -106,7 +106,6 @@ func TestUser(t *testing.T) {
 		err = m.User.AssignRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
 			t.Error(err)
-			t.Fatal(err)
 		}
 
 	})
