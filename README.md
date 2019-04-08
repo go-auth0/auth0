@@ -50,6 +50,7 @@ Following is a list of supported Auth0 resources.
 - [x] [Grants](https://auth0.com/docs/api/management/v2#!/Grants/get_grants)
 - [x] [Logs](https://auth0.com/docs/api/management/v2#!/Logs/get_logs)
 - [x] [Resource Servers (APIs)](https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers)
+- [x] [Roles](https://auth0.com/docs/api/management/v2#!/Roles)
 - [x] [Rules](https://auth0.com/docs/api/management/v2#!/Rules/get_rules)
 - [x] [Rules Configs](https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs)
 - [ ] [User Blocks](https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks)

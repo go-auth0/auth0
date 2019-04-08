@@ -41,6 +41,9 @@ type Management struct {
 	// Log reads Auth0 Logs.
 	Log *LogManager
 
+	// RoleManager manages Auth0 Roles.
+	Role *RoleManager
+
 	// RuleManager manages Auth0 Rules.
 	Rule *RuleManager
 
@@ -105,6 +108,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Grant = NewGrantManager(m)
 	m.Log = NewLogManager(m)
 	m.ResourceServer = NewResourceServerManager(m)
+	m.Role = NewRoleManager(m)
 	m.Rule = NewRuleManager(m)
 	m.RuleConfig = NewRuleConfigManager(m)
 	m.EmailTemplate = NewEmailTemplateManager(m)

@@ -30,6 +30,27 @@ func TestUser(t *testing.T) {
 
 	var err error
 
+	r1 := &Role{
+		Name:        auth0.String("admin"),
+		Description: auth0.String("Administrator"),
+	}
+	err = m.Role.Create(r1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	r2 := &Role{
+		Name:        auth0.String("user"),
+		Description: auth0.String("User"),
+	}
+	err = m.Role.Create(r2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer m.Role.Delete(auth0.StringValue(r1.ID))
+	defer m.Role.Delete(auth0.StringValue(r2.ID))
+
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
 		if err != nil {
@@ -80,11 +101,33 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", uu)
 	})
 
-	t.Run("Delete", func(t *testing.T) {
-		err = m.User.Delete(auth0.StringValue(u.ID))
+	t.Run("GetRoles", func(t *testing.T) {
+		var roles []*Role
+		roles, err = m.User.GetRoles(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
+		t.Logf("%v\n", roles)
+	})
+
+	t.Run("AssignRoles", func(t *testing.T) {
+		err = m.User.AssignRoles(auth0.StringValue(u.ID), r1, r2)
+		if err != nil {
+			t.Error(err)
+		}
+
+	})
+
+	t.Run("UnassignRoles", func(t *testing.T) {
+		roles := []*Role{r1, r2}
+		err = m.User.UnassignRoles(auth0.StringValue(u.ID), roles...)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+
+	t.Run("Delete", func(t *testing.T) {
+		err = m.User.Delete(auth0.StringValue(u.ID))
 	})
 
 	t.Run("Search", func(t *testing.T) {
