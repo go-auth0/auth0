@@ -106,3 +106,30 @@ func (um *UserManager) List(opts ...reqOption) (us []*User, err error) {
 func (um *UserManager) Search(opts ...reqOption) (us []*User, err error) {
 	return um.List(opts...)
 }
+
+func (um *UserManager) GetRoles(id string, opts ...reqOption) (roles []*Role, err error) {
+	err = um.m.get(um.m.uri("users", id, "roles")+um.m.q(opts), &roles)
+	return roles, err
+}
+
+func (um *UserManager) AssignRoles(id string, roles ...*Role) error {
+	r := make(map[string][]*string)
+
+	r["roles"] = make([]*string, len(roles))
+	for i, role := range roles {
+		r["roles"][i] = role.ID
+	}
+
+	return um.m.post(um.m.uri("users", id, "roles"), &r)
+}
+
+func (um *UserManager) UnassignRoles(id string, roles ...*Role) error {
+	r := make(map[string][]*string)
+
+	r["roles"] = make([]*string, len(roles))
+	for i, role := range roles {
+		r["roles"][i] = role.ID
+	}
+
+	return um.m.request("DELETE", um.m.uri("users", id, "roles"), &r)
+}
