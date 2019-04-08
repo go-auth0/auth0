@@ -13,7 +13,8 @@ func TestClient(t *testing.T) {
 	c := &Client{
 		Name: auth0.Stringf("Test Client (%s)",
 			time.Now().Format(time.StampMilli)),
-		Description: auth0.String("This is just a test client."),
+		Description:    auth0.String("This is just a test client."),
+		AllowedOrigins: auth0.Slice([]interface{}{"https://example.com"}),
 	}
 
 	var err error
@@ -49,6 +50,7 @@ func TestClient(t *testing.T) {
 		c.ClientID = nil                       // read-only
 		c.JWTConfiguration.SecretEncoded = nil // read-only
 		c.Description = auth0.String(strings.Replace(auth0.StringValue(c.Description), "just", "more than", 1))
+		c.AllowedOrigins = auth0.Slice([]interface{}{})
 
 		err = m.Client.Update(id, c)
 		if err != nil {

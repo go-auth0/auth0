@@ -64,3 +64,17 @@ func TimeValue(t *time.Time) time.Time {
 	}
 	return time.Time{}
 }
+
+// Time returns a pointer to the slice value passed in.
+func Slice(s []interface{}) *[]interface{} {
+	return &s
+}
+
+// SliceValue returns the value of the slice pointer passed in or an empty slice
+// if the pointer is nil.
+func SliceValue(s *[]interface{}) []interface{} {
+	if s != nil {
+		return *s
+	}
+	return []interface{}{}
+}
