@@ -111,8 +111,7 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("AssignRoles", func(t *testing.T) {
-		roles := []*Role{r1, r2}
-		err = m.User.AssignRoles(auth0.StringValue(u.ID), roles...)
+		err = m.User.AssignRoles(auth0.StringValue(u.ID), r1, r2)
 		if err != nil {
 			t.Error(err)
 		}
