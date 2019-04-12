@@ -14,6 +14,27 @@ var (
 	secret = os.Getenv("AUTH0_CLIENT_SECRET")
 )
 
+func ExampleClient() {
+	m, err := management.New(domain, id, secret)
+	if err != nil {
+		fmt.Printf("Failed creating management client. %s", err)
+	}
+
+	c := &management.Client{
+		Name:        auth0.String("Client Name"),
+		Description: auth0.String("Long description of client"),
+	}
+
+	err = m.Client.Create(c)
+	if err != nil {
+		fmt.Printf("Failed creating client. %s", err)
+	}
+	defer m.Client.Delete(auth0.StringValue(c.ClientID))
+
+	fmt.Print("Client created!")
+	// Output: Client created!
+}
+
 func ExampleUser() {
 	m, err := management.New(domain, id, secret)
 	if err != nil {
@@ -32,6 +53,6 @@ func ExampleUser() {
 	}
 	defer m.User.Delete(auth0.StringValue(u.ID))
 
-	fmt.Printf("User created!")
+	fmt.Print("User created!")
 	// Output: User created!
 }

@@ -15,23 +15,30 @@ For more information about [auth0](http://auth0.com/) check their [documentation
 
 The Auth0 Management API is meant to be used by back-end servers or trusted parties performing administrative tasks. Generally speaking, anything that can be done through the Auth0 dashboard (and more) can also be done through this API.
 
-Initialize your client class with an API v2 token and a domain.
+### Usage
 
 ```go
-import "gopkg.in/auth0.v1/management"
+import (
+	gopkg.in/auth0.v1
+	gopkg.in/auth0.v1/management
+)
+```
 
-m, err := management.New("<auth0-domain>", "<auth0-client-id>", "<auth0-client-secret>")
+Initialize your client class with your domain, client ID and secret.
+
+```go
+m, err := management.New(domain, id, secret)
 if err != nil {
 	// handle err
 }
 ```
 
-With an authenticated management client we can now interact with the Auth0 Management API.
+With the management client we can now interact with the Auth0 Management API.
 
 ```go
-c := &Client{
-	Name: "Client Name",
-	Description: "Long description of client",
+c := &management.Client{
+	Name:        auth0.String("Client Name"),
+	Description: auth0.String("Long description of client"),
 }
 
 err = m.Client.Create(c)
