@@ -107,6 +107,12 @@ func (um *UserManager) Search(opts ...reqOption) (us []*User, err error) {
 	return um.List(opts...)
 }
 
+func (um *UserManager) ListByEmail(email string, opts ...reqOption) (us []*User, err error) {
+	opts = append(opts, Parameter("email", email))
+	err = um.m.get(um.m.uri("users-by-email")+um.m.q(opts), &us)
+	return
+}
+
 func (um *UserManager) GetRoles(id string, opts ...reqOption) (roles []*Role, err error) {
 	err = um.m.get(um.m.uri("users", id, "roles")+um.m.q(opts), &roles)
 	return roles, err
