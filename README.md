@@ -62,7 +62,7 @@ Following is a list of supported Auth0 resources.
 - [x] [Rules Configs](https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs)
 - [ ] [User Blocks](https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks)
 - [x] [Users](https://auth0.com/docs/api/management/v2#!/Users/get_users)
-- [ ] [Users By Email](https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email)
+- [x] [Users By Email](https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email)
 - [ ] [Blacklists](https://auth0.com/docs/api/management/v2#!/Blacklists/get_tokens)
 - [x] [Email Templates](https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName)
 - [x] [Emails](https://auth0.com/docs/api/management/v2#!/Emails/get_provider)
