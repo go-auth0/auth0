@@ -123,6 +123,12 @@ func (cm *ConnectionManager) Read(id string, opts ...reqOption) (*Connection, er
 	return c, err
 }
 
+func (cm *ConnectionManager) List(opts ...reqOption) ([]*Connection, error) {
+	var c []*Connection
+	err := cm.m.get(cm.m.uri("connections")+cm.m.q(opts), &c)
+	return c, err
+}
+
 func (cm *ConnectionManager) Update(id string, c *Connection) (err error) {
 	return cm.m.patch(cm.m.uri("connections", id), c)
 }

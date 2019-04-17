@@ -32,6 +32,14 @@ func TestConnection(t *testing.T) {
 		t.Logf("%v\n", c)
 	})
 
+	t.Run("List", func(t *testing.T) {
+		cs, err := m.Connection.List()
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", cs)
+	})
+
 	t.Run("Update", func(t *testing.T) {
 
 		id := auth0.StringValue(c.ID)
