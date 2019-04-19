@@ -103,10 +103,26 @@ type ConnectionOptions struct {
 	CustomScripts map[string]interface{} `json:"customScripts,omitempty"`
 	// configuration variables that can be used in custom scripts
 	Configuration map[string]interface{} `json:"configuration,omitempty"`
+
+	// Options to add integration with Twilio
+	// https://community.auth0.com/t/using-management-api-to-create-a-twilio-connection/23576/3
+	Totp                *ConnectionOptionsTotp `json:"totp,omitempty"`
+	Name                *string                `json:"name,omitempty"`
+	TwilioSid           *string                `json:"twilio_sid,omitempty"`
+	TwilioToken         *string                `json:"twilio_token,omitempty"`
+	From                *string                `json:"from,omitempty"`
+	Syntax              *string                `json:"syntax,omitempty"`
+	Template            *string                `json:"template,omitempty"`
+	MessagingServiceSid *string                `json:"messaging_service_sid,omitempty"`
 }
 
 type ConnectionManager struct {
 	m *Management
+}
+
+type ConnectionOptionsTotp struct {
+	TimeStep *int `json:time_step,omitempty`
+	Length   *int `json:length,omitempty`
 }
 
 func NewConnectionManager(m *Management) *ConnectionManager {
