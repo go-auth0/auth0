@@ -114,6 +114,9 @@ type ConnectionOptions struct {
 	Syntax              *string                `json:"syntax,omitempty"`
 	Template            *string                `json:"template,omitempty"`
 	MessagingServiceSid *string                `json:"messaging_service_sid,omitempty"`
+
+	// Adfs
+	AdfsServer *string `json:"adfs_server,omitempty"`
 }
 
 type ConnectionManager struct {
