@@ -117,6 +117,10 @@ type ConnectionOptions struct {
 
 	// Adfs
 	AdfsServer *string `json:"adfs_server,omitempty"`
+
+	// Options to add Custom Authorization type for OAuth2 Connections
+	AuthorizationURL    *string                `json:"authorizationURL,omitempty"`
+	TokenURL			*string                `json:"tokenURL,omitempty"`
 }
 
 type ConnectionManager struct {
