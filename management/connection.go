@@ -122,6 +122,11 @@ type ConnectionOptions struct {
 	AuthorizationURL *string `json:"authorizationURL,omitempty"`
 	TokenURL         *string `json:"tokenURL,omitempty"`
 	Scope            *string `json:"scope,omitempty"`
+	Script           *Script `json:"script,omitempty"`
+}
+
+type Script struct {
+	FetchUserProfile *string `json:"fetchUserProfile,omitempty"`
 }
 
 type ConnectionManager struct {
