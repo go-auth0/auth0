@@ -83,11 +83,11 @@ func newPlainClient(debug bool) *http.Client {
 	c := &http.Client{
 		Timeout: time.Minute * 1,
 	}
-	c = wrapRetryClient(c)
-	c = wrapUserAgentClient(c)
+	c = WrapRetry(c)
+	c = WrapUserAgent(c)
 
 	if debug {
-		c = wrapDebugClient(c)
+		c = WrapDebug(c)
 	}
 
 	return c
