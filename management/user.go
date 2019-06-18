@@ -25,6 +25,9 @@ type User struct {
 	// The user's nickname
 	Nickname *string `json:"nickname,omitempty"`
 
+	// URL to users picture
+	Picture *string `json:"picture,omitempty"`
+
 	// The user's password (mandatory for non SMS connections)
 	Password *string `json:"password,omitempty"`
 
