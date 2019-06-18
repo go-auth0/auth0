@@ -77,3 +77,18 @@ func OAuth2(domain, clientID, clientSecret string) *http.Client {
 		},
 	}).Client(context.Background())
 }
+
+func newPlainClient(debug bool) *http.Client {
+
+	c := &http.Client{
+		Timeout: time.Minute * 1,
+	}
+	c = wrapRetryClient(c)
+	c = wrapUserAgentClient(c)
+
+	if debug {
+		c = wrapDebugClient(c)
+	}
+
+	return c
+}
