@@ -78,7 +78,7 @@ func OAuth2(domain, clientID, clientSecret string) *http.Client {
 	}).Client(context.Background())
 }
 
-func newPlainClient(debug bool) *http.Client {
+func NewPlainClient(debug bool) *http.Client {
 
 	c := &http.Client{
 		Timeout: time.Minute * 1,

@@ -106,7 +106,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		m.http = client.WrapDebug(m.http)
 	}
 
-	m.plainHTTP = newPlainClient(m.debug)
+	m.plainHTTP = client.NewPlainClient(m.debug)
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
