@@ -48,6 +48,7 @@ func TestClient(t *testing.T) {
 
 		c.ClientID = nil                       // read-only
 		c.JWTConfiguration.SecretEncoded = nil // read-only
+		c.SigningKeys = nil                    // read-only
 		c.Description = auth0.String(strings.Replace(auth0.StringValue(c.Description), "just", "more than", 1))
 
 		err = m.Client.Update(id, c)
