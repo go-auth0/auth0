@@ -12,6 +12,7 @@ func TestUser(t *testing.T) {
 		Connection: auth0.String("Username-Password-Authentication"),
 		Email:      auth0.String("chuck@chucknorris.com"),
 		Password:   auth0.String("Passwords hide their Chuck"),
+		Username:   auth0.String("chucknorris"),
 		Nickname:   auth0.String("Chucky"),
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
@@ -134,16 +135,19 @@ func TestUser(t *testing.T) {
 	allUsers := []*User{
 		{
 			Email:      auth0.String("alice@example.com"),
+			Username:   auth0.String("alice"),
 			Password:   auth0.String("5301111b-b31b-47c4-bf3d-0c26ea57bdf4"),
 			Connection: auth0.String("Username-Password-Authentication"),
 		},
 		{
 			Email:      auth0.String("bob@example.com"),
+			Username:   auth0.String("bob"),
 			Password:   auth0.String("bcfc3bca-8cd3-4b74-a474-402420f34f85"),
 			Connection: auth0.String("Username-Password-Authentication"),
 		},
 		{
 			Email:      auth0.String("charlie@example.com"),
+			Username:   auth0.String("charlie"),
 			Password:   auth0.String("80140c2a-b5c1-490c-a4bf-b0623114d5fd"),
 			Connection: auth0.String("Username-Password-Authentication"),
 		},

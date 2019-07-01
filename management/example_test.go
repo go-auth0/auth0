@@ -44,6 +44,7 @@ func ExampleUser() {
 	u := &management.User{
 		Connection: auth0.String("Username-Password-Authentication"),
 		Email:      auth0.String("smith@example.com"),
+		Username:   auth0.String("smith"),
 		Password:   auth0.String("F4e3DA1a6cDD"),
 	}
 

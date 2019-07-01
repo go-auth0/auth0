@@ -19,6 +19,7 @@ func TestRole(t *testing.T) {
 	u := &User{
 		Connection: auth0.String("Username-Password-Authentication"),
 		Email:      auth0.String("chuck@chucknorris.com"),
+		Username:   auth0.String("chuck"),
 		Password:   auth0.String("Passwords hide their Chuck"),
 	}
 	err = m.User.Create(u)
