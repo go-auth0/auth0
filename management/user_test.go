@@ -27,6 +27,7 @@ func TestUser(t *testing.T) {
 				"knows_victorias_secret",
 			},
 		},
+		Picture: auth0.String("https://example-picture-url.jpg"),
 	}
 
 	var err error

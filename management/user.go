@@ -74,6 +74,9 @@ type User struct {
 	// AppMetadata holds data that the user has read-only access to (e.g. roles,
 	// permissions, vip, etc).
 	AppMetadata map[string]interface{} `json:"app_metadata,omitempty"`
+
+	// The user's picture url
+	Picture *string `json:"picture,omitempty"`
 }
 
 func (u *User) String() string {
