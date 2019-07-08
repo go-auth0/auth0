@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+type Identity struct {
+	Connection *string `json:"connection,omitempty"`
+	UserID     *string `json:"user_id,omitempty"`
+	Provider   *string `json:"provider,omitempty"`
+	IsSocial   *bool   `json:"isSocial,omitempty"`
+}
+
 type User struct {
 
 	// The users identifier.
@@ -44,6 +51,8 @@ type User struct {
 	// UserMetadata holds data that the user has read/write access to (e.g.
 	// color_preference, blog_url, etc).
 	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
+
+	Identities []*Identity `json:"identities,omitempty"`
 
 	// True if the user's email is verified, false otherwise. If it is true then
 	// the user will not receive a verification email, unless verify_email: true
