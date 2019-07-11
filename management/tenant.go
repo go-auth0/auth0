@@ -118,7 +118,7 @@ type TenantFlags struct {
 	EnableCustomDomainInEmails *bool `json:"enable_custom_domain_in_emails,omitempty"`
 
 	// If enabled, users will not be prompted to confirm log in before SSO redirection.
-	EnableSso *bool `json:"enable_sso,omitempty"`
+	EnableSSO *bool `json:"enable_sso,omitempty"`
 
 	AllowChangingEnableSso *bool `json:"allow_changing_enable_sso,omitempty"`
 
