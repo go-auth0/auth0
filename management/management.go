@@ -151,7 +151,12 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	if v != nil {
 		json.NewEncoder(&payload).Encode(v)
 	}
-	req, _ := http.NewRequest(method, uri, &payload)
+	
+	req, err := http.NewRequest(method, uri, &payload)
+	if err != nil {
+		return err
+	}
+
 	req.Header.Add("Content-Type", "application/json")
 
 	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
