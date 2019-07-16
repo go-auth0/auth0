@@ -1,6 +1,9 @@
 package management
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+)
 
 type Connection struct {
 	// A generated string identifying the connection.
@@ -124,8 +127,8 @@ type ConnectionManager struct {
 }
 
 type ConnectionOptionsTotp struct {
-	TimeStep *int `json:time_step,omitempty`
-	Length   *int `json:length,omitempty`
+	TimeStep *int `json:"time_step,omitempty"`
+	Length   *int `json:"length,omitempty"`
 }
 
 func NewConnectionManager(m *Management) *ConnectionManager {
@@ -154,4 +157,14 @@ func (cm *ConnectionManager) Update(id string, c *Connection) (err error) {
 
 func (cm *ConnectionManager) Delete(id string) (err error) {
 	return cm.m.delete(cm.m.uri("connections", id))
+}
+
+func (cm *ConnectionManager) GetConnectionID(connectionName string) (*string, error) {
+	connections, err := cm.m.Connection.List(Parameter("name", connectionName), Parameter("fields", "id"))
+	if len(connections) == 1 {
+		return connections[0].ID, nil
+	} else if err == nil {
+		err = errors.New(connectionName + " connection does not exist.")
+	}
+	return nil, err
 }

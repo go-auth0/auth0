@@ -10,6 +10,8 @@ func TestJob(t *testing.T) {
 
 	var err error
 
+	connectionID, _ := m.Connection.GetConnectionID("Username-Password-Authentication")
+
 	u := &User{
 		Connection: auth0.String("Username-Password-Authentication"),
 		Email:      auth0.String("example@example.com"),
@@ -54,7 +56,7 @@ func TestJob(t *testing.T) {
 
 	t.Run("ExportUsers", func(t *testing.T) {
 		job := &Job{
-			ConnectionID: auth0.String("con_C2Imdps0x50qqvYF"),
+			ConnectionID: connectionID,
 			Format:       auth0.String("json"),
 			Limit:        auth0.Int(5),
 			Fields: []map[string]interface{}{
@@ -72,7 +74,7 @@ func TestJob(t *testing.T) {
 
 	t.Run("ImportUsers", func(t *testing.T) {
 		job := &Job{
-			ConnectionID:        auth0.String("con_C2Imdps0x50qqvYF"),
+			ConnectionID:        connectionID,
 			Upsert:              auth0.Bool(true),
 			SendCompletionEmail: auth0.Bool(false),
 			Users: []map[string]interface{}{
