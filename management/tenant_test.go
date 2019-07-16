@@ -44,7 +44,8 @@ func TestTenant(t *testing.T) {
 				"allow_changing_enable_sso": true,
 				"universal_login": false,
 				"enable_legacy_logs_search_v2": false,
-				"disable_clickjack_protection_headers": false
+				"disable_clickjack_protection_headers": false,
+				"enable_public_signup_user_exists_error": false
 			},
 			"friendly_name": "My Example Tenant",
 			"picture_url": "https://mycompany.org/logo.png",

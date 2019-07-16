@@ -132,6 +132,10 @@ type TenantFlags struct {
 	// If enabled, additional HTTP security headers will not be included in the response
 	// to prevent embedding of the Universal Login prompts in an IFRAME.
 	DisableClickjackProtectionHeaders *bool `json:"disable_clickjack_protection_headers,omitempty"`
+
+	// If enabled, this will use a generic response in the public signup API
+	// which will prevent users from being able to find out if an e-mail address or username has previously registered
+	EnablePublicSignupUserExistsError *bool `json:"enable_public_signup_user_exists_error,omitempty"`
 }
 
 type TenantUniversalLogin struct {
