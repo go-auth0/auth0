@@ -69,6 +69,7 @@ The following Auth0 resources are supported:
 - [x] [Stats](https://auth0.com/docs/api/management/v2#!/Stats/get_active_users)
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
 - [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
+- [x] [Branding](https://auth0.com/docs/api/management/v2/#!/Branding/get_branding)
 
 ## What is Auth0?
 

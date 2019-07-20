@@ -71,6 +71,9 @@ type Management struct {
 	// Stat is used to retrieve usage statistics.
 	Stat *StatManager
 
+	// Branding settings such as company logo or primary color.
+	Branding *BrandingManager
+
 	domain   string
 	basePath string
 	timeout  time.Duration
@@ -118,6 +121,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Tenant = NewTenantManager(m)
 	m.Ticket = NewTicketManager(m)
 	m.Stat = NewStatManager(m)
+	m.Branding = NewBrandingManager(m)
 
 	return m, nil
 }
