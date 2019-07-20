@@ -43,6 +43,9 @@ type ResourceServer struct {
 	VerificationLocation *string `json:"verificationLocation,omitempty"`
 
 	Options map[string]interface{} `json:"options,omitempty"`
+	
+	// Enables the enforcement of the authorization policies.
+	EnforcePolicies *bool `json:"enforce_policies,omitempty"`
 }
 
 func (r *ResourceServer) String() string {
