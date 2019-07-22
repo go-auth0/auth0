@@ -89,4 +89,12 @@ func TestConnection(t *testing.T) {
 			t.Error(err)
 		}
 	})
+
+	t.Run("GetConnectionID", func(t *testing.T) {
+		cs, err := m.Connection.GetConnectionID("Username-Password-Authentication")
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", cs)
+	})
 }
