@@ -85,6 +85,14 @@ type User struct {
 	Picture *string `json:"picture,omitempty"`
 }
 
+type UsersWithTotals struct {
+	Start  int     `json:"start"`
+	Limit  int     `json:"limit"`
+	Length int     `json:"length"`
+	Total  int     `json:"total"`
+	Users  []*User `json:"users"`
+}
+
 func (u *User) String() string {
 	b, _ := json.MarshalIndent(u, "", "  ")
 	return string(b)
@@ -123,6 +131,17 @@ func (um *UserManager) List(opts ...reqOption) (us []*User, err error) {
 
 func (um *UserManager) Search(opts ...reqOption) (us []*User, err error) {
 	return um.List(opts...)
+}
+
+func (um *UserManager) ListWithTotals(opts ...reqOption) (*UsersWithTotals, error) {
+	ut := new(UsersWithTotals)
+	opts = append(opts, IncludeTotals(true))
+	err := um.m.get(um.m.uri("users")+um.m.q(opts), ut)
+	return ut, err
+}
+
+func (um *UserManager) SearchWithTotals(opts ...reqOption) (*UsersWithTotals, error) {
+	return um.ListWithTotals(opts...)
 }
 
 func (um *UserManager) ListByEmail(email string, opts ...reqOption) (us []*User, err error) {
