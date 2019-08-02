@@ -120,7 +120,10 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	}
 	mp.Close()
 
-	req, _ := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
+	req, err := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
+	if err != nil {
+		return err
+	}
 	req.Header.Add("Content-Type", mp.FormDataContentType())
 
 	ctx, cancel := context.WithTimeout(context.Background(), jm.m.timeout)
