@@ -74,7 +74,7 @@ type Management struct {
 	// Branding settings such as company logo or primary color.
 	Branding *BrandingManager
 
-	domain   string
+	url      *url.URL
 	basePath string
 	timeout  time.Duration
 	debug    bool
@@ -85,9 +85,17 @@ type Management struct {
 // New creates a new Auth0 Management client by authenticating using the
 // supplied client id and secret.
 func New(domain, clientID, clientSecret string, options ...apiOption) (*Management, error) {
+	if !strings.HasPrefix(domain, "http://") && !strings.HasPrefix(domain, "https://") {
+		domain = "https://" + domain
+	}
+
+	u, err := url.Parse(domain)
+	if err != nil {
+		return nil, err
+	}
 
 	m := &Management{
-		domain:   domain,
+		url:      u,
 		basePath: "api/v2",
 		timeout:  1 * time.Minute,
 		debug:    false,
@@ -97,7 +105,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	m.http = client.OAuth2(domain, clientID, clientSecret)
+	m.http = client.OAuth2(m.url, clientID, clientSecret)
 	m.http = client.WrapUserAgent(m.http)
 	m.http = client.WrapRetry(m.http)
 	if m.debug {
@@ -128,8 +136,8 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 
 func (m *Management) uri(path ...string) string {
 	return (&url.URL{
-		Scheme: "https",
-		Host:   m.domain,
+		Scheme: m.url.Scheme,
+		Host:   m.url.Host,
 		Path:   m.basePath + "/" + strings.Join(path, "/"),
 	}).String()
 }
@@ -146,12 +154,16 @@ func (m *Management) q(options []reqOption) string {
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
-
 	var payload bytes.Buffer
 	if v != nil {
 		json.NewEncoder(&payload).Encode(v)
 	}
-	req, _ := http.NewRequest(method, uri, &payload)
+
+	req, err := http.NewRequest(method, uri, &payload)
+	if err != nil {
+		return err
+	}
+
 	req.Header.Add("Content-Type", "application/json")
 
 	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)

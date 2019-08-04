@@ -67,13 +67,25 @@ func WrapDebug(c *http.Client) *http.Client {
 	}
 }
 
-func OAuth2(domain, clientID, clientSecret string) *http.Client {
+func getTokenURL(u url.URL) string {
+	u.Path = "oauth/token"
+
+	return (&u).String()
+}
+
+func getAudience(u url.URL, apiPath string) string {
+	u.Path = apiPath
+
+	return (&u).String()
+}
+
+func OAuth2(u *url.URL, clientID, clientSecret string) *http.Client {
 	return (&clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		TokenURL:     "https://" + domain + "/oauth/token",
+		TokenURL:     getTokenURL(*u),
 		EndpointParams: url.Values{
-			"audience": {"https://" + domain + "/api/v2/"},
+			"audience": {getAudience(*u, "api/v2/")},
 		},
 	}).Client(context.Background())
 }
