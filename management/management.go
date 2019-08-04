@@ -163,7 +163,6 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	if err != nil {
 		return err
 	}
-
 	req.Header.Add("Content-Type", "application/json")
 
 	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
