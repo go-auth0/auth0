@@ -85,9 +85,13 @@ type Management struct {
 // New creates a new Auth0 Management client by authenticating using the
 // supplied client id and secret.
 func New(domain, clientID, clientSecret string, options ...apiOption) (*Management, error) {
-	if !strings.HasPrefix(domain, "http://") && !strings.HasPrefix(domain, "https://") {
-		domain = "https://" + domain
+
+	// Ignore the scheme if it was defined in the domain variable. Then prefix
+	// with https as its the only scheme supported by the Auth0 API.
+	if i := strings.Index(domain, "//"); i != -1 {
+		domain = domain[i+2:]
 	}
+	domain = "https://" + domain
 
 	u, err := url.Parse(domain)
 	if err != nil {

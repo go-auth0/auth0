@@ -22,6 +22,21 @@ func init() {
 	}
 }
 
+func TestNew(t *testing.T) {
+	for _, domain := range []string{
+		"example.com ",
+		" example.com",
+		" example.com ",
+		"%2Fexample.com",
+		" a.b.c.example.com",
+	} {
+		_, err := New(domain, "", "")
+		if err == nil {
+			t.Errorf("expected New to fail with domain %q", domain)
+		}
+	}
+}
+
 func TestOptionFields(t *testing.T) {
 	v := make(url.Values)
 	WithFields("foo", "bar")(v)
