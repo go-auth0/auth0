@@ -63,3 +63,12 @@ func (cg *ClientGrantManager) Update(id string, g *ClientGrant) (err error) {
 func (cg *ClientGrantManager) Delete(id string) (err error) {
 	return cg.m.delete(cg.m.uri("client-grants", id))
 }
+
+func (cg *ClientGrantManager) List(opts ...reqOption) ([]*ClientGrant, error) {
+	var gs []*ClientGrant
+	err := cg.m.get(cg.m.uri("client-grants")+cg.m.q(opts), &gs)
+	if err != nil {
+		return nil, err
+	}
+	return gs, err
+}
