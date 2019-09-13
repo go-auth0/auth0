@@ -2,6 +2,7 @@ package management
 
 import (
 	"testing"
+	"time"
 
 	"gopkg.in/auth0.v1"
 )
@@ -54,6 +55,27 @@ func TestUser(t *testing.T) {
 
 	defer m.Role.Delete(auth0.StringValue(r1.ID))
 	defer m.Role.Delete(auth0.StringValue(r2.ID))
+
+	s := &ResourceServer{
+		Name: auth0.Stringf("Test Role (%s)",
+			time.Now().Format(time.StampMilli)),
+		Identifier: auth0.String("https://api.example.com/role"),
+		Scopes: []*ResourceServerScope{
+			{
+				Value:       auth0.String("read:resource"),
+				Description: auth0.String("Read Resource"),
+			},
+			{
+				Value:       auth0.String("update:resource"),
+				Description: auth0.String("Update Resource"),
+			},
+		},
+	}
+	err = m.ResourceServer.Create(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
 
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
