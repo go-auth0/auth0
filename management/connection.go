@@ -72,6 +72,9 @@ type ConnectionOptions struct {
 	// Options for password dictionary policy.
 	PasswordDictionary map[string]interface{} `json:"password_dictionary,omitempty"`
 
+	// Options for password complexity options.
+	PasswordComplexityOptions map[string]interface{} `json:"password_complexity_options,omitempty"`
+
 	APIEnableUsers               *bool `json:"api_enable_users,omitempty"`
 	BasicProfile                 *bool `json:"basic_profile,omitempty"`
 	ExtAdmin                     *bool `json:"ext_admin,omitempty"`
