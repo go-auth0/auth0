@@ -47,7 +47,7 @@ type ResourceServer struct {
 	// Enables the enforcement of the authorization policies.
 	EnforcePolicies *bool `json:"enforce_policies,omitempty"`
 
-	// The dialect for the access token.
+	// The dialect for the access token ["access_token" or "access_token_authz"].
 	TokenDialect *string `json:"token_dialect,omitempty"`
 }
 
