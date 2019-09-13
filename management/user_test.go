@@ -13,7 +13,7 @@ func TestUser(t *testing.T) {
 		Email:      auth0.String("chuck@chucknorris.com"),
 		Password:   auth0.String("Passwords hide their Chuck"),
 		Username:   auth0.String("chucknorris"),
-		GivenName: auth0.String("Chuck"),
+		GivenName:  auth0.String("Chuck"),
 		FamilyName: auth0.String("Norris"),
 		Nickname:   auth0.String("Chucky"),
 		UserMetadata: map[string]interface{}{
@@ -127,6 +127,37 @@ func TestUser(t *testing.T) {
 		err = m.User.UnassignRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
 			t.Error(err)
+		}
+	})
+
+	t.Run("GetPermissions", func(t *testing.T) {
+		var permissions []*Permission
+		permissions, err = m.User.GetPermissions(auth0.StringValue(u.ID))
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", permissions)
+	})
+
+	t.Run("AssignPermissions", func(t *testing.T) {
+		permissions := []*Permission{
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+		}
+		err = m.User.AssignPermissions(auth0.StringValue(u.ID), permissions...)
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("UnassignPermissions", func(t *testing.T) {
+		permissions := []*Permission{
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+		}
+		err = m.User.UnassignPermissions(auth0.StringValue(u.ID), permissions...)
+		if err != nil {
+			t.Fatal(err)
 		}
 	})
 
