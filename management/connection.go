@@ -120,6 +120,9 @@ type ConnectionOptions struct {
 
 	// Adfs
 	AdfsServer *string `json:"adfs_server,omitempty"`
+
+	// Salesforce community
+	CommunityBaseURL *string `json:"community_base_url"`
 }
 
 type ConnectionManager struct {
