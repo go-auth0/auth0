@@ -26,7 +26,7 @@ type GuardianFactorStatus struct {
 	TrialExpired *bool `json:"trial_expired,omitempty"`
 }
 
-type GuardianTemplate struct {
+type GuardianSmsTemplate struct {
 	// Message sent to the user when they are invited to enroll with a phone number
 	EnrollmentMessage *string `json:"enrollment_message,omitempty"`
 
@@ -34,7 +34,7 @@ type GuardianTemplate struct {
 	VerificationMessage *string `json:"verification_message,omitempty"`
 }
 
-type GuardianFactorPushNotificationSnsConfig struct {
+type GuardianPushNotificationSnsConfig struct {
 	// AWS Access Key ID
 	AwsAccessKeyID *string `json:"aws_access_key_id,omitempty"`
 
@@ -51,7 +51,7 @@ type GuardianFactorPushNotificationSnsConfig struct {
 	SnsGcmPlatformApplicationArn *string `json:"sns_gcm_platform_application_arn,omitempty"`
 }
 
-type GuardianFactorSmsTwilioConfig struct {
+type GuardianSmsTwilioConfig struct {
 	// From number
 	From *string `json:"from,omitempty"`
 
@@ -73,7 +73,7 @@ func NewGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{m}
 }
 
-func (gm *GuardianManager) ListFactorsAndStatuses() ([]*GuardianFactorStatus, error) {
+func (gm *GuardianManager) ListFactors() ([]*GuardianFactorStatus, error) {
 	var gf []*GuardianFactorStatus
 	err := gm.m.get(gm.m.uri("guardian/factors"), &gf)
 	return gf, err
@@ -83,32 +83,32 @@ func (gm *GuardianManager) UpdateFactor(name GuardianFactorType, gf *GuardianFac
 	return gm.m.put(gm.m.uri("guardian/factors", string(name)), gf)
 }
 
-func (gm *GuardianManager) GetTemplate() (*GuardianTemplate, error) {
-	gt := new(GuardianTemplate)
-	err := gm.m.get(gm.m.uri("guardian/factors/sms/templates"), gt)
-	return gt, err
+func (gm *GuardianManager) GetSmsTemplate() (*GuardianSmsTemplate, error) {
+	st := new(GuardianSmsTemplate)
+	err := gm.m.get(gm.m.uri("guardian/factors/sms/templates"), st)
+	return st, err
 }
 
-func (gm *GuardianManager) UpdateTemplate(gt *GuardianTemplate) error {
-	return gm.m.put(gm.m.uri("guardian/factors/sms/templates"), gt)
+func (gm *GuardianManager) UpdateSmsTemplate(st *GuardianSmsTemplate) error {
+	return gm.m.put(gm.m.uri("guardian/factors/sms/templates"), st)
 }
 
-func (gm *GuardianManager) GetFactorPushNotificationSnsConfig() (*GuardianFactorPushNotificationSnsConfig, error) {
-	sc := new(GuardianFactorPushNotificationSnsConfig)
+func (gm *GuardianManager) GetPushNotificationSnsConfig() (*GuardianPushNotificationSnsConfig, error) {
+	sc := new(GuardianPushNotificationSnsConfig)
 	err := gm.m.get(gm.m.uri("guardian/factors/push-notification/providers/sns"), sc)
 	return sc, err
 }
 
-func (gm *GuardianManager) UpdateFactorPushNotificationSnsConfig(sc *GuardianFactorPushNotificationSnsConfig) error {
+func (gm *GuardianManager) UpdatePushNotificationSnsConfig(sc *GuardianPushNotificationSnsConfig) error {
 	return gm.m.put(gm.m.uri("guardian/factors/push-notification/providers/sns"), sc)
 }
 
-func (gm *GuardianManager) GetFactorSmsTwilioConfig() (*GuardianFactorSmsTwilioConfig, error) {
-	tc := new(GuardianFactorSmsTwilioConfig)
+func (gm *GuardianManager) GetSmsTwilioConfig() (*GuardianSmsTwilioConfig, error) {
+	tc := new(GuardianSmsTwilioConfig)
 	err := gm.m.get(gm.m.uri("guardian/factors/sms/providers/twilio"), tc)
 	return tc, err
 }
 
-func (gm *GuardianManager) UpdateFactorSmsTwilioConfig(tc *GuardianFactorSmsTwilioConfig) error {
+func (gm *GuardianManager) UpdateSmsTwilioConfig(tc *GuardianSmsTwilioConfig) error {
 	return gm.m.put(gm.m.uri("guardian/factors/sms/providers/twilio"), tc)
 }

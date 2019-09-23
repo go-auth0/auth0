@@ -14,18 +14,18 @@ func TestGuardian(t *testing.T) {
 		m.Guardian.UpdateFactor(testFactor, &GuardianFactor{
 			Enabled: auth0.Bool(false),
 		})
-		m.Guardian.UpdateTemplate(&GuardianTemplate{
+		m.Guardian.UpdateSmsTemplate(&GuardianSmsTemplate{
 			EnrollmentMessage:   auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."),
 			VerificationMessage: auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}"),
 		})
-		m.Guardian.UpdateFactorPushNotificationSnsConfig(&GuardianFactorPushNotificationSnsConfig{
+		m.Guardian.UpdatePushNotificationSnsConfig(&GuardianPushNotificationSnsConfig{
 			AwsAccessKeyID:                &emptyString,
 			AwsSecretAccessKeyID:          &emptyString,
 			AwsRegion:                     &emptyString,
 			SnsApnsPlatformApplicationArn: &emptyString,
 			SnsGcmPlatformApplicationArn:  &emptyString,
 		})
-		m.Guardian.UpdateFactorSmsTwilioConfig(&GuardianFactorSmsTwilioConfig{
+		m.Guardian.UpdateSmsTwilioConfig(&GuardianSmsTwilioConfig{
 			From:                &emptyString,
 			MessagingServiceSid: &emptyString,
 			AuthToken:           &emptyString,
@@ -33,8 +33,8 @@ func TestGuardian(t *testing.T) {
 		})
 	}()
 
-	t.Run("ListFactorsAndStatuses", func(t *testing.T) {
-		gf, err := m.Guardian.ListFactorsAndStatuses()
+	t.Run("ListFactors", func(t *testing.T) {
+		gf, err := m.Guardian.ListFactors()
 		if err != nil {
 			t.Error(err)
 		}
@@ -48,40 +48,40 @@ func TestGuardian(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		gf, _ := m.Guardian.ListFactorsAndStatuses()
+		gf, _ := m.Guardian.ListFactors()
 		t.Logf("%v\n", gf)
 	})
 
-	t.Run("GetTemplate", func(t *testing.T) {
-		gt, err := m.Guardian.GetTemplate()
+	t.Run("GetSmsTemplate", func(t *testing.T) {
+		st, err := m.Guardian.GetSmsTemplate()
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", gt)
+		t.Logf("%v\n", st)
 	})
 
-	t.Run("UpdateTemplate", func(t *testing.T) {
-		err := m.Guardian.UpdateTemplate(&GuardianTemplate{
+	t.Run("UpdateSmsTemplate", func(t *testing.T) {
+		err := m.Guardian.UpdateSmsTemplate(&GuardianSmsTemplate{
 			EnrollmentMessage:   auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
 			VerificationMessage: auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
 		})
 		if err != nil {
 			t.Error(err)
 		}
-		gt, _ := m.Guardian.GetTemplate()
-		t.Logf("%v\n", gt)
+		st, _ := m.Guardian.GetSmsTemplate()
+		t.Logf("%v\n", st)
 	})
 
-	t.Run("GetFactorPushNotificationSnsConfig", func(t *testing.T) {
-		sc, err := m.Guardian.GetFactorPushNotificationSnsConfig()
+	t.Run("GetPushNotificationSnsConfig", func(t *testing.T) {
+		sc, err := m.Guardian.GetPushNotificationSnsConfig()
 		if err != nil {
 			t.Error(err)
 		}
 		t.Logf("%v\n", sc)
 	})
 
-	t.Run("UpdateFactorPushNotificationSnsConfig", func(t *testing.T) {
-		err := m.Guardian.UpdateFactorPushNotificationSnsConfig(&GuardianFactorPushNotificationSnsConfig{
+	t.Run("UpdatePushNotificationSnsConfig", func(t *testing.T) {
+		err := m.Guardian.UpdatePushNotificationSnsConfig(&GuardianPushNotificationSnsConfig{
 			AwsAccessKeyID:                auth0.String("test"),
 			AwsSecretAccessKeyID:          auth0.String("test_secret"),
 			AwsRegion:                     auth0.String("us-west-1"),
@@ -91,20 +91,20 @@ func TestGuardian(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		sc, _ := m.Guardian.GetFactorPushNotificationSnsConfig()
+		sc, _ := m.Guardian.GetPushNotificationSnsConfig()
 		t.Logf("%v\n", sc)
 	})
 
-	t.Run("GetFactorSmsTwilioConfig", func(t *testing.T) {
-		tc, err := m.Guardian.GetFactorSmsTwilioConfig()
+	t.Run("GetSmsTwilioConfig", func(t *testing.T) {
+		tc, err := m.Guardian.GetSmsTwilioConfig()
 		if err != nil {
 			t.Error(err)
 		}
 		t.Logf("%v\n", tc)
 	})
 
-	t.Run("UpdateFactorSmsTwilioConfig", func(t *testing.T) {
-		err := m.Guardian.UpdateFactorSmsTwilioConfig(&GuardianFactorSmsTwilioConfig{
+	t.Run("UpdateSmsTwilioConfig", func(t *testing.T) {
+		err := m.Guardian.UpdateSmsTwilioConfig(&GuardianSmsTwilioConfig{
 			From:      auth0.String("123456789"),
 			AuthToken: auth0.String("test_token"),
 			Sid:       auth0.String("test_sid"),
@@ -112,7 +112,7 @@ func TestGuardian(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		tc, _ := m.Guardian.GetFactorSmsTwilioConfig()
+		tc, _ := m.Guardian.GetSmsTwilioConfig()
 		t.Logf("%v\n", tc)
 	})
 }
