@@ -65,27 +65,30 @@ func NewGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{m}
 }
 
-func (gm *GuardianManager) ListFactorsAndStatuses() (gf []*GuardianFactorStatus, err error) {
-	err = gm.m.get(gm.m.uri("guardian/factors"), gf)
-	return
+func (gm *GuardianManager) ListFactorsAndStatuses() ([]*GuardianFactorStatus, error) {
+	var gf []*GuardianFactorStatus
+	err := gm.m.get(gm.m.uri("guardian/factors"), &gf)
+	return gf, err
 }
 
 func (gm *GuardianManager) UpdateFactor(name GuardianFactorType, gf *GuardianFactor) error {
 	return gm.m.put(gm.m.uri("guardian/factors", string(name)), gf)
 }
 
-func (gm *GuardianManager) GetFactorPushNotificationSnsConfig() (sc *GuardianFactorPushNotificationSnsConfig, err error) {
-	err = gm.m.get(gm.m.uri("guardian/factors/push-notification/providers/sns"), sc)
-	return
+func (gm *GuardianManager) GetFactorPushNotificationSnsConfig() (*GuardianFactorPushNotificationSnsConfig, error) {
+	sc := new(GuardianFactorPushNotificationSnsConfig)
+	err := gm.m.get(gm.m.uri("guardian/factors/push-notification/providers/sns"), sc)
+	return sc, err
 }
 
 func (gm *GuardianManager) UpdateFactorPushNotificationSnsConfig(sc *GuardianFactorPushNotificationSnsConfig) error {
 	return gm.m.put(gm.m.uri("guardian/factors/push-notification/providers/sns"), sc)
 }
 
-func (gm *GuardianManager) GetFactorSmsTwilioConfig() (tc *GuardianFactorSmsTwilioConfig, err error) {
-	err = gm.m.get(gm.m.uri("guardian/factors/sms/providers/twilio"), tc)
-	return
+func (gm *GuardianManager) GetFactorSmsTwilioConfig() (*GuardianFactorSmsTwilioConfig, error) {
+	tc := new(GuardianFactorSmsTwilioConfig)
+	err := gm.m.get(gm.m.uri("guardian/factors/sms/providers/twilio"), tc)
+	return tc, err
 }
 
 func (gm *GuardianManager) UpdateFactorSmsTwilioConfig(tc *GuardianFactorSmsTwilioConfig) error {

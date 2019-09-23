@@ -60,7 +60,7 @@ func TestGuardian(t *testing.T) {
 		err := m.Guardian.UpdateFactorPushNotificationSnsConfig(&GuardianFactorPushNotificationSnsConfig{
 			AwsAccessKeyID:                auth0.String("test"),
 			AwsSecretAccessKeyID:          auth0.String("test_secret"),
-			AwsRegion:                     auth0.String("test_region"),
+			AwsRegion:                     auth0.String("us-west-1"),
 			SnsApnsPlatformApplicationArn: auth0.String("test_arn"),
 			SnsGcmPlatformApplicationArn:  auth0.String("test_arn"),
 		})
@@ -81,10 +81,9 @@ func TestGuardian(t *testing.T) {
 
 	t.Run("UpdateFactorSmsTwilioConfig", func(t *testing.T) {
 		err := m.Guardian.UpdateFactorSmsTwilioConfig(&GuardianFactorSmsTwilioConfig{
-			From:                auth0.String("123456789"),
-			MessagingServiceSid: auth0.String("test_sid"),
-			AuthToken:           auth0.String("test_token"),
-			Sid:                 auth0.String("test_sid"),
+			From:      auth0.String("123456789"),
+			AuthToken: auth0.String("test_token"),
+			Sid:       auth0.String("test_sid"),
 		})
 		if err != nil {
 			t.Error(err)
