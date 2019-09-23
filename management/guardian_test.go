@@ -14,6 +14,10 @@ func TestGuardian(t *testing.T) {
 		m.Guardian.UpdateFactor(testFactor, &GuardianFactor{
 			Enabled: auth0.Bool(false),
 		})
+		m.Guardian.UpdateTemplate(&GuardianTemplate{
+			EnrollmentMessage:   auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."),
+			VerificationMessage: auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}"),
+		})
 		m.Guardian.UpdateFactorPushNotificationSnsConfig(&GuardianFactorPushNotificationSnsConfig{
 			AwsAccessKeyID:                &emptyString,
 			AwsSecretAccessKeyID:          &emptyString,
@@ -46,6 +50,26 @@ func TestGuardian(t *testing.T) {
 		}
 		gf, _ := m.Guardian.ListFactorsAndStatuses()
 		t.Logf("%v\n", gf)
+	})
+
+	t.Run("GetTemplate", func(t *testing.T) {
+		gt, err := m.Guardian.GetTemplate()
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", gt)
+	})
+
+	t.Run("UpdateTemplate", func(t *testing.T) {
+		err := m.Guardian.UpdateTemplate(&GuardianTemplate{
+			EnrollmentMessage:   auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
+			VerificationMessage: auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
+		})
+		if err != nil {
+			t.Error(err)
+		}
+		gt, _ := m.Guardian.GetTemplate()
+		t.Logf("%v\n", gt)
 	})
 
 	t.Run("GetFactorPushNotificationSnsConfig", func(t *testing.T) {

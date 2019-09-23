@@ -26,6 +26,14 @@ type GuardianFactorStatus struct {
 	TrialExpired *bool `json:"trial_expired,omitempty"`
 }
 
+type GuardianTemplate struct {
+	// Message sent to the user when they are invited to enroll with a phone number
+	EnrollmentMessage *string `json:"enrollment_message,omitempty"`
+
+	// Message sent to the user when they are prompted to verify their account
+	VerificationMessage *string `json:"verification_message,omitempty"`
+}
+
 type GuardianFactorPushNotificationSnsConfig struct {
 	// AWS Access Key ID
 	AwsAccessKeyID *string `json:"aws_access_key_id,omitempty"`
@@ -73,6 +81,16 @@ func (gm *GuardianManager) ListFactorsAndStatuses() ([]*GuardianFactorStatus, er
 
 func (gm *GuardianManager) UpdateFactor(name GuardianFactorType, gf *GuardianFactor) error {
 	return gm.m.put(gm.m.uri("guardian/factors", string(name)), gf)
+}
+
+func (gm *GuardianManager) GetTemplate() (*GuardianTemplate, error) {
+	gt := new(GuardianTemplate)
+	err := gm.m.get(gm.m.uri("guardian/factors/sms/templates"), gt)
+	return gt, err
+}
+
+func (gm *GuardianManager) UpdateTemplate(gt *GuardianTemplate) error {
+	return gm.m.put(gm.m.uri("guardian/factors/sms/templates"), gt)
 }
 
 func (gm *GuardianManager) GetFactorPushNotificationSnsConfig() (*GuardianFactorPushNotificationSnsConfig, error) {
