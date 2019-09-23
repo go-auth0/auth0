@@ -52,16 +52,25 @@ func (rf RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return rf(req)
 }
 
+func dumpRequest(r *http.Request) {
+	b, _ := httputil.DumpRequestOut(r, true)
+	log.Printf("\n%s\n", b)
+}
+
+func dumpResponse(r *http.Response) {
+	b, _ := httputil.DumpResponse(r, true)
+	log.Printf("\n%s\n\n", b)
+}
+
 func WrapDebug(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
+			dumpRequest(req)
 			res, err := c.Transport.RoundTrip(req)
 			if err != nil {
 				return res, err
 			}
-			reqBytes, _ := httputil.DumpRequest(req, true)
-			resBytes, _ := httputil.DumpResponse(res, true)
-			log.Printf("%s\n%s\b\n", reqBytes, resBytes)
+			dumpResponse(res)
 			return res, nil
 		}),
 	}
