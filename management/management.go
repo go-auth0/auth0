@@ -74,6 +74,9 @@ type Management struct {
 	// Branding settings such as company logo or primary color.
 	Branding *BrandingManager
 
+	// Prompt manages your prompt settings.
+	Prompt *PromptManager
+
 	url      *url.URL
 	basePath string
 	timeout  time.Duration
@@ -134,6 +137,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Ticket = NewTicketManager(m)
 	m.Stat = NewStatManager(m)
 	m.Branding = NewBrandingManager(m)
+	m.Prompt = NewPromptManager(m)
 
 	return m, nil
 }
