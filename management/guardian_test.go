@@ -15,8 +15,8 @@ func TestGuardian(t *testing.T) {
 			Enabled: auth0.Bool(false),
 		})
 		m.Guardian.UpdateSmsTemplate(&GuardianSmsTemplate{
-			EnrollmentMessage:   auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}. Please enter this code to verify your enrollment."),
-			VerificationMessage: auth0.String("{{code}} is your verification code for {{tenant.friendly_name}}"),
+			EnrollmentMessage:   &emptyString,
+			VerificationMessage: &emptyString,
 		})
 		m.Guardian.UpdatePushNotificationSnsConfig(&GuardianPushNotificationSnsConfig{
 			AwsAccessKeyID:                &emptyString,
