@@ -31,7 +31,7 @@ func TestPrompt(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		if ps.UniversalLoginExperience != "new" {
+		if ps.UniversalLoginExperience != expected {
 			t.Errorf("unexpected output. have %v, expected %v", ps.UniversalLoginExperience, expected)
 		}
 		t.Logf("%v\n", ps)
