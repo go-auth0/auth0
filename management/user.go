@@ -157,3 +157,20 @@ func (um *UserManager) UnassignRoles(id string, roles ...*Role) error {
 
 	return um.m.request("DELETE", um.m.uri("users", id, "roles"), &r)
 }
+
+func (um *UserManager) GetPermissions(id string, opts ...reqOption) (permissions []*Permission, err error) {
+	err = um.m.get(um.m.uri("users", id, "permissions")+um.m.q(opts), &permissions)
+	return permissions, err
+}
+
+func (um *UserManager) AssignPermissions(id string, permissions ...*Permission) error {
+	p := make(map[string][]*Permission)
+	p["permissions"] = permissions
+	return um.m.post(um.m.uri("users", id, "permissions"), &p)
+}
+
+func (um *UserManager) UnassignPermissions(id string, permissions ...*Permission) error {
+	p := make(map[string][]*Permission)
+	p["permissions"] = permissions
+	return um.m.request("DELETE", um.m.uri("users", id, "permissions"), &p)
+}
