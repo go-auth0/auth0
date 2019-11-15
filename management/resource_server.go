@@ -35,7 +35,7 @@ type ResourceServer struct {
 	// token_lifetime.
 	TokenLifetimeForWeb *int `json:"token_lifetime_for_web,omitempty"`
 
-	// Flag this entity as capable of skipping consent
+	// Flag this entity as capable of skipping consent.
 	SkipConsentForVerifiableFirstPartyClients *bool `json:"skip_consent_for_verifiable_first_party_clients,omitempty"`
 
 	// A URI from which to retrieve JWKs for this resource server used for
@@ -43,9 +43,12 @@ type ResourceServer struct {
 	VerificationLocation *string `json:"verificationLocation,omitempty"`
 
 	Options map[string]interface{} `json:"options,omitempty"`
-	
+
 	// Enables the enforcement of the authorization policies.
 	EnforcePolicies *bool `json:"enforce_policies,omitempty"`
+
+	// The dialect for the access token ["access_token" or "access_token_authz"].
+	TokenDialect *string `json:"token_dialect,omitempty"`
 }
 
 func (r *ResourceServer) String() string {
