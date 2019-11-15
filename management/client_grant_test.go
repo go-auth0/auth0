@@ -87,4 +87,12 @@ func TestClientGrant(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
+
+	t.Run("List", func(t *testing.T) {
+		gs, err := m.ClientGrant.List()
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", gs)
+	})
 }
