@@ -17,4 +17,12 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Build
-      run: go build -v .
+      run: go build ./...
+
+    - name: Test
+      run: go test ./... -coverprofile=c.out
+
+    - name: Send coverage report
+      uses: paambaati/codeclimate-action@v2.3.0
+      env:
+        CC_TEST_REPORTER_ID: 4103b11485d14db907124f37f5c66db1e4f61d6302969c4794182e9f52c120aa
