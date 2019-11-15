@@ -31,6 +31,10 @@ type Ticket struct {
 
 	// The URL that represents the ticket
 	Ticket *string `json:"ticket,omitempty"`
+
+	// Whether to set the email_verified attribute to true (true) or whether it
+	// should not be updated
+	MarkEmailAsVerified *bool `json:"mark_email_as_verified,omitempty"`
 }
 
 func (t *Ticket) String() string {
