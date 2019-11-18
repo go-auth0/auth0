@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -76,13 +77,17 @@ func WrapDebug(c *http.Client) *http.Client {
 	}
 }
 
-func OAuth2(u *url.URL, clientID, clientSecret string) *http.Client {
-	return (&clientcredentials.Config{
+func New(ctx context.Context, c *clientcredentials.Config) *http.Client {
+	return oauth2.NewClient(ctx, c.TokenSource(ctx))
+}
+
+func OAuth2(u *url.URL, clientID, clientSecret string) *clientcredentials.Config {
+	return &clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
 		TokenURL:     u.String() + "/oauth/token",
 		EndpointParams: url.Values{
 			"audience": {u.String() + "/api/v2/"},
 		},
-	}).Client(context.Background())
+	}
 }

@@ -3,23 +3,38 @@ package management
 import (
 	"net/url"
 	"os"
+	"strings"
 	"testing"
 )
 
 var m *Management
 
 var (
-	auth0Domain       = os.Getenv("AUTH0_DOMAIN")
-	auth0ClientID     = os.Getenv("AUTH0_CLIENT_ID")
-	auth0ClientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
+	domain       = os.Getenv("AUTH0_DOMAIN")
+	clientID     = os.Getenv("AUTH0_CLIENT_ID")
+	clientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
 )
 
 func init() {
 	var err error
-	m, err = New(auth0Domain, auth0ClientID, auth0ClientSecret, WithDebug(true))
+	m, err = New(domain, clientID, clientSecret, WithDebug(true))
 	if err != nil {
+		println(obscure(domain))
+		println(obscure(clientID))
+		println(obscure(clientSecret))
 		panic(err)
 	}
+}
+
+func obscure(s string) string {
+	var sb strings.Builder
+	for i, r := range s {
+		if i > 0 {
+			sb.WriteRune(' ')
+		}
+		sb.WriteRune(r)
+	}
+	return sb.String()
 }
 
 func TestNew(t *testing.T) {

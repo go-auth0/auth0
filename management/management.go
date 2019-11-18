@@ -78,6 +78,7 @@ type Management struct {
 	basePath string
 	timeout  time.Duration
 	debug    bool
+	ctx      context.Context
 
 	http *http.Client
 }
@@ -103,13 +104,21 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		basePath: "api/v2",
 		timeout:  1 * time.Minute,
 		debug:    false,
+		ctx:      context.Background(),
 	}
 
 	for _, option := range options {
 		option(m)
 	}
 
-	m.http = client.OAuth2(m.url, clientID, clientSecret)
+	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+
+	_, err = oauth2.Token(m.ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	m.http = client.New(m.ctx, oauth2)
 	m.http = client.WrapUserAgent(m.http)
 	m.http = client.WrapRateLimit(m.http)
 	if m.debug {
@@ -173,7 +182,7 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	}
 	req.Header.Add("Content-Type", "application/json")
 
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
+	ctx, cancel := context.WithTimeout(m.ctx, m.timeout)
 	defer cancel()
 
 	if m.http == nil {
@@ -195,8 +204,11 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	}
 
 	if res.StatusCode != http.StatusNoContent {
-		defer res.Body.Close()
-		return json.NewDecoder(res.Body).Decode(v)
+		err := json.NewDecoder(res.Body).Decode(v)
+		if err != nil {
+			return err
+		}
+		return res.Body.Close()
 	}
 
 	return nil
@@ -236,6 +248,14 @@ func WithTimeout(t time.Duration) apiOption {
 func WithDebug(d bool) apiOption {
 	return func(m *Management) {
 		m.debug = d
+	}
+}
+
+// WitContext configures the management client to use the provided context
+// instead of the provided one.
+func WithContext(ctx context.Context) apiOption {
+	return func(m *Management) {
+		m.ctx = ctx
 	}
 }
 
