@@ -15,7 +15,7 @@ import (
 
 const UserAgent = "Go-Auth0-SDK/v1"
 
-func WrapRetry(c *http.Client) *http.Client {
+func WrapRateLimit(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: rehttp.NewTransport(
 			c.Transport,
@@ -76,25 +76,13 @@ func WrapDebug(c *http.Client) *http.Client {
 	}
 }
 
-func getTokenURL(u url.URL) string {
-	u.Path = "oauth/token"
-
-	return (&u).String()
-}
-
-func getAudience(u url.URL, apiPath string) string {
-	u.Path = apiPath
-
-	return (&u).String()
-}
-
 func OAuth2(u *url.URL, clientID, clientSecret string) *http.Client {
 	return (&clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		TokenURL:     getTokenURL(*u),
+		TokenURL:     u.String() + "oauth/token",
 		EndpointParams: url.Values{
-			"audience": {getAudience(*u, "api/v2/")},
+			"audience": {u.String() + "api/v2/"},
 		},
 	}).Client(context.Background())
 }

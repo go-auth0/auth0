@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestWrapRetry(t *testing.T) {
+func TestWrapRateLimit(t *testing.T) {
 
 	start := time.Now()
 	first := true
@@ -29,7 +29,7 @@ func TestWrapRetry(t *testing.T) {
 	s := httptest.NewServer(h)
 	defer s.Close()
 
-	c := WrapRetry(WrapDebug(s.Client()))
+	c := WrapRateLimit(WrapDebug(s.Client()))
 	r, err := c.Get(s.URL)
 	if err != nil {
 		t.Error(err)

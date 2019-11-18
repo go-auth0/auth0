@@ -19,13 +19,6 @@ jobs:
     - name: Build
       run: go build ./...
 
-    - name: Debug
-      run: env
-      env:
-        AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-        AUTH0_CLIENT_ID: ${{ secrets.AUTH0_DOMAIN }}
-        AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_DOMAIN }}
-
     - name: Test
       run: go test ./... -coverprofile=c.out
       env:
@@ -33,7 +26,7 @@ jobs:
         AUTH0_CLIENT_ID: ${{ secrets.AUTH0_DOMAIN }}
         AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_DOMAIN }}
 
-    - name: Send coverage report
+    - name: Send code coverage report
       uses: paambaati/codeclimate-action@v2.3.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

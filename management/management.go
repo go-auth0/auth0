@@ -111,7 +111,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 
 	m.http = client.OAuth2(m.url, clientID, clientSecret)
 	m.http = client.WrapUserAgent(m.http)
-	m.http = client.WrapRetry(m.http)
+	m.http = client.WrapRateLimit(m.http)
 	if m.debug {
 		m.http = client.WrapDebug(m.http)
 	}
@@ -158,16 +158,20 @@ func (m *Management) q(options []reqOption) string {
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
-	var payload bytes.Buffer
-	if v != nil {
-		json.NewEncoder(&payload).Encode(v)
-	}
 
+	var payload bytes.Buffer
 	req, err := http.NewRequest(method, uri, &payload)
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Content-Type", "application/json")
+
+	if v != nil {
+		err := json.NewEncoder(&payload).Encode(v)
+		if err != nil {
+			return err
+		}
+		req.Header.Add("Content-Type", "application/json")
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
 	defer cancel()
