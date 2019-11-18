@@ -1,5 +1,12 @@
 name: Go
 on: [push]
+
+env:
+  AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+  AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+  AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
 jobs:
 
   build:
@@ -19,14 +26,17 @@ jobs:
     - name: Build
       run: go build ./...
 
+    - name: Install codeclimate test reporter
+      run: |
+        curl -o cc-test-reporter -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
     - name: Test
       run: go test ./... -coverprofile=c.out
-      env:
-        AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
-        AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-        AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
 
     - name: Send code coverage report
-      uses: paambaati/codeclimate-action@v2.3.0
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      run: ./cc-test-reporter after-build --exit-code $?
+
+
+
