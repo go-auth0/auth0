@@ -27,7 +27,7 @@ jobs:
         AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
 
     - name: Send code coverage report
-      uses: alexkappa/codeclimate-test-reporter@master
+      uses: alexkappa/codeclimate-test-reporter-step@master
       with:
         codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
         codeclimate-test-reporter-version: latest
