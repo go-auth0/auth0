@@ -26,17 +26,14 @@ jobs:
     - name: Build
       run: go build ./...
 
-    - name: Install codeclimate test reporter
-      run: |
-        curl -o cc-test-reporter -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-        chmod +x ./cc-test-reporter
-        ./cc-test-reporter before-build
-
     - name: Test
       run: go test ./... -coverprofile=c.out
 
     - name: Send code coverage report
-      run: ./cc-test-reporter after-build --exit-code $?
+      run: |
+        curl -o cc-test-reporter -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter after-build --prefix $(go list -m)
 
 
 
