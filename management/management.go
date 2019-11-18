@@ -160,18 +160,18 @@ func (m *Management) q(options []reqOption) string {
 func (m *Management) request(method, uri string, v interface{}) error {
 
 	var payload bytes.Buffer
-	req, err := http.NewRequest(method, uri, &payload)
-	if err != nil {
-		return err
-	}
-
 	if v != nil {
 		err := json.NewEncoder(&payload).Encode(v)
 		if err != nil {
 			return err
 		}
-		req.Header.Add("Content-Type", "application/json")
 	}
+
+	req, err := http.NewRequest(method, uri, &payload)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Content-Type", "application/json")
 
 	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
 	defer cancel()
