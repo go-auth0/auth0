@@ -1,7 +1,7 @@
 # Auth0 Go SDK
 
 [![GoDoc](https://godoc.org/gopkg.in/auth0.v1?status.svg)](https://godoc.org/gopkg.in/auth0.v1)
-[![wercker status](https://app.wercker.com/status/3e342b16551d6aa722ffce55aece4419/s/master "wercker status")](https://app.wercker.com/project/byKey/3e342b16551d6aa722ffce55aece4419)
+[![build status](https://github.com/go-auth0/auth0/workflows/build/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bf038abb77ffb7c94cde/maintainability)](https://codeclimate.com/github/go-auth0/auth0/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/bf038abb77ffb7c94cde/test_coverage)](https://codeclimate.com/github/go-auth0/auth0/test_coverage)
 
