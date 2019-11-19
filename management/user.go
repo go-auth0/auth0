@@ -83,6 +83,9 @@ type User struct {
 
 	// The user's picture url
 	Picture *string `json:"picture,omitempty"`
+
+	// True if the user is blocked from the application, false if the user is enabled
+	Blocked *bool `json:"blocked,omitempty"`
 }
 
 func (u *User) String() string {
