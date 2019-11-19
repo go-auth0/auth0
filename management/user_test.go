@@ -31,6 +31,7 @@ func TestUser(t *testing.T) {
 			},
 		},
 		Picture: auth0.String("https://example-picture-url.jpg"),
+		Blocked: auth0.Bool(false),
 	}
 
 	var err error
