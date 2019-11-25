@@ -40,12 +40,18 @@ func NewBrandingManager(m *Management) *BrandingManager {
 	return &BrandingManager{m}
 }
 
+// Retrieve various settings related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
 func (bm *BrandingManager) Read(opts ...reqOption) (*Branding, error) {
 	branding := new(Branding)
 	err := bm.m.get(bm.m.uri("branding")+bm.m.q(opts), branding)
 	return branding, err
 }
 
+// Update various fields related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
 func (bm *BrandingManager) Update(t *Branding) (err error) {
 	return bm.m.patch(bm.m.uri("branding"), t)
 }

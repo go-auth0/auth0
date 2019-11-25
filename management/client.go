@@ -110,32 +110,51 @@ func NewClientManager(m *Management) *ClientManager {
 	return &ClientManager{m}
 }
 
+// Creates a new client application.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/post_clients
 func (cm *ClientManager) Create(c *Client) (err error) {
 	return cm.m.post(cm.m.uri("clients"), c)
 }
 
+// Retrieves a client by its id.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients_by_id
 func (cm *ClientManager) Read(id string, opts ...reqOption) (*Client, error) {
 	c := new(Client)
 	err := cm.m.get(cm.m.uri("clients", id)+cm.m.q(opts), c)
 	return c, err
 }
 
+// Retrieves a list of all client applications.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients
 func (cm *ClientManager) List(opts ...reqOption) ([]*Client, error) {
 	var c []*Client
 	err := cm.m.get(cm.m.uri("clients")+cm.m.q(opts), &c)
 	return c, err
 }
 
+// Updates a client.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/patch_clients_by_id
 func (cm *ClientManager) Update(id string, c *Client) (err error) {
 	return cm.m.patch(cm.m.uri("clients", id), c)
 }
 
+// Rotate a client secret.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/post_rotate_secret
 func (cm *ClientManager) RotateSecret(id string) (*Client, error) {
 	c := new(Client)
 	err := cm.m.post(cm.m.uri("clients", id, "rotate-secret"), c)
 	return c, err
 }
 
+// Deletes a client and all its related assets (like rules, connections, etc)
+// given its id.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Clients/delete_clients_by_id
 func (cm *ClientManager) Delete(id string) (err error) {
 	return cm.m.delete(cm.m.uri("clients", id))
 }

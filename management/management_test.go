@@ -19,22 +19,8 @@ func init() {
 	var err error
 	m, err = New(domain, clientID, clientSecret, WithDebug(true))
 	if err != nil {
-		println(obscure(domain))
-		println(obscure(clientID))
-		println(obscure(clientSecret))
 		panic(err)
 	}
-}
-
-func obscure(s string) string {
-	var sb strings.Builder
-	for i, r := range s {
-		if i > 0 {
-			sb.WriteRune(' ')
-		}
-		sb.WriteRune(r)
-	}
-	return sb.String()
 }
 
 func TestNew(t *testing.T) {

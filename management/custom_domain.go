@@ -47,20 +47,46 @@ func NewCustomDomainManager(m *Management) *CustomDomainManager {
 	return &CustomDomainManager{m}
 }
 
+// Create a new custom domain.
+//
+// Note: The custom domain will need to be verified before it starts accepting
+// requests.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/post_custom_domains
 func (cm *CustomDomainManager) Create(c *CustomDomain) (err error) {
 	return cm.m.post(cm.m.uri("custom-domains"), c)
 }
 
+// Retrieve a custom domain configuration and status.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains_by_id
 func (cm *CustomDomainManager) Read(id string, opts ...reqOption) (*CustomDomain, error) {
 	c := new(CustomDomain)
 	err := cm.m.get(cm.m.uri("custom-domains", id)+cm.m.q(opts), c)
 	return c, err
 }
 
-func (cm *CustomDomainManager) Update(id string, c *CustomDomain) (err error) {
-	return cm.m.patch(cm.m.uri("custom-domains", id), c)
+// Run the verification process on a custom domain.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/post_verify
+func (cm *CustomDomainManager) Verify(id string) (*CustomDomain, error) {
+	c := new(CustomDomain)
+	err := cm.m.post(cm.m.uri("custom-domains", id, "verify"), c)
+	return c, err
 }
 
+// Delete a custom domain and stop serving requests for it.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/delete_custom_domains_by_id
 func (cm *CustomDomainManager) Delete(id string) (err error) {
 	return cm.m.delete(cm.m.uri("custom-domains", id))
+}
+
+// Retrieve a list of custom domains.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains
+func (cm *CustomDomainManager) List(opts ...reqOption) ([]*CustomDomain, error) {
+    var c []*CustomDomain
+	err := cm.m.get(cm.m.uri("custom-domains")+cm.m.q(opts), &c)
+	return c, err
 }

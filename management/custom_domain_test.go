@@ -41,6 +41,18 @@ func TestCustomDomain(t *testing.T) {
 		t.Logf("%v\n", c)
 	})
 
+	t.Run("Verify", func(t *testing.T) {
+        c, err := m.CustomDomain.Verify(auth0.StringValue(c.ID))
+        if err != nil {
+            if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
+                t.Skip(err)
+            } else {
+                t.Error(err)
+            }
+        }
+        t.Logf("%v\n", c)
+	})
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.CustomDomain.Delete(auth0.StringValue(c.ID))
 		if err != nil {

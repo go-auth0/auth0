@@ -1,9 +1,6 @@
 package management
 
-import (
-	"encoding/json"
-	"errors"
-)
+import "encoding/json"
 
 type Connection struct {
 	// A generated string identifying the connection.
@@ -141,36 +138,58 @@ func NewConnectionManager(m *Management) *ConnectionManager {
 	return &ConnectionManager{m}
 }
 
+// Creates a new connection.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Connections/post_connections
 func (cm *ConnectionManager) Create(c *Connection) error {
 	return cm.m.post(cm.m.uri("connections"), c)
 }
 
+// Retrieves a connection by its id.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
 func (cm *ConnectionManager) Read(id string, opts ...reqOption) (*Connection, error) {
 	c := new(Connection)
 	err := cm.m.get(cm.m.uri("connections", id)+cm.m.q(opts), c)
 	return c, err
 }
 
+// Retrieves every connection matching the specified strategy.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
 func (cm *ConnectionManager) List(opts ...reqOption) ([]*Connection, error) {
 	var c []*Connection
 	err := cm.m.get(cm.m.uri("connections")+cm.m.q(opts), &c)
 	return c, err
 }
 
+// Updates a connection.
+//
+// Note: if you use the options parameter, the whole options object will be
+// overridden, so ensure that all parameters are present.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Connections/patch_connections_by_id
 func (cm *ConnectionManager) Update(id string, c *Connection) (err error) {
 	return cm.m.patch(cm.m.uri("connections", id), c)
 }
 
+// Deletes a connection and all its users.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Connections/delete_connections_by_id
 func (cm *ConnectionManager) Delete(id string) (err error) {
 	return cm.m.delete(cm.m.uri("connections", id))
 }
 
-func (cm *ConnectionManager) GetConnectionID(connectionName string) (*string, error) {
-	connections, err := cm.m.Connection.List(Parameter("name", connectionName), Parameter("fields", "id"))
-	if len(connections) == 1 {
-		return connections[0].ID, nil
-	} else if err == nil {
-		err = errors.New(connectionName + " connection does not exist.")
-	}
-	return nil, err
+// Retrieves a connection by its name. This is a helper method when a connection
+// id is not readily available.
+func (cm *ConnectionManager) ReadByName(name string, opts ...reqOption) (*Connection, error) {
+    opts = append(opts, Parameter("name", name))
+    c, err := cm.List(opts...)
+    if err != nil {
+        return nil, err
+    }
+    if len(c) > 0 {
+        return c[0], nil
+    }
+    return nil, &managementError{404, "not found", "Connection not found"}
 }
