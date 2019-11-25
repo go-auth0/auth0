@@ -1,11 +1,5 @@
 package management
 
-import (
-	"encoding/json"
-
-	"gopkg.in/auth0.v1"
-)
-
 type ClientGrant struct {
 
 	// A generated string identifying the client grant.
@@ -21,8 +15,7 @@ type ClientGrant struct {
 }
 
 func (c *ClientGrant) String() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
-	return string(b)
+	return Stringify(c)
 }
 
 type ClientGrantManager struct {
@@ -52,7 +45,7 @@ func (cg *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 		return nil, err
 	}
 	for _, g := range gs {
-		gid := auth0.StringValue(g.ID)
+		gid := *g.ID
 		if gid == id {
 			return g, nil
 		}

@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Ticket struct {
 	// The user will be redirected to this endpoint once the ticket is used
 	ResultURL *string `json:"result_url,omitempty"`
@@ -38,8 +36,7 @@ type Ticket struct {
 }
 
 func (t *Ticket) String() string {
-	b, _ := json.MarshalIndent(t, "", "  ")
-	return string(b)
+	return Stringify(t)
 }
 
 type TicketManager struct {
@@ -50,12 +47,18 @@ func NewTicketManager(m *Management) *TicketManager {
 	return &TicketManager{m}
 }
 
+// Create a ticket to verify a user's email address.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification
 func (tm *TicketManager) VerifyEmail(t *Ticket) (*Ticket, error) {
-	err := tm.m.post(tm.m.uri("tickets/email-verification"), t)
+	err := tm.m.post(tm.m.uri("tickets", "email-verification"), t)
 	return t, err
 }
 
+// Create a password change ticket for a user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Tickets/post_password_change
 func (tm *TicketManager) ChangePassword(t *Ticket) (*Ticket, error) {
-	err := tm.m.post(tm.m.uri("tickets/password-change"), t)
+	err := tm.m.post(tm.m.uri("tickets", "password-change"), t)
 	return t, err
 }

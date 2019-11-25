@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type CustomDomain struct {
 
 	// The id of the custom domain
@@ -29,8 +27,7 @@ type CustomDomain struct {
 }
 
 func (c *CustomDomain) String() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
-	return string(b)
+	return Stringify(c)
 }
 
 type CustomDomainVerification struct {
@@ -86,7 +83,7 @@ func (cm *CustomDomainManager) Delete(id string) (err error) {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains
 func (cm *CustomDomainManager) List(opts ...reqOption) ([]*CustomDomain, error) {
-    var c []*CustomDomain
+	var c []*CustomDomain
 	err := cm.m.get(cm.m.uri("custom-domains")+cm.m.q(opts), &c)
 	return c, err
 }

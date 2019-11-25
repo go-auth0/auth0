@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestUser(t *testing.T) {
@@ -145,17 +145,17 @@ func TestUser(t *testing.T) {
 
 	})
 
-	t.Run("UnassignRoles", func(t *testing.T) {
+	t.Run("RemoveRoles", func(t *testing.T) {
 		roles := []*Role{r1, r2}
-		err = m.User.UnassignRoles(auth0.StringValue(u.ID), roles...)
+		err = m.User.RemoveRoles(auth0.StringValue(u.ID), roles...)
 		if err != nil {
 			t.Error(err)
 		}
 	})
 
-	t.Run("GetPermissions", func(t *testing.T) {
+	t.Run("Permissions", func(t *testing.T) {
 		var permissions []*Permission
-		permissions, err = m.User.GetPermissions(auth0.StringValue(u.ID))
+		permissions, err = m.User.Permissions(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -173,12 +173,12 @@ func TestUser(t *testing.T) {
 		}
 	})
 
-	t.Run("UnassignPermissions", func(t *testing.T) {
+	t.Run("RemovePermissions", func(t *testing.T) {
 		permissions := []*Permission{
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.User.UnassignPermissions(auth0.StringValue(u.ID), permissions...)
+		err = m.User.RemovePermissions(auth0.StringValue(u.ID), permissions...)
 		if err != nil {
 			t.Fatal(err)
 		}

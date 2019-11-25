@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/auth0.v1/internal/client"
+	"gopkg.in/auth0.v2/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -335,4 +335,13 @@ func Parameter(key, value string) reqOption {
 	return func(v url.Values) {
 		v.Set(key, value)
 	}
+}
+
+// Stringify returns a string representation of the value passed as an argument.
+func Stringify(v interface{}) string {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(b)
 }

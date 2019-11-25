@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type EmailTemplate struct {
 
 	// The template name. Can be one of "verify_email", "reset_email",
@@ -33,8 +31,7 @@ type EmailTemplate struct {
 }
 
 func (e *EmailTemplate) String() string {
-	b, _ := json.MarshalIndent(e, "", "  ")
-	return string(b)
+	return Stringify(e)
 }
 
 type EmailTemplateManager struct {

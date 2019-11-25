@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Connection struct {
 	// A generated string identifying the connection.
 	ID *string `json:"id,omitempty"`
@@ -47,8 +45,7 @@ type Connection struct {
 }
 
 func (c *Connection) String() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
-	return string(b)
+	return Stringify(c)
 }
 
 // ConnectionOptions general options
@@ -183,13 +180,13 @@ func (cm *ConnectionManager) Delete(id string) (err error) {
 // Retrieves a connection by its name. This is a helper method when a connection
 // id is not readily available.
 func (cm *ConnectionManager) ReadByName(name string, opts ...reqOption) (*Connection, error) {
-    opts = append(opts, Parameter("name", name))
-    c, err := cm.List(opts...)
-    if err != nil {
-        return nil, err
-    }
-    if len(c) > 0 {
-        return c[0], nil
-    }
-    return nil, &managementError{404, "not found", "Connection not found"}
+	opts = append(opts, Parameter("name", name))
+	c, err := cm.List(opts...)
+	if err != nil {
+		return nil, err
+	}
+	if len(c) > 0 {
+		return c[0], nil
+	}
+	return nil, &managementError{404, "Not Found", "Connection not found"}
 }

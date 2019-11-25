@@ -1,10 +1,9 @@
 package management
 
 import (
-	"encoding/json"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 var logTypeName = map[string]string{
@@ -89,8 +88,7 @@ type Log struct {
 }
 
 func (l *Log) String() string {
-	b, _ := json.Marshal(l)
-	return string(b)
+	return Stringify(l)
 }
 
 func (l *Log) TypeName() string {

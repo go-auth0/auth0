@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestJob(t *testing.T) {
@@ -12,9 +12,9 @@ func TestJob(t *testing.T) {
 
 	c, err := m.Connection.ReadByName("Username-Password-Authentication")
 	if err != nil {
-        t.Error(err)
-    }
-    connectionID := auth0.StringValue(c.ID)
+		t.Error(err)
+	}
+	connectionID := auth0.StringValue(c.ID)
 
 	u := &User{
 		Connection: auth0.String("Username-Password-Authentication"),

@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Branding struct {
 	// Change password page settings
 	Colors *BrandingColors `json:"colors,omitempty"`
@@ -15,9 +13,8 @@ type Branding struct {
 	Font *BrandingFont `json:"font,omitempty"`
 }
 
-func (branding *Branding) String() string {
-	b, _ := json.MarshalIndent(branding, "", "  ")
-	return string(b)
+func (b *Branding) String() string {
+	return Stringify(b)
 }
 
 type BrandingColors struct {

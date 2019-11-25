@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Client struct {
 
 	// The name of the client
@@ -84,8 +82,7 @@ type Client struct {
 }
 
 func (c *Client) String() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
-	return string(b)
+	return Stringify(c)
 }
 
 type ClientJWTConfiguration struct {

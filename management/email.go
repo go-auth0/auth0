@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Email struct {
 
 	// The name of the email provider. Can be one of "mandrill", "sendgrid",
@@ -19,8 +17,7 @@ type Email struct {
 }
 
 func (e *Email) String() string {
-	b, _ := json.MarshalIndent(e, "", "  ")
-	return string(b)
+	return Stringify(e)
 }
 
 type EmailCredentials struct {
@@ -85,7 +82,6 @@ func (em *EmailManager) Read(opts ...reqOption) (*Email, error) {
 	err := em.m.get(em.m.uri("emails", "provider")+em.m.q(opts), e)
 	return e, err
 }
-
 
 // Update an email provider.
 //

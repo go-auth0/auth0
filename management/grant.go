@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Grant struct {
 
 	// The id of the grant.
@@ -20,8 +18,7 @@ type Grant struct {
 }
 
 func (g *Grant) String() string {
-	b, _ := json.MarshalIndent(g, "", "  ")
-	return string(b)
+	return Stringify(g)
 }
 
 type GrantManager struct {

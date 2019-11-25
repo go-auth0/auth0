@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Rule struct {
 
 	// The rule's identifier.
@@ -24,8 +22,7 @@ type Rule struct {
 }
 
 func (r *Rule) String() string {
-	b, _ := json.MarshalIndent(r, "", "  ")
-	return string(b)
+	return Stringify(r)
 }
 
 type RuleManager struct {
@@ -36,20 +33,35 @@ func NewRuleManager(m *Management) *RuleManager {
 	return &RuleManager{m}
 }
 
+// Create a new rule.
+//
+// Note: Changing a rule's stage of execution from the default `login_success`
+// can change the rule's function signature to have user omitted.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Rules/post_rules
 func (rm *RuleManager) Create(r *Rule) error {
 	return rm.m.post(rm.m.uri("rules"), r)
 }
 
+// Retrieve rule details. Accepts a list of fields to include or exclude in the result.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules_by_id
 func (rm *RuleManager) Read(id string, opts ...reqOption) (*Rule, error) {
 	r := new(Rule)
 	err := rm.m.get(rm.m.uri("rules", id)+rm.m.q(opts), r)
 	return r, err
 }
 
+// Update an existing rule.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Rules/patch_rules_by_id
 func (rm *RuleManager) Update(id string, r *Rule) (err error) {
 	return rm.m.patch(rm.m.uri("rules", id), r)
 }
 
+// Delete a rule.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Rules/delete_rules_by_id
 func (rm *RuleManager) Delete(id string) (err error) {
 	return rm.m.delete(rm.m.uri("rules", id))
 }

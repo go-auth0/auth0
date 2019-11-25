@@ -9,8 +9,6 @@ import (
 	"net/textproto"
 	"strconv"
 	"time"
-
-	"gopkg.in/auth0.v1"
 )
 
 type Job struct {
@@ -61,8 +59,7 @@ type Job struct {
 }
 
 func (j *Job) String() string {
-	b, _ := json.MarshalIndent(j, "", "  ")
-	return string(b)
+	return Stringify(j)
 }
 
 type JobManager struct {
@@ -102,16 +99,16 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	mp := multipart.NewWriter(&payload)
 
 	if j.ConnectionID != nil {
-		mp.WriteField("connection_id", auth0.StringValue(j.ConnectionID))
+		mp.WriteField("connection_id", *j.ConnectionID)
 	}
 	if j.Upsert != nil {
-		mp.WriteField("upsert", strconv.FormatBool(auth0.BoolValue(j.Upsert)))
+		mp.WriteField("upsert", strconv.FormatBool(*j.Upsert))
 	}
 	if j.ExternalID != nil {
-		mp.WriteField("external_id", auth0.StringValue(j.ExternalID))
+		mp.WriteField("external_id", *j.ExternalID)
 	}
 	if j.SendCompletionEmail != nil {
-		mp.WriteField("send_completion_email", strconv.FormatBool(auth0.BoolValue(j.SendCompletionEmail)))
+		mp.WriteField("send_completion_email", strconv.FormatBool(*j.SendCompletionEmail))
 	}
 	if j.Users != nil {
 		b, err := json.Marshal(j.Users)
