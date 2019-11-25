@@ -3,7 +3,6 @@ package management
 import (
 	"net/url"
 	"os"
-	"strings"
 	"testing"
 )
 
