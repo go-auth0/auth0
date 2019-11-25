@@ -77,16 +77,25 @@ func (jm *JobManager) VerifyEmail(j *Job) error {
 	return jm.m.post(jm.m.uri("jobs/verification-email"), j)
 }
 
+// Retrieves a job. Useful to check its status.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
 func (jm *JobManager) Read(id string, opts ...reqOption) (*Job, error) {
 	j := new(Job)
 	err := jm.m.get(jm.m.uri("jobs", id)+jm.m.q(opts), j)
 	return j, err
 }
 
+// Export all users to a file via a long-running job.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports
 func (jm *JobManager) ExportUsers(j *Job) error {
 	return jm.m.post(jm.m.uri("jobs/users-exports"), j)
 }
 
+// Import users from a formatted file into a connection via a long-running job.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_imports
 func (jm *JobManager) ImportUsers(j *Job) error {
 
 	var payload bytes.Buffer

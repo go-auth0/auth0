@@ -45,20 +45,39 @@ func NewEmailTemplateManager(m *Management) *EmailTemplateManager {
 	return &EmailTemplateManager{m}
 }
 
+// Create an email template.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Email_Templates/post_email_templates
 func (em *EmailTemplateManager) Create(e *EmailTemplate) error {
 	return em.m.post(em.m.uri("email-templates"), e)
 }
 
+// Retrieve an email template by pre-defined name.
+//
+// These names are `verify_email`, `reset_email`, `welcome_email`,
+// `blocked_account`, `stolen_credentials`, `enrollment_email`, and
+// `mfa_oob_code`.
+//
+// The names `change_password`, and `password_reset` are also supported for
+// legacy scenarios.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
 func (em *EmailTemplateManager) Read(template string, opts ...reqOption) (*EmailTemplate, error) {
 	e := new(EmailTemplate)
 	err := em.m.get(em.m.uri("email-templates", template)+em.m.q(opts), e)
 	return e, err
 }
 
+// Modify an email template.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Email_Templates/patch_email_templates_by_templateName
 func (em *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
 	return em.m.patch(em.m.uri("email-templates", template), e)
 }
 
+// Replace an email template.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Email_Templates/put_email_templates_by_templateName
 func (em *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
 	return em.m.put(em.m.uri("email-templates", template), e)
 }
