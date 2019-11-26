@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Tenant struct {
 	// Change password page settings
 	ChangePassword *TenantChangePassword `json:"change_password,omitempty"`
@@ -59,8 +57,7 @@ type Tenant struct {
 }
 
 func (t *Tenant) String() string {
-	b, _ := json.MarshalIndent(t, "", "  ")
-	return string(b)
+	return Stringify(t)
 }
 
 type TenantChangePassword struct {
@@ -166,12 +163,19 @@ func NewTenantManager(m *Management) *TenantManager {
 	return &TenantManager{m}
 }
 
+// Retrieve tenant settings. A list of fields to include or exclude may also be
+// specified.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Tenants/get_settings
 func (tm *TenantManager) Read(opts ...reqOption) (*Tenant, error) {
 	t := new(Tenant)
 	err := tm.m.get(tm.m.uri("tenants/settings")+tm.m.q(opts), t)
 	return t, err
 }
 
+// Update settings for a tenant.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Tenants/patch_settings
 func (tm *TenantManager) Update(t *Tenant) (err error) {
 	return tm.m.patch(tm.m.uri("tenants/settings"), t)
 }

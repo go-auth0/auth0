@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type ResourceServer struct {
 
 	// A generated string identifying the resource server.
@@ -52,8 +50,7 @@ type ResourceServer struct {
 }
 
 func (r *ResourceServer) String() string {
-	b, _ := json.MarshalIndent(r, "", "  ")
-	return string(b)
+	return Stringify(r)
 }
 
 type ResourceServerScope struct {
@@ -73,20 +70,32 @@ func NewResourceServerManager(m *Management) *ResourceServerManager {
 	return &ResourceServerManager{m}
 }
 
+// Creates a resource server.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/post_resource_servers
 func (r *ResourceServerManager) Create(rs *ResourceServer) (err error) {
 	return r.m.post(r.m.uri("resource-servers"), rs)
 }
 
+// Retrieves a resource server by its id or audience.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers_by_id
 func (r *ResourceServerManager) Read(id string, opts ...reqOption) (*ResourceServer, error) {
 	rs := new(ResourceServer)
 	err := r.m.get(r.m.uri("resource-servers", id)+r.m.q(opts), rs)
 	return rs, err
 }
 
+// Updates a resource server.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/patch_resource_servers_by_id
 func (r *ResourceServerManager) Update(id string, rs *ResourceServer) (err error) {
 	return r.m.patch(r.m.uri("resource-servers", id), rs)
 }
 
+// Delete a resource server.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/delete_resource_servers_by_id
 func (r *ResourceServerManager) Delete(id string) (err error) {
 	return r.m.delete(r.m.uri("resource-servers", id))
 }

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestCustomDomain(t *testing.T) {
@@ -31,6 +31,18 @@ func TestCustomDomain(t *testing.T) {
 
 	t.Run("Read", func(t *testing.T) {
 		c, err = m.CustomDomain.Read(auth0.StringValue(c.ID))
+		if err != nil {
+			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
+				t.Skip(err)
+			} else {
+				t.Error(err)
+			}
+		}
+		t.Logf("%v\n", c)
+	})
+
+	t.Run("Verify", func(t *testing.T) {
+		c, err := m.CustomDomain.Verify(auth0.StringValue(c.ID))
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 				t.Skip(err)

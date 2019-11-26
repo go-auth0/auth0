@@ -3,7 +3,6 @@ package management
 import (
 	"net/url"
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -19,22 +18,8 @@ func init() {
 	var err error
 	m, err = New(domain, clientID, clientSecret, WithDebug(true))
 	if err != nil {
-		println(obscure(domain))
-		println(obscure(clientID))
-		println(obscure(clientSecret))
 		panic(err)
 	}
-}
-
-func obscure(s string) string {
-	var sb strings.Builder
-	for i, r := range s {
-		if i > 0 {
-			sb.WriteRune(' ')
-		}
-		sb.WriteRune(r)
-	}
-	return sb.String()
 }
 
 func TestNew(t *testing.T) {
@@ -113,5 +98,24 @@ func TestOptionParameter(t *testing.T) {
 	bar := v.Get("bar")
 	if bar != "xyz" {
 		t.Errorf("Expected %q, but got %q", bar, "xyz")
+	}
+}
+
+func TestStringify(t *testing.T) {
+
+	expected := `{
+  "foo": "bar"
+}`
+
+	v := struct {
+		Foo string `json:"foo"`
+	}{
+		"bar",
+	}
+
+	s := Stringify(v)
+
+	if s != expected {
+		t.Errorf("Expected %q, but got %q", expected, s)
 	}
 }

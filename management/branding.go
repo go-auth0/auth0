@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Branding struct {
 	// Change password page settings
 	Colors *BrandingColors `json:"colors,omitempty"`
@@ -15,9 +13,8 @@ type Branding struct {
 	Font *BrandingFont `json:"font,omitempty"`
 }
 
-func (branding *Branding) String() string {
-	b, _ := json.MarshalIndent(branding, "", "  ")
-	return string(b)
+func (b *Branding) String() string {
+	return Stringify(b)
 }
 
 type BrandingColors struct {
@@ -40,12 +37,18 @@ func NewBrandingManager(m *Management) *BrandingManager {
 	return &BrandingManager{m}
 }
 
+// Retrieve various settings related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
 func (bm *BrandingManager) Read(opts ...reqOption) (*Branding, error) {
 	branding := new(Branding)
 	err := bm.m.get(bm.m.uri("branding")+bm.m.q(opts), branding)
 	return branding, err
 }
 
+// Update various fields related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
 func (bm *BrandingManager) Update(t *Branding) (err error) {
 	return bm.m.patch(bm.m.uri("branding"), t)
 }

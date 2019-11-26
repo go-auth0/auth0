@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestConnection(t *testing.T) {
@@ -90,8 +90,8 @@ func TestConnection(t *testing.T) {
 		}
 	})
 
-	t.Run("GetConnectionID", func(t *testing.T) {
-		cs, err := m.Connection.GetConnectionID("Username-Password-Authentication")
+	t.Run("ReadByName", func(t *testing.T) {
+		cs, err := m.Connection.ReadByName("Username-Password-Authentication")
 		if err != nil {
 			t.Error(err)
 		}

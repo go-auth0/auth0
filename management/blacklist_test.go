@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestBlacklist(t *testing.T) {
@@ -25,8 +25,8 @@ func TestBlacklist(t *testing.T) {
 		t.Logf("%v\n", bl)
 	})
 
-	t.Run("Update", func(t *testing.T) {
-		err := m.Blacklist.Update(&BlacklistToken{
+	t.Run("Create", func(t *testing.T) {
+		err := m.Blacklist.Create(&BlacklistToken{
 			Audience: auth0.StringValue(c.ClientID),
 			JTI:      "test",
 		})

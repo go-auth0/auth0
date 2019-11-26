@@ -3,14 +3,18 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestJob(t *testing.T) {
 
 	var err error
 
-	connectionID, _ := m.Connection.GetConnectionID("Username-Password-Authentication")
+	c, err := m.Connection.ReadByName("Username-Password-Authentication")
+	if err != nil {
+		t.Error(err)
+	}
+	connectionID := auth0.StringValue(c.ID)
 
 	u := &User{
 		Connection: auth0.String("Username-Password-Authentication"),
@@ -22,7 +26,6 @@ func TestJob(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
 	userID := auth0.StringValue(u.ID)
 
 	defer m.User.Delete(userID)
@@ -56,7 +59,7 @@ func TestJob(t *testing.T) {
 
 	t.Run("ExportUsers", func(t *testing.T) {
 		job := &Job{
-			ConnectionID: connectionID,
+			ConnectionID: auth0.String(connectionID),
 			Format:       auth0.String("json"),
 			Limit:        auth0.Int(5),
 			Fields: []map[string]interface{}{
@@ -74,7 +77,7 @@ func TestJob(t *testing.T) {
 
 	t.Run("ImportUsers", func(t *testing.T) {
 		job := &Job{
-			ConnectionID:        connectionID,
+			ConnectionID:        auth0.String(connectionID),
 			Upsert:              auth0.Bool(true),
 			SendCompletionEmail: auth0.Bool(false),
 			Users: []map[string]interface{}{

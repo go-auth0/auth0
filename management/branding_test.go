@@ -1,8 +1,9 @@
 package management
 
 import (
-	"gopkg.in/auth0.v1"
 	"testing"
+
+	"gopkg.in/auth0.v2"
 )
 
 func TestBranding(t *testing.T) {

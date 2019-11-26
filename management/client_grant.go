@@ -1,11 +1,5 @@
 package management
 
-import (
-	"encoding/json"
-
-	"gopkg.in/auth0.v1"
-)
-
 type ClientGrant struct {
 
 	// A generated string identifying the client grant.
@@ -21,8 +15,7 @@ type ClientGrant struct {
 }
 
 func (c *ClientGrant) String() string {
-	b, _ := json.MarshalIndent(c, "", "  ")
-	return string(b)
+	return Stringify(c)
 }
 
 type ClientGrantManager struct {
@@ -33,10 +26,18 @@ func NewClientGrantManager(m *Management) *ClientGrantManager {
 	return &ClientGrantManager{m}
 }
 
+// Create a client grant.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Client_Grants/post_client_grants
 func (cg *ClientGrantManager) Create(g *ClientGrant) (err error) {
 	return cg.m.post(cg.m.uri("client-grants"), g)
 }
 
+// Retrieves a client grant by its id.
+//
+// The Auth0 Management API does not offer a method to retrieve a client grant
+// by id, we fake this by listing all client grants and matching by id on the
+// client side. For this reason this method should be used with caution.
 func (cg *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 	var gs []*ClientGrant
 	err := cg.m.get(cg.m.uri("client-grants"), &gs)
@@ -44,7 +45,7 @@ func (cg *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 		return nil, err
 	}
 	for _, g := range gs {
-		gid := auth0.StringValue(g.ID)
+		gid := *g.ID
 		if gid == id {
 			return g, nil
 		}
@@ -56,14 +57,23 @@ func (cg *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 	}
 }
 
+// Update a client grant.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Client_Grants/patch_client_grants_by_id
 func (cg *ClientGrantManager) Update(id string, g *ClientGrant) (err error) {
 	return cg.m.patch(cg.m.uri("client-grants", id), g)
 }
 
+// Delete a client grant.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Client_Grants/delete_client_grants_by_id
 func (cg *ClientGrantManager) Delete(id string) (err error) {
 	return cg.m.delete(cg.m.uri("client-grants", id))
 }
 
+// Retrieve client grants.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants
 func (cg *ClientGrantManager) List(opts ...reqOption) (gs []*ClientGrant, err error) {
 	err = cg.m.get(cg.m.uri("client-grants")+cg.m.q(opts), &gs)
 	return
