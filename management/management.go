@@ -80,6 +80,9 @@ type Management struct {
 	// Prompt manages your prompt settings.
 	Prompt *PromptManager
 
+	// Blacklist manages the auth0 blacklists
+	Blacklist *BlacklistManager
+
 	url      *url.URL
 	basePath string
 	timeout  time.Duration
@@ -151,6 +154,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Branding = NewBrandingManager(m)
 	m.Guardian = NewGuardianManager(m)
 	m.Prompt = NewPromptManager(m)
+	m.Blacklist = NewBlacklistManager(m)
 
 	return m, nil
 }
