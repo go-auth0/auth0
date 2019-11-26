@@ -77,6 +77,9 @@ type Management struct {
 	// Guardian manages your Auth0 Guardian settings
 	Guardian *GuardianManager
 
+	// Prompt manages your prompt settings.
+	Prompt *PromptManager
+
 	url      *url.URL
 	basePath string
 	timeout  time.Duration
@@ -147,6 +150,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Stat = NewStatManager(m)
 	m.Branding = NewBrandingManager(m)
 	m.Guardian = NewGuardianManager(m)
+	m.Prompt = NewPromptManager(m)
 
 	return m, nil
 }
