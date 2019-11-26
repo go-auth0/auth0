@@ -1,7 +1,7 @@
 /*
 Package auth0 provides a client for using the Auth0 Management API.
 
-## Usage
+Usage
 
     import (
         gopkg.in/auth0.v2
@@ -27,14 +27,14 @@ With the management client we can now interact with the Auth0 Management API.
         // handle err
     }
 
-## Authentication
+Authentication
 
 The auth0 package handles authentication by exchanging the client id and secret
 supplied when creating a new management client.
 
 This is done using the https://godoc.org/golang.org/x/oauth2 package.
 
-## Rate Limiting
+Rate Limiting
 
 The auth0 package also handles rate limiting by respecting the `X-Ratelimit-*`
 headers sent by the server.
@@ -42,7 +42,7 @@ headers sent by the server.
 The amount of time the client waits for the rate limit to be reset is taken from
 the `X-Ratelimit-Reset` header as the amount of seconds to wait.
 
-## Configuration
+Configuration
 
 There are several other options that can be specified during the creation of a
 new client.
@@ -52,7 +52,7 @@ new client.
         management.WithContext(context.Background()),
         management.WithTimeout(5 * time.Seconds))
 
-## Request Configuration
+Request Configuration
 
 As with the global client configuration, fine-grained configuration can be done
 on a request basis.
