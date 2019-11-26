@@ -100,3 +100,22 @@ func TestOptionParameter(t *testing.T) {
 		t.Errorf("Expected %q, but got %q", bar, "xyz")
 	}
 }
+
+func TestStringify(t *testing.T) {
+
+	expected := `{
+  "foo": "bar"
+}`
+
+	v := struct {
+		Foo string `json:"foo"`
+	}{
+		"bar",
+	}
+
+	s := Stringify(v)
+
+	if s != expected {
+		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
