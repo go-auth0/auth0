@@ -46,7 +46,7 @@ func (rm *RuleManager) Create(r *Rule) error {
 // Retrieve rule details. Accepts a list of fields to include or exclude in the result.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules_by_id
-func (rm *RuleManager) Read(id string, opts ...reqOption) (*Rule, error) {
+func (rm *RuleManager) Read(id string, opts ...ReqOption) (*Rule, error) {
 	r := new(Rule)
 	err := rm.m.get(rm.m.uri("rules", id)+rm.m.q(opts), r)
 	return r, err

@@ -80,7 +80,7 @@ func (r *ResourceServerManager) Create(rs *ResourceServer) (err error) {
 // Retrieves a resource server by its id or audience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers_by_id
-func (r *ResourceServerManager) Read(id string, opts ...reqOption) (*ResourceServer, error) {
+func (r *ResourceServerManager) Read(id string, opts ...ReqOption) (*ResourceServer, error) {
 	rs := new(ResourceServer)
 	err := r.m.get(r.m.uri("resource-servers", id)+r.m.q(opts), rs)
 	return rs, err

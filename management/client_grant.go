@@ -74,7 +74,7 @@ func (cg *ClientGrantManager) Delete(id string) (err error) {
 // Retrieve client grants.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants
-func (cg *ClientGrantManager) List(opts ...reqOption) (gs []*ClientGrant, err error) {
+func (cg *ClientGrantManager) List(opts ...ReqOption) (gs []*ClientGrant, err error) {
 	err = cg.m.get(cg.m.uri("client-grants")+cg.m.q(opts), &gs)
 	return
 }

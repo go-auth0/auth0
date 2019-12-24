@@ -167,7 +167,7 @@ func NewTenantManager(m *Management) *TenantManager {
 // specified.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/get_settings
-func (tm *TenantManager) Read(opts ...reqOption) (*Tenant, error) {
+func (tm *TenantManager) Read(opts ...ReqOption) (*Tenant, error) {
 	t := new(Tenant)
 	err := tm.m.get(tm.m.uri("tenants/settings")+tm.m.q(opts), t)
 	return t, err

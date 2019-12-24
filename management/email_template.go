@@ -59,7 +59,7 @@ func (em *EmailTemplateManager) Create(e *EmailTemplate) error {
 // legacy scenarios.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
-func (em *EmailTemplateManager) Read(template string, opts ...reqOption) (*EmailTemplate, error) {
+func (em *EmailTemplateManager) Read(template string, opts ...ReqOption) (*EmailTemplate, error) {
 	e := new(EmailTemplate)
 	err := em.m.get(em.m.uri("email-templates", template)+em.m.q(opts), e)
 	return e, err

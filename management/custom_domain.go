@@ -57,7 +57,7 @@ func (cm *CustomDomainManager) Create(c *CustomDomain) (err error) {
 // Retrieve a custom domain configuration and status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains_by_id
-func (cm *CustomDomainManager) Read(id string, opts ...reqOption) (*CustomDomain, error) {
+func (cm *CustomDomainManager) Read(id string, opts ...ReqOption) (*CustomDomain, error) {
 	c := new(CustomDomain)
 	err := cm.m.get(cm.m.uri("custom-domains", id)+cm.m.q(opts), c)
 	return c, err
@@ -82,7 +82,7 @@ func (cm *CustomDomainManager) Delete(id string) (err error) {
 // Retrieve a list of custom domains.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains
-func (cm *CustomDomainManager) List(opts ...reqOption) ([]*CustomDomain, error) {
+func (cm *CustomDomainManager) List(opts ...ReqOption) ([]*CustomDomain, error) {
 	var c []*CustomDomain
 	err := cm.m.get(cm.m.uri("custom-domains")+cm.m.q(opts), &c)
 	return c, err

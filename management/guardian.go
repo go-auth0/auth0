@@ -101,7 +101,7 @@ type MultiFactorManager struct {
 // Retrieves all factors.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_factors
-func (mfm *MultiFactorManager) List(opts ...reqOption) ([]*MultiFactor, error) {
+func (mfm *MultiFactorManager) List(opts ...ReqOption) ([]*MultiFactor, error) {
 	var mf []*MultiFactor
 	err := mfm.m.get(mfm.m.uri("guardian", "factors")+mfm.m.q(opts), &mf)
 	return mf, err

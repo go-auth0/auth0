@@ -36,7 +36,7 @@ func (d *DailyStat) String() string {
 // (subscription required) that occurred each day within a specified date range.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Stats/get_daily
-func (sm *StatManager) Daily(opts ...reqOption) ([]*DailyStat, error) {
+func (sm *StatManager) Daily(opts ...ReqOption) ([]*DailyStat, error) {
 	var ds []*DailyStat
 	err := sm.m.get(sm.m.uri("stats/daily")+sm.m.q(opts), &ds)
 	return ds, err

@@ -167,7 +167,7 @@ func (m *Management) uri(path ...string) string {
 	}).String()
 }
 
-func (m *Management) q(options []reqOption) string {
+func (m *Management) q(options []ReqOption) string {
 	if len(options) == 0 {
 		return ""
 	}
@@ -299,12 +299,12 @@ func (m *managementError) Status() int {
 	return m.StatusCode
 }
 
-// reqOption configures a call (typically to retrieve a resource) to Auth0 with
+// ReqOption configures a call (typically to retrieve a resource) to Auth0 with
 // query parameters.
-type reqOption func(url.Values)
+type ReqOption func(url.Values)
 
 // WithFields configures a call to include the desired fields.
-func WithFields(fields ...string) reqOption {
+func WithFields(fields ...string) ReqOption {
 	return func(v url.Values) {
 		v.Set("fields", strings.Join(fields, ","))
 		v.Set("include_fields", "true")
@@ -312,7 +312,7 @@ func WithFields(fields ...string) reqOption {
 }
 
 // WithoutFields configures a call to exclude the desired fields.
-func WithoutFields(fields ...string) reqOption {
+func WithoutFields(fields ...string) ReqOption {
 	return func(v url.Values) {
 		v.Set("fields", strings.Join(fields, ","))
 		v.Set("include_fields", "false")
@@ -321,21 +321,21 @@ func WithoutFields(fields ...string) reqOption {
 
 // Page configures a call to receive a specific page, if the results where
 // concatenated.
-func Page(page int) reqOption {
+func Page(page int) ReqOption {
 	return func(v url.Values) {
 		v.Set("page", strconv.FormatInt(int64(page), 10))
 	}
 }
 
 // PerPage configures a call to limit the amount of items in the result.
-func PerPage(items int) reqOption {
+func PerPage(items int) ReqOption {
 	return func(v url.Values) {
 		v.Set("per_page", strconv.FormatInt(int64(items), 10))
 	}
 }
 
 // IncludeTotals configures a call to include totals.
-func IncludeTotals(include bool) reqOption {
+func IncludeTotals(include bool) ReqOption {
 	return func(v url.Values) {
 		v.Set("include_totals", strconv.FormatBool(include))
 	}
@@ -343,7 +343,7 @@ func IncludeTotals(include bool) reqOption {
 
 // Parameter is a generic configuration to add arbitrary query parameters to
 // calls made to Auth0.
-func Parameter(key, value string) reqOption {
+func Parameter(key, value string) ReqOption {
 	return func(v url.Values) {
 		v.Set(key, value)
 	}

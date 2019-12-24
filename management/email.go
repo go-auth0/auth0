@@ -77,7 +77,7 @@ func (em *EmailManager) Create(e *Email) error {
 // Retrieve email provider details.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/get_provider
-func (em *EmailManager) Read(opts ...reqOption) (*Email, error) {
+func (em *EmailManager) Read(opts ...ReqOption) (*Email, error) {
 	e := new(Email)
 	err := em.m.get(em.m.uri("emails", "provider")+em.m.q(opts), e)
 	return e, err

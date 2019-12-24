@@ -32,7 +32,7 @@ func NewGrantManager(m *Management) *GrantManager {
 // List the grants associated with your account.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
-func (gm *GrantManager) List(opts ...reqOption) ([]*Grant, error) {
+func (gm *GrantManager) List(opts ...ReqOption) ([]*Grant, error) {
 	var g []*Grant
 	err := gm.m.get(gm.m.uri("grants")+gm.m.q(opts), &g)
 	return g, err

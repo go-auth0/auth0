@@ -145,7 +145,7 @@ func (cm *ConnectionManager) Create(c *Connection) error {
 // Retrieves a connection by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
-func (cm *ConnectionManager) Read(id string, opts ...reqOption) (*Connection, error) {
+func (cm *ConnectionManager) Read(id string, opts ...ReqOption) (*Connection, error) {
 	c := new(Connection)
 	err := cm.m.get(cm.m.uri("connections", id)+cm.m.q(opts), c)
 	return c, err
@@ -154,7 +154,7 @@ func (cm *ConnectionManager) Read(id string, opts ...reqOption) (*Connection, er
 // Retrieves every connection matching the specified strategy.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
-func (cm *ConnectionManager) List(opts ...reqOption) ([]*Connection, error) {
+func (cm *ConnectionManager) List(opts ...ReqOption) ([]*Connection, error) {
 	var c []*Connection
 	err := cm.m.get(cm.m.uri("connections")+cm.m.q(opts), &c)
 	return c, err
@@ -179,7 +179,7 @@ func (cm *ConnectionManager) Delete(id string) (err error) {
 
 // Retrieves a connection by its name. This is a helper method when a connection
 // id is not readily available.
-func (cm *ConnectionManager) ReadByName(name string, opts ...reqOption) (*Connection, error) {
+func (cm *ConnectionManager) ReadByName(name string, opts ...ReqOption) (*Connection, error) {
 	opts = append(opts, Parameter("name", name))
 	c, err := cm.List(opts...)
 	if err != nil {

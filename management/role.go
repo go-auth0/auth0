@@ -47,7 +47,7 @@ func (rm *RoleManager) Create(r *Role) error {
 // Retrieve a role.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Roles/get_roles_by_id
-func (rm *RoleManager) Read(id string, opts ...reqOption) (*Role, error) {
+func (rm *RoleManager) Read(id string, opts ...ReqOption) (*Role, error) {
 	r := new(Role)
 	err := rm.m.get(rm.m.uri("roles", id)+rm.m.q(opts), r)
 	return r, err
@@ -70,7 +70,7 @@ func (rm *RoleManager) Delete(id string) (err error) {
 // Retrieve a list of roles that can be assigned to users or groups.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Roles/get_roles
-func (rm *RoleManager) List(opts ...reqOption) ([]*Role, error) {
+func (rm *RoleManager) List(opts ...ReqOption) ([]*Role, error) {
 	var r []*Role
 	err := rm.m.get(rm.m.uri("roles")+rm.m.q(opts), &r)
 	return r, err
@@ -91,7 +91,7 @@ func (rm *RoleManager) AssignUsers(id string, users ...*User) error {
 // Retrieve users associated with a role.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Roles/get_role_user
-func (rm *RoleManager) Users(id string, opts ...reqOption) ([]*User, error) {
+func (rm *RoleManager) Users(id string, opts ...ReqOption) ([]*User, error) {
 	var u []*User
 	err := rm.m.get(rm.m.uri("roles", id, "users")+rm.m.q(opts), &u)
 	return u, err
@@ -109,7 +109,7 @@ func (rm *RoleManager) AssociatePermissions(id string, permissions ...*Permissio
 // Retrieve list of permissions granted by a role.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Roles/get_role_permission
-func (rm *RoleManager) Permissions(id string, opts ...reqOption) ([]*Permission, error) {
+func (rm *RoleManager) Permissions(id string, opts ...ReqOption) ([]*Permission, error) {
 	var p []*Permission
 	err := rm.m.get(rm.m.uri("roles", id, "permissions")+rm.m.q(opts), &p)
 	return p, err

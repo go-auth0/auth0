@@ -117,7 +117,7 @@ func (cm *ClientManager) Create(c *Client) (err error) {
 // Retrieves a client by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients_by_id
-func (cm *ClientManager) Read(id string, opts ...reqOption) (*Client, error) {
+func (cm *ClientManager) Read(id string, opts ...ReqOption) (*Client, error) {
 	c := new(Client)
 	err := cm.m.get(cm.m.uri("clients", id)+cm.m.q(opts), c)
 	return c, err
@@ -126,7 +126,7 @@ func (cm *ClientManager) Read(id string, opts ...reqOption) (*Client, error) {
 // Retrieves a list of all client applications.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients
-func (cm *ClientManager) List(opts ...reqOption) ([]*Client, error) {
+func (cm *ClientManager) List(opts ...ReqOption) ([]*Client, error) {
 	var c []*Client
 	err := cm.m.get(cm.m.uri("clients")+cm.m.q(opts), &c)
 	return c, err
