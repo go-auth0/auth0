@@ -39,6 +39,8 @@ type EmailCredentials struct {
 	SMTPUser *string `json:"smtp_user,omitempty"`
 	// SMTP password
 	SMTPPass *string `json:"smtp_pass,omitempty"`
+	// Domain
+	Domain *string `json:"domain,omitempty"`
 }
 
 type EmailManager struct {
@@ -62,6 +64,9 @@ func NewEmailManager(m *Management) *EmailManager {
 // values for `region`.
 // - ses requires accessKeyId, secretAccessKey, and region
 // - smtp requires smtp_host, smtp_port, smtp_user, and smtp_pass
+// - `mailgun` requires `api_key` and `domain`. Optionally, set region to eu to use
+// the Mailgun service hosted in Europe; set to null otherwise. eu or
+// null are the only valid values for region.
 //
 // Depending on the type of provider it is possible to specify settings object with different configuration options, which will be used when sending an email:
 //
