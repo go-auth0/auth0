@@ -10,12 +10,13 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-const UserAgent = "Go-Auth0-SDK/v1"
+const UserAgent = "Go-Auth0-SDK/v2"
 
-func WrapRetry(c *http.Client) *http.Client {
+func WrapRateLimit(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: rehttp.NewTransport(
 			c.Transport,
@@ -52,28 +53,41 @@ func (rf RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return rf(req)
 }
 
+func dumpRequest(r *http.Request) {
+	b, _ := httputil.DumpRequestOut(r, true)
+	log.Printf("\n%s\n", b)
+}
+
+func dumpResponse(r *http.Response) {
+	b, _ := httputil.DumpResponse(r, true)
+	log.Printf("\n%s\n\n", b)
+}
+
 func WrapDebug(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
+			dumpRequest(req)
 			res, err := c.Transport.RoundTrip(req)
 			if err != nil {
 				return res, err
 			}
-			reqBytes, _ := httputil.DumpRequest(req, true)
-			resBytes, _ := httputil.DumpResponse(res, true)
-			log.Printf("%s\n%s\b\n", reqBytes, resBytes)
+			dumpResponse(res)
 			return res, nil
 		}),
 	}
 }
 
-func OAuth2(domain, clientID, clientSecret string) *http.Client {
-	return (&clientcredentials.Config{
+func New(ctx context.Context, c *clientcredentials.Config) *http.Client {
+	return oauth2.NewClient(ctx, c.TokenSource(ctx))
+}
+
+func OAuth2(u *url.URL, clientID, clientSecret string) *clientcredentials.Config {
+	return &clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		TokenURL:     "https://" + domain + "/oauth/token",
+		TokenURL:     u.String() + "/oauth/token",
 		EndpointParams: url.Values{
-			"audience": {"https://" + domain + "/api/v2/"},
+			"audience": {u.String() + "/api/v2/"},
 		},
-	}).Client(context.Background())
+	}
 }

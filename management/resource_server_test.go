@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestResourceServer(t *testing.T) {

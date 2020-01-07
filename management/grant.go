@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type Grant struct {
 
 	// The id of the grant.
@@ -20,8 +18,7 @@ type Grant struct {
 }
 
 func (g *Grant) String() string {
-	b, _ := json.MarshalIndent(g, "", "  ")
-	return string(b)
+	return Stringify(g)
 }
 
 type GrantManager struct {
@@ -32,6 +29,9 @@ func NewGrantManager(m *Management) *GrantManager {
 	return &GrantManager{m}
 }
 
+// List the grants associated with your account.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
 func (gm *GrantManager) List(opts ...reqOption) ([]*Grant, error) {
 	var g []*Grant
 	err := gm.m.get(gm.m.uri("grants")+gm.m.q(opts), &g)

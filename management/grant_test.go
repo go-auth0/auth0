@@ -1,8 +1,6 @@
 package management
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestGrant(t *testing.T) {
 

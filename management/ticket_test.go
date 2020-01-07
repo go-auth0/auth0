@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestTicket(t *testing.T) {
@@ -41,9 +41,10 @@ func TestTicket(t *testing.T) {
 	t.Run("ChangePassword", func(t *testing.T) {
 
 		v := &Ticket{
-			ResultURL: auth0.String("https://example.com/change-password"),
-			UserID:    auth0.String(userID),
-			TTLSec:    auth0.Int(3600),
+			ResultURL:           auth0.String("https://example.com/change-password"),
+			UserID:              auth0.String(userID),
+			TTLSec:              auth0.Int(3600),
+			MarkEmailAsVerified: auth0.Bool(true),
 		}
 
 		v, err = m.Ticket.ChangePassword(v)

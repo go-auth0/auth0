@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestCustomDomain(t *testing.T) {
@@ -41,27 +41,26 @@ func TestCustomDomain(t *testing.T) {
 		t.Logf("%v\n", c)
 	})
 
-	t.Run("Update", func(t *testing.T) {
-		id := auth0.StringValue(c.ID)
-
-		c.ID = nil // read-only
-		c.Domain = auth0.String("id.example.com")
-
-		err = m.CustomDomain.Update(id, c)
-		if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-			t.Skip(err)
-		} else {
-			t.Error(err)
+	t.Run("Verify", func(t *testing.T) {
+		c, err := m.CustomDomain.Verify(auth0.StringValue(c.ID))
+		if err != nil {
+			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
+				t.Skip(err)
+			} else {
+				t.Error(err)
+			}
 		}
 		t.Logf("%v\n", c)
 	})
 
 	t.Run("Delete", func(t *testing.T) {
 		err = m.CustomDomain.Delete(auth0.StringValue(c.ID))
-		if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-			t.Skip(err)
-		} else {
-			t.Error(err)
+		if err != nil {
+			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
+				t.Skip(err)
+			} else {
+				t.Error(err)
+			}
 		}
 	})
 }

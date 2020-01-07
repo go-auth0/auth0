@@ -9,8 +9,6 @@ import (
 	"net/textproto"
 	"strconv"
 	"time"
-
-	"gopkg.in/auth0.v1"
 )
 
 type Job struct {
@@ -61,8 +59,7 @@ type Job struct {
 }
 
 func (j *Job) String() string {
-	b, _ := json.MarshalIndent(j, "", "  ")
-	return string(b)
+	return Stringify(j)
 }
 
 type JobManager struct {
@@ -77,32 +74,41 @@ func (jm *JobManager) VerifyEmail(j *Job) error {
 	return jm.m.post(jm.m.uri("jobs/verification-email"), j)
 }
 
+// Retrieves a job. Useful to check its status.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
 func (jm *JobManager) Read(id string, opts ...reqOption) (*Job, error) {
 	j := new(Job)
 	err := jm.m.get(jm.m.uri("jobs", id)+jm.m.q(opts), j)
 	return j, err
 }
 
+// Export all users to a file via a long-running job.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports
 func (jm *JobManager) ExportUsers(j *Job) error {
 	return jm.m.post(jm.m.uri("jobs/users-exports"), j)
 }
 
+// Import users from a formatted file into a connection via a long-running job.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_imports
 func (jm *JobManager) ImportUsers(j *Job) error {
 
 	var payload bytes.Buffer
 	mp := multipart.NewWriter(&payload)
 
 	if j.ConnectionID != nil {
-		mp.WriteField("connection_id", auth0.StringValue(j.ConnectionID))
+		mp.WriteField("connection_id", *j.ConnectionID)
 	}
 	if j.Upsert != nil {
-		mp.WriteField("upsert", strconv.FormatBool(auth0.BoolValue(j.Upsert)))
+		mp.WriteField("upsert", strconv.FormatBool(*j.Upsert))
 	}
 	if j.ExternalID != nil {
-		mp.WriteField("external_id", auth0.StringValue(j.ExternalID))
+		mp.WriteField("external_id", *j.ExternalID)
 	}
 	if j.SendCompletionEmail != nil {
-		mp.WriteField("send_completion_email", strconv.FormatBool(auth0.BoolValue(j.SendCompletionEmail)))
+		mp.WriteField("send_completion_email", strconv.FormatBool(*j.SendCompletionEmail))
 	}
 	if j.Users != nil {
 		b, err := json.Marshal(j.Users)
@@ -120,7 +126,10 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	}
 	mp.Close()
 
-	req, _ := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
+	req, err := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
+	if err != nil {
+		return err
+	}
 	req.Header.Add("Content-Type", mp.FormDataContentType())
 
 	ctx, cancel := context.WithTimeout(context.Background(), jm.m.timeout)

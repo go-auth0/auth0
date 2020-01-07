@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestEmailTemplate(t *testing.T) {
@@ -56,12 +56,22 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
+		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), &EmailTemplate{
+			Body: auth0.String("<html><body><h1>Let's get you verified!</h1></body></html>"),
+		})
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", et)
+	})
+
+	t.Run("Replace", func(t *testing.T) {
 
 		et.Subject = auth0.String("Let's get you verified!")
 		et.Body = auth0.String("<html><body><h1>Let's get you verified!</h1></body></html>")
 		et.From = auth0.String("someone@example.com")
 
-		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), et)
+		err = m.EmailTemplate.Replace(auth0.StringValue(et.Template), et)
 		if err != nil {
 			t.Error(err)
 		}

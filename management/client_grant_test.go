@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 func TestClientGrant(t *testing.T) {
@@ -86,5 +86,13 @@ func TestClientGrant(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+	})
+
+	t.Run("List", func(t *testing.T) {
+		gs, err := m.ClientGrant.List()
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", gs)
 	})
 }

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/auth0.v1/internal/client"
+	"gopkg.in/auth0.v2/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -74,10 +74,20 @@ type Management struct {
 	// Branding settings such as company logo or primary color.
 	Branding *BrandingManager
 
-	domain   string
+	// Guardian manages your Auth0 Guardian settings
+	Guardian *GuardianManager
+
+	// Prompt manages your prompt settings.
+	Prompt *PromptManager
+
+	// Blacklist manages the auth0 blacklists
+	Blacklist *BlacklistManager
+
+	url      *url.URL
 	basePath string
 	timeout  time.Duration
 	debug    bool
+	ctx      context.Context
 
 	http *http.Client
 }
@@ -86,20 +96,40 @@ type Management struct {
 // supplied client id and secret.
 func New(domain, clientID, clientSecret string, options ...apiOption) (*Management, error) {
 
+	// Ignore the scheme if it was defined in the domain variable. Then prefix
+	// with https as its the only scheme supported by the Auth0 API.
+	if i := strings.Index(domain, "//"); i != -1 {
+		domain = domain[i+2:]
+	}
+	domain = "https://" + domain
+
+	u, err := url.Parse(domain)
+	if err != nil {
+		return nil, err
+	}
+
 	m := &Management{
-		domain:   domain,
+		url:      u,
 		basePath: "api/v2",
 		timeout:  1 * time.Minute,
 		debug:    false,
+		ctx:      context.Background(),
 	}
 
 	for _, option := range options {
 		option(m)
 	}
 
-	m.http = client.OAuth2(domain, clientID, clientSecret)
+	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+
+	_, err = oauth2.Token(m.ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	m.http = client.New(m.ctx, oauth2)
 	m.http = client.WrapUserAgent(m.http)
-	m.http = client.WrapRetry(m.http)
+	m.http = client.WrapRateLimit(m.http)
 	if m.debug {
 		m.http = client.WrapDebug(m.http)
 	}
@@ -122,14 +152,17 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Ticket = NewTicketManager(m)
 	m.Stat = NewStatManager(m)
 	m.Branding = NewBrandingManager(m)
+	m.Guardian = NewGuardianManager(m)
+	m.Prompt = NewPromptManager(m)
+	m.Blacklist = NewBlacklistManager(m)
 
 	return m, nil
 }
 
 func (m *Management) uri(path ...string) string {
 	return (&url.URL{
-		Scheme: "https",
-		Host:   m.domain,
+		Scheme: m.url.Scheme,
+		Host:   m.url.Host,
 		Path:   m.basePath + "/" + strings.Join(path, "/"),
 	}).String()
 }
@@ -149,12 +182,19 @@ func (m *Management) request(method, uri string, v interface{}) error {
 
 	var payload bytes.Buffer
 	if v != nil {
-		json.NewEncoder(&payload).Encode(v)
+		err := json.NewEncoder(&payload).Encode(v)
+		if err != nil {
+			return err
+		}
 	}
-	req, _ := http.NewRequest(method, uri, &payload)
+
+	req, err := http.NewRequest(method, uri, &payload)
+	if err != nil {
+		return err
+	}
 	req.Header.Add("Content-Type", "application/json")
 
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
+	ctx, cancel := context.WithTimeout(m.ctx, m.timeout)
 	defer cancel()
 
 	if m.http == nil {
@@ -176,8 +216,11 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	}
 
 	if res.StatusCode != http.StatusNoContent {
-		defer res.Body.Close()
-		return json.NewDecoder(res.Body).Decode(v)
+		err := json.NewDecoder(res.Body).Decode(v)
+		if err != nil {
+			return err
+		}
+		return res.Body.Close()
 	}
 
 	return nil
@@ -217,6 +260,14 @@ func WithTimeout(t time.Duration) apiOption {
 func WithDebug(d bool) apiOption {
 	return func(m *Management) {
 		m.debug = d
+	}
+}
+
+// WitContext configures the management client to use the provided context
+// instead of the provided one.
+func WithContext(ctx context.Context) apiOption {
+	return func(m *Management) {
+		m.ctx = ctx
 	}
 }
 
@@ -296,4 +347,13 @@ func Parameter(key, value string) reqOption {
 	return func(v url.Values) {
 		v.Set(key, value)
 	}
+}
+
+// Stringify returns a string representation of the value passed as an argument.
+func Stringify(v interface{}) string {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(b)
 }

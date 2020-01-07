@@ -1,10 +1,9 @@
 package management
 
 import (
-	"encoding/json"
 	"time"
 
-	"gopkg.in/auth0.v1"
+	"gopkg.in/auth0.v2"
 )
 
 var logTypeName = map[string]string{
@@ -89,8 +88,7 @@ type Log struct {
 }
 
 func (l *Log) String() string {
-	b, _ := json.Marshal(l)
-	return string(b)
+	return Stringify(l)
 }
 
 func (l *Log) TypeName() string {
@@ -108,18 +106,31 @@ func NewLogManager(m *Management) *LogManager {
 	return &LogManager{m}
 }
 
+// Retrieves the data related to the log entry identified by id. This returns a
+// single log entry representation as specified in the schema.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs_by_id
 func (lm *LogManager) Read(id string, opts ...reqOption) (*Log, error) {
 	l := new(Log)
 	err := lm.m.get(lm.m.uri("logs", id), l)
 	return l, err
 }
 
+// Retrieves log entries that match the specified search criteria (or lists all
+// log entries if no criteria are used). Set custom search criteria using the
+// `q` parameter, or search from a specific log id ("search from checkpoint").
+//
+// For more information on all possible event types, their respective acronyms
+// and descriptions, Log Data Event Listing.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs
 func (lm *LogManager) List(opts ...reqOption) ([]*Log, error) {
 	var l []*Log
 	err := lm.m.get(lm.m.uri("logs")+lm.m.q(opts), &l)
 	return l, err
 }
 
+// Search is an alias for List
 func (lm *LogManager) Search(opts ...reqOption) ([]*Log, error) {
 	return lm.List(opts...)
 }
