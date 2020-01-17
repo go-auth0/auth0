@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestUser(t *testing.T) {
@@ -95,11 +95,11 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		us, err := m.User.List()
+		ul, err := m.User.List()
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", us)
+		t.Logf("%v\n", ul)
 	})
 
 	t.Run("Update", func(t *testing.T) {
@@ -222,27 +222,24 @@ func TestUser(t *testing.T) {
 	}()
 
 	t.Run("Search", func(t *testing.T) {
-		foundUsers, err := m.User.Search(
-			Parameter("q", `email:"alice@example.com"`),
-			Parameter("search_engine", "v3"))
-
+		ul, err := m.User.Search(Query(`email:"alice@example.com"`))
 		if err != nil {
 			t.Error(err)
 		}
-		if len(foundUsers) != 1 {
+		if len(ul.Users) != 1 {
 			t.Error("unexpected number of users found")
 		}
-		t.Logf("%v\n", foundUsers)
+		t.Logf("%v\n", ul)
 	})
 
 	t.Run("ListByEmail", func(t *testing.T) {
-		foundUsers, err := m.User.ListByEmail("alice@example.com")
+		us, err := m.User.ListByEmail("alice@example.com")
 		if err != nil {
 			t.Error(err)
 		}
-		if len(foundUsers) != 1 {
+		if len(us) != 1 {
 			t.Error("unexpected number of users found")
 		}
-		t.Logf("%v\n", foundUsers)
+		t.Logf("%v\n", us)
 	})
 }

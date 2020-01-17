@@ -13,10 +13,6 @@ type Branding struct {
 	Font *BrandingFont `json:"font,omitempty"`
 }
 
-func (b *Branding) String() string {
-	return Stringify(b)
-}
-
 type BrandingColors struct {
 	// Accent color
 	Primary *string `json:"primary,omitempty"`

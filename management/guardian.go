@@ -1,7 +1,5 @@
 package management
 
-import "encoding/json"
-
 type MultiFactor struct {
 	// States if this factor is enabled
 	Enabled *bool `json:"enabled,omitempty"`
@@ -13,22 +11,12 @@ type MultiFactor struct {
 	TrialExpired *bool `json:"trial_expired,omitempty"`
 }
 
-func (mfa *MultiFactor) String() string {
-	b, _ := json.MarshalIndent(mfa, "", "  ")
-	return string(b)
-}
-
 type MultiFactorSMSTemplate struct {
 	// Message sent to the user when they are invited to enroll with a phone number
 	EnrollmentMessage *string `json:"enrollment_message,omitempty"`
 
 	// Message sent to the user when they are prompted to verify their account
 	VerificationMessage *string `json:"verification_message,omitempty"`
-}
-
-func (sms *MultiFactorSMSTemplate) String() string {
-	b, _ := json.MarshalIndent(sms, "", "  ")
-	return string(b)
 }
 
 type MultiFactorProviderAmazonSNS struct {
@@ -48,11 +36,6 @@ type MultiFactorProviderAmazonSNS struct {
 	GCMPlatformApplicationARN *string `json:"sns_gcm_platform_application_arn,omitempty"`
 }
 
-func (sns *MultiFactorProviderAmazonSNS) String() string {
-	b, _ := json.MarshalIndent(sns, "", "  ")
-	return string(b)
-}
-
 type MultiFactorProviderTwilio struct {
 	// From number
 	From *string `json:"from,omitempty"`
@@ -65,11 +48,6 @@ type MultiFactorProviderTwilio struct {
 
 	// Twilio SID
 	SID *string `json:"sid,omitempty"`
-}
-
-func (twilio *MultiFactorProviderTwilio) String() string {
-	b, _ := json.MarshalIndent(twilio, "", "  ")
-	return string(b)
 }
 
 type GuardianManager struct {
@@ -101,10 +79,9 @@ type MultiFactorManager struct {
 // Retrieves all factors.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_factors
-func (mfm *MultiFactorManager) List(opts ...reqOption) ([]*MultiFactor, error) {
-	var mf []*MultiFactor
-	err := mfm.m.get(mfm.m.uri("guardian", "factors")+mfm.m.q(opts), &mf)
-	return mf, err
+func (mfm *MultiFactorManager) List(opts ...ListOption) (mf []*MultiFactor, err error) {
+	err = mfm.m.get(mfm.m.uri("guardian", "factors")+mfm.m.q(opts), &mf)
+	return
 }
 
 type MultiFactorSMS struct{ m *Management }

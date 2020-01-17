@@ -1,7 +1,5 @@
 package management
 
-import "gopkg.in/auth0.v2"
-
 type RuleConfig struct {
 
 	// The key for a RuleConfigs config
@@ -11,49 +9,51 @@ type RuleConfig struct {
 	Value *string `json:"value,omitempty"`
 }
 
-func (r *RuleConfig) String() string {
-	return Stringify(r)
-}
-
 type RuleConfigManager struct {
-	m *Management
+	*Management
 }
 
 func NewRuleConfigManager(m *Management) *RuleConfigManager {
 	return &RuleConfigManager{m}
 }
 
-// Sets a rules config variable.
+// Upsert sets a rule configuration variable.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/put_rules_configs_by_key
-func (rm *RuleConfigManager) Upsert(key string, r *RuleConfig) (err error) {
-	return rm.m.put(rm.m.uri("rules-configs", key), r)
+func (m *RuleConfigManager) Upsert(key string, r *RuleConfig) (err error) {
+	return m.put(m.uri("rules-configs", key), r)
 }
 
-// Retrieve rules config variable keys.
+// Read a rule configuration variable by key.
 //
 // Note: For security, config variable values cannot be retrieved outside rule
 // execution.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs
-func (rm *RuleConfigManager) Read(key string) (*RuleConfig, error) {
-	var rs []*RuleConfig
-	err := rm.m.get(rm.m.uri("rules-configs"), &rs)
+func (m *RuleConfigManager) Read(key string) (*RuleConfig, error) {
+	rs, err := m.List()
 	if err != nil {
 		return nil, err
 	}
 	for _, r := range rs {
-		rkey := auth0.StringValue(r.Key)
-		if rkey == key {
+		if r.GetKey() == key {
 			return r, nil
 		}
 	}
 	return nil, &managementError{404, "Not Found", "Rule config not found"}
 }
 
-// Delete a rules config variable identified by its key.
+// Delete a rule configuration variable identified by its key.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/delete_rules_configs_by_key
-func (rm *RuleConfigManager) Delete(key string) (err error) {
-	return rm.m.delete(rm.m.uri("rules-configs", key))
+func (m *RuleConfigManager) Delete(key string) (err error) {
+	return m.delete(m.uri("rules-configs", key))
+}
+
+// List all rule configuration variables.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs
+func (m *RuleConfigManager) List(opts ...ListOption) (r []*RuleConfig, err error) {
+	err = m.get(m.uri("rules-configs")+m.q(opts), &r)
+	return
 }

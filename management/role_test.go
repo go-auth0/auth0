@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestRole(t *testing.T) {
@@ -79,7 +79,7 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		var rs []*Role
+		var rs *RoleList
 		rs, err = m.Role.List()
 		if err != nil {
 			t.Fatal(err)

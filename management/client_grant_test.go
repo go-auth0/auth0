@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestClientGrant(t *testing.T) {
@@ -89,7 +89,10 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		gs, err := m.ClientGrant.List()
+		gs, err := m.ClientGrant.List(
+			PerPage(10),          // overwrites the default 50
+			IncludeTotals(false), // has no effect as it is enforced internally
+		)
 		if err != nil {
 			t.Fatal(err)
 		}

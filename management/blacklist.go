@@ -15,10 +15,6 @@ type BlacklistToken struct {
 	JTI string `json:"jti,omitempty"`
 }
 
-func (b *BlacklistToken) String() string {
-	return Stringify(b)
-}
-
 type BlacklistManager struct {
 	*Management
 }

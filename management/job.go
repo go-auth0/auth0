@@ -58,10 +58,6 @@ type Job struct {
 	SendCompletionEmail *bool `json:"send_completion_email,omitempty"`
 }
 
-func (j *Job) String() string {
-	return Stringify(j)
-}
-
 type JobManager struct {
 	m *Management
 }
@@ -77,9 +73,9 @@ func (jm *JobManager) VerifyEmail(j *Job) error {
 // Retrieves a job. Useful to check its status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
-func (jm *JobManager) Read(id string, opts ...reqOption) (*Job, error) {
+func (jm *JobManager) Read(id string) (*Job, error) {
 	j := new(Job)
-	err := jm.m.get(jm.m.uri("jobs", id)+jm.m.q(opts), j)
+	err := jm.m.get(jm.m.uri("jobs", id), j)
 	return j, err
 }
 

@@ -16,10 +16,6 @@ type Email struct {
 	Settings    map[string]interface{} `json:"settings,omitempty"`
 }
 
-func (e *Email) String() string {
-	return Stringify(e)
-}
-
 type EmailCredentials struct {
 	// API User
 	APIUser *string `json:"api_user,omitempty"`
@@ -77,10 +73,9 @@ func (em *EmailManager) Create(e *Email) error {
 // Retrieve email provider details.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/get_provider
-func (em *EmailManager) Read(opts ...reqOption) (*Email, error) {
-	e := new(Email)
-	err := em.m.get(em.m.uri("emails", "provider")+em.m.q(opts), e)
-	return e, err
+func (em *EmailManager) Read() (e *Email, err error) {
+	err = em.m.get(em.m.uri("emails", "provider"), &e)
+	return
 }
 
 // Update an email provider.

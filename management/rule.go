@@ -21,12 +21,13 @@ type Rule struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
-func (r *Rule) String() string {
-	return Stringify(r)
+type RuleList struct {
+	List
+	Rules []*Rule `json:"rules"`
 }
 
 type RuleManager struct {
-	m *Management
+	*Management
 }
 
 func NewRuleManager(m *Management) *RuleManager {
@@ -39,29 +40,37 @@ func NewRuleManager(m *Management) *RuleManager {
 // can change the rule's function signature to have user omitted.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/post_rules
-func (rm *RuleManager) Create(r *Rule) error {
-	return rm.m.post(rm.m.uri("rules"), r)
+func (m *RuleManager) Create(r *Rule) error {
+	return m.post(m.uri("rules"), r)
 }
 
 // Retrieve rule details. Accepts a list of fields to include or exclude in the result.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules_by_id
-func (rm *RuleManager) Read(id string, opts ...reqOption) (*Rule, error) {
-	r := new(Rule)
-	err := rm.m.get(rm.m.uri("rules", id)+rm.m.q(opts), r)
-	return r, err
+func (m *RuleManager) Read(id string) (r *Rule, err error) {
+	err = m.get(m.uri("rules", id), &r)
+	return
 }
 
 // Update an existing rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/patch_rules_by_id
-func (rm *RuleManager) Update(id string, r *Rule) (err error) {
-	return rm.m.patch(rm.m.uri("rules", id), r)
+func (m *RuleManager) Update(id string, r *Rule) error {
+	return m.patch(m.uri("rules", id), r)
 }
 
 // Delete a rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/delete_rules_by_id
-func (rm *RuleManager) Delete(id string) (err error) {
-	return rm.m.delete(rm.m.uri("rules", id))
+func (m *RuleManager) Delete(id string) error {
+	return m.delete(m.uri("rules", id))
+}
+
+// List all rules.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Roles/get_roles
+func (m *RuleManager) List(opts ...ListOption) (r *RuleList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("roles")+m.q(opts), &r)
+	return
 }

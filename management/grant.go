@@ -17,10 +17,6 @@ type Grant struct {
 	Scope []interface{} `json:"scope,omitempty"`
 }
 
-func (g *Grant) String() string {
-	return Stringify(g)
-}
-
 type GrantManager struct {
 	m *Management
 }
@@ -32,9 +28,7 @@ func NewGrantManager(m *Management) *GrantManager {
 // List the grants associated with your account.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
-func (gm *GrantManager) List(opts ...reqOption) ([]*Grant, error) {
-	var g []*Grant
-	err := gm.m.get(gm.m.uri("grants")+gm.m.q(opts), &g)
-	return g, err
-
+func (gm *GrantManager) List(opts ...ListOption) (g []*Grant, err error) {
+	err = gm.m.get(gm.m.uri("grants")+gm.m.q(opts), &g)
+	return
 }

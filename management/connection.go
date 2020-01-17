@@ -44,10 +44,6 @@ type Connection struct {
 	Metadata *interface{} `json:"metadata,omitempty"`
 }
 
-func (c *Connection) String() string {
-	return Stringify(c)
-}
-
 // ConnectionOptions general options
 type ConnectionOptions struct {
 	// Options for validation.
@@ -123,7 +119,7 @@ type ConnectionOptions struct {
 }
 
 type ConnectionManager struct {
-	m *Management
+	*Management
 }
 
 type ConnectionOptionsTotp struct {
@@ -131,62 +127,65 @@ type ConnectionOptionsTotp struct {
 	Length   *int `json:"length,omitempty"`
 }
 
+type ConnectionList struct {
+	List
+	Connections []*Connection `json:"connections"`
+}
+
 func NewConnectionManager(m *Management) *ConnectionManager {
 	return &ConnectionManager{m}
 }
 
-// Creates a new connection.
+// Create a new connection.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/post_connections
-func (cm *ConnectionManager) Create(c *Connection) error {
-	return cm.m.post(cm.m.uri("connections"), c)
+func (m *ConnectionManager) Create(c *Connection) error {
+	return m.post(m.uri("connections"), c)
 }
 
-// Retrieves a connection by its id.
+// Read retrieves a connection by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
-func (cm *ConnectionManager) Read(id string, opts ...reqOption) (*Connection, error) {
-	c := new(Connection)
-	err := cm.m.get(cm.m.uri("connections", id)+cm.m.q(opts), c)
-	return c, err
+func (m *ConnectionManager) Read(id string) (c *Connection, err error) {
+	err = m.get(m.uri("connections", id), &c)
+	return
 }
 
-// Retrieves every connection matching the specified strategy.
+// List all connections.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
-func (cm *ConnectionManager) List(opts ...reqOption) ([]*Connection, error) {
-	var c []*Connection
-	err := cm.m.get(cm.m.uri("connections")+cm.m.q(opts), &c)
-	return c, err
+func (m *ConnectionManager) List(opts ...ListOption) (c *ConnectionList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("connections")+m.q(opts), &c)
+	return
 }
 
-// Updates a connection.
+// Update a connection.
 //
 // Note: if you use the options parameter, the whole options object will be
 // overridden, so ensure that all parameters are present.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/patch_connections_by_id
-func (cm *ConnectionManager) Update(id string, c *Connection) (err error) {
-	return cm.m.patch(cm.m.uri("connections", id), c)
+func (m *ConnectionManager) Update(id string, c *Connection) (err error) {
+	return m.patch(m.uri("connections", id), c)
 }
 
-// Deletes a connection and all its users.
+// Delete a connection and all its users.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/delete_connections_by_id
-func (cm *ConnectionManager) Delete(id string) (err error) {
-	return cm.m.delete(cm.m.uri("connections", id))
+func (m *ConnectionManager) Delete(id string) (err error) {
+	return m.delete(m.uri("connections", id))
 }
 
-// Retrieves a connection by its name. This is a helper method when a connection
-// id is not readily available.
-func (cm *ConnectionManager) ReadByName(name string, opts ...reqOption) (*Connection, error) {
-	opts = append(opts, Parameter("name", name))
-	c, err := cm.List(opts...)
+// ReadByName retrieves a connection by its name. This is a helper method when a
+// connection id is not readily available.
+func (m *ConnectionManager) ReadByName(name string) (*Connection, error) {
+	c, err := m.List(Parameter("name", name))
 	if err != nil {
 		return nil, err
 	}
-	if len(c) > 0 {
-		return c[0], nil
+	if len(c.Connections) > 0 {
+		return c.Connections[0], nil
 	}
 	return nil, &managementError{404, "Not Found", "Connection not found"}
 }
