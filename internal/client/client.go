@@ -14,7 +14,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-const UserAgent = "Go-Auth0-SDK/v2"
+const UserAgent = "Go-Auth0-SDK/v3"
 
 func WrapRateLimit(c *http.Client) *http.Client {
 	return &http.Client{
