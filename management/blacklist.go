@@ -38,7 +38,7 @@ func NewBlacklistManager(m *Management) *BlacklistManager {
 // and let expire.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Blacklists/get_tokens
-func (m *BlacklistManager) List(opts ...ListOption) (bl *ListBlacklistToken, err error) {
+func (m *BlacklistManager) List(opts ...ListOption) (bl []*BlacklistToken, err error) {
 	err = m.get(m.uri("blacklists", "tokens")+m.q(opts), &bl)
 	return
 }
