@@ -30,7 +30,7 @@ type BrandingFont struct {
 }
 
 type BrandingManager struct {
-	m *Management
+	*Management
 }
 
 func NewBrandingManager(m *Management) *BrandingManager {
@@ -40,15 +40,15 @@ func NewBrandingManager(m *Management) *BrandingManager {
 // Retrieve various settings related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
-func (bm *BrandingManager) Read(opts ...reqOption) (*Branding, error) {
+func (m *BrandingManager) Read() (*Branding, error) {
 	branding := new(Branding)
-	err := bm.m.get(bm.m.uri("branding")+bm.m.q(opts), branding)
+	err := m.get(m.uri("branding"), branding)
 	return branding, err
 }
 
 // Update various fields related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
-func (bm *BrandingManager) Update(t *Branding) (err error) {
-	return bm.m.patch(bm.m.uri("branding"), t)
+func (m *BrandingManager) Update(t *Branding) (err error) {
+	return m.patch(m.uri("branding"), t)
 }
