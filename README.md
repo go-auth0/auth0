@@ -43,6 +43,8 @@ err = m.Client.Create(c)
 if err != nil {
 	// handle err
 }
+
+fmt.Printf("Created client %s\n", c.ClientID)
 ```
 
 The following Auth0 resources are supported:
@@ -65,7 +67,6 @@ The following Auth0 resources are supported:
 - [x] [Email Templates](https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName)
 - [x] [Emails](https://auth0.com/docs/api/management/v2#!/Emails/get_provider)
 - [x] [Guardian](https://auth0.com/docs/api/management/v2#!/Guardian/get_factors)
-	- Only Guardian Factors; Enrollment endpoints not implemented
 - [x] [Jobs](https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id)
 - [x] [Stats](https://auth0.com/docs/api/management/v2#!/Stats/get_active_users)
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
