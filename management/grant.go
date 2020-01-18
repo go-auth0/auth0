@@ -18,7 +18,7 @@ type Grant struct {
 }
 
 type GrantManager struct {
-	m *Management
+	*Management
 }
 
 func NewGrantManager(m *Management) *GrantManager {
@@ -28,7 +28,7 @@ func NewGrantManager(m *Management) *GrantManager {
 // List the grants associated with your account.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
-func (gm *GrantManager) List(opts ...ListOption) (g []*Grant, err error) {
-	err = gm.m.get(gm.m.uri("grants")+gm.m.q(opts), &g)
+func (m *GrantManager) List(opts ...ListOption) (g []*Grant, err error) {
+	err = m.get(m.uri("grants")+m.q(opts), &g)
 	return
 }
