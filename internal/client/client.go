@@ -14,6 +14,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+// UserAgent holds the default user agent string
 const UserAgent = "Go-Auth0-SDK/v3"
 
 func WrapRateLimit(c *http.Client) *http.Client {
@@ -38,10 +39,10 @@ func WrapRateLimit(c *http.Client) *http.Client {
 	}
 }
 
-func WrapUserAgent(c *http.Client) *http.Client {
+func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
 	return &http.Client{
 		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			req.Header.Set("User-Agent", UserAgent)
+			req.Header.Set("User-Agent", userAgent)
 			return c.Transport.RoundTrip(req)
 		}),
 	}
@@ -63,7 +64,10 @@ func dumpResponse(r *http.Response) {
 	log.Printf("\n%s\n\n", b)
 }
 
-func WrapDebug(c *http.Client) *http.Client {
+func WrapDebug(c *http.Client, debug bool) *http.Client {
+	if !debug {
+		return c
+	}
 	return &http.Client{
 		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
 			dumpRequest(req)

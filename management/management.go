@@ -85,11 +85,12 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
-	url      *url.URL
-	basePath string
-	timeout  time.Duration
-	debug    bool
-	ctx      context.Context
+	url       *url.URL
+	basePath  string
+	userAgent string
+	timeout   time.Duration
+	debug     bool
+	ctx       context.Context
 
 	http *http.Client
 }
@@ -111,11 +112,12 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	}
 
 	m := &Management{
-		url:      u,
-		basePath: "api/v2",
-		timeout:  1 * time.Minute,
-		debug:    false,
-		ctx:      context.Background(),
+		url:       u,
+		basePath:  "api/v2",
+		userAgent: client.UserAgent,
+		timeout:   1 * time.Minute,
+		debug:     false,
+		ctx:       context.Background(),
 	}
 
 	for _, option := range options {
@@ -130,11 +132,9 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	}
 
 	m.http = client.New(m.ctx, oauth2)
-	m.http = client.WrapUserAgent(m.http)
+	m.http = client.WrapDebug(m.http, m.debug)
+	m.http = client.WrapUserAgent(m.http, m.userAgent)
 	m.http = client.WrapRateLimit(m.http)
-	if m.debug {
-		m.http = client.WrapDebug(m.http)
-	}
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
@@ -276,6 +276,14 @@ func WithDebug(d bool) apiOption {
 func WithContext(ctx context.Context) apiOption {
 	return func(m *Management) {
 		m.ctx = ctx
+	}
+}
+
+// WithUserAgent configures the management client to use the provided user agent
+// string instead of the default one.
+func WithUserAgent(userAgent string) apiOption {
+	return func(m *Management) {
+		m.userAgent = userAgent
 	}
 }
 
