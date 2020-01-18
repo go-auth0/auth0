@@ -1,5 +1,7 @@
 package management
 
+//go:generate go run gen-methods.go
+
 import (
 	"bytes"
 	"context"

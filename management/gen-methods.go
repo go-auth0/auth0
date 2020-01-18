@@ -21,6 +21,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/ioutil"
+	"regexp"
 	"log"
 	"os"
 	"sort"
@@ -29,20 +30,15 @@ import (
 )
 
 const (
-	fileSuffix = "_accessors.go"
+	suffix = ".gen.go"
 )
 
 var (
 	verbose = flag.Bool("v", false, "Print verbose log messages")
 
-	sourceTmpl = template.Must(template.New("source").Parse(source))
-
-	// blacklistStructMethod lists "struct.method" combos to skip.
-	blacklistStructMethod = map[string]bool{}
-
-	// blacklistStruct lists structs to skip.
-	blacklistStruct = map[string]bool{
-		"Management": true,
+	blacklist = []string{
+		`Management`,
+		`.*Manager`,
 	}
 )
 
@@ -56,7 +52,7 @@ func main() {
 	flag.Parse()
 	fset := token.NewFileSet()
 
-	pkgs, err := parser.ParseDir(fset, ".", sourceFilter, 0)
+	pkgs, err := parser.ParseDir(fset, ".", filter, 0)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -64,14 +60,14 @@ func main() {
 
 	for pkgName, pkg := range pkgs {
 		t := &templateData{
-			filename: pkgName + fileSuffix,
+			filename: pkgName + suffix,
 			Year:     time.Now().Year(),
 			Package:  pkgName,
 			Imports:  map[string]string{},
 		}
 		for filename, f := range pkg.Files {
 			logf("Processing %v...", filename)
-			if err := t.processAST(f); err != nil {
+			if err := t.process(f); err != nil {
 				log.Fatal(err)
 			}
 		}
@@ -82,12 +78,13 @@ func main() {
 	logf("Done.")
 }
 
-func (t *templateData) processAST(f *ast.File) error {
+func (t *templateData) process(f *ast.File) error {
 	for _, decl := range f.Decls {
 		gd, ok := decl.(*ast.GenDecl)
 		if !ok {
 			continue
 		}
+		specLoop:
 		for _, spec := range gd.Specs {
 			ts, ok := spec.(*ast.TypeSpec)
 			if !ok {
@@ -99,14 +96,24 @@ func (t *templateData) processAST(f *ast.File) error {
 				continue
 			}
 			// Check if the struct is blacklisted.
-			if blacklistStruct[ts.Name.Name] {
-				logf("Struct %v is blacklisted; skipping.", ts.Name)
-				continue
+			for _, pattern := range blacklist {
+				match, err := regexp.Match(pattern, []byte(ts.Name.String()))
+				if err != nil {
+					return err
+				}
+				if match {
+					logf("Struct %v is blacklisted; skipping.", ts.Name)
+					continue specLoop
+				}
 			}
 			st, ok := ts.Type.(*ast.StructType)
 			if !ok {
 				continue
 			}
+			// Add stringer method
+			t.addStringer(ts.Name.String())
+
+			// Add accessor for each field
 			for _, field := range st.Fields.List {
 				se, ok := field.Type.(*ast.StarExpr)
 				if len(field.Names) == 0 || !ok {
@@ -119,11 +126,11 @@ func (t *templateData) processAST(f *ast.File) error {
 					logf("Field %v is unexported; skipping.", fieldName)
 					continue
 				}
-				// Check if "struct.method" is blacklisted.
-				if key := fmt.Sprintf("%v.Get%v", ts.Name, fieldName); blacklistStructMethod[key] {
-					logf("Method %v is blacklisted; skipping.", key)
-					continue
-				}
+				// // Check if "struct.method" is blacklisted.
+				// if key := fmt.Sprintf("%v.Get%v", ts.Name, fieldName); blacklistStructMethod[key] {
+				// 	logf("Method %v is blacklisted; skipping.", key)
+				// 	continue
+				// }
 
 				switch x := se.X.(type) {
 				case *ast.ArrayType:
@@ -135,7 +142,7 @@ func (t *templateData) processAST(f *ast.File) error {
 				case *ast.SelectorExpr:
 					t.addSelectorExpr(x, ts.Name.String(), fieldName.String())
 				default:
-					logf("processAST: type %q, field %q, unknown %T: %+v", ts.Name, fieldName, x, x)
+					logf("process: type %q, field %q, unknown %T: %+v", ts.Name, fieldName, x, x)
 				}
 			}
 		}
@@ -143,8 +150,8 @@ func (t *templateData) processAST(f *ast.File) error {
 	return nil
 }
 
-func sourceFilter(fi os.FileInfo) bool {
-	return !strings.HasSuffix(fi.Name(), "_test.go") && !strings.HasSuffix(fi.Name(), fileSuffix)
+func filter(fi os.FileInfo) bool {
+	return !strings.HasSuffix(fi.Name(), "_test.go") && !strings.HasSuffix(fi.Name(), suffix)
 }
 
 func (t *templateData) dump() error {
@@ -153,11 +160,13 @@ func (t *templateData) dump() error {
 		return nil
 	}
 
+	tpl := template.Must(template.New("source").Parse(source))
+
 	// Sort getters by ReceiverType.FieldName.
 	sort.Sort(byName(t.Getters))
 
 	var buf bytes.Buffer
-	if err := sourceTmpl.Execute(&buf, t); err != nil {
+	if err := tpl.Execute(&buf, t); err != nil {
 		return err
 	}
 	clean, err := format.Source(buf.Bytes())
@@ -179,6 +188,15 @@ func newGetter(receiverType, fieldName, fieldType, zeroValue string, namedStruct
 		ZeroValue:    zeroValue,
 		NamedStruct:  namedStruct,
 	}
+}
+
+func (t *templateData) addStringer(receiverType string) {
+	t.Getters = append(t.Getters, &getter{
+		sortVal:      strings.ToLower(receiverType) + ".zzz",
+		ReceiverVar:  strings.ToLower(receiverType[:1]),
+		ReceiverType: receiverType,
+		Stringer: true,
+	})
 }
 
 func (t *templateData) addArrayType(x *ast.ArrayType, receiverType, fieldName string) {
@@ -282,6 +300,7 @@ type getter struct {
 	FieldType    string
 	ZeroValue    string
 	NamedStruct  bool // Getter for named struct.
+	Stringer bool // Used for the structs String method.
 }
 
 type byName []*getter
@@ -308,6 +327,11 @@ func ({{.ReceiverVar}} *{{.ReceiverType}}) Get{{.FieldName}}() *{{.FieldType}} {
     return {{.ZeroValue}}
   }
   return {{.ReceiverVar}}.{{.FieldName}}
+}
+{{else if .Stringer}}
+// String returns a string representation of {{.ReceiverType}}.
+func ({{.ReceiverVar}} *{{.ReceiverType}}) String() string {
+  return Stringify({{.ReceiverVar}})
 }
 {{else}}
 // Get{{.FieldName}} returns the {{.FieldName}} field if it's non-nil, zero value otherwise.

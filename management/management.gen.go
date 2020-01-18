@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+// String returns a string representation of BlacklistToken.
+func (b *BlacklistToken) String() string {
+	return Stringify(b)
+}
+
 // GetColors returns the Colors field.
 func (b *Branding) GetColors() *BrandingColors {
 	if b == nil {
@@ -38,6 +43,11 @@ func (b *Branding) GetLogoURL() string {
 	return *b.LogoURL
 }
 
+// String returns a string representation of Branding.
+func (b *Branding) String() string {
+	return Stringify(b)
+}
+
 // GetPageBackground returns the PageBackground field if it's non-nil, zero value otherwise.
 func (b *BrandingColors) GetPageBackground() string {
 	if b == nil || b.PageBackground == nil {
@@ -54,12 +64,22 @@ func (b *BrandingColors) GetPrimary() string {
 	return *b.Primary
 }
 
+// String returns a string representation of BrandingColors.
+func (b *BrandingColors) String() string {
+	return Stringify(b)
+}
+
 // GetURL returns the URL field if it's non-nil, zero value otherwise.
 func (b *BrandingFont) GetURL() string {
 	if b == nil || b.URL == nil {
 		return ""
 	}
 	return *b.URL
+}
+
+// String returns a string representation of BrandingFont.
+func (b *BrandingFont) String() string {
+	return Stringify(b)
 }
 
 // GetAppType returns the AppType field if it's non-nil, zero value otherwise.
@@ -214,6 +234,11 @@ func (c *Client) GetTokenEndpointAuthMethod() string {
 	return *c.TokenEndpointAuthMethod
 }
 
+// String returns a string representation of Client.
+func (c *Client) String() string {
+	return Stringify(c)
+}
+
 // GetAudience returns the Audience field if it's non-nil, zero value otherwise.
 func (c *ClientGrant) GetAudience() string {
 	if c == nil || c.Audience == nil {
@@ -238,6 +263,16 @@ func (c *ClientGrant) GetID() string {
 	return *c.ID
 }
 
+// String returns a string representation of ClientGrant.
+func (c *ClientGrant) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of ClientGrantList.
+func (c *ClientGrantList) String() string {
+	return Stringify(c)
+}
+
 // GetAlgorithm returns the Algorithm field if it's non-nil, zero value otherwise.
 func (c *ClientJWTConfiguration) GetAlgorithm() string {
 	if c == nil || c.Algorithm == nil {
@@ -260,6 +295,16 @@ func (c *ClientJWTConfiguration) GetSecretEncoded() bool {
 		return false
 	}
 	return *c.SecretEncoded
+}
+
+// String returns a string representation of ClientJWTConfiguration.
+func (c *ClientJWTConfiguration) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of ClientList.
+func (c *ClientList) String() string {
+	return Stringify(c)
 }
 
 // GetID returns the ID field if it's non-nil, zero value otherwise.
@@ -300,6 +345,16 @@ func (c *Connection) GetStrategy() string {
 		return ""
 	}
 	return *c.Strategy
+}
+
+// String returns a string representation of Connection.
+func (c *Connection) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of ConnectionList.
+func (c *ConnectionList) String() string {
+	return Stringify(c)
 }
 
 // GetAdfsServer returns the AdfsServer field if it's non-nil, zero value otherwise.
@@ -574,6 +629,11 @@ func (c *ConnectionOptions) GetWaadProtocol() string {
 	return *c.WaadProtocol
 }
 
+// String returns a string representation of ConnectionOptions.
+func (c *ConnectionOptions) String() string {
+	return Stringify(c)
+}
+
 // GetLength returns the Length field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsTotp) GetLength() int {
 	if c == nil || c.Length == nil {
@@ -588,6 +648,11 @@ func (c *ConnectionOptionsTotp) GetTimeStep() int {
 		return 0
 	}
 	return *c.TimeStep
+}
+
+// String returns a string representation of ConnectionOptionsTotp.
+func (c *ConnectionOptionsTotp) String() string {
+	return Stringify(c)
 }
 
 // GetDomain returns the Domain field if it's non-nil, zero value otherwise.
@@ -646,6 +711,16 @@ func (c *CustomDomain) GetVerificationMethod() string {
 	return *c.VerificationMethod
 }
 
+// String returns a string representation of CustomDomain.
+func (c *CustomDomain) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of CustomDomainVerification.
+func (c *CustomDomainVerification) String() string {
+	return Stringify(c)
+}
+
 // GetCreatedAt returns the CreatedAt field if it's non-nil, zero value otherwise.
 func (d *DailyStat) GetCreatedAt() time.Time {
 	if d == nil || d.CreatedAt == nil {
@@ -694,6 +769,11 @@ func (d *DailyStat) GetUpdatedAt() time.Time {
 	return *d.UpdatedAt
 }
 
+// String returns a string representation of DailyStat.
+func (d *DailyStat) String() string {
+	return Stringify(d)
+}
+
 // GetCredentials returns the Credentials field.
 func (e *Email) GetCredentials() *EmailCredentials {
 	if e == nil {
@@ -724,6 +804,11 @@ func (e *Email) GetName() string {
 		return ""
 	}
 	return *e.Name
+}
+
+// String returns a string representation of Email.
+func (e *Email) String() string {
+	return Stringify(e)
 }
 
 // GetAccessKeyID returns the AccessKeyID field if it's non-nil, zero value otherwise.
@@ -798,6 +883,11 @@ func (e *EmailCredentials) GetSMTPUser() string {
 	return *e.SMTPUser
 }
 
+// String returns a string representation of EmailCredentials.
+func (e *EmailCredentials) String() string {
+	return Stringify(e)
+}
+
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
 func (e *EmailTemplate) GetBody() string {
 	if e == nil || e.Body == nil {
@@ -862,6 +952,11 @@ func (e *EmailTemplate) GetURLLifetimeInSecoonds() int {
 	return *e.URLLifetimeInSecoonds
 }
 
+// String returns a string representation of EmailTemplate.
+func (e *EmailTemplate) String() string {
+	return Stringify(e)
+}
+
 // GetAudience returns the Audience field if it's non-nil, zero value otherwise.
 func (g *Grant) GetAudience() string {
 	if g == nil || g.Audience == nil {
@@ -894,12 +989,9 @@ func (g *Grant) GetUserID() string {
 	return *g.UserID
 }
 
-// GetMultiFactor returns the MultiFactor field.
-func (g *GuardianManager) GetMultiFactor() *MultiFactorManager {
-	if g == nil {
-		return nil
-	}
-	return g.MultiFactor
+// String returns a string representation of Grant.
+func (g *Grant) String() string {
+	return Stringify(g)
 }
 
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
@@ -1022,6 +1114,16 @@ func (j *Job) GetUserID() string {
 	return *j.UserID
 }
 
+// String returns a string representation of Job.
+func (j *Job) String() string {
+	return Stringify(j)
+}
+
+// String returns a string representation of List.
+func (l *List) String() string {
+	return Stringify(l)
+}
+
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
 func (l *Log) GetClientID() string {
 	if l == nil || l.ClientID == nil {
@@ -1086,6 +1188,11 @@ func (l *Log) GetUserID() string {
 	return *l.UserID
 }
 
+// String returns a string representation of Log.
+func (l *Log) String() string {
+	return Stringify(l)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (m *MultiFactor) GetEnabled() bool {
 	if m == nil || m.Enabled == nil {
@@ -1110,44 +1217,24 @@ func (m *MultiFactor) GetTrialExpired() bool {
 	return *m.TrialExpired
 }
 
-// GetDUO returns the DUO field.
-func (m *MultiFactorManager) GetDUO() *MultiFactorDUO {
-	if m == nil {
-		return nil
-	}
-	return m.DUO
+// String returns a string representation of MultiFactor.
+func (m *MultiFactor) String() string {
+	return Stringify(m)
 }
 
-// GetEmail returns the Email field.
-func (m *MultiFactorManager) GetEmail() *MultiFactorEmail {
-	if m == nil {
-		return nil
-	}
-	return m.Email
+// String returns a string representation of MultiFactorDUO.
+func (m *MultiFactorDUO) String() string {
+	return Stringify(m)
 }
 
-// GetOTP returns the OTP field.
-func (m *MultiFactorManager) GetOTP() *MultiFactorOTP {
-	if m == nil {
-		return nil
-	}
-	return m.OTP
+// String returns a string representation of MultiFactorEmail.
+func (m *MultiFactorEmail) String() string {
+	return Stringify(m)
 }
 
-// GetPush returns the Push field.
-func (m *MultiFactorManager) GetPush() *MultiFactorPush {
-	if m == nil {
-		return nil
-	}
-	return m.Push
-}
-
-// GetSMS returns the SMS field.
-func (m *MultiFactorManager) GetSMS() *MultiFactorSMS {
-	if m == nil {
-		return nil
-	}
-	return m.SMS
+// String returns a string representation of MultiFactorOTP.
+func (m *MultiFactorOTP) String() string {
+	return Stringify(m)
 }
 
 // GetAccessKeyID returns the AccessKeyID field if it's non-nil, zero value otherwise.
@@ -1190,6 +1277,11 @@ func (m *MultiFactorProviderAmazonSNS) GetSecretAccessKeyID() string {
 	return *m.SecretAccessKeyID
 }
 
+// String returns a string representation of MultiFactorProviderAmazonSNS.
+func (m *MultiFactorProviderAmazonSNS) String() string {
+	return Stringify(m)
+}
+
 // GetAuthToken returns the AuthToken field if it's non-nil, zero value otherwise.
 func (m *MultiFactorProviderTwilio) GetAuthToken() string {
 	if m == nil || m.AuthToken == nil {
@@ -1222,6 +1314,21 @@ func (m *MultiFactorProviderTwilio) GetSID() string {
 	return *m.SID
 }
 
+// String returns a string representation of MultiFactorProviderTwilio.
+func (m *MultiFactorProviderTwilio) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MultiFactorPush.
+func (m *MultiFactorPush) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MultiFactorSMS.
+func (m *MultiFactorSMS) String() string {
+	return Stringify(m)
+}
+
 // GetEnrollmentMessage returns the EnrollmentMessage field if it's non-nil, zero value otherwise.
 func (m *MultiFactorSMSTemplate) GetEnrollmentMessage() string {
 	if m == nil || m.EnrollmentMessage == nil {
@@ -1236,6 +1343,11 @@ func (m *MultiFactorSMSTemplate) GetVerificationMessage() string {
 		return ""
 	}
 	return *m.VerificationMessage
+}
+
+// String returns a string representation of MultiFactorSMSTemplate.
+func (m *MultiFactorSMSTemplate) String() string {
+	return Stringify(m)
 }
 
 // GetDescription returns the Description field if it's non-nil, zero value otherwise.
@@ -1268,6 +1380,16 @@ func (p *Permission) GetResourceServerName() string {
 		return ""
 	}
 	return *p.ResourceServerName
+}
+
+// String returns a string representation of Permission.
+func (p *Permission) String() string {
+	return Stringify(p)
+}
+
+// String returns a string representation of Prompt.
+func (p *Prompt) String() string {
+	return Stringify(p)
 }
 
 // GetAllowOfflineAccess returns the AllowOfflineAccess field if it's non-nil, zero value otherwise.
@@ -1366,6 +1488,16 @@ func (r *ResourceServer) GetVerificationLocation() string {
 	return *r.VerificationLocation
 }
 
+// String returns a string representation of ResourceServer.
+func (r *ResourceServer) String() string {
+	return Stringify(r)
+}
+
+// String returns a string representation of ResourceServerList.
+func (r *ResourceServerList) String() string {
+	return Stringify(r)
+}
+
 // GetDescription returns the Description field if it's non-nil, zero value otherwise.
 func (r *ResourceServerScope) GetDescription() string {
 	if r == nil || r.Description == nil {
@@ -1380,6 +1512,11 @@ func (r *ResourceServerScope) GetValue() string {
 		return ""
 	}
 	return *r.Value
+}
+
+// String returns a string representation of ResourceServerScope.
+func (r *ResourceServerScope) String() string {
+	return Stringify(r)
 }
 
 // GetDescription returns the Description field if it's non-nil, zero value otherwise.
@@ -1404,6 +1541,16 @@ func (r *Role) GetName() string {
 		return ""
 	}
 	return *r.Name
+}
+
+// String returns a string representation of Role.
+func (r *Role) String() string {
+	return Stringify(r)
+}
+
+// String returns a string representation of RoleList.
+func (r *RoleList) String() string {
+	return Stringify(r)
 }
 
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
@@ -1446,6 +1593,11 @@ func (r *Rule) GetScript() string {
 	return *r.Script
 }
 
+// String returns a string representation of Rule.
+func (r *Rule) String() string {
+	return Stringify(r)
+}
+
 // GetKey returns the Key field if it's non-nil, zero value otherwise.
 func (r *RuleConfig) GetKey() string {
 	if r == nil || r.Key == nil {
@@ -1460,6 +1612,16 @@ func (r *RuleConfig) GetValue() string {
 		return ""
 	}
 	return *r.Value
+}
+
+// String returns a string representation of RuleConfig.
+func (r *RuleConfig) String() string {
+	return Stringify(r)
+}
+
+// String returns a string representation of RuleList.
+func (r *RuleList) String() string {
+	return Stringify(r)
 }
 
 // GetChangePassword returns the ChangePassword field.
@@ -1582,6 +1744,11 @@ func (t *Tenant) GetUniversalLogin() *TenantUniversalLogin {
 	return t.UniversalLogin
 }
 
+// String returns a string representation of Tenant.
+func (t *Tenant) String() string {
+	return Stringify(t)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (t *TenantChangePassword) GetEnabled() bool {
 	if t == nil || t.Enabled == nil {
@@ -1598,6 +1765,11 @@ func (t *TenantChangePassword) GetHTML() string {
 	return *t.HTML
 }
 
+// String returns a string representation of TenantChangePassword.
+func (t *TenantChangePassword) String() string {
+	return Stringify(t)
+}
+
 // GetCharset returns the Charset field if it's non-nil, zero value otherwise.
 func (t *TenantDeviceFlow) GetCharset() string {
 	if t == nil || t.Charset == nil {
@@ -1612,6 +1784,11 @@ func (t *TenantDeviceFlow) GetMask() string {
 		return ""
 	}
 	return *t.Mask
+}
+
+// String returns a string representation of TenantDeviceFlow.
+func (t *TenantDeviceFlow) String() string {
+	return Stringify(t)
 }
 
 // GetHTML returns the HTML field if it's non-nil, zero value otherwise.
@@ -1636,6 +1813,11 @@ func (t *TenantErrorPage) GetURL() string {
 		return ""
 	}
 	return *t.URL
+}
+
+// String returns a string representation of TenantErrorPage.
+func (t *TenantErrorPage) String() string {
+	return Stringify(t)
 }
 
 // GetAllowChangingEnableSso returns the AllowChangingEnableSso field if it's non-nil, zero value otherwise.
@@ -1742,6 +1924,11 @@ func (t *TenantFlags) GetUniversalLogin() bool {
 	return *t.UniversalLogin
 }
 
+// String returns a string representation of TenantFlags.
+func (t *TenantFlags) String() string {
+	return Stringify(t)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (t *TenantGuardianMFAPage) GetEnabled() bool {
 	if t == nil || t.Enabled == nil {
@@ -1758,12 +1945,22 @@ func (t *TenantGuardianMFAPage) GetHTML() string {
 	return *t.HTML
 }
 
+// String returns a string representation of TenantGuardianMFAPage.
+func (t *TenantGuardianMFAPage) String() string {
+	return Stringify(t)
+}
+
 // GetColors returns the Colors field.
 func (t *TenantUniversalLogin) GetColors() *TenantUniversalLoginColors {
 	if t == nil {
 		return nil
 	}
 	return t.Colors
+}
+
+// String returns a string representation of TenantUniversalLogin.
+func (t *TenantUniversalLogin) String() string {
+	return Stringify(t)
 }
 
 // GetPageBackground returns the PageBackground field if it's non-nil, zero value otherwise.
@@ -1780,6 +1977,11 @@ func (t *TenantUniversalLoginColors) GetPrimary() string {
 		return ""
 	}
 	return *t.Primary
+}
+
+// String returns a string representation of TenantUniversalLoginColors.
+func (t *TenantUniversalLoginColors) String() string {
+	return Stringify(t)
 }
 
 // GetConnectionID returns the ConnectionID field if it's non-nil, zero value otherwise.
@@ -1836,6 +2038,11 @@ func (t *Ticket) GetUserID() string {
 		return ""
 	}
 	return *t.UserID
+}
+
+// String returns a string representation of Ticket.
+func (t *Ticket) String() string {
+	return Stringify(t)
 }
 
 // GetBlocked returns the Blocked field if it's non-nil, zero value otherwise.
@@ -1982,6 +2189,11 @@ func (u *User) GetVerifyEmail() bool {
 	return *u.VerifyEmail
 }
 
+// String returns a string representation of User.
+func (u *User) String() string {
+	return Stringify(u)
+}
+
 // GetConnection returns the Connection field if it's non-nil, zero value otherwise.
 func (u *UserIdentity) GetConnection() string {
 	if u == nil || u.Connection == nil {
@@ -2012,4 +2224,14 @@ func (u *UserIdentity) GetUserID() string {
 		return ""
 	}
 	return *u.UserID
+}
+
+// String returns a string representation of UserIdentity.
+func (u *UserIdentity) String() string {
+	return Stringify(u)
+}
+
+// String returns a string representation of UserList.
+func (u *UserList) String() string {
+	return Stringify(u)
 }
