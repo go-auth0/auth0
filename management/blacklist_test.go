@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestBlacklist(t *testing.T) {
@@ -16,14 +16,6 @@ func TestBlacklist(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer m.Client.Delete(auth0.StringValue(c.ClientID))
-
-	t.Run("List", func(t *testing.T) {
-		bl, err := m.Blacklist.List()
-		if err != nil {
-			t.Error(err)
-		}
-		t.Logf("%v\n", bl)
-	})
 
 	t.Run("Create", func(t *testing.T) {
 		err := m.Blacklist.Create(&BlacklistToken{
@@ -39,6 +31,14 @@ func TestBlacklist(t *testing.T) {
 		}
 		if len(bl) == 0 {
 			t.Error("unexpected output; blacklist should not be empty")
+		}
+		t.Logf("%v\n", bl)
+	})
+
+	t.Run("List", func(t *testing.T) {
+		bl, err := m.Blacklist.List(Parameter("aud", auth0.StringValue(c.ClientID)))
+		if err != nil {
+			t.Error(err)
 		}
 		t.Logf("%v\n", bl)
 	})

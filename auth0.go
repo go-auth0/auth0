@@ -36,7 +36,7 @@ func String(s string) *string {
 	return &s
 }
 
-// String returns a pointer to the string value passed in formatted using
+// Stringf returns a pointer to the string value passed in formatted using
 // fmt.Sprintf.
 func Stringf(s string, v ...interface{}) *string {
 	return String(fmt.Sprintf(s, v...))

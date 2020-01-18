@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestClient(t *testing.T) {
@@ -35,12 +35,12 @@ func TestClient(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		var cs []*Client
-		cs, err = m.Client.List()
+		var cl *ClientList
+		cl, err = m.Client.List(WithFields("client_id"))
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", cs)
+		t.Logf("%v\n", cl)
 	})
 
 	t.Run("Update", func(t *testing.T) {
@@ -60,20 +60,19 @@ func TestClient(t *testing.T) {
 	})
 
 	t.Run("RotateSecret", func(t *testing.T) {
-		id := auth0.StringValue(c.ClientID)
-		secret := c.ClientSecret
-		c, err = m.Client.RotateSecret(id)
+		secret := c.GetClientSecret()
+		c, err = m.Client.RotateSecret(c.GetClientID())
 		if err != nil {
 			t.Error(err)
 		}
-		if secret == c.ClientSecret {
+		if secret == c.GetClientSecret() {
 			t.Errorf("expected secret to change but didn't")
 		}
 		t.Logf("%v\n", c)
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Client.Delete(auth0.StringValue(c.ClientID))
+		err = m.Client.Delete(c.GetClientID())
 		if err != nil {
 			t.Error(err)
 		}

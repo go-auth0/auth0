@@ -3,7 +3,7 @@ package management
 import (
 	"time"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 var logTypeName = map[string]string{
@@ -87,10 +87,6 @@ type Log struct {
 	UserID *string `json:"user_id"`
 }
 
-func (l *Log) String() string {
-	return Stringify(l)
-}
-
 func (l *Log) TypeName() string {
 	if name, ok := logTypeName[auth0.StringValue(l.Type)]; ok {
 		return name
@@ -110,7 +106,7 @@ func NewLogManager(m *Management) *LogManager {
 // single log entry representation as specified in the schema.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs_by_id
-func (lm *LogManager) Read(id string, opts ...reqOption) (*Log, error) {
+func (lm *LogManager) Read(id string) (*Log, error) {
 	l := new(Log)
 	err := lm.m.get(lm.m.uri("logs", id), l)
 	return l, err
@@ -124,13 +120,13 @@ func (lm *LogManager) Read(id string, opts ...reqOption) (*Log, error) {
 // and descriptions, Log Data Event Listing.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs
-func (lm *LogManager) List(opts ...reqOption) ([]*Log, error) {
+func (lm *LogManager) List(opts ...ListOption) ([]*Log, error) {
 	var l []*Log
 	err := lm.m.get(lm.m.uri("logs")+lm.m.q(opts), &l)
 	return l, err
 }
 
 // Search is an alias for List
-func (lm *LogManager) Search(opts ...reqOption) ([]*Log, error) {
+func (lm *LogManager) Search(opts ...ListOption) ([]*Log, error) {
 	return lm.List(opts...)
 }

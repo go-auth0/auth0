@@ -2,13 +2,9 @@ package management
 
 import "time"
 
-type Identity struct {
-	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"user_id,omitempty"`
-	Provider   *string `json:"provider,omitempty"`
-	IsSocial   *bool   `json:"isSocial,omitempty"`
-}
-
+// User represents an Auth0 user resource
+//
+// See: https://auth0.com/docs/users
 type User struct {
 
 	// The users identifier.
@@ -55,7 +51,8 @@ type User struct {
 	// color_preference, blog_url, etc).
 	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
 
-	Identities []*Identity `json:"identities,omitempty"`
+	// Identities is a list of user identities for when accounts are linked.
+	Identities []*UserIdentity `json:"identities,omitempty"`
 
 	// True if the user's email is verified, false otherwise. If it is true then
 	// the user will not receive a verification email, unless verify_email: true
@@ -85,19 +82,33 @@ type User struct {
 	Blocked *bool `json:"blocked,omitempty"`
 }
 
-func (u *User) String() string {
-	return Stringify(u)
+type UserIdentity struct {
+	Connection *string `json:"connection,omitempty"`
+	UserID     *string `json:"user_id,omitempty"`
+	Provider   *string `json:"provider,omitempty"`
+	IsSocial   *bool   `json:"isSocial,omitempty"`
 }
 
+// UserList is an envelope struct which is used when calling List() or Search()
+// methods.
+//
+// It holds metadata such as the total result count, starting offset and limit.
+type UserList struct {
+	List
+	Users []*User `json:"users"`
+}
+
+// UserManager manages Auth0 User resources.
 type UserManager struct {
-	m *Management
+	*Management
 }
 
+// NewUserManager returns a new instance of a user manager.
 func NewUserManager(m *Management) *UserManager {
 	return &UserManager{m}
 }
 
-// Creates a new user. It works only for database and passwordless connections.
+// Create a new user. It works only for database and passwordless connections.
 //
 // The samples on the right show you every attribute that could be used. The
 // attribute connection is always mandatory but depending on the type of
@@ -105,20 +116,20 @@ func NewUserManager(m *Management) *UserManager {
 // connections require `email` and `password`.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_users
-func (um *UserManager) Create(u *User) error {
-	return um.m.post(um.m.uri("users"), u)
+func (m *UserManager) Create(u *User) error {
+	return m.post(m.uri("users"), u)
 }
 
-// This endpoint can be used to retrieve user details given the user_id.
+// Read user details for a given user_id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users_by_id
-func (um *UserManager) Read(id string, opts ...reqOption) (*User, error) {
+func (m *UserManager) Read(id string) (*User, error) {
 	u := new(User)
-	err := um.m.get(um.m.uri("users", id)+um.m.q(opts), u)
+	err := m.get(m.uri("users", id), u)
 	return u, err
 }
 
-// Updates a user.
+// Update user.
 //
 // The following attributes can be updated at the root level:
 //
@@ -139,30 +150,33 @@ func (um *UserManager) Read(id string, opts ...reqOption) (*User, error) {
 // - `verify_email`
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
-func (um *UserManager) Update(id string, u *User) (err error) {
-	return um.m.patch(um.m.uri("users", id), u)
+func (m *UserManager) Update(id string, u *User) (err error) {
+	return m.patch(m.uri("users", id), u)
 }
 
-// This endpoint can be used to delete a single user based on the id.
+// Delete a single user based on its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_users_by_id
-func (um *UserManager) Delete(id string) (err error) {
-	return um.m.delete(um.m.uri("users", id))
+func (m *UserManager) Delete(id string) (err error) {
+	return m.delete(m.uri("users", id))
 }
 
-// This endpoint can be used to retrieve a list of users.
+// List all users. This method forces the `include_totals` option.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users
-func (um *UserManager) List(opts ...reqOption) (us []*User, err error) {
-	err = um.m.get(um.m.uri("users")+um.m.q(opts), &us)
+func (m *UserManager) List(opts ...ListOption) (ul *UserList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("users")+m.q(opts), &ul)
 	return
 }
 
 // Search is an alias for List.
-func (um *UserManager) Search(opts ...reqOption) (us []*User, err error) {
-	return um.List(opts...)
+func (m *UserManager) Search(opts ...ListOption) (ul *UserList, err error) {
+	return m.List(opts...)
 }
 
+// ListByEmail retrieves all users matching a given email.
+//
 // If Auth0 is the identify provider (idP), the email address associated with a
 // user is saved in lower case, regardless of how you initially provided it.
 // For example, if you register a user as JohnSmith@example.com, Auth0 saves the
@@ -175,66 +189,66 @@ func (um *UserManager) Search(opts ...reqOption) (us []*User, err error) {
 // email addresses using the correct case.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email
-func (um *UserManager) ListByEmail(email string, opts ...reqOption) (us []*User, err error) {
+func (m *UserManager) ListByEmail(email string, opts ...ListOption) (us []*User, err error) {
 	opts = append(opts, Parameter("email", email))
-	err = um.m.get(um.m.uri("users-by-email")+um.m.q(opts), &us)
+	err = m.get(m.uri("users-by-email")+m.q(opts), &us)
 	return
 }
 
-// List the the roles associated with a user.
+// GetRoles lists all roles associated with a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_user_roles
-func (um *UserManager) GetRoles(id string, opts ...reqOption) (roles []*Role, err error) {
-	err = um.m.get(um.m.uri("users", id, "roles")+um.m.q(opts), &roles)
+func (m *UserManager) GetRoles(id string, opts ...ListOption) (roles []*Role, err error) {
+	err = m.get(m.uri("users", id, "roles")+m.q(opts), &roles)
 	return roles, err
 }
 
-// Assign roles to a user.
+// AssignRoles assignes roles to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_user_roles
-func (um *UserManager) AssignRoles(id string, roles ...*Role) error {
+func (m *UserManager) AssignRoles(id string, roles ...*Role) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
 		r["roles"][i] = role.ID
 	}
-	return um.m.post(um.m.uri("users", id, "roles"), &r)
+	return m.post(m.uri("users", id, "roles"), &r)
 }
 
-// Removes roles from a user.
+// RemoveRoles removes any roles associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_user_roles
-func (um *UserManager) RemoveRoles(id string, roles ...*Role) error {
+func (m *UserManager) RemoveRoles(id string, roles ...*Role) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
 		r["roles"][i] = role.ID
 	}
-	return um.m.request("DELETE", um.m.uri("users", id, "roles"), &r)
+	return m.request("DELETE", m.uri("users", id, "roles"), &r)
 }
 
-// List the permissions associated to the user.
+// Permissions lists the permissions associated to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_permissions
-func (um *UserManager) Permissions(id string, opts ...reqOption) (permissions []*Permission, err error) {
-	err = um.m.get(um.m.uri("users", id, "permissions")+um.m.q(opts), &permissions)
+func (m *UserManager) Permissions(id string, opts ...ListOption) (permissions []*Permission, err error) {
+	err = m.get(m.uri("users", id, "permissions")+m.q(opts), &permissions)
 	return permissions, err
 }
 
-// Assign permissions to the user.
+// AssignPermissions assigns permissions to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_permissions
-func (um *UserManager) AssignPermissions(id string, permissions ...*Permission) error {
+func (m *UserManager) AssignPermissions(id string, permissions ...*Permission) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
-	return um.m.post(um.m.uri("users", id, "permissions"), &p)
+	return m.post(m.uri("users", id, "permissions"), &p)
 }
 
-// Removes permissions from a user.
+// RemovePermissions removes any permissions associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_permissions
-func (um *UserManager) RemovePermissions(id string, permissions ...*Permission) error {
+func (m *UserManager) RemovePermissions(id string, permissions ...*Permission) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
-	return um.m.request("DELETE", um.m.uri("users", id, "permissions"), &p)
+	return m.request("DELETE", m.uri("users", id, "permissions"), &p)
 }

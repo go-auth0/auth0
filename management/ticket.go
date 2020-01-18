@@ -35,30 +35,24 @@ type Ticket struct {
 	MarkEmailAsVerified *bool `json:"mark_email_as_verified,omitempty"`
 }
 
-func (t *Ticket) String() string {
-	return Stringify(t)
-}
-
 type TicketManager struct {
-	m *Management
+	*Management
 }
 
 func NewTicketManager(m *Management) *TicketManager {
 	return &TicketManager{m}
 }
 
-// Create a ticket to verify a user's email address.
+// VerifyEmail creates a ticket to verify a user's email address.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification
-func (tm *TicketManager) VerifyEmail(t *Ticket) (*Ticket, error) {
-	err := tm.m.post(tm.m.uri("tickets", "email-verification"), t)
-	return t, err
+func (m *TicketManager) VerifyEmail(t *Ticket) error {
+	return m.post(m.uri("tickets", "email-verification"), t)
 }
 
-// Create a password change ticket for a user.
+// ChangePassword creates a password change ticket for a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_password_change
-func (tm *TicketManager) ChangePassword(t *Ticket) (*Ticket, error) {
-	err := tm.m.post(tm.m.uri("tickets", "password-change"), t)
-	return t, err
+func (m *TicketManager) ChangePassword(t *Ticket) error {
+	return m.post(m.uri("tickets", "password-change"), t)
 }

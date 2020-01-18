@@ -56,10 +56,6 @@ type Tenant struct {
 	DeviceFlow *TenantDeviceFlow `json:"device_flow,omitempty"`
 }
 
-func (t *Tenant) String() string {
-	return Stringify(t)
-}
-
 type TenantChangePassword struct {
 	// True to use the custom change password html, false otherwise.
 	Enabled *bool `json:"enabled,omitempty"`
@@ -156,7 +152,7 @@ type TenantDeviceFlow struct {
 }
 
 type TenantManager struct {
-	m *Management
+	*Management
 }
 
 func NewTenantManager(m *Management) *TenantManager {
@@ -167,15 +163,14 @@ func NewTenantManager(m *Management) *TenantManager {
 // specified.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/get_settings
-func (tm *TenantManager) Read(opts ...reqOption) (*Tenant, error) {
-	t := new(Tenant)
-	err := tm.m.get(tm.m.uri("tenants/settings")+tm.m.q(opts), t)
-	return t, err
+func (m *TenantManager) Read() (t *Tenant, err error) {
+	err = m.get(m.uri("tenants", "settings"), &t)
+	return
 }
 
 // Update settings for a tenant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/patch_settings
-func (tm *TenantManager) Update(t *Tenant) (err error) {
-	return tm.m.patch(tm.m.uri("tenants/settings"), t)
+func (m *TenantManager) Update(t *Tenant) (err error) {
+	return m.patch(m.uri("tenants", "settings"), t)
 }

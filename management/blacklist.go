@@ -15,19 +15,15 @@ type BlacklistToken struct {
 	JTI string `json:"jti,omitempty"`
 }
 
-func (b *BlacklistToken) String() string {
-    return Stringify(b)
-}
-
 type BlacklistManager struct {
-	m *Management
+	*Management
 }
 
 func NewBlacklistManager(m *Management) *BlacklistManager {
 	return &BlacklistManager{m}
 }
 
-// Retrieve all tokens that are blacklisted.
+// List all tokens that are blacklisted.
 //
 // Note: The JWT specification states that the `jti` field can be used to
 // prevent replay attacks. Though Auth0 tokens do not include a `jti`, you can
@@ -38,14 +34,14 @@ func NewBlacklistManager(m *Management) *BlacklistManager {
 // and let expire.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Blacklists/get_tokens
-func (bm *BlacklistManager) List() (bl []*BlacklistToken, err error) {
-	err = bm.m.get(bm.m.uri("blacklists", "tokens"), &bl)
+func (m *BlacklistManager) List(opts ...ListOption) (bl []*BlacklistToken, err error) {
+	err = m.get(m.uri("blacklists", "tokens")+m.q(opts), &bl)
 	return
 }
 
-// Blacklist a token.
+// Create a blacklist for a token.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Blacklists/post_tokens
-func (bm *BlacklistManager) Create(bt *BlacklistToken) error {
-	return bm.m.post(bm.m.uri("blacklists", "tokens"), bt)
+func (m *BlacklistManager) Create(t *BlacklistToken) error {
+	return m.post(m.uri("blacklists", "tokens"), t)
 }

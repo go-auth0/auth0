@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v2"
+	"gopkg.in/auth0.v3"
 )
 
 func TestRule(t *testing.T) {
@@ -40,6 +40,14 @@ func TestRule(t *testing.T) {
 		r.Enabled = auth0.Bool(true)
 
 		err = m.Rule.Update(id, r)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", r)
+	})
+
+	t.Run("List", func(t *testing.T) {
+		r, err := m.Rule.List()
 		if err != nil {
 			t.Error(err)
 		}

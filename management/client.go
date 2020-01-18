@@ -81,10 +81,6 @@ type Client struct {
 	Mobile                  map[string]interface{} `json:"mobile,omitempty"`
 }
 
-func (c *Client) String() string {
-	return Stringify(c)
-}
-
 type ClientJWTConfiguration struct {
 	// The amount of seconds the JWT will be valid (affects exp claim)
 	LifetimeInSeconds *int `json:"lifetime_in_seconds,omitempty"`
@@ -99,59 +95,62 @@ type ClientJWTConfiguration struct {
 	Algorithm *string `json:"alg,omitempty"`
 }
 
+type ClientList struct {
+	List
+	Clients []*Client `json:"clients"`
+}
+
 type ClientManager struct {
-	m *Management
+	*Management
 }
 
 func NewClientManager(m *Management) *ClientManager {
 	return &ClientManager{m}
 }
 
-// Creates a new client application.
+// Create a new client application.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/post_clients
-func (cm *ClientManager) Create(c *Client) (err error) {
-	return cm.m.post(cm.m.uri("clients"), c)
+func (m *ClientManager) Create(c *Client) (err error) {
+	return m.post(m.uri("clients"), c)
 }
 
-// Retrieves a client by its id.
+// Read a client by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients_by_id
-func (cm *ClientManager) Read(id string, opts ...reqOption) (*Client, error) {
-	c := new(Client)
-	err := cm.m.get(cm.m.uri("clients", id)+cm.m.q(opts), c)
-	return c, err
+func (m *ClientManager) Read(id string) (c *Client, err error) {
+	err = m.get(m.uri("clients", id), &c)
+	return
 }
 
-// Retrieves a list of all client applications.
+// List all client applications.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients
-func (cm *ClientManager) List(opts ...reqOption) ([]*Client, error) {
-	var c []*Client
-	err := cm.m.get(cm.m.uri("clients")+cm.m.q(opts), &c)
-	return c, err
+func (m *ClientManager) List(opts ...ListOption) (c *ClientList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("clients")+m.q(opts), &c)
+	return
 }
 
-// Updates a client.
+// Update a client.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/patch_clients_by_id
-func (cm *ClientManager) Update(id string, c *Client) (err error) {
-	return cm.m.patch(cm.m.uri("clients", id), c)
+func (m *ClientManager) Update(id string, c *Client) (err error) {
+	return m.patch(m.uri("clients", id), c)
 }
 
-// Rotate a client secret.
+// RotateSecret rotates a client secret.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/post_rotate_secret
-func (cm *ClientManager) RotateSecret(id string) (*Client, error) {
-	c := new(Client)
-	err := cm.m.post(cm.m.uri("clients", id, "rotate-secret"), c)
-	return c, err
+func (m *ClientManager) RotateSecret(id string) (c *Client, err error) {
+	err = m.post(m.uri("clients", id, "rotate-secret"), &c)
+	return
 }
 
-// Deletes a client and all its related assets (like rules, connections, etc)
+// Delete a client and all its related assets (like rules, connections, etc)
 // given its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/delete_clients_by_id
-func (cm *ClientManager) Delete(id string) (err error) {
-	return cm.m.delete(cm.m.uri("clients", id))
+func (m *ClientManager) Delete(id string) error {
+	return m.delete(m.uri("clients", id))
 }

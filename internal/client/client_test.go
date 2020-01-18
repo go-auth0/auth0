@@ -29,7 +29,7 @@ func TestWrapRateLimit(t *testing.T) {
 	s := httptest.NewServer(h)
 	defer s.Close()
 
-	c := WrapRateLimit(WrapDebug(s.Client()))
+	c := WrapRateLimit(WrapDebug(s.Client(), true))
 	r, err := c.Get(s.URL)
 	if err != nil {
 		t.Error(err)
@@ -57,6 +57,6 @@ func TestWrapUserAgent(t *testing.T) {
 	s := httptest.NewServer(h)
 	defer s.Close()
 
-	c := WrapUserAgent(s.Client())
+	c := WrapUserAgent(s.Client(), UserAgent)
 	c.Get(s.URL)
 }

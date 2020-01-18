@@ -17,7 +17,9 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Build
-      run: go build ./...
+      run: |
+        go generate  ./...
+        go build ./...
 
     - name: Test
       run: go test ./... -coverprofile=c.out
@@ -31,4 +33,4 @@ jobs:
       with:
         codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
         codeclimate-test-reporter-version: latest
-        command: after-build --prefix gopkg.in/auth0.v2
+        command: after-build --prefix gopkg.in/auth0.v3

@@ -1,5 +1,7 @@
 package management
 
+//go:generate go run gen-methods.go
+
 import (
 	"bytes"
 	"context"
@@ -12,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/auth0.v2/internal/client"
+	"gopkg.in/auth0.v3/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -83,11 +85,12 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
-	url      *url.URL
-	basePath string
-	timeout  time.Duration
-	debug    bool
-	ctx      context.Context
+	url       *url.URL
+	basePath  string
+	userAgent string
+	timeout   time.Duration
+	debug     bool
+	ctx       context.Context
 
 	http *http.Client
 }
@@ -109,11 +112,12 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	}
 
 	m := &Management{
-		url:      u,
-		basePath: "api/v2",
-		timeout:  1 * time.Minute,
-		debug:    false,
-		ctx:      context.Background(),
+		url:       u,
+		basePath:  "api/v2",
+		userAgent: client.UserAgent,
+		timeout:   1 * time.Minute,
+		debug:     false,
+		ctx:       context.Background(),
 	}
 
 	for _, option := range options {
@@ -128,11 +132,9 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	}
 
 	m.http = client.New(m.ctx, oauth2)
-	m.http = client.WrapUserAgent(m.http)
+	m.http = client.WrapDebug(m.http, m.debug)
+	m.http = client.WrapUserAgent(m.http, m.userAgent)
 	m.http = client.WrapRateLimit(m.http)
-	if m.debug {
-		m.http = client.WrapDebug(m.http)
-	}
 
 	m.Client = NewClientManager(m)
 	m.ClientGrant = NewClientGrantManager(m)
@@ -167,7 +169,7 @@ func (m *Management) uri(path ...string) string {
 	}).String()
 }
 
-func (m *Management) q(options []reqOption) string {
+func (m *Management) q(options []ListOption) string {
 	if len(options) == 0 {
 		return ""
 	}
@@ -176,6 +178,12 @@ func (m *Management) q(options []reqOption) string {
 		option(v)
 	}
 	return "?" + v.Encode()
+}
+
+func (m *Management) defaults(options []ListOption) []ListOption {
+	options = append([]ListOption{PerPage(50)}, options...)
+	options = append(options, IncludeTotals(true))
+	return options
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
@@ -271,6 +279,14 @@ func WithContext(ctx context.Context) apiOption {
 	}
 }
 
+// WithUserAgent configures the management client to use the provided user agent
+// string instead of the default one.
+func WithUserAgent(userAgent string) apiOption {
+	return func(m *Management) {
+		m.userAgent = userAgent
+	}
+}
+
 type Error interface {
 	Status() int
 	error
@@ -299,12 +315,30 @@ func (m *managementError) Status() int {
 	return m.StatusCode
 }
 
-// reqOption configures a call (typically to retrieve a resource) to Auth0 with
+// List is an envelope which is typically used when calling List() or Search()
+// methods.
+//
+// It holds metadata such as the total result count, starting offset and limit.
+//
+// Specific implementations embed this struct, therefore its direct use is not
+// useful. Rather it has been made public in order to aid documentation.
+type List struct {
+	Start  int `json:"start"`
+	Limit  int `json:"limit"`
+	Length int `json:"length"`
+	Total  int `json:"total"`
+}
+
+func (l List) HasNext() bool {
+	return l.Total > l.Start+l.Limit
+}
+
+// ListOption configures a call (typically to retrieve a resource) to Auth0 with
 // query parameters.
-type reqOption func(url.Values)
+type ListOption func(url.Values)
 
 // WithFields configures a call to include the desired fields.
-func WithFields(fields ...string) reqOption {
+func WithFields(fields ...string) ListOption {
 	return func(v url.Values) {
 		v.Set("fields", strings.Join(fields, ","))
 		v.Set("include_fields", "true")
@@ -312,7 +346,7 @@ func WithFields(fields ...string) reqOption {
 }
 
 // WithoutFields configures a call to exclude the desired fields.
-func WithoutFields(fields ...string) reqOption {
+func WithoutFields(fields ...string) ListOption {
 	return func(v url.Values) {
 		v.Set("fields", strings.Join(fields, ","))
 		v.Set("include_fields", "false")
@@ -321,29 +355,45 @@ func WithoutFields(fields ...string) reqOption {
 
 // Page configures a call to receive a specific page, if the results where
 // concatenated.
-func Page(page int) reqOption {
+func Page(page int) ListOption {
 	return func(v url.Values) {
 		v.Set("page", strconv.FormatInt(int64(page), 10))
 	}
 }
 
 // PerPage configures a call to limit the amount of items in the result.
-func PerPage(items int) reqOption {
+func PerPage(items int) ListOption {
 	return func(v url.Values) {
 		v.Set("per_page", strconv.FormatInt(int64(items), 10))
 	}
 }
 
 // IncludeTotals configures a call to include totals.
-func IncludeTotals(include bool) reqOption {
+func IncludeTotals(include bool) ListOption {
 	return func(v url.Values) {
 		v.Set("include_totals", strconv.FormatBool(include))
 	}
 }
 
+// Query configures a call to search on specific query parameters.
+//
+// For example:
+//   List(Query(`email:"alice@example.com"`))
+//   List(Query(`name:"jane smith"`))
+//   List(Query(`logins_count:[100 TO 200}`))
+//   List(Query(`logins_count:{100 TO *]`))
+//
+// See: https://auth0.com/docs/users/search/v3/query-syntax
+func Query(q string) ListOption {
+	return func(v url.Values) {
+		v.Set("search_engine", "v3")
+		v.Set("q", q)
+	}
+}
+
 // Parameter is a generic configuration to add arbitrary query parameters to
 // calls made to Auth0.
-func Parameter(key, value string) reqOption {
+func Parameter(key, value string) ListOption {
 	return func(v url.Values) {
 		v.Set(key, value)
 	}

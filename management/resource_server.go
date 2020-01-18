@@ -49,10 +49,6 @@ type ResourceServer struct {
 	TokenDialect *string `json:"token_dialect,omitempty"`
 }
 
-func (r *ResourceServer) String() string {
-	return Stringify(r)
-}
-
 type ResourceServerScope struct {
 	// The scope name. Use the format <action>:<resource> for example
 	// 'delete:client_grants'.
@@ -62,40 +58,53 @@ type ResourceServerScope struct {
 	Description *string `json:"description,omitempty"`
 }
 
+type ResourceServerList struct {
+	List
+	ResourceServer []*ResourceServer `json:"resource_servers"`
+}
+
 type ResourceServerManager struct {
-	m *Management
+	*Management
 }
 
 func NewResourceServerManager(m *Management) *ResourceServerManager {
 	return &ResourceServerManager{m}
 }
 
-// Creates a resource server.
+// Create a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/post_resource_servers
-func (r *ResourceServerManager) Create(rs *ResourceServer) (err error) {
-	return r.m.post(r.m.uri("resource-servers"), rs)
+func (m *ResourceServerManager) Create(rs *ResourceServer) (err error) {
+	return m.post(m.uri("resource-servers"), rs)
 }
 
-// Retrieves a resource server by its id or audience.
+// Read retrieves a resource server by its id or audience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers_by_id
-func (r *ResourceServerManager) Read(id string, opts ...reqOption) (*ResourceServer, error) {
-	rs := new(ResourceServer)
-	err := r.m.get(r.m.uri("resource-servers", id)+r.m.q(opts), rs)
-	return rs, err
+func (m *ResourceServerManager) Read(id string) (rs *ResourceServer, err error) {
+	err = m.get(m.uri("resource-servers", id), &rs)
+	return
 }
 
-// Updates a resource server.
+// Update a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/patch_resource_servers_by_id
-func (r *ResourceServerManager) Update(id string, rs *ResourceServer) (err error) {
-	return r.m.patch(r.m.uri("resource-servers", id), rs)
+func (m *ResourceServerManager) Update(id string, rs *ResourceServer) (err error) {
+	return m.patch(m.uri("resource-servers", id), rs)
 }
 
 // Delete a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/delete_resource_servers_by_id
-func (r *ResourceServerManager) Delete(id string) (err error) {
-	return r.m.delete(r.m.uri("resource-servers", id))
+func (m *ResourceServerManager) Delete(id string) (err error) {
+	return m.delete(m.uri("resource-servers", id))
+}
+
+// List all resource server.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers
+func (m *ResourceServerManager) List(opts ...ListOption) (rl *ResourceServerList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("users")+m.q(opts), &rl)
+	return
 }
