@@ -31,7 +31,7 @@ type EmailTemplate struct {
 }
 
 type EmailTemplateManager struct {
-	m *Management
+	*Management
 }
 
 func NewEmailTemplateManager(m *Management) *EmailTemplateManager {
@@ -41,8 +41,8 @@ func NewEmailTemplateManager(m *Management) *EmailTemplateManager {
 // Create an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/post_email_templates
-func (em *EmailTemplateManager) Create(e *EmailTemplate) error {
-	return em.m.post(em.m.uri("email-templates"), e)
+func (m *EmailTemplateManager) Create(e *EmailTemplate) error {
+	return m.post(m.uri("email-templates"), e)
 }
 
 // Retrieve an email template by pre-defined name.
@@ -55,22 +55,22 @@ func (em *EmailTemplateManager) Create(e *EmailTemplate) error {
 // legacy scenarios.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
-func (em *EmailTemplateManager) Read(template string) (*EmailTemplate, error) {
+func (m *EmailTemplateManager) Read(template string) (*EmailTemplate, error) {
 	e := new(EmailTemplate)
-	err := em.m.get(em.m.uri("email-templates", template), e)
+	err := m.get(m.uri("email-templates", template), e)
 	return e, err
 }
 
 // Modify an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/patch_email_templates_by_templateName
-func (em *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
-	return em.m.patch(em.m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
+	return m.patch(m.uri("email-templates", template), e)
 }
 
 // Replace an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/put_email_templates_by_templateName
-func (em *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
-	return em.m.put(em.m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
+	return m.put(m.uri("email-templates", template), e)
 }

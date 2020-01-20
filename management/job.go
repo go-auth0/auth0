@@ -59,37 +59,37 @@ type Job struct {
 }
 
 type JobManager struct {
-	m *Management
+	*Management
 }
 
 func NewJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 
-func (jm *JobManager) VerifyEmail(j *Job) error {
-	return jm.m.post(jm.m.uri("jobs/verification-email"), j)
+func (m *JobManager) VerifyEmail(j *Job) error {
+	return m.post(m.uri("jobs", "verification-email"), j)
 }
 
 // Retrieves a job. Useful to check its status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
-func (jm *JobManager) Read(id string) (*Job, error) {
+func (m *JobManager) Read(id string) (*Job, error) {
 	j := new(Job)
-	err := jm.m.get(jm.m.uri("jobs", id), j)
+	err := m.get(m.uri("jobs", id), j)
 	return j, err
 }
 
 // Export all users to a file via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports
-func (jm *JobManager) ExportUsers(j *Job) error {
-	return jm.m.post(jm.m.uri("jobs/users-exports"), j)
+func (m *JobManager) ExportUsers(j *Job) error {
+	return m.post(m.uri("jobs", "users-exports"), j)
 }
 
 // Import users from a formatted file into a connection via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_imports
-func (jm *JobManager) ImportUsers(j *Job) error {
+func (m *JobManager) ImportUsers(j *Job) error {
 
 	var payload bytes.Buffer
 	mp := multipart.NewWriter(&payload)
@@ -122,20 +122,20 @@ func (jm *JobManager) ImportUsers(j *Job) error {
 	}
 	mp.Close()
 
-	req, err := http.NewRequest("POST", jm.m.uri("jobs/users-imports"), &payload)
+	req, err := http.NewRequest("POST", m.uri("jobs", "users-imports"), &payload)
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Content-Type", mp.FormDataContentType())
 
-	ctx, cancel := context.WithTimeout(context.Background(), jm.m.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
 	defer cancel()
 
-	if jm.m.http == nil {
-		jm.m.http = http.DefaultClient
+	if m.http == nil {
+		m.http = http.DefaultClient
 	}
 
-	res, err := jm.m.http.Do(req.WithContext(ctx))
+	res, err := m.http.Do(req.WithContext(ctx))
 	if err != nil {
 		select {
 		case <-ctx.Done():
