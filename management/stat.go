@@ -6,7 +6,7 @@ type StatManager struct {
 	*Management
 }
 
-func NewStatManager(m *Management) *StatManager {
+func newStatManager(m *Management) *StatManager {
 	return &StatManager{m}
 }
 

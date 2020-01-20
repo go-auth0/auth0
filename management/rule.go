@@ -30,7 +30,7 @@ type RuleManager struct {
 	*Management
 }
 
-func NewRuleManager(m *Management) *RuleManager {
+func newRuleManager(m *Management) *RuleManager {
 	return &RuleManager{m}
 }
 

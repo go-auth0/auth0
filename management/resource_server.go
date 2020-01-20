@@ -67,7 +67,7 @@ type ResourceServerManager struct {
 	*Management
 }
 
-func NewResourceServerManager(m *Management) *ResourceServerManager {
+func newResourceServerManager(m *Management) *ResourceServerManager {
 	return &ResourceServerManager{m}
 }
 

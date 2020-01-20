@@ -104,7 +104,7 @@ type ClientManager struct {
 	*Management
 }
 
-func NewClientManager(m *Management) *ClientManager {
+func newClientManager(m *Management) *ClientManager {
 	return &ClientManager{m}
 }
 

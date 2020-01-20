@@ -62,7 +62,7 @@ type JobManager struct {
 	*Management
 }
 
-func NewJobManager(m *Management) *JobManager {
+func newJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 

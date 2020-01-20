@@ -29,7 +29,7 @@ type BrandingManager struct {
 	*Management
 }
 
-func NewBrandingManager(m *Management) *BrandingManager {
+func newBrandingManager(m *Management) *BrandingManager {
 	return &BrandingManager{m}
 }
 

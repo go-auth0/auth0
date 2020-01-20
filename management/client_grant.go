@@ -23,7 +23,7 @@ type ClientGrantManager struct {
 	*Management
 }
 
-func NewClientGrantManager(m *Management) *ClientGrantManager {
+func newClientGrantManager(m *Management) *ClientGrantManager {
 	return &ClientGrantManager{m}
 }
 

@@ -103,8 +103,8 @@ type UserManager struct {
 	*Management
 }
 
-// NewUserManager returns a new instance of a user manager.
-func NewUserManager(m *Management) *UserManager {
+// newUserManager returns a new instance of a user manager.
+func newUserManager(m *Management) *UserManager {
 	return &UserManager{m}
 }
 

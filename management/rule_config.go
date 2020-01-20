@@ -13,7 +13,7 @@ type RuleConfigManager struct {
 	*Management
 }
 
-func NewRuleConfigManager(m *Management) *RuleConfigManager {
+func newRuleConfigManager(m *Management) *RuleConfigManager {
 	return &RuleConfigManager{m}
 }
 

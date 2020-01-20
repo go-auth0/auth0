@@ -43,7 +43,7 @@ type EmailManager struct {
 	*Management
 }
 
-func NewEmailManager(m *Management) *EmailManager {
+func newEmailManager(m *Management) *EmailManager {
 	return &EmailManager{m}
 }
 

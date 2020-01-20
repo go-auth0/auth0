@@ -155,7 +155,7 @@ type TenantManager struct {
 	*Management
 }
 
-func NewTenantManager(m *Management) *TenantManager {
+func newTenantManager(m *Management) *TenantManager {
 	return &TenantManager{m}
 }
 

@@ -21,7 +21,7 @@ type GrantManager struct {
 	*Management
 }
 
-func NewGrantManager(m *Management) *GrantManager {
+func newGrantManager(m *Management) *GrantManager {
 	return &GrantManager{m}
 }
 

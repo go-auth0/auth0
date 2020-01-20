@@ -34,7 +34,7 @@ type EmailTemplateManager struct {
 	*Management
 }
 
-func NewEmailTemplateManager(m *Management) *EmailTemplateManager {
+func newEmailTemplateManager(m *Management) *EmailTemplateManager {
 	return &EmailTemplateManager{m}
 }
 

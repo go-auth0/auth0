@@ -132,7 +132,7 @@ type ConnectionList struct {
 	Connections []*Connection `json:"connections"`
 }
 
-func NewConnectionManager(m *Management) *ConnectionManager {
+func newConnectionManager(m *Management) *ConnectionManager {
 	return &ConnectionManager{m}
 }
 

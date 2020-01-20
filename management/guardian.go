@@ -54,7 +54,7 @@ type GuardianManager struct {
 	MultiFactor *MultiFactorManager
 }
 
-func NewGuardianManager(m *Management) *GuardianManager {
+func newGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{
 		&MultiFactorManager{m,
 			&MultiFactorSMS{m},

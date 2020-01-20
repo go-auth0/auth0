@@ -36,7 +36,7 @@ type CustomDomainManager struct {
 	*Management
 }
 
-func NewCustomDomainManager(m *Management) *CustomDomainManager {
+func newCustomDomainManager(m *Management) *CustomDomainManager {
 	return &CustomDomainManager{m}
 }
 

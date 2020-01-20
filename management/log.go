@@ -99,7 +99,7 @@ type LogManager struct {
 	*Management
 }
 
-func NewLogManager(m *Management) *LogManager {
+func newLogManager(m *Management) *LogManager {
 	return &LogManager{m}
 }
 

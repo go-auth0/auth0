@@ -9,7 +9,7 @@ type PromptManager struct {
 	*Management
 }
 
-func NewPromptManager(m *Management) *PromptManager {
+func newPromptManager(m *Management) *PromptManager {
 	return &PromptManager{m}
 }
 

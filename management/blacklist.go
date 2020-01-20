@@ -19,7 +19,7 @@ type BlacklistManager struct {
 	*Management
 }
 
-func NewBlacklistManager(m *Management) *BlacklistManager {
+func newBlacklistManager(m *Management) *BlacklistManager {
 	return &BlacklistManager{m}
 }
 

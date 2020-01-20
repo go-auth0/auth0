@@ -34,7 +34,7 @@ type RoleManager struct {
 	*Management
 }
 
-func NewRoleManager(m *Management) *RoleManager {
+func newRoleManager(m *Management) *RoleManager {
 	return &RoleManager{m}
 }
 

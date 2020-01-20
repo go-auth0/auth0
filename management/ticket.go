@@ -39,7 +39,7 @@ type TicketManager struct {
 	*Management
 }
 
-func NewTicketManager(m *Management) *TicketManager {
+func newTicketManager(m *Management) *TicketManager {
 	return &TicketManager{m}
 }
 
