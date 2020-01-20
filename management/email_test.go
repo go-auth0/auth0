@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"gopkg.in/auth0.v3"
+	"gopkg.in/auth0.v3/internal/testing/expect"
 )
 
 func TestEmail(t *testing.T) {
@@ -35,6 +36,11 @@ func TestEmail(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
+		expect.Expect(t, e.GetName(), "smtp")
+		expect.Expect(t, e.GetEnabled(), true)
+		expect.Expect(t, e.GetDefaultFromAddress(), "no-reply@example.com")
+		expect.Expect(t, e.GetCredentials().GetSMTPUser(), "user")
+		expect.Expect(t, e.GetCredentials().GetSMTPPass(), "") // passwords are not returned from Auth0
 		t.Logf("%v\n", e)
 	})
 
