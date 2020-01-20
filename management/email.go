@@ -40,7 +40,7 @@ type EmailCredentials struct {
 }
 
 type EmailManager struct {
-	m *Management
+	*Management
 }
 
 func NewEmailManager(m *Management) *EmailManager {
@@ -71,28 +71,28 @@ func NewEmailManager(m *Management) *EmailManager {
 // `X-SES-Configuration-Set` header. The value must be a string.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/post_provider
-func (em *EmailManager) Create(e *Email) error {
-	return em.m.post(em.m.uri("emails", "provider"), e)
+func (m *EmailManager) Create(e *Email) error {
+	return m.post(m.uri("emails", "provider"), e)
 }
 
 // Retrieve email provider details.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/get_provider
-func (em *EmailManager) Read() (e *Email, err error) {
-	err = em.m.get(em.m.uri("emails", "provider"), &e)
+func (m *EmailManager) Read() (e *Email, err error) {
+	err = m.get(m.uri("emails", "provider"), &e)
 	return
 }
 
 // Update an email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/patch_provider
-func (em *EmailManager) Update(e *Email) (err error) {
-	return em.m.patch(em.m.uri("emails", "provider"), e)
+func (m *EmailManager) Update(e *Email) (err error) {
+	return m.patch(m.uri("emails", "provider"), e)
 }
 
 // Delete the email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/delete_provider
-func (em *EmailManager) Delete() (err error) {
-	return em.m.delete(em.m.uri("emails", "provider"))
+func (m *EmailManager) Delete() (err error) {
+	return m.delete(m.uri("emails", "provider"))
 }
