@@ -60,7 +60,7 @@ The following Auth0 resources are supported:
 - [x] [Roles](https://auth0.com/docs/api/management/v2#!/Roles)
 - [x] [Rules](https://auth0.com/docs/api/management/v2#!/Rules/get_rules)
 - [x] [Rules Configs](https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs)
-- [ ] [User Blocks](https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks)
+- [x] [User Blocks](https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks)
 - [x] [Users](https://auth0.com/docs/api/management/v2#!/Users/get_users)
 - [x] [Users By Email](https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email)
 - [x] [Blacklists](https://auth0.com/docs/api/management/v2#!/Blacklists/get_tokens)
