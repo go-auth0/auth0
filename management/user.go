@@ -89,9 +89,10 @@ type User struct {
 
 type UserIdentity struct {
 	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"user_id,omitempty"`
-	Provider   *string `json:"provider,omitempty"`
-	IsSocial   *bool   `json:"isSocial,omitempty"`
+	// user_id should be String but it's a Number sometimes
+	UserID   *string `json:"-"`
+	Provider *string `json:"provider,omitempty"`
+	IsSocial *bool   `json:"isSocial,omitempty"`
 }
 
 // Used to avoid recursion in UnmarshalJSON below.
