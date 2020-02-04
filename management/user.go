@@ -96,10 +96,11 @@ type UserIdentity struct {
 }
 
 // Used to avoid recursion in UnmarshalJSON below.
-type IdentityAlias UserIdentity
+type identityAlias UserIdentity
 
+// UnmarshalJSON - Override regular JSON unmarshal to handle identity providers with Number user_id field.
 func (u *UserIdentity) UnmarshalJSON(b []byte) error {
-	var identityAlias IdentityAlias
+	var identityAlias identityAlias
 	if err := json.Unmarshal(b, &identityAlias); err != nil {
 		return err
 	}
