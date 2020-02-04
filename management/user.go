@@ -1,6 +1,11 @@
 package management
 
-import "time"
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
 // User represents an Auth0 user resource
 //
@@ -87,6 +92,37 @@ type UserIdentity struct {
 	UserID     *string `json:"user_id,omitempty"`
 	Provider   *string `json:"provider,omitempty"`
 	IsSocial   *bool   `json:"isSocial,omitempty"`
+}
+
+// Used to avoid recursion in UnmarshalJSON below.
+type IdentityAlias UserIdentity
+
+func (u *UserIdentity) UnmarshalJSON(b []byte) error {
+	var identityAlias IdentityAlias
+	if err := json.Unmarshal(b, &identityAlias); err != nil {
+		return err
+	}
+	ident := UserIdentity(identityAlias)
+	var v struct {
+		UserID interface{} `json:"user_id,omitempty"`
+	}
+	// UserID might be a number bigger than int64 - must convert it to Number type
+	d := json.NewDecoder(bytes.NewReader(b))
+	d.UseNumber()
+	if err := d.Decode(&v); err != nil {
+		return err
+	}
+	switch t := v.UserID.(type) {
+	case json.Number:
+		idToString := t.String()
+		ident.UserID = &idToString
+	case string:
+		ident.UserID = &t
+	default:
+		return fmt.Errorf("cannot unmarshal %T field into Go struct field UserIdentity.user_id of type string", t)
+	}
+	*u = ident
+	return nil
 }
 
 // UserList is an envelope struct which is used when calling List() or Search()
