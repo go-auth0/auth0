@@ -128,9 +128,9 @@ func TestUser(t *testing.T) {
 		})
 	})
 
-	t.Run("GetRoles", func(t *testing.T) {
+	t.Run("Roles", func(t *testing.T) {
 		var roles []*Role
-		roles, err = m.User.GetRoles(auth0.StringValue(u.ID))
+		roles, err = m.User.Roles(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -184,8 +184,26 @@ func TestUser(t *testing.T) {
 		}
 	})
 
+	t.Run("Blocks", func(t *testing.T) {
+		b, err := m.User.Blocks(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", b)
+	})
+
+	t.Run("Blocks", func(t *testing.T) {
+		err := m.User.Unblock(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
 	t.Run("Delete", func(t *testing.T) {
-		err = m.User.Delete(auth0.StringValue(u.ID))
+		err = m.User.Delete(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
 
 	// Create some users we can search for
