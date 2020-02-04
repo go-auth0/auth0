@@ -49,13 +49,16 @@ fmt.Printf("Created client %s\n", c.ClientID)
 
 The following Auth0 resources are supported:
 
+- [x] [Branding](https://auth0.com/docs/api/management/v2/#!/Branding/get_branding)
 - [x] [Clients (Applications)](https://auth0.com/docs/api/management/v2#!/Clients/get_clients)
 - [x] [Client Grants](https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants)
 - [x] [Connections](https://auth0.com/docs/api/management/v2#!/Connections/get_connections)
 - [x] [Custom Domains](https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains)
 - [ ] [Device Credentials](https://auth0.com/docs/api/management/v2#!/Device_Credentials/get_device_credentials)
 - [x] [Grants](https://auth0.com/docs/api/management/v2#!/Grants/get_grants)
+- [ ] [Hooks](https://auth0.com/docs/api/management/v2#!/Hooks/get_hooks)
 - [x] [Logs](https://auth0.com/docs/api/management/v2#!/Logs/get_logs)
+- [x] [Prompts](https://auth0.com/docs/api/management/v2#!/Prompts/get_prompts)
 - [x] [Resource Servers (APIs)](https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers)
 - [x] [Roles](https://auth0.com/docs/api/management/v2#!/Roles)
 - [x] [Rules](https://auth0.com/docs/api/management/v2#!/Rules/get_rules)
@@ -70,9 +73,8 @@ The following Auth0 resources are supported:
 - [x] [Jobs](https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id)
 - [x] [Stats](https://auth0.com/docs/api/management/v2#!/Stats/get_active_users)
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
+- [ ] [Anomaly](https://auth0.com/docs/api/management/v2#!/Anomaly/get_ips_by_id)
 - [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
-- [x] [Branding](https://auth0.com/docs/api/management/v2/#!/Branding/get_branding)
-- [x] [Prompts](https://auth0.com/docs/api/management/v2#!/Prompts/get_prompts)
 
 ## What is Auth0?
 
