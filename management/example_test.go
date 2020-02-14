@@ -28,6 +28,7 @@ func ExampleNew() {
 	if err != nil {
 		// handle err
 	}
+	_, _ = api.Stat.ActiveUsers()
 }
 
 func ExampleClientManager_Create() {
