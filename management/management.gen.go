@@ -835,6 +835,14 @@ func (e *EmailCredentials) GetAPIUser() string {
 	return *e.APIUser
 }
 
+// GetDomain returns the Domain field if it's non-nil, zero value otherwise.
+func (e *EmailCredentials) GetDomain() string {
+	if e == nil || e.Domain == nil {
+		return ""
+	}
+	return *e.Domain
+}
+
 // GetRegion returns the Region field if it's non-nil, zero value otherwise.
 func (e *EmailCredentials) GetRegion() string {
 	if e == nil || e.Region == nil {
@@ -992,6 +1000,56 @@ func (g *Grant) GetUserID() string {
 // String returns a string representation of Grant.
 func (g *Grant) String() string {
 	return Stringify(g)
+}
+
+// GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
+func (h *Hook) GetEnabled() bool {
+	if h == nil || h.Enabled == nil {
+		return false
+	}
+	return *h.Enabled
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (h *Hook) GetID() string {
+	if h == nil || h.ID == nil {
+		return ""
+	}
+	return *h.ID
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (h *Hook) GetName() string {
+	if h == nil || h.Name == nil {
+		return ""
+	}
+	return *h.Name
+}
+
+// GetScript returns the Script field if it's non-nil, zero value otherwise.
+func (h *Hook) GetScript() string {
+	if h == nil || h.Script == nil {
+		return ""
+	}
+	return *h.Script
+}
+
+// GetTriggerID returns the TriggerID field if it's non-nil, zero value otherwise.
+func (h *Hook) GetTriggerID() string {
+	if h == nil || h.TriggerID == nil {
+		return ""
+	}
+	return *h.TriggerID
+}
+
+// String returns a string representation of Hook.
+func (h *Hook) String() string {
+	return Stringify(h)
+}
+
+// String returns a string representation of HookList.
+func (h *HookList) String() string {
+	return Stringify(h)
 }
 
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
@@ -2191,6 +2249,27 @@ func (u *User) GetVerifyEmail() bool {
 
 // String returns a string representation of User.
 func (u *User) String() string {
+	return Stringify(u)
+}
+
+// GetIdentifier returns the Identifier field if it's non-nil, zero value otherwise.
+func (u *UserBlock) GetIdentifier() string {
+	if u == nil || u.Identifier == nil {
+		return ""
+	}
+	return *u.Identifier
+}
+
+// GetIP returns the IP field if it's non-nil, zero value otherwise.
+func (u *UserBlock) GetIP() string {
+	if u == nil || u.IP == nil {
+		return ""
+	}
+	return *u.IP
+}
+
+// String returns a string representation of UserBlock.
+func (u *UserBlock) String() string {
 	return Stringify(u)
 }
 

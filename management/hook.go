@@ -16,10 +16,10 @@ type Hook struct {
 	// Can currently be any of the following:
 	// "credentials-exchange", "pre-user-registration",
 	// "post-user-registration", "post-change-password"
-	TriggerId *string `json:"triggerId,omitempty"`
+	TriggerID *string `json:"triggerId,omitempty"`
 
 	// Used to store additional metadata
-	Dependencies * map[string]interface{} `json:"dependencies,omitempty"`
+	Dependencies *map[string]interface{} `json:"dependencies,omitempty"`
 
 	// Enabled should be set to true if the hook is enabled, false otherwise.
 	Enabled *bool `json:"enabled,omitempty"`

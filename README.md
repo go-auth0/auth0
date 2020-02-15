@@ -56,7 +56,7 @@ The following Auth0 resources are supported:
 - [x] [Custom Domains](https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains)
 - [ ] [Device Credentials](https://auth0.com/docs/api/management/v2#!/Device_Credentials/get_device_credentials)
 - [x] [Grants](https://auth0.com/docs/api/management/v2#!/Grants/get_grants)
-- [ ] [Hooks](https://auth0.com/docs/api/management/v2#!/Hooks/get_hooks)
+- [x] [Hooks](https://auth0.com/docs/api/management/v2#!/Hooks/get_hooks)
 - [x] [Logs](https://auth0.com/docs/api/management/v2#!/Logs/get_logs)
 - [x] [Prompts](https://auth0.com/docs/api/management/v2#!/Prompts/get_prompts)
 - [x] [Resource Servers (APIs)](https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers)
