@@ -162,6 +162,14 @@ func (c *Client) GetFormTemplate() string {
 	return *c.FormTemplate
 }
 
+// GetInitiateLoginURI returns the InitiateLoginURI field if it's non-nil, zero value otherwise.
+func (c *Client) GetInitiateLoginURI() string {
+	if c == nil || c.InitiateLoginURI == nil {
+		return ""
+	}
+	return *c.InitiateLoginURI
+}
+
 // GetIsFirstParty returns the IsFirstParty field if it's non-nil, zero value otherwise.
 func (c *Client) GetIsFirstParty() bool {
 	if c == nil || c.IsFirstParty == nil {
@@ -202,12 +210,28 @@ func (c *Client) GetName() string {
 	return *c.Name
 }
 
+// GetNativeSocialLogin returns the NativeSocialLogin field.
+func (c *Client) GetNativeSocialLogin() *ClientNativeSocialLogin {
+	if c == nil {
+		return nil
+	}
+	return c.NativeSocialLogin
+}
+
 // GetOIDCConformant returns the OIDCConformant field if it's non-nil, zero value otherwise.
 func (c *Client) GetOIDCConformant() bool {
 	if c == nil || c.OIDCConformant == nil {
 		return false
 	}
 	return *c.OIDCConformant
+}
+
+// GetRefreshToken returns the RefreshToken field.
+func (c *Client) GetRefreshToken() *ClientRefreshToken {
+	if c == nil {
+		return nil
+	}
+	return c.RefreshToken
 }
 
 // GetSSO returns the SSO field if it's non-nil, zero value otherwise.
@@ -304,6 +328,32 @@ func (c *ClientJWTConfiguration) String() string {
 
 // String returns a string representation of ClientList.
 func (c *ClientList) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of ClientNativeSocialLogin.
+func (c *ClientNativeSocialLogin) String() string {
+	return Stringify(c)
+}
+
+// GetLeeway returns the Leeway field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetLeeway() int {
+	if c == nil || c.Leeway == nil {
+		return 0
+	}
+	return *c.Leeway
+}
+
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetType() string {
+	if c == nil || c.Type == nil {
+		return ""
+	}
+	return *c.Type
+}
+
+// String returns a string representation of ClientRefreshToken.
+func (c *ClientRefreshToken) String() string {
 	return Stringify(c)
 }
 
@@ -1706,6 +1756,14 @@ func (t *Tenant) GetDefaultDirectory() string {
 	return *t.DefaultDirectory
 }
 
+// GetDefaultRedirectionURI returns the DefaultRedirectionURI field if it's non-nil, zero value otherwise.
+func (t *Tenant) GetDefaultRedirectionURI() string {
+	if t == nil || t.DefaultRedirectionURI == nil {
+		return ""
+	}
+	return *t.DefaultRedirectionURI
+}
+
 // GetDeviceFlow returns the DeviceFlow field.
 func (t *Tenant) GetDeviceFlow() *TenantDeviceFlow {
 	if t == nil {
@@ -1878,12 +1936,12 @@ func (t *TenantErrorPage) String() string {
 	return Stringify(t)
 }
 
-// GetAllowChangingEnableSso returns the AllowChangingEnableSso field if it's non-nil, zero value otherwise.
-func (t *TenantFlags) GetAllowChangingEnableSso() bool {
-	if t == nil || t.AllowChangingEnableSso == nil {
+// GetAllowChangingEnableSSO returns the AllowChangingEnableSSO field if it's non-nil, zero value otherwise.
+func (t *TenantFlags) GetAllowChangingEnableSSO() bool {
+	if t == nil || t.AllowChangingEnableSSO == nil {
 		return false
 	}
-	return *t.AllowChangingEnableSso
+	return *t.AllowChangingEnableSSO
 }
 
 // GetChangePasswordFlowV1 returns the ChangePasswordFlowV1 field if it's non-nil, zero value otherwise.
