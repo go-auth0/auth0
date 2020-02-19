@@ -1,6 +1,7 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -96,5 +97,81 @@ func TestConnection(t *testing.T) {
 			t.Error(err)
 		}
 		t.Logf("%v\n", cs)
+	})
+}
+
+func TestConnectionOptions_UnmarshalJSON(t *testing.T) {
+	t.Run("Unmarshal passwordless email option", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{
+			Syntax:  auth0.String("liquid"),
+			From:    auth0.String("from@example.com"),
+			Subject: auth0.String("a subject"),
+			Body:    auth0.String("<html><body>Some body</body></html>"),
+		}
+		co := ConnectionOptions{
+			Name:  auth0.String("email"),
+			Email: oe,
+		}
+		s := Stringify(co)
+
+		var actual ConnectionOptions
+		err := json.Unmarshal([]byte(s), &actual)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if e, ok := actual.Email.(*ConnectionOptionsEmail); !ok {
+			t.Fatal("ConnectionOptions.Email value is not of type *ConnectionOptionsEmail")
+		} else {
+			if *e.Syntax != *oe.Syntax {
+				t.Fatalf("expected syntax to be %v but got %v", *oe.Syntax, *e.Syntax)
+			}
+			if *e.From != *oe.From {
+				t.Fatalf("expected from to be %v but got %v", *oe.From, *e.From)
+			}
+			if *e.Subject != *oe.Subject {
+				t.Fatalf("expected subject to be %v but got %v", *oe.Subject, *e.Subject)
+			}
+			if *e.Body != *oe.Body {
+				t.Fatalf("expected body to be %v but got %v", *oe.Body, *e.Body)
+			}
+		}
+	})
+
+	t.Run("Unmarshal unexpected email option", func(t *testing.T) {
+		co := ConnectionOptions{
+			Email: auth0.Bool(true),
+		}
+		s := Stringify(co)
+
+		var actual ConnectionOptions
+		err := json.Unmarshal([]byte(s), &actual)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if e, ok := actual.Email.(*bool); !ok {
+			t.Fatal("Email value is not of type *bool")
+		} else {
+			if !*e {
+				t.Fatal("expected email to be true")
+			}
+		}
+	})
+
+	t.Run("Unmarshal unexpected email option", func(t *testing.T) {
+		co := ConnectionOptions{
+			Email: auth0.Time(time.Now()),
+		}
+		s := Stringify(co)
+
+		var actual ConnectionOptions
+		err := json.Unmarshal([]byte(s), &actual)
+
+		if err == nil {
+			t.Error("expected an error")
+		}
 	})
 }

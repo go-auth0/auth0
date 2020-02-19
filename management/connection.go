@@ -1,5 +1,7 @@
 package management
 
+import "encoding/json"
+
 type Connection struct {
 	// A generated string identifying the connection.
 	ID *string `json:"id,omitempty"`
@@ -116,10 +118,139 @@ type ConnectionOptions struct {
 
 	// Salesforce community
 	CommunityBaseURL *string `json:"community_base_url"`
+
+	// Passwordless email or Google-Oauth2
+	Email interface{} `json:"email,omitempty"`
+}
+
+func (c *ConnectionOptions) UnmarshalJSON(b []byte) (err error) {
+	var v struct {
+		Validation                   map[string]interface{} `json:"validation,omitempty"`
+		PasswordPolicy               *string                `json:"passwordPolicy,omitempty"`
+		PasswordHistory              map[string]interface{} `json:"password_history,omitempty"`
+		PasswordNoPersonalInfo       map[string]interface{} `json:"password_no_personal_info,omitempty"`
+		PasswordDictionary           map[string]interface{} `json:"password_dictionary,omitempty"`
+		PasswordComplexityOptions    map[string]interface{} `json:"password_complexity_options,omitempty"`
+		APIEnableUsers               *bool                  `json:"api_enable_users,omitempty"`
+		BasicProfile                 *bool                  `json:"basic_profile,omitempty"`
+		ExtAdmin                     *bool                  `json:"ext_admin,omitempty"`
+		ExtIsSuspended               *bool                  `json:"ext_is_suspended,omitempty"`
+		ExtAgreedTerms               *bool                  `json:"ext_agreed_terms,omitempty"`
+		ExtGroups                    *bool                  `json:"ext_groups,omitempty"`
+		ExtNestedGroups              *bool                  `json:"ext_nested_groups,omitempty"`
+		ExtAssignedPlans             *bool                  `json:"ext_assigned_plans,omitempty"`
+		ExtProfile                   *bool                  `json:"ext_profile,omitempty"`
+		EnabledDatabaseCustomization *bool                  `json:"enabledDatabaseCustomization,omitempty"`
+		BruteForceProtection         *bool                  `json:"brute_force_protection,omitempty"`
+		ImportMode                   *bool                  `json:"import_mode,omitempty"`
+		DisableSignup                *bool                  `json:"disable_signup,omitempty"`
+		RequiresUsername             *bool                  `json:"requires_username,omitempty"`
+		UpstreamParams               *interface{}           `json:"upstream_params,omitempty"`
+		ClientID                     *string                `json:"client_id,omitempty"`
+		ClientSecret                 *string                `json:"client_secret,omitempty"`
+		TenantDomain                 *string                `json:"tenant_domain,omitempty"`
+		DomainAliases                []interface{}          `json:"domain_aliases,omitempty"`
+		UseWsfed                     *bool                  `json:"use_wsfed,omitempty"`
+		WaadProtocol                 *string                `json:"waad_protocol,omitempty"`
+		WaadCommonEndpoint           *bool                  `json:"waad_common_endpoint,omitempty"`
+		AppID                        *string                `json:"app_id,omitempty"`
+		AppDomain                    *string                `json:"app_domain,omitempty"`
+		MaxGroupsToRetrieve          *string                `json:"max_groups_to_retrieve,omitempty"`
+		CustomScripts                map[string]interface{} `json:"customScripts,omitempty"`
+		Configuration                map[string]interface{} `json:"configuration,omitempty"`
+		Totp                         *ConnectionOptionsTotp `json:"totp,omitempty"`
+		Name                         *string                `json:"name,omitempty"`
+		TwilioSid                    *string                `json:"twilio_sid,omitempty"`
+		TwilioToken                  *string                `json:"twilio_token,omitempty"`
+		From                         *string                `json:"from,omitempty"`
+		Syntax                       *string                `json:"syntax,omitempty"`
+		Template                     *string                `json:"template,omitempty"`
+		MessagingServiceSid          *string                `json:"messaging_service_sid,omitempty"`
+		AdfsServer                   *string                `json:"adfs_server,omitempty"`
+		CommunityBaseURL             *string                `json:"community_base_url"`
+		Email                        json.RawMessage        `json:"email,omitempty"`
+	}
+	err = json.Unmarshal(b, &v)
+	if err != nil {
+		return
+	}
+
+	if v.Email != nil {
+		// check if this is an passwordless email option
+		var o ConnectionOptionsEmail
+		if err = json.Unmarshal(v.Email, &o); err == nil {
+			c.Email = &o
+		} else {
+			// nope, so maybe it is a google-oauth2 email option
+			var b bool
+			if err = json.Unmarshal(v.Email, &b); err == nil {
+				c.Email = &b
+			} else {
+				// it's neither :(
+				return err
+			}
+		}
+	}
+
+	c.Validation = v.Validation
+	c.PasswordPolicy = v.PasswordPolicy
+	c.PasswordHistory = v.PasswordHistory
+	c.PasswordNoPersonalInfo = v.PasswordNoPersonalInfo
+	c.PasswordDictionary = v.PasswordDictionary
+	c.PasswordComplexityOptions = v.PasswordComplexityOptions
+	c.APIEnableUsers = v.APIEnableUsers
+	c.BasicProfile = v.BasicProfile
+	c.ExtAdmin = v.ExtAdmin
+	c.ExtIsSuspended = v.ExtIsSuspended
+	c.ExtAgreedTerms = v.ExtAgreedTerms
+	c.ExtGroups = v.ExtGroups
+	c.ExtNestedGroups = v.ExtNestedGroups
+	c.ExtAssignedPlans = v.ExtAssignedPlans
+	c.ExtProfile = v.ExtProfile
+	c.EnabledDatabaseCustomization = v.EnabledDatabaseCustomization
+	c.BruteForceProtection = v.BruteForceProtection
+	c.ImportMode = v.ImportMode
+	c.DisableSignup = v.DisableSignup
+	c.RequiresUsername = v.RequiresUsername
+	c.UpstreamParams = v.UpstreamParams
+	c.ClientID = v.ClientID
+	c.ClientSecret = v.ClientSecret
+	c.TenantDomain = v.TenantDomain
+	c.DomainAliases = v.DomainAliases
+	c.UseWsfed = v.UseWsfed
+	c.WaadProtocol = v.WaadProtocol
+	c.WaadCommonEndpoint = v.WaadCommonEndpoint
+	c.AppID = v.AppID
+	c.AppDomain = v.AppDomain
+	c.MaxGroupsToRetrieve = v.MaxGroupsToRetrieve
+	c.CustomScripts = v.CustomScripts
+	c.Configuration = v.Configuration
+	c.Totp = v.Totp
+	c.Name = v.Name
+	c.TwilioSid = v.TwilioSid
+	c.TwilioToken = v.TwilioToken
+	c.From = v.From
+	c.Syntax = v.Syntax
+	c.Template = v.Template
+	c.MessagingServiceSid = v.MessagingServiceSid
+	c.AdfsServer = v.AdfsServer
+	c.CommunityBaseURL = v.CommunityBaseURL
+
+	return
 }
 
 type ConnectionManager struct {
 	*Management
+}
+
+// Options for one-time password authentication via email messages
+// See https://auth0.com/docs/connections/passwordless/guides/email-otp
+type ConnectionOptionsEmail struct {
+	// allowed key for syntax: "liquid"
+	Syntax  *string `json:"syntax,omitempty"`
+	From    *string `json:"from,omitempty"`
+	Subject *string `json:"subject,omitempty"`
+	Body    *string `json:"body,omitempty"`
 }
 
 type ConnectionOptionsTotp struct {
