@@ -123,6 +123,8 @@ type ConnectionOptions struct {
 	Email interface{} `json:"email,omitempty"`
 }
 
+// UnmarshalJSON manages unmarshalling of the Email options type,
+// which can either be ConnectionOptionsEmail or bool
 func (c *ConnectionOptions) UnmarshalJSON(b []byte) (err error) {
 	var v struct {
 		Validation                   map[string]interface{} `json:"validation,omitempty"`
@@ -243,7 +245,7 @@ type ConnectionManager struct {
 	*Management
 }
 
-// Options for one-time password authentication via email messages
+// ConnectionOptionsEmail for one-time password authentication via email messages
 // See https://auth0.com/docs/connections/passwordless/guides/email-otp
 type ConnectionOptionsEmail struct {
 	// allowed key for syntax: "liquid"
