@@ -100,49 +100,49 @@ func TestConnection(t *testing.T) {
 	})
 }
 
-func TestConnectionOptions_UnmarshalJSON(t *testing.T) {
+func TestConnectionOptionsEmail_UnmarshalJSON(t *testing.T) {
 	t.Run("Unmarshal passwordless email option", func(t *testing.T) {
-		oe := &ConnectionOptionsEmail{
+		pe := PasswordlessEmail{
 			Syntax:  auth0.String("liquid"),
 			From:    auth0.String("from@example.com"),
 			Subject: auth0.String("a subject"),
 			Body:    auth0.String("<html><body>Some body</body></html>"),
 		}
+		oe := &ConnectionOptionsEmail{v: &pe}
 		co := ConnectionOptions{
 			Name:  auth0.String("email"),
 			Email: oe,
 		}
 		s := Stringify(co)
 
-		var actual ConnectionOptions
-		err := json.Unmarshal([]byte(s), &actual)
+		var aco ConnectionOptions
+		err := json.Unmarshal([]byte(s), &aco)
 
 		if err != nil {
 			t.Error(err)
 		}
 
-		if e, ok := actual.Email.(*ConnectionOptionsEmail); !ok {
+		if ape, ok := aco.Email.PasswordlessEmail(); !ok {
 			t.Fatal("ConnectionOptions.Email value is not of type *ConnectionOptionsEmail")
 		} else {
-			if *e.Syntax != *oe.Syntax {
-				t.Fatalf("expected syntax to be %v but got %v", *oe.Syntax, *e.Syntax)
+			if *ape.Syntax != *pe.Syntax {
+				t.Fatalf("expected syntax to be %v but got %v", *pe.Syntax, *ape.Syntax)
 			}
-			if *e.From != *oe.From {
-				t.Fatalf("expected from to be %v but got %v", *oe.From, *e.From)
+			if *ape.From != *pe.From {
+				t.Fatalf("expected from to be %v but got %v", *pe.From, *ape.From)
 			}
-			if *e.Subject != *oe.Subject {
-				t.Fatalf("expected subject to be %v but got %v", *oe.Subject, *e.Subject)
+			if *ape.Subject != *pe.Subject {
+				t.Fatalf("expected subject to be %v but got %v", *pe.Subject, *ape.Subject)
 			}
-			if *e.Body != *oe.Body {
-				t.Fatalf("expected body to be %v but got %v", *oe.Body, *e.Body)
+			if *ape.Body != *pe.Body {
+				t.Fatalf("expected body to be %v but got %v", *pe.Body, *ape.Body)
 			}
 		}
 	})
 
-	t.Run("Unmarshal unexpected email option", func(t *testing.T) {
-		co := ConnectionOptions{
-			Email: auth0.Bool(true),
-		}
+	t.Run("Unmarshal bool email option", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{v: auth0.Bool(true)}
+		co := ConnectionOptions{Email: oe}
 		s := Stringify(co)
 
 		var actual ConnectionOptions
@@ -152,7 +152,7 @@ func TestConnectionOptions_UnmarshalJSON(t *testing.T) {
 			t.Error(err)
 		}
 
-		if e, ok := actual.Email.(*bool); !ok {
+		if e, ok := actual.Email.Bool(); !ok {
 			t.Fatal("Email value is not of type *bool")
 		} else {
 			if !*e {
@@ -162,9 +162,8 @@ func TestConnectionOptions_UnmarshalJSON(t *testing.T) {
 	})
 
 	t.Run("Unmarshal unexpected email option", func(t *testing.T) {
-		co := ConnectionOptions{
-			Email: auth0.Time(time.Now()),
-		}
+		oe := &ConnectionOptionsEmail{v: auth0.Time(time.Now())}
+		co := ConnectionOptions{Email: oe}
 		s := Stringify(co)
 
 		var actual ConnectionOptions
@@ -172,6 +171,124 @@ func TestConnectionOptions_UnmarshalJSON(t *testing.T) {
 
 		if err == nil {
 			t.Error("expected an error")
+		}
+	})
+}
+
+func TestConnectionOptionsEmail_MarshalJSON(t *testing.T) {
+	type OptionsTest struct {
+		Email *ConnectionOptionsEmail `json:"email,omitempty"`
+	}
+
+	t.Run("Marshal passwordless email values", func(t *testing.T) {
+		pe := &PasswordlessEmail{
+			Syntax:  auth0.String("syntax"),
+			From:    auth0.String("from"),
+			Subject: auth0.String("subject"),
+			Body:    auth0.String("body"),
+		}
+		oe := &ConnectionOptionsEmail{}
+		oe.SetPasswordlessEmail(pe)
+		ot := OptionsTest{Email: oe}
+
+		b, err := json.Marshal(ot)
+		if err != nil {
+			t.Error(err)
+		}
+
+		actual := string(b)
+		expected := `{"email":{"syntax":"syntax","from":"from","subject":"subject","body":"body"}}`
+
+		if actual != expected {
+			t.Fatalf("expected json to be %v but got %v", expected, actual)
+		}
+	})
+
+	t.Run("Marshal boolean values", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{}
+		oe.SetBool(auth0.Bool(true))
+		ot := OptionsTest{Email: oe}
+
+		b, err := json.Marshal(ot)
+		if err != nil {
+			t.Error(err)
+		}
+
+		actual := string(b)
+		expected := `{"email":true}`
+
+		if actual != expected {
+			t.Fatalf("expected json to be %v but got %v", expected, actual)
+		}
+	})
+}
+
+func TestConnectionOptionsEmail_PasswordlessEmail(t *testing.T) {
+	t.Run("get passwordless email", func(t *testing.T) {
+		pe := &PasswordlessEmail{
+			Syntax:  auth0.String("syntax"),
+			From:    auth0.String("from"),
+			Subject: auth0.String("subject"),
+			Body:    auth0.String("body"),
+		}
+		oe := &ConnectionOptionsEmail{v: pe}
+
+		actual, b := oe.PasswordlessEmail()
+		if !b {
+			t.Error("unexpected type")
+		}
+		if actual != pe {
+			t.Fatalf("expected passwordless email to be %v but got %v", actual, pe)
+		}
+	})
+
+	t.Run("nil passwordless email", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{}
+
+		_, ok := oe.PasswordlessEmail()
+		if ok {
+			t.Error("expected not ok")
+		}
+	})
+
+	t.Run("not a passwordless email", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{v: auth0.Bool(true)}
+
+		_, ok := oe.PasswordlessEmail()
+		if ok {
+			t.Error("expected not ok")
+		}
+	})
+}
+
+func TestConnectionOptionsEmail_Bool(t *testing.T) {
+	t.Run("get bool", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{v: auth0.Bool(true)}
+
+		actual, b := oe.Bool()
+		if !b {
+			t.Error("unexpected type")
+		}
+		if !*actual {
+			t.Fatalf("expected bool to be true")
+		}
+	})
+
+	t.Run("nil bool", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{}
+
+		_, ok := oe.Bool()
+		if ok {
+			t.Error("expected not ok")
+		}
+	})
+
+	t.Run("not bool", func(t *testing.T) {
+		oe := &ConnectionOptionsEmail{v: &PasswordlessEmail{}}
+
+		_, ok := oe.Bool()
+		if ok {
+			t.Error("expected not ok")
 		}
 	})
 }
