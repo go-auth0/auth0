@@ -137,14 +137,17 @@ type PasswordlessEmail struct {
 	Body    *string `json:"body,omitempty"`
 }
 
+// ConnectionOptionsEmail holds a pointer to either a bool or to a PasswordlessEmail
 type ConnectionOptionsEmail struct {
 	v interface{}
 }
 
+// MarshalJSON marshals a ConnectionOptionsEmail
 func (e *ConnectionOptionsEmail) MarshalJSON() ([]byte, error) {
 	return json.Marshal(e.v)
 }
 
+// UnmarshalJSON unmarshals a ConnectionOptionsEmail
 func (e *ConnectionOptionsEmail) UnmarshalJSON(b []byte) (err error) {
 	// check if this is an passwordless email option
 	var p PasswordlessEmail
@@ -164,6 +167,9 @@ func (e *ConnectionOptionsEmail) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
+// PasswordlessEmail returns the value of a ConnectionOptionsEmail as a
+// passwordless email, or false if ConnectionOptionsEmail is not a pointer
+// to a passwordless email value
 func (e *ConnectionOptionsEmail) PasswordlessEmail() (*PasswordlessEmail, bool) {
 	if e == nil || e.v == nil {
 		return nil, false
@@ -176,6 +182,8 @@ func (e *ConnectionOptionsEmail) PasswordlessEmail() (*PasswordlessEmail, bool) 
 	return nil, false
 }
 
+// Bool returns the value of a ConnectionOptionsEmail as a bool, or false if
+// ConnectionOptionsEmail is not a pointer to a boolean value
 func (e *ConnectionOptionsEmail) Bool() (*bool, bool) {
 	if e == nil || e.v == nil {
 		return nil, false
@@ -188,12 +196,12 @@ func (e *ConnectionOptionsEmail) Bool() (*bool, bool) {
 	return nil, false
 }
 
-// Set the value of ConnectionOptionsEmail as an otp passwordless email
+// SetPasswordlessEmail sets the value of ConnectionOptionsEmail to a passwordless email
 func (e *ConnectionOptionsEmail) SetPasswordlessEmail(v *PasswordlessEmail) {
 	e.v = v
 }
 
-// Set the value of ConnectionOptionsEmail as a bool
+// SetBool sets the value of ConnectionOptionsEmail to a bool
 func (e *ConnectionOptionsEmail) SetBool(v *bool) {
 	e.v = v
 }
