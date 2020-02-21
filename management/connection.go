@@ -116,6 +116,11 @@ type ConnectionOptions struct {
 
 	// Salesforce community
 	CommunityBaseURL *string `json:"community_base_url"`
+
+	// Windowslive strategy version:
+	//   1 => Live Connect (DEPRECATED)
+	//   2 => Azure AD (personal accounts)
+	StrategyVersion *int `json:"strategy_version"`
 }
 
 type ConnectionManager struct {
