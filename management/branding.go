@@ -52,7 +52,11 @@ type jsonPageBackgroundGradient struct {
 // It is required to handle the json field page_background, which can either
 // be a hex color string, or an object describing a gradient.
 func (bc *BrandingColors) MarshalJSON() ([]byte, error) {
-	var data interface{}
+	var data interface{} = struct {
+		Primary *string `json:"primary,omitempty"`
+	}{
+		Primary: bc.Primary,
+	}
 
 	if bc.PageBackground != nil {
 		data = struct {
