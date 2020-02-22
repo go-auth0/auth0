@@ -1,5 +1,9 @@
 package management
 
+import (
+	"encoding/json"
+)
+
 type Branding struct {
 	// Change password page settings
 	Colors *BrandingColors `json:"colors,omitempty"`
@@ -16,8 +20,100 @@ type Branding struct {
 type BrandingColors struct {
 	// Accent color
 	Primary *string `json:"primary,omitempty"`
+
 	// Page background color
+	// Only one of PageBackground and PageBackgroundGradient should be set.
+	// If both fields are set, PageBackground takes priority.
+	PageBackground *string `json:"-"`
+
+	// Page background gradient
+	// Only one of PageBackground and PageBackgroundGradient should be set.
+	// If both fields are set, PageBackground takes priority.
+	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"-"`
+}
+
+type BrandingPageBackgroundGradient struct {
+	Type        *string `json:"type,omitempty"`
+	Start       *string `json:"start,omitempty"`
+	End         *string `json:"end,omitempty"`
+	AngleDegree *int    `json:"angle_deg,omitempty"`
+}
+
+type jsonPageBackgroundSolid struct {
 	PageBackground *string `json:"page_background,omitempty"`
+}
+
+type jsonPageBackgroundGradient struct {
+	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"page_background,omitempty"`
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+//
+// It is required to handle the json field page_background, which can either
+// be a hex color string, or an object describing a gradient.
+func (bc *BrandingColors) MarshalJSON() ([]byte, error) {
+	var data interface{}
+
+	if bc.PageBackground != nil {
+		data = struct {
+			Primary *string `json:"primary,omitempty"`
+			*jsonPageBackgroundSolid
+		}{
+			Primary: bc.Primary,
+			jsonPageBackgroundSolid: &jsonPageBackgroundSolid{
+				PageBackground: bc.PageBackground,
+			},
+		}
+	} else if bc.PageBackgroundGradient != nil {
+		data = struct {
+			Primary *string `json:"primary,omitempty"`
+			*jsonPageBackgroundGradient
+		}{
+			Primary: bc.Primary,
+			jsonPageBackgroundGradient: &jsonPageBackgroundGradient{
+				PageBackgroundGradient: bc.PageBackgroundGradient,
+			},
+		}
+	}
+
+	return json.Marshal(data)
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+//
+// It is required to handle the json field page_background, which can either
+// be a hex color string, or an object describing a gradient.
+func (bc *BrandingColors) UnmarshalJSON(data []byte) error {
+	// Unmarshal common fields
+	type JSONBrandingColors BrandingColors
+
+	var commonBrandingColors JSONBrandingColors
+
+	err := json.Unmarshal(data, &commonBrandingColors)
+	if err != nil {
+		return err
+	}
+
+	bc.Primary = commonBrandingColors.Primary
+
+	// Unmarshal page_background
+	// Can be either a string with solid color
+	var solidBrandingColor jsonPageBackgroundSolid
+	err = json.Unmarshal(data, &solidBrandingColor)
+	if err == nil {
+		bc.PageBackground = solidBrandingColor.PageBackground
+		bc.PageBackgroundGradient = nil
+	}
+
+	// Or object describing a color-gradient
+	var gradientBrandingColor jsonPageBackgroundGradient
+	err = json.Unmarshal(data, &gradientBrandingColor)
+	if err == nil {
+		bc.PageBackgroundGradient = gradientBrandingColor.PageBackgroundGradient
+		bc.PageBackground = nil
+	}
+
+	return nil
 }
 
 type BrandingFont struct {
