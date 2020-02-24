@@ -121,6 +121,11 @@ type ConnectionOptions struct {
 
 	// Passwordless email or Google-Oauth2
 	Email *ConnectionOptionsEmail `json:"email,omitempty"`
+
+	// Windowslive strategy version:
+	//   1 => Live Connect (DEPRECATED)
+	//   2 => Azure AD (personal accounts)
+	StrategyVersion *int `json:"strategy_version"`
 }
 
 type ConnectionManager struct {
