@@ -1,6 +1,7 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -259,5 +260,43 @@ func TestUser(t *testing.T) {
 			t.Error("unexpected number of users found")
 		}
 		t.Logf("%v\n", us)
+	})
+}
+
+func TestUserIdentityUnmarshalling(t *testing.T) {
+	t.Run("user_id as a string", func(t *testing.T) {
+		identityJson := `
+{
+	"connection": "github",
+	"provider": "github",
+	"user_id": "123456",
+	"is_social": true
+}`
+		identity := UserIdentity{}
+		if err := json.Unmarshal([]byte(identityJson), &identity); err != nil {
+			t.Error(err)
+		}
+
+		if *identity.UserID != "123456" {
+			t.Errorf("incorret UserID")
+		}
+	})
+
+	t.Run("user_id as an int", func(t *testing.T) {
+		identityJson := `
+{
+	"connection": "github",
+	"provider": "github",
+	"user_id": 123456,
+	"is_social": true
+}`
+		identity := UserIdentity{}
+		if err := json.Unmarshal([]byte(identityJson), &identity); err != nil {
+			t.Error(err)
+		}
+
+		if *identity.UserID != "123456" {
+			t.Errorf("incorret UserID: %s", *identity.UserID)
+		}
 	})
 }
