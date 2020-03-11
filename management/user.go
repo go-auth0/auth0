@@ -117,8 +117,8 @@ func (i *UserIdentity) UnmarshalJSON(data []byte) error {
 	i.Provider = ambiguousIdentity.Provider
 	i.IsSocial = ambiguousIdentity.IsSocial
 
-	userId := fmt.Sprintf("%v", ambiguousIdentity.UserID)
-	i.UserID = &userId
+	userID := fmt.Sprintf("%v", ambiguousIdentity.UserID)
+	i.UserID = &userID
 
 	return nil
 }
