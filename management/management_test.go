@@ -1,6 +1,8 @@
 package management
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
 	"testing"
@@ -117,5 +119,29 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func mockAuth0Server(t *testing.T) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/v2/users":
+			w.Write([]byte("{\"users\":[]}"))
+		}
+	}))
+}
+
+func Test_WithoutAuth_WithHTTP(t *testing.T) {
+	mockServer := mockAuth0Server(t)
+	management, err := New(mockServer.URL, "", "", WithoutAuth(), WithHTTP())
+	if err != nil {
+		t.Error(err)
+	}
+	list, err := management.User.List()
+	if err != nil {
+		t.Error(err)
+	}
+	if len(list.Users) != 0 {
+		t.Error("unexpected list of users")
 	}
 }

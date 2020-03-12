@@ -88,12 +88,13 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
-	url       *url.URL
-	basePath  string
-	userAgent string
-	timeout   time.Duration
-	debug     bool
-	ctx       context.Context
+	url         *url.URL
+	basePath    string
+	userAgent   string
+	timeout     time.Duration
+	debug       bool
+	withoutAuth bool
+	ctx         context.Context
 
 	http *http.Client
 }
@@ -127,14 +128,16 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
-
-	_, err = oauth2.Token(m.ctx)
-	if err != nil {
-		return nil, err
+	if !m.withoutAuth {
+		oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+		_, err = oauth2.Token(m.ctx)
+		if err != nil {
+			return nil, err
+		}
+		m.http = client.New(m.ctx, oauth2)
+	} else {
+		m.http = &http.Client{Transport: http.DefaultTransport}
 	}
-
-	m.http = client.New(m.ctx, oauth2)
 	m.http = client.WrapDebug(m.http, m.debug)
 	m.http = client.WrapUserAgent(m.http, m.userAgent)
 	m.http = client.WrapRateLimit(m.http)
@@ -272,6 +275,24 @@ func WithTimeout(t time.Duration) apiOption {
 func WithDebug(d bool) apiOption {
 	return func(m *Management) {
 		m.debug = d
+	}
+}
+
+// WithoutAuth configures the management client to avoid trying to receive an
+// access token (as a side effect all requests to Auth0 won't have Authorization header).
+// This is helpful for testing - allows to start a mock HTTP server playing for Auth0
+// without necessity to support OAuth2 flow in it.
+func WithoutAuth() apiOption {
+	return func(m *Management) {
+		m.withoutAuth = true
+	}
+}
+
+// WithHTTP configures the management client to use `http` scheme for requests to Auth0.
+// This is helpful for testing - allows to start a mock HTTP server without HTTPS playing for Auth0
+func WithHTTP() apiOption {
+	return func(m *Management) {
+		m.url.Scheme = "http"
 	}
 }
 
