@@ -21,6 +21,9 @@ func TestConnection(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if _, ok := c.Options.(ConnectionOptions); !ok {
+			t.Errorf("unexpected options type %T", c.Options)
+		}
 		t.Logf("%v\n", c)
 	})
 
@@ -37,7 +40,43 @@ func TestConnection(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", cs)
+		for _, c := range cs.Connections {
+			var ok bool
+			switch c.GetStrategy() {
+			case "auth0":
+				_, ok = c.Options.(ConnectionOptions)
+			case "google-oauth2":
+				_, ok = c.Options.(ConnectionOptionsGooleOAuth2)
+			case "facebook":
+				_, ok = c.Options.(ConnectionOptionsFacebook)
+			case "apple":
+				_, ok = c.Options.(ConnectionOptionsApple)
+			case "linkedin":
+				_, ok = c.Options.(ConnectionOptionsLinkedin)
+			case "github":
+				_, ok = c.Options.(ConnectionOptionsGitHub)
+			case "windowslive":
+				_, ok = c.Options.(ConnectionOptionsWindowsLive)
+			case "salesforce":
+				_, ok = c.Options.(ConnectionOptionsSalesforce)
+			case "email":
+				_, ok = c.Options.(ConnectionOptionsEmail)
+			case "sms":
+				_, ok = c.Options.(ConnectionOptionsSMS)
+			case "oidc":
+				_, ok = c.Options.(ConnectionOptionsOIDC)
+			case "waad":
+				_, ok = c.Options.(ConnectionOptionsAzureAD)
+			default:
+				_, ok = c.Options.(map[string]interface{})
+			}
+
+			if !ok {
+				t.Errorf("unexpected options type %T", c.Options)
+			}
+
+			t.Logf("%s %s %T\n", c.GetID(), c.GetName(), c.Options)
+		}
 	})
 
 	t.Run("Update", func(t *testing.T) {
@@ -49,19 +88,15 @@ func TestConnection(t *testing.T) {
 		c.Strategy = nil // read-only
 
 		c.Options = &ConnectionOptions{
-			ExtAdmin:       auth0.Bool(true),
-			ExtGroups:      auth0.Bool(true),
-			ExtProfile:     auth0.Bool(true),
-			ExtIsSuspended: auth0.Bool(false), // try some zero values
-			ExtAgreedTerms: auth0.Bool(false),
+
+			BruteForceProtection: auth0.Bool(true),
+			ImportMode:           auth0.Bool(false), // try some zero values
+			DisableSignup:        auth0.Bool(true),
+			RequiresUsername:     auth0.Bool(false),
 
 			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
 			Configuration: map[string]interface{}{"foo": "bar"},
-
-			RequiresUsername: auth0.Bool(true),
 		}
-
-		cc := c // make a copy so we can compare later
 
 		err = m.Connection.Update(id, c)
 		if err != nil {
@@ -69,18 +104,6 @@ func TestConnection(t *testing.T) {
 		}
 
 		t.Logf("%v\n", c)
-
-		if c.Options.CustomScripts["get_user"] != cc.Options.CustomScripts["get_user"] {
-			t.Fatal(`unexpected result for "get_user" custom script`)
-		}
-
-		if _, exist := c.Options.Configuration["foo"]; !exist {
-			t.Fatal(`missing key "foo"`)
-		}
-
-		if c.Options.RequiresUsername != cc.Options.RequiresUsername {
-			t.Fatalf("expected requires_username to be %v but got %v", cc.Options.RequiresUsername, c.Options.RequiresUsername)
-		}
 	})
 
 	t.Run("Delete", func(t *testing.T) {
@@ -96,5 +119,39 @@ func TestConnection(t *testing.T) {
 			t.Error(err)
 		}
 		t.Logf("%v\n", cs)
+	})
+
+	t.Run("GoogleOAuth2", func(t *testing.T) {
+		g := &Connection{
+			Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
+			Strategy: auth0.String("google-oauth2"),
+			Options: &ConnectionOptionsGooleOAuth2{
+				AllowedAudiences: []interface{}{
+					"example.com",
+					"api.example.com",
+				},
+				Profile:  auth0.Bool(true),
+				Calendar: auth0.Bool(true),
+				Youtube:  auth0.Bool(false),
+			},
+		}
+
+		defer m.Connection.Delete(g.GetID())
+
+		err := m.Connection.Create(g)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		o, ok := g.Options.(ConnectionOptionsGooleOAuth2)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+
+		_ = o.GetProfile() // check some getters as they have a pointer receiver
+		_ = o.GetCalendar()
+		_ = o.GetYoutube()
+
+		t.Logf("%s\n", g)
 	})
 }
