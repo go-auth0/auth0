@@ -381,7 +381,6 @@ type ConnectionOptionsWindowsLive struct {
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
-// Salesforce
 type ConnectionOptionsSalesforce struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
@@ -411,22 +410,6 @@ type ConnectionOptionsOIDC struct {
 	TokenEndpoint         *string `json:"token_endpoint"`
 
 	Scope *string `json:"scope,omitempty"`
-
-	// "scope": "openid profile email",
-	// "icon_url": "https://alexkappa.com/logo.png",
-	// "discovery_url": "https://alexkappa.eu.auth0.com",
-	// "authorization_endpoint": "https://alexkappa.eu.auth0.com/authorize",
-	// "issuer": "https://alexkappa.eu.auth0.com/",
-	// "jwks_uri": "https://alexkappa.eu.auth0.com/.well-known/jwks.json",
-	// "type": "front_channel",
-	// "userinfo_endpoint": "https://alexkappa.eu.auth0.com/userinfo",
-	// "token_endpoint": null,
-	// "client_id": "foo",
-	// "domain_aliases": [
-	// 	"alexkappa.com",
-	// 	"api.alexkappa.com"
-	// ],
-	// "tenant_domain": "alexkappa.com"
 }
 
 // Azure AD

@@ -1,6 +1,7 @@
 package management_test
 
 import (
+	"fmt"
 	"os"
 
 	"gopkg.in/auth0.v3"
@@ -124,4 +125,25 @@ func ExampleUserManager_List_pagination() {
 		}
 		page++
 	}
+}
+
+func ExampleConnectionManager_List() {
+	l, err := api.Connection.List(
+		management.Parameter("strategy", "auth0"),
+	)
+	if err != nil {
+		// handle err
+	}
+	for _, c := range l.Connections {
+
+		fmt.Println(c.GetName())
+
+		if o, ok := c.Options.(management.ConnectionOptions); ok {
+			fmt.Printf("\tPassword Policy: %s\n", o.GetPasswordPolicy())
+			fmt.Printf("\tMulti-Factor Auth Enabled: %t\n", o.MFA["active"])
+		}
+	}
+	// Output: Username-Password-Authentication
+	// 	Password Policy: good
+	// 	Multi-Factor Auth Enabled: true
 }
