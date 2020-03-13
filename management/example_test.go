@@ -3,6 +3,7 @@ package management_test
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"gopkg.in/auth0.v3"
 	"gopkg.in/auth0.v3/management"
@@ -146,4 +147,29 @@ func ExampleConnectionManager_List() {
 	// Output: Username-Password-Authentication
 	// 	Password Policy: good
 	// 	Multi-Factor Auth Enabled: true
+}
+
+func ExampleConnectionManager_Create() {
+	c := &management.Connection{
+		Name:     auth0.Stringf("Test-Google-OAuth2-%d", time.Now().Unix()),
+		Strategy: auth0.String("google-oauth2"),
+		Options: &management.ConnectionOptionsGooleOAuth2{
+			ClientID:     auth0.String(""), // replace with your client id
+			ClientSecret: auth0.String(""),
+			AllowedAudiences: []interface{}{
+				"example.com",
+				"api.example.com",
+			},
+			Profile:  auth0.Bool(true),
+			Calendar: auth0.Bool(true),
+			Youtube:  auth0.Bool(false),
+		},
+	}
+
+	defer api.Connection.Delete(c.GetID())
+
+	err := api.Connection.Create(c)
+	if err != nil {
+		// handle err
+	}
 }
