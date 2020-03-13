@@ -153,7 +153,7 @@ func ExampleConnectionManager_Create() {
 	c := &management.Connection{
 		Name:     auth0.Stringf("Test-Google-OAuth2-%d", time.Now().Unix()),
 		Strategy: auth0.String("google-oauth2"),
-		Options: &management.ConnectionOptionsGooleOAuth2{
+		Options: &management.ConnectionOptionsGoogleOAuth2{
 			ClientID:     auth0.String(""), // replace with your client id
 			ClientSecret: auth0.String(""),
 			AllowedAudiences: []interface{}{

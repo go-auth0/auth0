@@ -46,7 +46,7 @@ func TestConnection(t *testing.T) {
 			case "auth0":
 				_, ok = c.Options.(ConnectionOptions)
 			case "google-oauth2":
-				_, ok = c.Options.(ConnectionOptionsGooleOAuth2)
+				_, ok = c.Options.(ConnectionOptionsGoogleOAuth2)
 			case "facebook":
 				_, ok = c.Options.(ConnectionOptionsFacebook)
 			case "apple":
@@ -125,7 +125,7 @@ func TestConnection(t *testing.T) {
 		g := &Connection{
 			Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
 			Strategy: auth0.String("google-oauth2"),
-			Options: &ConnectionOptionsGooleOAuth2{
+			Options: &ConnectionOptionsGoogleOAuth2{
 				AllowedAudiences: []interface{}{
 					"example.com",
 					"api.example.com",
@@ -143,7 +143,7 @@ func TestConnection(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		o, ok := g.Options.(ConnectionOptionsGooleOAuth2)
+		o, ok := g.Options.(ConnectionOptionsGoogleOAuth2)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}

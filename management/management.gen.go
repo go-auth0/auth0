@@ -1315,7 +1315,7 @@ func (c *ConnectionOptionsGitHub) String() string {
 }
 
 // GetAdsenseManagement returns the AdsenseManagement field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetAdsenseManagement() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetAdsenseManagement() bool {
 	if c == nil || c.AdsenseManagement == nil {
 		return false
 	}
@@ -1323,7 +1323,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetAdsenseManagement() bool {
 }
 
 // GetAnalytics returns the Analytics field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetAnalytics() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetAnalytics() bool {
 	if c == nil || c.Analytics == nil {
 		return false
 	}
@@ -1331,7 +1331,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetAnalytics() bool {
 }
 
 // GetBlogger returns the Blogger field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetBlogger() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetBlogger() bool {
 	if c == nil || c.Blogger == nil {
 		return false
 	}
@@ -1339,7 +1339,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetBlogger() bool {
 }
 
 // GetCalendar returns the Calendar field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetCalendar() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetCalendar() bool {
 	if c == nil || c.Calendar == nil {
 		return false
 	}
@@ -1347,7 +1347,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetCalendar() bool {
 }
 
 // GetChromeWebStore returns the ChromeWebStore field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetChromeWebStore() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetChromeWebStore() bool {
 	if c == nil || c.ChromeWebStore == nil {
 		return false
 	}
@@ -1355,7 +1355,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetChromeWebStore() bool {
 }
 
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetClientID() string {
+func (c *ConnectionOptionsGoogleOAuth2) GetClientID() string {
 	if c == nil || c.ClientID == nil {
 		return ""
 	}
@@ -1363,7 +1363,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetClientID() string {
 }
 
 // GetClientSecret returns the ClientSecret field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetClientSecret() string {
+func (c *ConnectionOptionsGoogleOAuth2) GetClientSecret() string {
 	if c == nil || c.ClientSecret == nil {
 		return ""
 	}
@@ -1371,7 +1371,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetClientSecret() string {
 }
 
 // GetContacts returns the Contacts field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetContacts() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetContacts() bool {
 	if c == nil || c.Contacts == nil {
 		return false
 	}
@@ -1379,7 +1379,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetContacts() bool {
 }
 
 // GetContentAPIForShopping returns the ContentAPIForShopping field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetContentAPIForShopping() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetContentAPIForShopping() bool {
 	if c == nil || c.ContentAPIForShopping == nil {
 		return false
 	}
@@ -1387,7 +1387,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetContentAPIForShopping() bool {
 }
 
 // GetCoordinate returns the Coordinate field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetCoordinate() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetCoordinate() bool {
 	if c == nil || c.Coordinate == nil {
 		return false
 	}
@@ -1395,7 +1395,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetCoordinate() bool {
 }
 
 // GetCoordinateReadonly returns the CoordinateReadonly field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetCoordinateReadonly() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetCoordinateReadonly() bool {
 	if c == nil || c.CoordinateReadonly == nil {
 		return false
 	}
@@ -1403,7 +1403,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetCoordinateReadonly() bool {
 }
 
 // GetDocumentList returns the DocumentList field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetDocumentList() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetDocumentList() bool {
 	if c == nil || c.DocumentList == nil {
 		return false
 	}
@@ -1411,7 +1411,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetDocumentList() bool {
 }
 
 // GetEmail returns the Email field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetEmail() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetEmail() bool {
 	if c == nil || c.Email == nil {
 		return false
 	}
@@ -1419,7 +1419,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetEmail() bool {
 }
 
 // GetGmail returns the Gmail field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGmail() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGmail() bool {
 	if c == nil || c.Gmail == nil {
 		return false
 	}
@@ -1427,7 +1427,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGmail() bool {
 }
 
 // GetGoogleAffiliateNetwork returns the GoogleAffiliateNetwork field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGoogleAffiliateNetwork() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGoogleAffiliateNetwork() bool {
 	if c == nil || c.GoogleAffiliateNetwork == nil {
 		return false
 	}
@@ -1435,7 +1435,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGoogleAffiliateNetwork() bool {
 }
 
 // GetGoogleBooks returns the GoogleBooks field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGoogleBooks() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGoogleBooks() bool {
 	if c == nil || c.GoogleBooks == nil {
 		return false
 	}
@@ -1443,7 +1443,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGoogleBooks() bool {
 }
 
 // GetGoogleCloudStorage returns the GoogleCloudStorage field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGoogleCloudStorage() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGoogleCloudStorage() bool {
 	if c == nil || c.GoogleCloudStorage == nil {
 		return false
 	}
@@ -1451,7 +1451,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGoogleCloudStorage() bool {
 }
 
 // GetGoogleDrive returns the GoogleDrive field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGoogleDrive() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGoogleDrive() bool {
 	if c == nil || c.GoogleDrive == nil {
 		return false
 	}
@@ -1459,7 +1459,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGoogleDrive() bool {
 }
 
 // GetGoogleDriveFiles returns the GoogleDriveFiles field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGoogleDriveFiles() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGoogleDriveFiles() bool {
 	if c == nil || c.GoogleDriveFiles == nil {
 		return false
 	}
@@ -1467,7 +1467,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGoogleDriveFiles() bool {
 }
 
 // GetGooglePlus returns the GooglePlus field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetGooglePlus() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetGooglePlus() bool {
 	if c == nil || c.GooglePlus == nil {
 		return false
 	}
@@ -1475,7 +1475,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetGooglePlus() bool {
 }
 
 // GetLatitudeBest returns the LatitudeBest field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetLatitudeBest() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetLatitudeBest() bool {
 	if c == nil || c.LatitudeBest == nil {
 		return false
 	}
@@ -1483,7 +1483,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetLatitudeBest() bool {
 }
 
 // GetLatitudeCity returns the LatitudeCity field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetLatitudeCity() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetLatitudeCity() bool {
 	if c == nil || c.LatitudeCity == nil {
 		return false
 	}
@@ -1491,7 +1491,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetLatitudeCity() bool {
 }
 
 // GetModerator returns the Moderator field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetModerator() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetModerator() bool {
 	if c == nil || c.Moderator == nil {
 		return false
 	}
@@ -1499,7 +1499,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetModerator() bool {
 }
 
 // GetOrkut returns the Orkut field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetOrkut() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetOrkut() bool {
 	if c == nil || c.Orkut == nil {
 		return false
 	}
@@ -1507,7 +1507,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetOrkut() bool {
 }
 
 // GetPicasaWeb returns the PicasaWeb field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetPicasaWeb() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetPicasaWeb() bool {
 	if c == nil || c.PicasaWeb == nil {
 		return false
 	}
@@ -1515,7 +1515,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetPicasaWeb() bool {
 }
 
 // GetProfile returns the Profile field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetProfile() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetProfile() bool {
 	if c == nil || c.Profile == nil {
 		return false
 	}
@@ -1523,7 +1523,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetProfile() bool {
 }
 
 // GetSites returns the Sites field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetSites() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetSites() bool {
 	if c == nil || c.Sites == nil {
 		return false
 	}
@@ -1531,7 +1531,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetSites() bool {
 }
 
 // GetSpreadsheets returns the Spreadsheets field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetSpreadsheets() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetSpreadsheets() bool {
 	if c == nil || c.Spreadsheets == nil {
 		return false
 	}
@@ -1539,7 +1539,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetSpreadsheets() bool {
 }
 
 // GetTasks returns the Tasks field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetTasks() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetTasks() bool {
 	if c == nil || c.Tasks == nil {
 		return false
 	}
@@ -1547,7 +1547,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetTasks() bool {
 }
 
 // GetURLShortener returns the URLShortener field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetURLShortener() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetURLShortener() bool {
 	if c == nil || c.URLShortener == nil {
 		return false
 	}
@@ -1555,7 +1555,7 @@ func (c *ConnectionOptionsGooleOAuth2) GetURLShortener() bool {
 }
 
 // GetWebmasterTools returns the WebmasterTools field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetWebmasterTools() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetWebmasterTools() bool {
 	if c == nil || c.WebmasterTools == nil {
 		return false
 	}
@@ -1563,15 +1563,15 @@ func (c *ConnectionOptionsGooleOAuth2) GetWebmasterTools() bool {
 }
 
 // GetYoutube returns the Youtube field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsGooleOAuth2) GetYoutube() bool {
+func (c *ConnectionOptionsGoogleOAuth2) GetYoutube() bool {
 	if c == nil || c.Youtube == nil {
 		return false
 	}
 	return *c.Youtube
 }
 
-// String returns a string representation of ConnectionOptionsGooleOAuth2.
-func (c *ConnectionOptionsGooleOAuth2) String() string {
+// String returns a string representation of ConnectionOptionsGoogleOAuth2.
+func (c *ConnectionOptionsGoogleOAuth2) String() string {
 	return Stringify(c)
 }
 

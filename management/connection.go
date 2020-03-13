@@ -82,7 +82,7 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 		case "auth0":
 			v = &ConnectionOptions{}
 		case "google-oauth2":
-			v = &ConnectionOptionsGooleOAuth2{}
+			v = &ConnectionOptionsGoogleOAuth2{}
 		case "facebook":
 			v = &ConnectionOptionsFacebook{}
 		case "apple":
@@ -162,7 +162,7 @@ type ConnectionOptions struct {
 	StrategyVersion *int `json:"strategy_version"`
 }
 
-type ConnectionOptionsGooleOAuth2 struct {
+type ConnectionOptionsGoogleOAuth2 struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
