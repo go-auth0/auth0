@@ -521,6 +521,30 @@ func (c *ConnectionOptionsApple) String() string {
 	return Stringify(c)
 }
 
+// GetAdmin returns the Admin field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetAdmin() bool {
+	if c == nil || c.Admin == nil {
+		return false
+	}
+	return *c.Admin
+}
+
+// GetAgreedTerms returns the AgreedTerms field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetAgreedTerms() bool {
+	if c == nil || c.AgreedTerms == nil {
+		return false
+	}
+	return *c.AgreedTerms
+}
+
+// GetAssignedPlans returns the AssignedPlans field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetAssignedPlans() bool {
+	if c == nil || c.AssignedPlans == nil {
+		return false
+	}
+	return *c.AssignedPlans
+}
+
 // GetBasicProfile returns the BasicProfile field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsAzureAD) GetBasicProfile() bool {
 	if c == nil || c.BasicProfile == nil {
@@ -561,60 +585,20 @@ func (c *ConnectionOptionsAzureAD) GetEnableUsersAPI() bool {
 	return *c.EnableUsersAPI
 }
 
-// GetExtAdmin returns the ExtAdmin field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtAdmin() bool {
-	if c == nil || c.ExtAdmin == nil {
+// GetExtendedProfile returns the ExtendedProfile field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetExtendedProfile() bool {
+	if c == nil || c.ExtendedProfile == nil {
 		return false
 	}
-	return *c.ExtAdmin
+	return *c.ExtendedProfile
 }
 
-// GetExtAgreedTerms returns the ExtAgreedTerms field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtAgreedTerms() bool {
-	if c == nil || c.ExtAgreedTerms == nil {
+// GetGroups returns the Groups field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetGroups() bool {
+	if c == nil || c.Groups == nil {
 		return false
 	}
-	return *c.ExtAgreedTerms
-}
-
-// GetExtAssignedPlans returns the ExtAssignedPlans field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtAssignedPlans() bool {
-	if c == nil || c.ExtAssignedPlans == nil {
-		return false
-	}
-	return *c.ExtAssignedPlans
-}
-
-// GetExtGroups returns the ExtGroups field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtGroups() bool {
-	if c == nil || c.ExtGroups == nil {
-		return false
-	}
-	return *c.ExtGroups
-}
-
-// GetExtIsSuspended returns the ExtIsSuspended field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtIsSuspended() bool {
-	if c == nil || c.ExtIsSuspended == nil {
-		return false
-	}
-	return *c.ExtIsSuspended
-}
-
-// GetExtNestedGroups returns the ExtNestedGroups field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtNestedGroups() bool {
-	if c == nil || c.ExtNestedGroups == nil {
-		return false
-	}
-	return *c.ExtNestedGroups
-}
-
-// GetExtProfile returns the ExtProfile field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetExtProfile() bool {
-	if c == nil || c.ExtProfile == nil {
-		return false
-	}
-	return *c.ExtProfile
+	return *c.Groups
 }
 
 // GetIdentityAPI returns the IdentityAPI field if it's non-nil, zero value otherwise.
@@ -623,6 +607,14 @@ func (c *ConnectionOptionsAzureAD) GetIdentityAPI() string {
 		return ""
 	}
 	return *c.IdentityAPI
+}
+
+// GetIsSuspended returns the IsSuspended field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetIsSuspended() bool {
+	if c == nil || c.IsSuspended == nil {
+		return false
+	}
+	return *c.IsSuspended
 }
 
 // GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
@@ -639,6 +631,14 @@ func (c *ConnectionOptionsAzureAD) GetMaxGroupsToRetrieve() string {
 		return ""
 	}
 	return *c.MaxGroupsToRetrieve
+}
+
+// GetNestedGroups returns the NestedGroups field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetNestedGroups() bool {
+	if c == nil || c.NestedGroups == nil {
+		return false
+	}
+	return *c.NestedGroups
 }
 
 // GetTenantDomain returns the TenantDomain field if it's non-nil, zero value otherwise.

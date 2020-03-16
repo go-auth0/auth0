@@ -432,14 +432,14 @@ type ConnectionOptionsAzureAD struct {
 	EnableUsersAPI      *bool   `json:"api_enable_users,omitempty"`
 	MaxGroupsToRetrieve *string `json:"max_groups_to_retrieve,omitempty"`
 
-	BasicProfile     *bool `json:"basic_profile,omitempty"`
-	ExtProfile       *bool `json:"ext_profile,omitempty"`
-	ExtGroups        *bool `json:"ext_groups,omitempty"`
-	ExtNestedGroups  *bool `json:"ext_nested_groups,omitempty"`
-	ExtAdmin         *bool `json:"ext_admin,omitempty"`
-	ExtIsSuspended   *bool `json:"ext_is_suspended,omitempty"`
-	ExtAgreedTerms   *bool `json:"ext_agreed_terms,omitempty"`
-	ExtAssignedPlans *bool `json:"ext_assigned_plans,omitempty"`
+	BasicProfile    *bool `json:"basic_profile,omitempty"`
+	ExtendedProfile *bool `json:"ext_profile,omitempty"`
+	Groups          *bool `json:"ext_groups,omitempty"`
+	NestedGroups    *bool `json:"ext_nested_groups,omitempty"`
+	Admin           *bool `json:"ext_admin,omitempty"`
+	IsSuspended     *bool `json:"ext_is_suspended,omitempty"`
+	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty"`
+	AssignedPlans   *bool `json:"ext_assigned_plans,omitempty"`
 }
 
 type ConnectionManager struct {
