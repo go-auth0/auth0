@@ -460,6 +460,51 @@ func (c *ConnectionOptions) String() string {
 	return Stringify(c)
 }
 
+// GetADFSServer returns the ADFSServer field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetADFSServer() string {
+	if c == nil || c.ADFSServer == nil {
+		return ""
+	}
+	return *c.ADFSServer
+}
+
+// GetEnableUsersAPI returns the EnableUsersAPI field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetEnableUsersAPI() bool {
+	if c == nil || c.EnableUsersAPI == nil {
+		return false
+	}
+	return *c.EnableUsersAPI
+}
+
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetLogoURL() string {
+	if c == nil || c.LogoURL == nil {
+		return ""
+	}
+	return *c.LogoURL
+}
+
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
+// GetTenantDomain returns the TenantDomain field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetTenantDomain() string {
+	if c == nil || c.TenantDomain == nil {
+		return ""
+	}
+	return *c.TenantDomain
+}
+
+// String returns a string representation of ConnectionOptionsADFS.
+func (c *ConnectionOptionsADFS) String() string {
+	return Stringify(c)
+}
+
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsApple) GetClientID() string {
 	if c == nil || c.ClientID == nil {
@@ -468,12 +513,12 @@ func (c *ConnectionOptionsApple) GetClientID() string {
 	return *c.ClientID
 }
 
-// GetClientSecretSigningKey returns the ClientSecretSigningKey field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsApple) GetClientSecretSigningKey() string {
-	if c == nil || c.ClientSecretSigningKey == nil {
+// GetClientSecret returns the ClientSecret field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsApple) GetClientSecret() string {
+	if c == nil || c.ClientSecret == nil {
 		return ""
 	}
-	return *c.ClientSecretSigningKey
+	return *c.ClientSecret
 }
 
 // GetEmail returns the Email field if it's non-nil, zero value otherwise.
@@ -535,6 +580,14 @@ func (c *ConnectionOptionsAzureAD) GetAgreedTerms() bool {
 		return false
 	}
 	return *c.AgreedTerms
+}
+
+// GetAppID returns the AppID field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetAppID() string {
+	if c == nil || c.AppID == nil {
+		return ""
+	}
+	return *c.AppID
 }
 
 // GetAssignedPlans returns the AssignedPlans field if it's non-nil, zero value otherwise.
@@ -1885,27 +1938,6 @@ func (c *ConnectionOptionsSMS) GetTwilioToken() string {
 
 // String returns a string representation of ConnectionOptionsSMS.
 func (c *ConnectionOptionsSMS) String() string {
-	return Stringify(c)
-}
-
-// GetLength returns the Length field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsTotp) GetLength() int {
-	if c == nil || c.Length == nil {
-		return 0
-	}
-	return *c.Length
-}
-
-// GetTimeStep returns the TimeStep field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsTotp) GetTimeStep() int {
-	if c == nil || c.TimeStep == nil {
-		return 0
-	}
-	return *c.TimeStep
-}
-
-// String returns a string representation of ConnectionOptionsTotp.
-func (c *ConnectionOptionsTotp) String() string {
 	return Stringify(c)
 }
 
