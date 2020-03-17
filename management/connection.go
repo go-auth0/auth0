@@ -253,8 +253,8 @@ type ConnectionOptionsFacebook struct {
 }
 
 type ConnectionOptionsApple struct {
-	ClientID               *string `json:"client_id,omitempty"`
-	ClientSecretSigningKey *string `json:"app_secret,omitempty"`
+	ClientID     *string `json:"client_id,omitempty"`
+	ClientSecret *string `json:"app_secret,omitempty"`
 
 	TeamID *string `json:"team_id,omitempty"`
 	KeyID  *string `json:"kid,omitempty"`
@@ -412,7 +412,6 @@ type ConnectionOptionsOIDC struct {
 	Scope *string `json:"scope,omitempty"`
 }
 
-// Azure AD
 type ConnectionOptionsAzureAD struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
@@ -442,13 +441,20 @@ type ConnectionOptionsAzureAD struct {
 	AssignedPlans   *bool `json:"ext_assigned_plans,omitempty"`
 }
 
-type ConnectionManager struct {
-	*Management
+type ConnectionOptionsADFS struct {
+	TenantDomain  *string       `json:"tenant_domain,omitempty"`
+	DomainAliases []interface{} `json:"domain_aliases,omitempty"`
+	LogoURL       *string       `json:"icon_url,omitempty"`
+	ADFSServer    *string       `json:"adfs_server,omitempty"`
+
+	EnableUsersAPI *bool `json:"api_enable_users,omitempty"`
+
+	// Set to on_first_login to avoid setting user attributes at each login.
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
-type ConnectionOptionsTotp struct {
-	TimeStep *int `json:"time_step,omitempty"`
-	Length   *int `json:"length,omitempty"`
+type ConnectionManager struct {
+	*Management
 }
 
 type ConnectionList struct {
