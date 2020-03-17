@@ -139,7 +139,7 @@ func ExampleConnectionManager_List() {
 
 		fmt.Println(c.GetName())
 
-		if o, ok := c.Options.(management.ConnectionOptions); ok {
+		if o, ok := c.Options.(*management.ConnectionOptions); ok {
 			fmt.Printf("\tPassword Policy: %s\n", o.GetPasswordPolicy())
 			fmt.Printf("\tMulti-Factor Auth Enabled: %t\n", o.MFA["active"])
 		}
