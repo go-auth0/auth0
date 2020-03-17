@@ -21,7 +21,7 @@ func TestConnection(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if _, ok := c.Options.(ConnectionOptions); !ok {
+		if _, ok := c.Options.(*ConnectionOptions); !ok {
 			t.Errorf("unexpected options type %T", c.Options)
 		}
 		t.Logf("%v\n", c)
@@ -44,29 +44,29 @@ func TestConnection(t *testing.T) {
 			var ok bool
 			switch c.GetStrategy() {
 			case "auth0":
-				_, ok = c.Options.(ConnectionOptions)
+				_, ok = c.Options.(*ConnectionOptions)
 			case "google-oauth2":
-				_, ok = c.Options.(ConnectionOptionsGoogleOAuth2)
+				_, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
 			case "facebook":
-				_, ok = c.Options.(ConnectionOptionsFacebook)
+				_, ok = c.Options.(*ConnectionOptionsFacebook)
 			case "apple":
-				_, ok = c.Options.(ConnectionOptionsApple)
+				_, ok = c.Options.(*ConnectionOptionsApple)
 			case "linkedin":
-				_, ok = c.Options.(ConnectionOptionsLinkedin)
+				_, ok = c.Options.(*ConnectionOptionsLinkedin)
 			case "github":
-				_, ok = c.Options.(ConnectionOptionsGitHub)
+				_, ok = c.Options.(*ConnectionOptionsGitHub)
 			case "windowslive":
-				_, ok = c.Options.(ConnectionOptionsWindowsLive)
+				_, ok = c.Options.(*ConnectionOptionsWindowsLive)
 			case "salesforce":
-				_, ok = c.Options.(ConnectionOptionsSalesforce)
+				_, ok = c.Options.(*ConnectionOptionsSalesforce)
 			case "email":
-				_, ok = c.Options.(ConnectionOptionsEmail)
+				_, ok = c.Options.(*ConnectionOptionsEmail)
 			case "sms":
-				_, ok = c.Options.(ConnectionOptionsSMS)
+				_, ok = c.Options.(*ConnectionOptionsSMS)
 			case "oidc":
-				_, ok = c.Options.(ConnectionOptionsOIDC)
+				_, ok = c.Options.(*ConnectionOptionsOIDC)
 			case "waad":
-				_, ok = c.Options.(ConnectionOptionsAzureAD)
+				_, ok = c.Options.(*ConnectionOptionsAzureAD)
 			default:
 				_, ok = c.Options.(map[string]interface{})
 			}
@@ -143,7 +143,7 @@ func TestConnection(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		o, ok := g.Options.(ConnectionOptionsGoogleOAuth2)
+		o, ok := g.Options.(*ConnectionOptionsGoogleOAuth2)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}

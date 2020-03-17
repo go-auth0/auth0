@@ -2,7 +2,6 @@ package management
 
 import (
 	"encoding/json"
-	"reflect"
 )
 
 type Connection struct {
@@ -104,7 +103,7 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 		case "waad":
 			v = &ConnectionOptionsAzureAD{}
 		default:
-			v = &map[string]interface{}{}
+			v = make(map[string]interface{})
 		}
 
 		err = json.Unmarshal(c.RawOptions, &v)
@@ -112,7 +111,7 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			return err
 		}
 
-		c.Options = reflect.ValueOf(v).Elem().Interface()
+		c.Options = v
 	}
 
 	return nil
