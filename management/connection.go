@@ -416,6 +416,7 @@ type ConnectionOptionsAzureAD struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
+	AppID         *string       `json:"app_id,omitempty"`
 	TenantDomain  *string       `json:"tenant_domain,omitempty"`
 	Domain        *string       `json:"domain,omitempty"`
 	DomainAliases []interface{} `json:"domain_aliases,omitempty"`
