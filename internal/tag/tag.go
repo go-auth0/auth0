@@ -21,7 +21,7 @@ func Scopes(v interface{}) (scopes []string) {
 				if field.Kind() == reflect.Ptr {
 					field = field.Elem()
 				}
-				if field.Bool() {
+				if field.CanAddr() && field.Bool() {
 					scopes = append(scopes, scope)
 				}
 			}

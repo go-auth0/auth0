@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"gopkg.in/auth0.v3"
+	"gopkg.in/auth0.v3/internal/testing/expect"
 )
 
 func TestConnection(t *testing.T) {
@@ -148,9 +149,10 @@ func TestConnection(t *testing.T) {
 			t.Fatalf("unexpected type %T", o)
 		}
 
-		_ = o.GetProfile() // check some getters as they have a pointer receiver
-		_ = o.GetCalendar()
-		_ = o.GetYoutube()
+		expect.Expect(t, o.GetProfile(), true)
+		expect.Expect(t, o.GetCalendar(), true)
+		expect.Expect(t, o.GetYoutube(), false)
+		expect.Expect(t, o.Scopes(), []string{"email", "profile", "calendar"})
 
 		t.Logf("%s\n", g)
 	})
