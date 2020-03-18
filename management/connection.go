@@ -2,6 +2,8 @@ package management
 
 import (
 	"encoding/json"
+
+	"gopkg.in/auth0.v3/internal/tag"
 )
 
 type Connection struct {
@@ -167,88 +169,105 @@ type ConnectionOptionsGoogleOAuth2 struct {
 
 	AllowedAudiences []interface{} `json:"allowed_audiences,omitempty"`
 
-	Email                  *bool `json:"email,omitempty"`
-	Profile                *bool `json:"profile,omitempty"`
-	Contacts               *bool `json:"contacts,omitempty"`
-	Blogger                *bool `json:"blogger,omitempty"`
-	Calendar               *bool `json:"calendar,omitempty"`
-	Gmail                  *bool `json:"gmail,omitempty"`
-	GooglePlus             *bool `json:"google_plus,omitempty"`
-	Orkut                  *bool `json:"orkut,omitempty"`
-	PicasaWeb              *bool `json:"picasa_web,omitempty"`
-	Tasks                  *bool `json:"tasks,omitempty"`
-	Youtube                *bool `json:"youtube,omitempty"`
-	AdsenseManagement      *bool `json:"adsense_management,omitempty"`
-	GoogleAffiliateNetwork *bool `json:"google_affiliate_network,omitempty"`
-	Analytics              *bool `json:"analytics,omitempty"`
-	GoogleBooks            *bool `json:"google_books,omitempty"`
-	GoogleCloudStorage     *bool `json:"google_cloud_storage,omitempty"`
-	ContentAPIForShopping  *bool `json:"content_api_for_shopping,omitempty"`
-	ChromeWebStore         *bool `json:"chrome_web_store,omitempty"`
-	DocumentList           *bool `json:"document_list,omitempty"`
-	GoogleDrive            *bool `json:"google_drive,omitempty"`
-	GoogleDriveFiles       *bool `json:"google_drive_files,omitempty"`
-	LatitudeBest           *bool `json:"latitude_best,omitempty"`
-	LatitudeCity           *bool `json:"latitude_city,omitempty"`
-	Moderator              *bool `json:"moderator,omitempty"`
-	Sites                  *bool `json:"sites,omitempty"`
-	Spreadsheets           *bool `json:"spreadsheets,omitempty"`
-	URLShortener           *bool `json:"url_shortener,omitempty"`
-	WebmasterTools         *bool `json:"webmaster_tools,omitempty"`
-	Coordinate             *bool `json:"coordinate,omitempty"`
-	CoordinateReadonly     *bool `json:"coordinate_readonly,omitempty"`
+	Email                  *bool `json:"email,omitempty" scope:"email"`
+	Profile                *bool `json:"profile,omitempty" scope:"profile"`
+	Contacts               *bool `json:"contacts,omitempty" scope:"contacts"`
+	Blogger                *bool `json:"blogger,omitempty" scope:"blogger"`
+	Calendar               *bool `json:"calendar,omitempty" scope:"calendar"`
+	Gmail                  *bool `json:"gmail,omitempty" scope:"gmail"`
+	GooglePlus             *bool `json:"google_plus,omitempty" scope:"google_plus"`
+	Orkut                  *bool `json:"orkut,omitempty" scope:"orkut"`
+	PicasaWeb              *bool `json:"picasa_web,omitempty" scope:"picasa_web"`
+	Tasks                  *bool `json:"tasks,omitempty" scope:"tasks"`
+	Youtube                *bool `json:"youtube,omitempty" scope:"youtube"`
+	AdsenseManagement      *bool `json:"adsense_management,omitempty" scope:"adsense_management"`
+	GoogleAffiliateNetwork *bool `json:"google_affiliate_network,omitempty" scope:"google_affiliate_network"`
+	Analytics              *bool `json:"analytics,omitempty" scope:"analytics"`
+	GoogleBooks            *bool `json:"google_books,omitempty" scope:"google_books"`
+	GoogleCloudStorage     *bool `json:"google_cloud_storage,omitempty" scope:"google_cloud_storage"`
+	ContentAPIForShopping  *bool `json:"content_api_for_shopping,omitempty" scope:"content_api_for_shopping"`
+	ChromeWebStore         *bool `json:"chrome_web_store,omitempty" scope:"chrome_web_store"`
+	DocumentList           *bool `json:"document_list,omitempty" scope:"document_list"`
+	GoogleDrive            *bool `json:"google_drive,omitempty" scope:"google_drive"`
+	GoogleDriveFiles       *bool `json:"google_drive_files,omitempty" scope:"google_drive_files"`
+	LatitudeBest           *bool `json:"latitude_best,omitempty" scope:"latitude_best"`
+	LatitudeCity           *bool `json:"latitude_city,omitempty" scope:"latitude_city"`
+	Moderator              *bool `json:"moderator,omitempty" scope:"moderator"`
+	Sites                  *bool `json:"sites,omitempty" scope:"sites"`
+	Spreadsheets           *bool `json:"spreadsheets,omitempty" scope:"spreadsheets"`
+	URLShortener           *bool `json:"url_shortener,omitempty" scope:"url_shortener"`
+	WebmasterTools         *bool `json:"webmaster_tools,omitempty" scope:"webmaster_tools"`
+	Coordinate             *bool `json:"coordinate,omitempty" scope:"coordinate"`
+	CoordinateReadonly     *bool `json:"coordinate_readonly,omitempty" scope:"coordinate_readonly"`
 
 	Scope []interface{} `json:"scope,omitempty"`
+}
+
+func (c *ConnectionOptionsGoogleOAuth2) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsGoogleOAuth2) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsFacebook struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
-	Email                       *bool `json:"email,omitempty"`
-	GroupsAccessMemberInfo      *bool `json:"groups_access_member_info,omitempty"`
-	PublishToGroups             *bool `json:"publish_to_groups,omitempty"`
-	UserAgeRange                *bool `json:"user_age_range,omitempty"`
-	UserBirthday                *bool `json:"user_birthday,omitempty"`
-	AdsManagement               *bool `json:"ads_management,omitempty"`
-	AdsRead                     *bool `json:"ads_read,omitempty"`
-	ReadAudienceNetworkInsights *bool `json:"read_audience_network_insights,omitempty"`
-	ReadInsights                *bool `json:"read_insights,omitempty"`
-	ManageNotifications         *bool `json:"manage_notifications,omitempty"`
-	PublishActions              *bool `json:"publish_actions,omitempty"`
-	ReadMailbox                 *bool `json:"read_mailbox,omitempty"`
-	PublicProfile               *bool `json:"public_profile,omitempty"`
-	UserEvents                  *bool `json:"user_events,omitempty"`
-	UserFriends                 *bool `json:"user_friends,omitempty"`
-	UserGender                  *bool `json:"user_gender,omitempty"`
-	UserHometown                *bool `json:"user_hometown,omitempty"`
-	UserLikes                   *bool `json:"user_likes,omitempty"`
-	UserLink                    *bool `json:"user_link,omitempty"`
-	UserLocation                *bool `json:"user_location,omitempty"`
-	UserPhotos                  *bool `json:"user_photos,omitempty"`
-	UserPosts                   *bool `json:"user_posts,omitempty"`
-	UserTaggedPlaces            *bool `json:"user_tagged_places,omitempty"`
-	UserVideos                  *bool `json:"user_videos,omitempty"`
-	BusinessManagement          *bool `json:"business_management,omitempty"`
-	LeadsRetrieval              *bool `json:"leads_retrieval,omitempty"`
-	ManagePages                 *bool `json:"manage_pages,omitempty"`
-	PagesManageCTA              *bool `json:"pages_manage_cta,omitempty"`
-	PagesManageInstantArticles  *bool `json:"pages_manage_instant_articles,omitempty"`
-	PagesShowList               *bool `json:"pages_show_list,omitempty"`
-	PagesMessaging              *bool `json:"pages_messaging,omitempty"`
-	PagesMessagingPhoneNumber   *bool `json:"pages_messaging_phone_number,omitempty"`
-	PagesMessagingSubscriptions *bool `json:"pages_messaging_subscriptions,omitempty"`
-	PublishPages                *bool `json:"publish_pages,omitempty"`
-	PublishVideo                *bool `json:"publish_video,omitempty"`
-	ReadPageMailboxes           *bool `json:"read_page_mailboxes,omitempty"`
-	ReadStream                  *bool `json:"read_stream,omitempty"`
-	UserGroups                  *bool `json:"user_groups,omitempty"`
-	UserManagedGroups           *bool `json:"user_managed_groups,omitempty"`
-	UserStatus                  *bool `json:"user_status,omitempty"`
-	AllowContextProfileField    *bool `json:"allow_context_profile_field,omitempty"`
+	AllowContextProfileField *bool `json:"allow_context_profile_field,omitempty"`
+
+	Email                       *bool `json:"email,omitempty" scope:"email"`
+	GroupsAccessMemberInfo      *bool `json:"groups_access_member_info,omitempty" scope:"groups_access_member_info"`
+	PublishToGroups             *bool `json:"publish_to_groups,omitempty" scope:"publish_to_groups"`
+	UserAgeRange                *bool `json:"user_age_range,omitempty" scope:"user_age_range"`
+	UserBirthday                *bool `json:"user_birthday,omitempty" scope:"user_birthday"`
+	AdsManagement               *bool `json:"ads_management,omitempty" scope:"ads_management"`
+	AdsRead                     *bool `json:"ads_read,omitempty" scope:"ads_read"`
+	ReadAudienceNetworkInsights *bool `json:"read_audience_network_insights,omitempty" scope:"read_audience_network_insights"`
+	ReadInsights                *bool `json:"read_insights,omitempty" scope:"read_insights"`
+	ManageNotifications         *bool `json:"manage_notifications,omitempty" scope:"manage_notifications"`
+	PublishActions              *bool `json:"publish_actions,omitempty" scope:"publish_actions"`
+	ReadMailbox                 *bool `json:"read_mailbox,omitempty" scope:"read_mailbox"`
+	PublicProfile               *bool `json:"public_profile,omitempty" scope:"public_profile"`
+	UserEvents                  *bool `json:"user_events,omitempty" scope:"user_events"`
+	UserFriends                 *bool `json:"user_friends,omitempty" scope:"user_friends"`
+	UserGender                  *bool `json:"user_gender,omitempty" scope:"user_gender"`
+	UserHometown                *bool `json:"user_hometown,omitempty" scope:"user_hometown"`
+	UserLikes                   *bool `json:"user_likes,omitempty" scope:"user_likes"`
+	UserLink                    *bool `json:"user_link,omitempty" scope:"user_link"`
+	UserLocation                *bool `json:"user_location,omitempty" scope:"user_location"`
+	UserPhotos                  *bool `json:"user_photos,omitempty" scope:"user_photos"`
+	UserPosts                   *bool `json:"user_posts,omitempty" scope:"user_posts"`
+	UserTaggedPlaces            *bool `json:"user_tagged_places,omitempty" scope:"user_tagged_places"`
+	UserVideos                  *bool `json:"user_videos,omitempty" scope:"user_videos"`
+	BusinessManagement          *bool `json:"business_management,omitempty" scope:"business_management"`
+	LeadsRetrieval              *bool `json:"leads_retrieval,omitempty" scope:"leads_retrieval"`
+	ManagePages                 *bool `json:"manage_pages,omitempty" scope:"manage_pages"`
+	PagesManageCTA              *bool `json:"pages_manage_cta,omitempty" scope:"pages_manage_cta"`
+	PagesManageInstantArticles  *bool `json:"pages_manage_instant_articles,omitempty" scope:"pages_manage_instant_articles"`
+	PagesShowList               *bool `json:"pages_show_list,omitempty" scope:"pages_show_list"`
+	PagesMessaging              *bool `json:"pages_messaging,omitempty" scope:"pages_messaging"`
+	PagesMessagingPhoneNumber   *bool `json:"pages_messaging_phone_number,omitempty" scope:"pages_messaging_phone_number"`
+	PagesMessagingSubscriptions *bool `json:"pages_messaging_subscriptions,omitempty" scope:"pages_messaging_subscriptions"`
+	PublishPages                *bool `json:"publish_pages,omitempty" scope:"publish_pages"`
+	PublishVideo                *bool `json:"publish_video,omitempty" scope:"publish_video"`
+	ReadPageMailboxes           *bool `json:"read_page_mailboxes,omitempty" scope:"read_page_mailboxes"`
+	ReadStream                  *bool `json:"read_stream,omitempty" scope:"read_stream"`
+	UserGroups                  *bool `json:"user_groups,omitempty" scope:"user_groups"`
+	UserManagedGroups           *bool `json:"user_managed_groups,omitempty" scope:"user_managed_groups"`
+	UserStatus                  *bool `json:"user_status,omitempty" scope:"user_status"`
 
 	// Scope is a comma separated list of scopes.
 	Scope *string `json:"scope,omitempty"`
+}
+
+func (c *ConnectionOptionsFacebook) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsFacebook) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsApple struct {
@@ -258,10 +277,18 @@ type ConnectionOptionsApple struct {
 	TeamID *string `json:"team_id,omitempty"`
 	KeyID  *string `json:"kid,omitempty"`
 
-	Name  *bool `json:"name,omitempty"`
-	Email *bool `json:"email,omitempty"`
+	Name  *bool `json:"name,omitempty" scope:"name"`
+	Email *bool `json:"email,omitempty" scope:"email"`
 
 	Scope *string `json:"scope,omitempty"`
+}
+
+func (c *ConnectionOptionsApple) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsApple) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsLinkedin struct {
@@ -270,43 +297,59 @@ type ConnectionOptionsLinkedin struct {
 
 	StrategyVersion *int `json:"strategy_version"`
 
-	Email        *bool `json:"email,omitempty"`
-	Profile      *bool `json:"profile,omitempty"`
-	BasicProfile *bool `json:"basic_profile,omitempty"`
+	Email        *bool `json:"email,omitempty" scope:"email"`
+	Profile      *bool `json:"profile,omitempty" scope:"profile"`
+	BasicProfile *bool `json:"basic_profile,omitempty" scope:"basic_profile"`
 
 	Scope []interface{} `json:"scope,omitempty"`
 
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
+func (c *ConnectionOptionsLinkedin) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsLinkedin) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
+}
+
 type ConnectionOptionsGitHub struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
-	Email          *bool `json:"email,omitempty"`
-	ReadUser       *bool `json:"read_user,omitempty"`
-	Follow         *bool `json:"follow,omitempty"`
-	PublicRepo     *bool `json:"public_repo,omitempty"`
-	Repo           *bool `json:"repo,omitempty"`
-	RepoDeployment *bool `json:"repo_deployment,omitempty"`
-	RepoStatus     *bool `json:"repo_status,omitempty"`
-	DeleteRepo     *bool `json:"delete_repo,omitempty"`
-	Notifications  *bool `json:"notifications,omitempty"`
-	Gist           *bool `json:"gist,omitempty"`
-	ReadRepoHook   *bool `json:"read_repo_hook,omitempty"`
-	WriteRepoHook  *bool `json:"write_repo_hook,omitempty"`
-	AdminRepoHook  *bool `json:"admin_repo_hook,omitempty"`
-	ReadOrg        *bool `json:"read_org,omitempty"`
-	AdminOrg       *bool `json:"admin_org,omitempty"`
-	ReadPublicKey  *bool `json:"read_public_key,omitempty"`
-	WritePublicKey *bool `json:"write_public_key,omitempty"`
-	AdminPublicKey *bool `json:"admin_public_key,omitempty"`
-	WriteOrg       *bool `json:"write_org,omitempty"`
-	Profile        *bool `json:"profile,omitempty"`
+	Email          *bool `json:"email,omitempty" scope:"email"`
+	ReadUser       *bool `json:"read_user,omitempty" scope:"read_user"`
+	Follow         *bool `json:"follow,omitempty" scope:"follow"`
+	PublicRepo     *bool `json:"public_repo,omitempty" scope:"public_repo"`
+	Repo           *bool `json:"repo,omitempty" scope:"repo"`
+	RepoDeployment *bool `json:"repo_deployment,omitempty" scope:"repo_deployment"`
+	RepoStatus     *bool `json:"repo_status,omitempty" scope:"repo_status"`
+	DeleteRepo     *bool `json:"delete_repo,omitempty" scope:"delete_repo"`
+	Notifications  *bool `json:"notifications,omitempty" scope:"notifications"`
+	Gist           *bool `json:"gist,omitempty" scope:"gist"`
+	ReadRepoHook   *bool `json:"read_repo_hook,omitempty" scope:"read_repo_hook"`
+	WriteRepoHook  *bool `json:"write_repo_hook,omitempty" scope:"write_repo_hook"`
+	AdminRepoHook  *bool `json:"admin_repo_hook,omitempty" scope:"admin_repo_hook"`
+	ReadOrg        *bool `json:"read_org,omitempty" scope:"read_org"`
+	AdminOrg       *bool `json:"admin_org,omitempty" scope:"admin_org"`
+	ReadPublicKey  *bool `json:"read_public_key,omitempty" scope:"read_public_key"`
+	WritePublicKey *bool `json:"write_public_key,omitempty" scope:"write_public_key"`
+	AdminPublicKey *bool `json:"admin_public_key,omitempty" scope:"admin_public_key"`
+	WriteOrg       *bool `json:"write_org,omitempty" scope:"write_org"`
+	Profile        *bool `json:"profile,omitempty" scope:"profile"`
 
 	Scope []interface{} `json:"scope,omitempty"`
 
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
+}
+
+func (c *ConnectionOptionsGitHub) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsGitHub) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsEmail struct {
@@ -352,44 +395,60 @@ type ConnectionOptionsWindowsLive struct {
 
 	StrategyVersion *int `json:"strategy_version"`
 
-	OfflineAccess   *bool `json:"offline_access,omitempty"`
-	UserUpdate      *bool `json:"graph_user_update,omitempty"`
-	UserActivity    *bool `json:"graph_user_activity,omitempty"`
-	Device          *bool `json:"graph_device,omitempty"`
-	Emails          *bool `json:"graph_emails,omitempty"`
-	NotesUpdate     *bool `json:"graph_notes_update,omitempty"`
-	User            *bool `json:"graph_user,omitempty"`
-	DeviceCommand   *bool `json:"graph_device_command,omitempty"`
-	EmailsUpdate    *bool `json:"graph_emails_update,omitempty"`
-	Calendars       *bool `json:"graph_calendars,omitempty"`
-	CalendarsUpdate *bool `json:"graph_calendars_update,omitempty"`
-	Contacts        *bool `json:"graph_contacts,omitempty"`
-	ContactsUpdate  *bool `json:"graph_contacts_update,omitempty"`
-	Files           *bool `json:"graph_files,omitempty"`
-	FilesAll        *bool `json:"graph_files_all,omitempty"`
-	FilesUpdate     *bool `json:"graph_files_update,omitempty"`
-	FilesAllUpdate  *bool `json:"graph_files_all_update,omitempty"`
-	Notes           *bool `json:"graph_notes,omitempty"`
-	NotesCreate     *bool `json:"graph_notes_create,omitempty"`
-	Tasks           *bool `json:"graph_tasks,omitempty"`
-	TasksUpdate     *bool `json:"graph_tasks_update,omitempty"`
-	Signin          *bool `json:"signin,omitempty"`
+	OfflineAccess   *bool `json:"offline_access,omitempty" scope:"offline_access"`
+	UserUpdate      *bool `json:"graph_user_update,omitempty" scope:"graph_user_update"`
+	UserActivity    *bool `json:"graph_user_activity,omitempty" scope:"graph_user_activity"`
+	Device          *bool `json:"graph_device,omitempty" scope:"graph_device"`
+	Emails          *bool `json:"graph_emails,omitempty" scope:"graph_emails"`
+	NotesUpdate     *bool `json:"graph_notes_update,omitempty" scope:"graph_notes_update"`
+	User            *bool `json:"graph_user,omitempty" scope:"graph_user"`
+	DeviceCommand   *bool `json:"graph_device_command,omitempty" scope:"graph_device_command"`
+	EmailsUpdate    *bool `json:"graph_emails_update,omitempty" scope:"graph_emails_update"`
+	Calendars       *bool `json:"graph_calendars,omitempty" scope:"graph_calendars"`
+	CalendarsUpdate *bool `json:"graph_calendars_update,omitempty" scope:"graph_calendars_update"`
+	Contacts        *bool `json:"graph_contacts,omitempty" scope:"graph_contacts"`
+	ContactsUpdate  *bool `json:"graph_contacts_update,omitempty" scope:"graph_contacts_update"`
+	Files           *bool `json:"graph_files,omitempty" scope:"graph_files"`
+	FilesAll        *bool `json:"graph_files_all,omitempty" scope:"graph_files_all"`
+	FilesUpdate     *bool `json:"graph_files_update,omitempty" scope:"graph_files_update"`
+	FilesAllUpdate  *bool `json:"graph_files_all_update,omitempty" scope:"graph_files_all_update"`
+	Notes           *bool `json:"graph_notes,omitempty" scope:"graph_notes"`
+	NotesCreate     *bool `json:"graph_notes_create,omitempty" scope:"graph_notes_create"`
+	Tasks           *bool `json:"graph_tasks,omitempty" scope:"graph_tasks"`
+	TasksUpdate     *bool `json:"graph_tasks_update,omitempty" scope:"graph_tasks_update"`
+	Signin          *bool `json:"signin,omitempty" scope:"signin"`
 
 	Scope []interface{} `json:"scope,omitempty"`
 
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
+func (c *ConnectionOptionsWindowsLive) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsWindowsLive) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
+}
+
 type ConnectionOptionsSalesforce struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
-	Profile *bool `json:"profile,omitempty"`
+	Profile *bool `json:"profile,omitempty" scope:"profile"`
 
 	Scope []interface{} `json:"scope,omitempty"`
 
 	CommunityBaseURL  *string `json:"community_base_url,omitempty"`
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
+}
+
+func (c *ConnectionOptionsSalesforce) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsSalesforce) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsOIDC struct {
@@ -431,14 +490,22 @@ type ConnectionOptionsAzureAD struct {
 	EnableUsersAPI      *bool   `json:"api_enable_users,omitempty"`
 	MaxGroupsToRetrieve *string `json:"max_groups_to_retrieve,omitempty"`
 
-	BasicProfile    *bool `json:"basic_profile,omitempty"`
-	ExtendedProfile *bool `json:"ext_profile,omitempty"`
-	Groups          *bool `json:"ext_groups,omitempty"`
-	NestedGroups    *bool `json:"ext_nested_groups,omitempty"`
-	Admin           *bool `json:"ext_admin,omitempty"`
-	IsSuspended     *bool `json:"ext_is_suspended,omitempty"`
-	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty"`
-	AssignedPlans   *bool `json:"ext_assigned_plans,omitempty"`
+	BasicProfile    *bool `json:"basic_profile,omitempty" scope:"basic_profile"`
+	ExtendedProfile *bool `json:"ext_profile,omitempty" scope:"ext_profile"`
+	Groups          *bool `json:"ext_groups,omitempty" scope:"ext_groups"`
+	NestedGroups    *bool `json:"ext_nested_groups,omitempty" scope:"ext_nested_groups"`
+	Admin           *bool `json:"ext_admin,omitempty" scope:"ext_admin"`
+	IsSuspended     *bool `json:"ext_is_suspended,omitempty" scope:"ext_is_suspended"`
+	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty" scope:"ext_agreed_terms"`
+	AssignedPlans   *bool `json:"ext_assigned_plans,omitempty" scope:"ext_assigned_plans"`
+}
+
+func (c *ConnectionOptionsAzureAD) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsAzureAD) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, true, scopes...)
 }
 
 type ConnectionOptionsADFS struct {
