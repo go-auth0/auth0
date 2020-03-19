@@ -98,31 +98,33 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 		var v interface{}
 
 		switch *c.Strategy {
-		case "auth0":
+		case ConnectionStrategyAuth0:
 			v = &ConnectionOptions{}
-		case "google-oauth2":
+		case ConnectionStrategyGoogleOAuth2:
 			v = &ConnectionOptionsGoogleOAuth2{}
-		case "facebook":
+		case ConnectionStrategyFacebook:
 			v = &ConnectionOptionsFacebook{}
-		case "apple":
+		case ConnectionStrategyApple:
 			v = &ConnectionOptionsApple{}
-		case "linkedin":
+		case ConnectionStrategyLinkedin:
 			v = &ConnectionOptionsLinkedin{}
-		case "github":
+		case ConnectionStrategyGitHub:
 			v = &ConnectionOptionsGitHub{}
-		case "windowslive":
+		case ConnectionStrategyWindowsLive:
 			v = &ConnectionOptionsWindowsLive{}
-		case "salesforce":
+		case ConnectionStrategySalesforce,
+			ConnectionStrategySalesforceCommunity,
+			ConnectionStrategySalesforceSandbox:
 			v = &ConnectionOptionsSalesforce{}
-		case "email":
+		case ConnectionStrategyEmail:
 			v = &ConnectionOptionsEmail{}
-		case "sms":
+		case ConnectionStrategySMS:
 			v = &ConnectionOptionsSMS{}
-		case "oidc":
+		case ConnectionStrategyOIDC:
 			v = &ConnectionOptionsOIDC{}
-		case "ad":
+		case ConnectionStrategyAD:
 			v = &ConnectionOptionsAD{}
-		case "waad":
+		case ConnectionStrategyAzureAD:
 			v = &ConnectionOptionsAzureAD{}
 		default:
 			v = make(map[string]interface{})

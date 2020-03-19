@@ -460,6 +460,67 @@ func (c *ConnectionOptions) String() string {
 	return Stringify(c)
 }
 
+// GetBruteForceProtection returns the BruteForceProtection field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetBruteForceProtection() bool {
+	if c == nil || c.BruteForceProtection == nil {
+		return false
+	}
+	return *c.BruteForceProtection
+}
+
+// GetCertAuth returns the CertAuth field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetCertAuth() bool {
+	if c == nil || c.CertAuth == nil {
+		return false
+	}
+	return *c.CertAuth
+}
+
+// GetDisableCache returns the DisableCache field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetDisableCache() bool {
+	if c == nil || c.DisableCache == nil {
+		return false
+	}
+	return *c.DisableCache
+}
+
+// GetKerberos returns the Kerberos field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetKerberos() bool {
+	if c == nil || c.Kerberos == nil {
+		return false
+	}
+	return *c.Kerberos
+}
+
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetLogoURL() string {
+	if c == nil || c.LogoURL == nil {
+		return ""
+	}
+	return *c.LogoURL
+}
+
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
+// GetTenantDomain returns the TenantDomain field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetTenantDomain() string {
+	if c == nil || c.TenantDomain == nil {
+		return ""
+	}
+	return *c.TenantDomain
+}
+
+// String returns a string representation of ConnectionOptionsAD.
+func (c *ConnectionOptionsAD) String() string {
+	return Stringify(c)
+}
+
 // GetADFSServer returns the ADFSServer field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsADFS) GetADFSServer() string {
 	if c == nil || c.ADFSServer == nil {
