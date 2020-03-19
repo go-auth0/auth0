@@ -43,30 +43,33 @@ func TestConnection(t *testing.T) {
 		}
 		for _, c := range cs.Connections {
 			var ok bool
+
 			switch c.GetStrategy() {
-			case "auth0":
+			case ConnectionStrategyAuth0:
 				_, ok = c.Options.(*ConnectionOptions)
-			case "google-oauth2":
+			case ConnectionStrategyGoogleOAuth2:
 				_, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
-			case "facebook":
+			case ConnectionStrategyFacebook:
 				_, ok = c.Options.(*ConnectionOptionsFacebook)
-			case "apple":
+			case ConnectionStrategyApple:
 				_, ok = c.Options.(*ConnectionOptionsApple)
-			case "linkedin":
+			case ConnectionStrategyLinkedin:
 				_, ok = c.Options.(*ConnectionOptionsLinkedin)
-			case "github":
+			case ConnectionStrategyGitHub:
 				_, ok = c.Options.(*ConnectionOptionsGitHub)
-			case "windowslive":
+			case ConnectionStrategyWindowsLive:
 				_, ok = c.Options.(*ConnectionOptionsWindowsLive)
-			case "salesforce":
+			case ConnectionStrategySalesforce, ConnectionStrategySalesforceCommunity, ConnectionStrategySalesforceSandbox:
 				_, ok = c.Options.(*ConnectionOptionsSalesforce)
-			case "email":
+			case ConnectionStrategyEmail:
 				_, ok = c.Options.(*ConnectionOptionsEmail)
-			case "sms":
+			case ConnectionStrategySMS:
 				_, ok = c.Options.(*ConnectionOptionsSMS)
-			case "oidc":
+			case ConnectionStrategyOIDC:
 				_, ok = c.Options.(*ConnectionOptionsOIDC)
-			case "waad":
+			case ConnectionStrategyAD:
+				_, ok = c.Options.(*ConnectionOptionsAD)
+			case ConnectionStrategyAzureAD:
 				_, ok = c.Options.(*ConnectionOptionsAzureAD)
 			default:
 				_, ok = c.Options.(map[string]interface{})

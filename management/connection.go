@@ -6,6 +6,24 @@ import (
 	"gopkg.in/auth0.v3/internal/tag"
 )
 
+const (
+	ConnectionStrategyAuth0               = "auth0"
+	ConnectionStrategyGoogleOAuth2        = "google-oauth2"
+	ConnectionStrategyFacebook            = "facebook"
+	ConnectionStrategyApple               = "apple"
+	ConnectionStrategyLinkedin            = "linkedin"
+	ConnectionStrategyGitHub              = "github"
+	ConnectionStrategyWindowsLive         = "windowslive"
+	ConnectionStrategySalesforce          = "salesforce"
+	ConnectionStrategySalesforceCommunity = "salesforce-community"
+	ConnectionStrategySalesforceSandbox   = "salesforce-sandbox"
+	ConnectionStrategyEmail               = "email"
+	ConnectionStrategySMS                 = "sms"
+	ConnectionStrategyOIDC                = "oidc"
+	ConnectionStrategyAD                  = "ad"
+	ConnectionStrategyAzureAD             = "waad"
+)
+
 type Connection struct {
 	// A generated string identifying the connection.
 	ID *string `json:"id,omitempty"`
@@ -102,6 +120,8 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = &ConnectionOptionsSMS{}
 		case "oidc":
 			v = &ConnectionOptionsOIDC{}
+		case "ad":
+			v = &ConnectionOptionsAD{}
 		case "waad":
 			v = &ConnectionOptionsAzureAD{}
 		default:
@@ -468,6 +488,20 @@ type ConnectionOptionsOIDC struct {
 	TokenEndpoint         *string `json:"token_endpoint"`
 
 	Scope *string `json:"scope,omitempty"`
+}
+
+type ConnectionOptionsAD struct {
+	TenantDomain  *string       `json:"tenant_domain,omitempty"`
+	DomainAliases []interface{} `json:"domain_aliases,omitempty"`
+	LogoURL       *string       `json:"icon_url,omitempty"`
+	IPs           []interface{} `json:"ips"`
+
+	CertAuth             *bool `json:"certAuth"`
+	Kerberos             *bool `json:"kerberos"`
+	DisableCache         *bool `json:"disable_cache"`
+	BruteForceProtection *bool `json:"brute_force_protection,omitempty"`
+
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
 type ConnectionOptionsAzureAD struct {
