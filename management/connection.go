@@ -498,9 +498,9 @@ type ConnectionOptionsAD struct {
 	LogoURL       *string       `json:"icon_url,omitempty"`
 	IPs           []interface{} `json:"ips"`
 
-	CertAuth             *bool `json:"certAuth"`
-	Kerberos             *bool `json:"kerberos"`
-	DisableCache         *bool `json:"disable_cache"`
+	CertAuth             *bool `json:"certAuth,omitempty"`
+	Kerberos             *bool `json:"kerberos,omitempty"`
+	DisableCache         *bool `json:"disable_cache,omitempty"`
 	BruteForceProtection *bool `json:"brute_force_protection,omitempty"`
 
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
