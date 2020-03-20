@@ -33,4 +33,4 @@ jobs:
       with:
         codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
         codeclimate-test-reporter-version: latest
-        command: after-build --prefix gopkg.in/auth0.v3
+        command: after-build --prefix gopkg.in/auth0.v4

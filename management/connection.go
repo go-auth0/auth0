@@ -3,7 +3,7 @@ package management
 import (
 	"encoding/json"
 
-	"gopkg.in/auth0.v3/internal/tag"
+	"gopkg.in/auth0.v4/internal/tag"
 )
 
 const (
