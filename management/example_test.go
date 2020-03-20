@@ -1,10 +1,12 @@
 package management_test
 
 import (
+	"fmt"
 	"os"
+	"time"
 
-	"gopkg.in/auth0.v3"
-	"gopkg.in/auth0.v3/management"
+	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v4/management"
 )
 
 var (
@@ -123,5 +125,51 @@ func ExampleUserManager_List_pagination() {
 			break
 		}
 		page++
+	}
+}
+
+func ExampleConnectionManager_List() {
+	l, err := api.Connection.List(
+		management.Parameter("strategy", "auth0"),
+	)
+	if err != nil {
+		// handle err
+	}
+	for _, c := range l.Connections {
+
+		fmt.Println(c.GetName())
+
+		if o, ok := c.Options.(*management.ConnectionOptions); ok {
+			fmt.Printf("\tPassword Policy: %s\n", o.GetPasswordPolicy())
+			fmt.Printf("\tMulti-Factor Auth Enabled: %t\n", o.MFA["active"])
+		}
+	}
+	// Output: Username-Password-Authentication
+	// 	Password Policy: good
+	// 	Multi-Factor Auth Enabled: true
+}
+
+func ExampleConnectionManager_Create() {
+	c := &management.Connection{
+		Name:     auth0.Stringf("Test-Google-OAuth2-%d", time.Now().Unix()),
+		Strategy: auth0.String("google-oauth2"),
+		Options: &management.ConnectionOptionsGoogleOAuth2{
+			ClientID:     auth0.String(""), // replace with your client id
+			ClientSecret: auth0.String(""),
+			AllowedAudiences: []interface{}{
+				"example.com",
+				"api.example.com",
+			},
+			Profile:  auth0.Bool(true),
+			Calendar: auth0.Bool(true),
+			Youtube:  auth0.Bool(false),
+		},
+	}
+
+	defer api.Connection.Delete(c.GetID())
+
+	err := api.Connection.Create(c)
+	if err != nil {
+		// handle err
 	}
 }

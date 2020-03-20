@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v3"
+	"gopkg.in/auth0.v4"
 )
 
 func TestHook(t *testing.T) {
