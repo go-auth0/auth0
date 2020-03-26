@@ -1,6 +1,7 @@
 package management
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -156,6 +157,124 @@ func TestConnection(t *testing.T) {
 		expect.Expect(t, o.GetCalendar(), true)
 		expect.Expect(t, o.GetYoutube(), false)
 		expect.Expect(t, o.Scopes(), []string{"email", "profile", "calendar"})
+
+		t.Logf("%s\n", g)
+	})
+
+	t.Run("Email", func(t *testing.T) {
+		name := fmt.Sprintf("Test-Connection-%d", time.Now().Unix())
+		from := "{{application.name}} <test@example.com>"
+		subject := "Email Login - {{application.name}}"
+		syntax := "liquid"
+		body := "<html><body>email contents</body></html>"
+		scope := "openid profile"
+		g := &Connection{
+			Name:     auth0.String(name),
+			Strategy: auth0.String("email"),
+			Options: &ConnectionOptionsEmail{
+				Email: &ConnectionOptionsEmailSettings{
+					Syntax:  auth0.String(syntax),
+					From:    auth0.String(from),
+					Subject: auth0.String(subject),
+					Body:    auth0.String(body),
+				},
+				OTP: &ConnectionOptionsOTP{
+					TimeStep: auth0.Int(100),
+					Length:   auth0.Int(4),
+				},
+				AuthParams: map[string]string{
+					"scope": scope,
+				},
+				BruteForceProtection: auth0.Bool(true),
+				DisableSignup:        auth0.Bool(true),
+				Name:                 auth0.String(name),
+			},
+		}
+
+		defer m.Connection.Delete(g.GetID())
+
+		err := m.Connection.Create(g)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		o, ok := g.Options.(*ConnectionOptionsEmail)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+
+		expect.Expect(t, o.GetEmail().GetSyntax(), syntax)
+		expect.Expect(t, o.GetEmail().GetFrom(), from)
+		expect.Expect(t, o.GetEmail().GetSubject(), subject)
+		expect.Expect(t, o.GetEmail().GetBody(), body)
+		expect.Expect(t, o.GetOTP().GetTimeStep(), 100)
+		expect.Expect(t, o.GetOTP().GetLength(), 4)
+		expect.Expect(t, o.AuthParams["scope"], scope)
+		expect.Expect(t, o.GetBruteForceProtection(), true)
+		expect.Expect(t, o.GetDisableSignup(), true)
+		expect.Expect(t, o.GetName(), name)
+		expect.Expect(t, g.GetName(), name)
+
+		t.Logf("%s\n", g)
+	})
+
+	t.Run("SMS", func(t *testing.T) {
+		name := fmt.Sprintf("Test-Connection-%d", time.Now().Unix())
+		from := "+17777777777"
+		template := "Your verification code is { code }}"
+		syntax := "liquid"
+		scope := "openid profile"
+		twilioSid := "abc132asdfasdf56"
+		twilioToken := "234127asdfsada23"
+		messagingServiceSID := "273248090982390423"
+		g := &Connection{
+			Name:     auth0.String(name),
+			Strategy: auth0.String("sms"),
+			Options: &ConnectionOptionsSMS{
+				From:     auth0.String(from),
+				Template: auth0.String(template),
+				Syntax:   auth0.String(syntax),
+				OTP: &ConnectionOptionsOTP{
+					TimeStep: auth0.Int(110),
+					Length:   auth0.Int(5),
+				},
+				AuthParams: map[string]string{
+					"scope": scope,
+				},
+				BruteForceProtection: auth0.Bool(true),
+				DisableSignup:        auth0.Bool(true),
+				Name:                 auth0.String(name),
+				TwilioSID:            auth0.String(twilioSid),
+				TwilioToken:          auth0.String(twilioToken),
+				MessagingServiceSID:  auth0.String(messagingServiceSID),
+			},
+		}
+
+		defer m.Connection.Delete(g.GetID())
+
+		err := m.Connection.Create(g)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		o, ok := g.Options.(*ConnectionOptionsSMS)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+
+		expect.Expect(t, o.GetTemplate(), template)
+		expect.Expect(t, o.GetFrom(), from)
+		expect.Expect(t, o.GetSyntax(), syntax)
+		expect.Expect(t, o.GetOTP().GetTimeStep(), 110)
+		expect.Expect(t, o.GetOTP().GetLength(), 5)
+		expect.Expect(t, o.AuthParams["scope"], scope)
+		expect.Expect(t, o.GetBruteForceProtection(), true)
+		expect.Expect(t, o.GetDisableSignup(), true)
+		expect.Expect(t, o.GetName(), name)
+		expect.Expect(t, g.GetName(), name)
+		expect.Expect(t, o.GetTwilioSID(), twilioSid)
+		expect.Expect(t, o.GetTwilioToken(), twilioToken)
+		expect.Expect(t, o.GetMessagingServiceSID(), messagingServiceSID)
 
 		t.Logf("%s\n", g)
 	})
