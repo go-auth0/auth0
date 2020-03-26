@@ -546,7 +546,7 @@ func (c *ConnectionOptionsAzureAD) Scopes() []string {
 }
 
 func (c *ConnectionOptionsAzureAD) SetScopes(enable bool, scopes ...string) {
-	tag.SetScopes(c, true, scopes...)
+	tag.SetScopes(c, enable, scopes...)
 }
 
 type ConnectionOptionsADFS struct {
