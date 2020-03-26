@@ -162,13 +162,13 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Email", func(t *testing.T) {
-		name := fmt.Sprintf("Test-Connection-%d", time.Now().Unix())
+		name := fmt.Sprintf("Test-Connection-Email-%d", time.Now().Unix())
 		from := "{{application.name}} <test@example.com>"
 		subject := "Email Login - {{application.name}}"
 		syntax := "liquid"
 		body := "<html><body>email contents</body></html>"
 		scope := "openid profile"
-		g := &Connection{
+		e := &Connection{
 			Name:     auth0.String(name),
 			Strategy: auth0.String("email"),
 			Options: &ConnectionOptionsEmail{
@@ -191,14 +191,14 @@ func TestConnection(t *testing.T) {
 			},
 		}
 
-		defer m.Connection.Delete(g.GetID())
+		defer m.Connection.Delete(e.GetID())
 
-		err := m.Connection.Create(g)
+		err := m.Connection.Create(e)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		o, ok := g.Options.(*ConnectionOptionsEmail)
+		o, ok := e.Options.(*ConnectionOptionsEmail)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
@@ -213,13 +213,12 @@ func TestConnection(t *testing.T) {
 		expect.Expect(t, o.GetBruteForceProtection(), true)
 		expect.Expect(t, o.GetDisableSignup(), true)
 		expect.Expect(t, o.GetName(), name)
-		expect.Expect(t, g.GetName(), name)
 
-		t.Logf("%s\n", g)
+		t.Logf("%s\n", e)
 	})
 
 	t.Run("SMS", func(t *testing.T) {
-		name := fmt.Sprintf("Test-Connection-%d", time.Now().Unix())
+		name := fmt.Sprintf("Test-Connection-SMS-%d", time.Now().Unix())
 		from := "+17777777777"
 		template := "Your verification code is { code }}"
 		syntax := "liquid"
