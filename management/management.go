@@ -52,6 +52,9 @@ type Management struct {
 	// HookManager manages Auth0 Hooks
 	Hook *HookManager
 
+	/// HookSecretsManager manages Auth0 Hook Secrets
+	HookSecrets *HookSecretsManager
+
 	// RuleManager manages Auth0 Rule Configurations.
 	RuleConfig *RuleConfigManager
 
@@ -149,6 +152,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Role = newRoleManager(m)
 	m.Rule = newRuleManager(m)
 	m.Hook = newHookManager(m)
+	m.HookSecrets = newHookSecretsManager(m)
 	m.RuleConfig = newRuleConfigManager(m)
 	m.EmailTemplate = newEmailTemplateManager(m)
 	m.Email = newEmailManager(m)
