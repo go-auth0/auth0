@@ -2,8 +2,8 @@
 
 [![GoDoc](https://godoc.org/gopkg.in/auth0.v4?status.svg)](https://godoc.org/gopkg.in/auth0.v4)
 [![Build](https://github.com/go-auth0/auth0/workflows/Build/badge.svg)](https://github.com/go-auth0/auth0/actions?query=branch%3Amaster)
-[![Maintainability](https://img.shields.io/codeclimate/maintainability/go-auth0/auth0)](https://codeclimate.com/github/go-auth0/auth0/maintainability)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/go-auth0/auth0)](https://codeclimate.com/github/go-auth0/auth0/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/bf038abb77ffb7c94cde/maintainability)](https://codeclimate.com/github/go-auth0/auth0/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/bf038abb77ffb7c94cde/test_coverage)](https://codeclimate.com/github/go-auth0/auth0/test_coverage)
 
 ## Documentation
 
