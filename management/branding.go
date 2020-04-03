@@ -53,35 +53,23 @@ type jsonPageBackgroundGradient struct {
 // It is required to handle the json field page_background, which can either
 // be a hex color string, or an object describing a gradient.
 func (bc *BrandingColors) MarshalJSON() ([]byte, error) {
-	var data interface{} = struct {
-		Primary *string `json:"primary,omitempty"`
-	}{
-		Primary: bc.Primary,
+	type brandingColors BrandingColors
+	type brandingColorsWrapper struct {
+		*brandingColors
+		RawPageBackground interface{} `json:"page_background,omitempty"`
 	}
 
-	if bc.PageBackground != nil {
-		data = struct {
-			Primary *string `json:"primary,omitempty"`
-			*jsonPageBackgroundSolid
-		}{
-			Primary: bc.Primary,
-			jsonPageBackgroundSolid: &jsonPageBackgroundSolid{
-				PageBackground: bc.PageBackground,
-			},
-		}
+	alias := &brandingColorsWrapper{(*brandingColors)(bc), nil}
+
+	if bc.PageBackground != nil && bc.PageBackgroundGradient != nil {
+		return nil, fmt.Errorf("only one of PageBackground and PageBackgroundGradient is allowed")
+	} else if bc.PageBackground != nil {
+		alias.RawPageBackground = bc.PageBackground
 	} else if bc.PageBackgroundGradient != nil {
-		data = struct {
-			Primary *string `json:"primary,omitempty"`
-			*jsonPageBackgroundGradient
-		}{
-			Primary: bc.Primary,
-			jsonPageBackgroundGradient: &jsonPageBackgroundGradient{
-				PageBackgroundGradient: bc.PageBackgroundGradient,
-			},
-		}
+		alias.RawPageBackground = bc.PageBackgroundGradient
 	}
 
-	return json.Marshal(data)
+	return json.Marshal(alias)
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
