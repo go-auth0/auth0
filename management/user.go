@@ -2,7 +2,8 @@ package management
 
 import (
 	"encoding/json"
-	"fmt"
+	"reflect"
+	"strconv"
 	"time"
 )
 
@@ -88,39 +89,62 @@ type User struct {
 
 type UserIdentity struct {
 	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"user_id,omitempty"`
+	UserID     *string `json:"-"`
 	Provider   *string `json:"provider,omitempty"`
 	IsSocial   *bool   `json:"isSocial,omitempty"`
 }
 
-// ambiguousUserIdentity is an exact copy of UserIdentity type but with a UserID being
-// an interface. This allows us to unmarshal Auth0 response no mater what type of data
-// Auth0 returns for a `user_id` key.
-type ambiguousUserIdentity struct {
-	Connection *string     `json:"connection,omitempty"`
-	UserID     interface{} `json:"user_id,omitempty"`
-	Provider   *string     `json:"provider,omitempty"`
-	IsSocial   *bool       `json:"isSocial,omitempty"`
-}
-
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
-// We have to use a custom one due to a bug in Auth0 - for requests to /users/<user-id>
-// Auth0 might return a number for `user_id` instead of a string.
+//
+// We have to use a custom one due to a bug in the Auth0 Management API which
+// might return a number for `user_id` instead of a string.
+//
 // See https://community.auth0.com/t/users-user-id-returns-inconsistent-type-for-identities-user-id/39236
-func (i *UserIdentity) UnmarshalJSON(data []byte) error {
-	ambiguousIdentity := ambiguousUserIdentity{}
-	if err := json.Unmarshal(data, &ambiguousIdentity); err != nil {
+func (i *UserIdentity) UnmarshalJSON(b []byte) error {
+
+	type userIdentity UserIdentity
+	type userIdentityAlias struct {
+		*userIdentity
+		RawUserID interface{} `json:"user_id,omitempty"`
+	}
+
+	alias := &userIdentityAlias{(*userIdentity)(i), nil}
+
+	err := json.Unmarshal(b, alias)
+	if err != nil {
 		return err
 	}
 
-	i.Connection = ambiguousIdentity.Connection
-	i.Provider = ambiguousIdentity.Provider
-	i.IsSocial = ambiguousIdentity.IsSocial
-
-	userID := fmt.Sprintf("%v", ambiguousIdentity.UserID)
-	i.UserID = &userID
+	if alias.RawUserID != nil {
+		var id string
+		switch rawID := alias.RawUserID.(type) {
+		case string:
+			id = rawID
+		case float64:
+			id = strconv.Itoa(int(rawID))
+		default:
+			panic(reflect.TypeOf(rawID))
+		}
+		alias.UserID = &id
+	}
 
 	return nil
+}
+
+func (i *UserIdentity) MarshalJSON() ([]byte, error) {
+
+	type userIdentity UserIdentity
+	type userIdentityAlias struct {
+		*userIdentity
+		RawUserID interface{} `json:"user_id,omitempty"`
+	}
+
+	alias := &userIdentityAlias{userIdentity: (*userIdentity)(i)}
+	if i.UserID != nil {
+		alias.RawUserID = i.UserID
+	}
+
+	return json.Marshal(alias)
 }
 
 type userBlock struct {
