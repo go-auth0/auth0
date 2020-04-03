@@ -131,12 +131,11 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("Roles", func(t *testing.T) {
-		var roles []*Role
-		roles, err = m.User.Roles(auth0.StringValue(u.ID))
+		l, err := m.User.Roles(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", roles)
+		t.Logf("%v\n", l.Roles)
 	})
 
 	t.Run("AssignRoles", func(t *testing.T) {
@@ -156,12 +155,11 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("Permissions", func(t *testing.T) {
-		var permissions []*Permission
-		permissions, err = m.User.Permissions(auth0.StringValue(u.ID))
+		l, err := m.User.Permissions(auth0.StringValue(u.ID))
 		if err != nil {
 			t.Fatal(err)
 		}
-		t.Logf("%v\n", permissions)
+		t.Logf("%v\n", l.Permissions)
 	})
 
 	t.Run("AssignPermissions", func(t *testing.T) {
