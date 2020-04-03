@@ -1,3 +1,10 @@
+## v4.2.0
+
+* `management.UserManager`: `Roles()` returns `RoleList` ([#109](https://github.com/go-auth0/auth0/pull/109)).
+* `management.UserManager`: `Permissions()` returns `PermissionList`.
+* `management.RoleManager`: `Users()` returns `UserList`.
+* `management.RoleManager`: `Permissions()` returns `PermissionList`.
+
 ## v4.1.0
 
 * `management.ConnectionOptionsEmail`, `management.ConnectionOptionsSMS`: add `authParams`.
