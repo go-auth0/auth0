@@ -1,6 +1,11 @@
 package management
 
-import "time"
+import (
+	"encoding/json"
+	"reflect"
+	"strconv"
+	"time"
+)
 
 // User represents an Auth0 user resource
 //
@@ -84,9 +89,62 @@ type User struct {
 
 type UserIdentity struct {
 	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"user_id,omitempty"`
+	UserID     *string `json:"-"`
 	Provider   *string `json:"provider,omitempty"`
 	IsSocial   *bool   `json:"isSocial,omitempty"`
+}
+
+// UnmarshalJSON is a custom deserializer for the UserIdentity type.
+//
+// We have to use a custom one due to a bug in the Auth0 Management API which
+// might return a number for `user_id` instead of a string.
+//
+// See https://community.auth0.com/t/users-user-id-returns-inconsistent-type-for-identities-user-id/39236
+func (i *UserIdentity) UnmarshalJSON(b []byte) error {
+
+	type userIdentity UserIdentity
+	type userIdentityAlias struct {
+		*userIdentity
+		RawUserID interface{} `json:"user_id,omitempty"`
+	}
+
+	alias := &userIdentityAlias{(*userIdentity)(i), nil}
+
+	err := json.Unmarshal(b, alias)
+	if err != nil {
+		return err
+	}
+
+	if alias.RawUserID != nil {
+		var id string
+		switch rawID := alias.RawUserID.(type) {
+		case string:
+			id = rawID
+		case float64:
+			id = strconv.Itoa(int(rawID))
+		default:
+			panic(reflect.TypeOf(rawID))
+		}
+		alias.UserID = &id
+	}
+
+	return nil
+}
+
+func (i *UserIdentity) MarshalJSON() ([]byte, error) {
+
+	type userIdentity UserIdentity
+	type userIdentityAlias struct {
+		*userIdentity
+		RawUserID interface{} `json:"user_id,omitempty"`
+	}
+
+	alias := &userIdentityAlias{userIdentity: (*userIdentity)(i)}
+	if i.UserID != nil {
+		alias.RawUserID = i.UserID
+	}
+
+	return json.Marshal(alias)
 }
 
 type userBlock struct {

@@ -1,10 +1,12 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
 	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v4/internal/testing/expect"
 )
 
 func TestUser(t *testing.T) {
@@ -259,5 +261,38 @@ func TestUser(t *testing.T) {
 			t.Error("unexpected number of users found")
 		}
 		t.Logf("%v\n", us)
+	})
+}
+
+func TestUserIdentity(t *testing.T) {
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for u, expected := range map[*UserIdentity]string{
+			&UserIdentity{}:                            `{}`,
+			&UserIdentity{UserID: auth0.String("1")}:   `{"user_id":"1"}`,
+			&UserIdentity{UserID: auth0.String("foo")}: `{"user_id":"foo"}`,
+		} {
+			b, err := json.Marshal(u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, string(b), expected)
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		for b, expected := range map[string]*UserIdentity{
+			`{}`:                &UserIdentity{UserID: nil},
+			`{"user_id":1}`:     &UserIdentity{UserID: auth0.String("1")},
+			`{"user_id":"1"}`:   &UserIdentity{UserID: auth0.String("1")},
+			`{"user_id":"foo"}`: &UserIdentity{UserID: auth0.String("foo")},
+		} {
+			var u UserIdentity
+			err := json.Unmarshal([]byte(b), &u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, u.GetUserID(), expected.GetUserID())
+		}
 	})
 }
