@@ -1,6 +1,10 @@
 package management
 
-import "time"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
 // User represents an Auth0 user resource
 //
@@ -87,6 +91,36 @@ type UserIdentity struct {
 	UserID     *string `json:"user_id,omitempty"`
 	Provider   *string `json:"provider,omitempty"`
 	IsSocial   *bool   `json:"isSocial,omitempty"`
+}
+
+// ambiguousUserIdentity is an exact copy of UserIdentity type but with a UserID being
+// an interface. This allows us to unmarshal Auth0 response no mater what type of data
+// Auth0 returns for a `user_id` key.
+type ambiguousUserIdentity struct {
+	Connection *string     `json:"connection,omitempty"`
+	UserID     interface{} `json:"user_id,omitempty"`
+	Provider   *string     `json:"provider,omitempty"`
+	IsSocial   *bool       `json:"isSocial,omitempty"`
+}
+
+// UnmarshalJSON is a custom deserializer for the UserIdentity type.
+// We have to use a custom one due to a bug in Auth0 - for requests to /users/<user-id>
+// Auth0 might return a number for `user_id` instead of a string.
+// See https://community.auth0.com/t/users-user-id-returns-inconsistent-type-for-identities-user-id/39236
+func (i *UserIdentity) UnmarshalJSON(data []byte) error {
+	ambiguousIdentity := ambiguousUserIdentity{}
+	if err := json.Unmarshal(data, &ambiguousIdentity); err != nil {
+		return err
+	}
+
+	i.Connection = ambiguousIdentity.Connection
+	i.Provider = ambiguousIdentity.Provider
+	i.IsSocial = ambiguousIdentity.IsSocial
+
+	userID := fmt.Sprintf("%v", ambiguousIdentity.UserID)
+	i.UserID = &userID
+
+	return nil
 }
 
 type userBlock struct {
