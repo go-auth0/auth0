@@ -1,6 +1,7 @@
-## latest
+## v4.1.0
 
 * `management.ConnectionOptionsEmail`, `management.ConnectionOptionsSMS`: add `authParams`.
+* `management.UserIdentity`: correctly marshal/unmarshal integer `user_id`'s ([#101](https://github.com/go-auth0/auth0/issues/101), [#102](https://github.com/go-auth0/auth0/pull/102)). 
 
 ## v4.0.1
 
