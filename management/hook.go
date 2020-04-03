@@ -30,6 +30,7 @@ type HookList struct {
 	Hooks []*Hook `json:"hooks"`
 }
 
+// HookSecrets are the secret keys and values associated with a hook
 type HookSecrets map[string]string
 
 type HookManager struct {
@@ -80,48 +81,48 @@ func (m *HookManager) List(opts ...ListOption) (r *HookList, err error) {
 	return
 }
 
-// Creates hook secrets
+// CreateSecrets creates hook secrets on a hook that has no secrets defined
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/post_secrets
-func (m *HookManager) CreateSecrets(hookId string, r *HookSecrets) (err error) {
-	return m.post(m.uri("hooks", hookId, "secrets"), r)
+func (m *HookManager) CreateSecrets(hookID string, r *HookSecrets) (err error) {
+	return m.post(m.uri("hooks", hookID, "secrets"), r)
 }
 
-// Update hook secrets
+// UpdateSecrets updates the values of a hook's secrets that have previously been created
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
-func (m *HookManager) UpdateSecrets(hookId string, r *HookSecrets) (err error) {
-	return m.patch(m.uri("hooks", hookId, "secrets"), r)
+func (m *HookManager) UpdateSecrets(hookID string, r *HookSecrets) (err error) {
+	return m.patch(m.uri("hooks", hookID, "secrets"), r)
 }
 
-// Reads hook secrets
+// Secrets list all secrets configured for the given hook
 //
 // Note: For security, hook secret values cannot be retrieved outside rule
 // execution (they all appear as "_VALUE_NOT_SHOWN_")
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_secrets
-func (m *HookManager) Secrets(hookId string) (r *HookSecrets, err error) {
-	err = m.get(m.uri("hooks", hookId, "secrets"), &r)
+func (m *HookManager) Secrets(hookID string) (r *HookSecrets, err error) {
+	err = m.get(m.uri("hooks", hookID, "secrets"), &r)
 	return
 }
 
-// Delete a list of hook secret keys from a given hook's secrets identified by its hookId and the keys
+// RemoveSecrets removes a list of hook secret keys from a given hook's secrets by the keys of the secrets
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/delete_secrets
-func (m *HookManager) RemoveSecrets(hookId string, keys ...string) (err error) {
-	return m.request("DELETE", m.uri("hooks", hookId, "secrets"), keys)
+func (m *HookManager) RemoveSecrets(hookID string, keys ...string) (err error) {
+	return m.request("DELETE", m.uri("hooks", hookID, "secrets"), keys)
 }
 
-// Remove all hook secrets associated with a given hook
-func (m *HookManager) RemoveAllSecrets(hookId string) (err error) {
-	r, err := m.Secrets(hookId)
+// RemoveAllSecrets removes all secrets associated with a given hook
+func (m *HookManager) RemoveAllSecrets(hookID string) (err error) {
+	r, err := m.Secrets(hookID)
 	if err == nil {
-		err = m.RemoveSecrets(hookId, r.Keys()...)
+		err = m.RemoveSecrets(hookID, r.Keys()...)
 	}
 	return err
 }
 
-// Gets the configured hook secret keys
+// Keys gets the configured hook secret keys
 func (s *HookSecrets) Keys() []string {
 	keys := make([]string, len(*s))
 	i := 0
