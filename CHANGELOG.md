@@ -1,3 +1,7 @@
+## v4.1.1
+
+* `management.Branding`: Support for both `BrandingColors.PageBackgroundGradient` as well as `BrandingColors.PageBackground`. ([#99](https://github.com/go-auth0/auth0/pull/99))
+
 ## v4.1.0
 
 * `management.ConnectionOptionsEmail`, `management.ConnectionOptionsSMS`: add `authParams`.
