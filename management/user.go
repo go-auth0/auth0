@@ -265,9 +265,10 @@ func (m *UserManager) ListByEmail(email string, opts ...ListOption) (us []*User,
 // Roles lists all roles associated with a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_user_roles
-func (m *UserManager) Roles(id string, opts ...ListOption) (roles []*Role, err error) {
-	err = m.get(m.uri("users", id, "roles")+m.q(opts), &roles)
-	return roles, err
+func (m *UserManager) Roles(id string, opts ...ListOption) (r *RoleList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("users", id, "roles")+m.q(opts), &r)
+	return r, err
 }
 
 // AssignRoles assignes roles to a user.
@@ -297,9 +298,10 @@ func (m *UserManager) RemoveRoles(id string, roles ...*Role) error {
 // Permissions lists the permissions associated to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_permissions
-func (m *UserManager) Permissions(id string, opts ...ListOption) (permissions []*Permission, err error) {
-	err = m.get(m.uri("users", id, "permissions")+m.q(opts), &permissions)
-	return permissions, err
+func (m *UserManager) Permissions(id string, opts ...ListOption) (p *PermissionList, err error) {
+	opts = m.defaults(opts)
+	err = m.get(m.uri("users", id, "permissions")+m.q(opts), &p)
+	return p, err
 }
 
 // AssignPermissions assigns permissions to the user.
