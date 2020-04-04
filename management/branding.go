@@ -2,6 +2,7 @@ package management
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type Branding struct {
@@ -52,35 +53,23 @@ type jsonPageBackgroundGradient struct {
 // It is required to handle the json field page_background, which can either
 // be a hex color string, or an object describing a gradient.
 func (bc *BrandingColors) MarshalJSON() ([]byte, error) {
-	var data interface{} = struct {
-		Primary *string `json:"primary,omitempty"`
-	}{
-		Primary: bc.Primary,
+	type brandingColors BrandingColors
+	type brandingColorsWrapper struct {
+		*brandingColors
+		RawPageBackground interface{} `json:"page_background,omitempty"`
 	}
 
-	if bc.PageBackground != nil {
-		data = struct {
-			Primary *string `json:"primary,omitempty"`
-			*jsonPageBackgroundSolid
-		}{
-			Primary: bc.Primary,
-			jsonPageBackgroundSolid: &jsonPageBackgroundSolid{
-				PageBackground: bc.PageBackground,
-			},
-		}
+	alias := &brandingColorsWrapper{(*brandingColors)(bc), nil}
+
+	if bc.PageBackground != nil && bc.PageBackgroundGradient != nil {
+		return nil, fmt.Errorf("only one of PageBackground and PageBackgroundGradient is allowed")
+	} else if bc.PageBackground != nil {
+		alias.RawPageBackground = bc.PageBackground
 	} else if bc.PageBackgroundGradient != nil {
-		data = struct {
-			Primary *string `json:"primary,omitempty"`
-			*jsonPageBackgroundGradient
-		}{
-			Primary: bc.Primary,
-			jsonPageBackgroundGradient: &jsonPageBackgroundGradient{
-				PageBackgroundGradient: bc.PageBackgroundGradient,
-			},
-		}
+		alias.RawPageBackground = bc.PageBackgroundGradient
 	}
 
-	return json.Marshal(data)
+	return json.Marshal(alias)
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
@@ -88,33 +77,47 @@ func (bc *BrandingColors) MarshalJSON() ([]byte, error) {
 // It is required to handle the json field page_background, which can either
 // be a hex color string, or an object describing a gradient.
 func (bc *BrandingColors) UnmarshalJSON(data []byte) error {
-	// Unmarshal common fields
-	type JSONBrandingColors BrandingColors
+	type brandingColors BrandingColors
+	type brandingColorsWrapper struct {
+		*brandingColors
+		RawPageBackground interface{} `json:"page_background,omitempty"`
+	}
 
-	var commonBrandingColors JSONBrandingColors
+	alias := &brandingColorsWrapper{(*brandingColors)(bc), nil}
 
-	err := json.Unmarshal(data, &commonBrandingColors)
+	err := json.Unmarshal(data, alias)
 	if err != nil {
 		return err
 	}
 
-	bc.Primary = commonBrandingColors.Primary
+	if alias.RawPageBackground != nil {
+		// Use type-switch to determine wether its a constant or gradient page background
+		switch rawPageBackground := alias.RawPageBackground.(type) {
+		case string:
+			// Constant Page Background
+			bc.PageBackground = &rawPageBackground
+			bc.PageBackgroundGradient = nil
 
-	// Unmarshal page_background
-	// Can be either a string with solid color
-	var solidBrandingColor jsonPageBackgroundSolid
-	err = json.Unmarshal(data, &solidBrandingColor)
-	if err == nil {
-		bc.PageBackground = solidBrandingColor.PageBackground
-		bc.PageBackgroundGradient = nil
-	}
+		case map[string]interface{}:
+			// Gradient Page Background
+			gradient := &BrandingPageBackgroundGradient{}
 
-	// Or object describing a color-gradient
-	var gradientBrandingColor jsonPageBackgroundGradient
-	err = json.Unmarshal(data, &gradientBrandingColor)
-	if err == nil {
-		bc.PageBackgroundGradient = gradientBrandingColor.PageBackgroundGradient
-		bc.PageBackground = nil
+			// Marshal map back to JSON to Unmarshal into correct struct
+			gradientJSON, err := json.Marshal(rawPageBackground)
+			if err != nil {
+				return err
+			}
+
+			err = json.Unmarshal(gradientJSON, gradient)
+			if err != nil {
+				return err
+			}
+
+			bc.PageBackgroundGradient = gradient
+			bc.PageBackground = nil
+		default:
+			return fmt.Errorf("unexpected type for field page_background")
+		}
 	}
 
 	return nil
