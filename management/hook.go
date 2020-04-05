@@ -117,7 +117,10 @@ func (m *HookManager) RemoveSecrets(hookID string, keys ...string) (err error) {
 func (m *HookManager) RemoveAllSecrets(hookID string) (err error) {
 	r, err := m.Secrets(hookID)
 	if err == nil {
-		err = m.RemoveSecrets(hookID, r.Keys()...)
+        keys := r.Keys()
+        if len(keys) > 0 {
+            err = m.RemoveSecrets(hookID, keys...)
+        }
 	}
 	return err
 }
