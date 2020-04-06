@@ -130,9 +130,7 @@ func (s *HookSecrets) Keys() []string {
 	keys := make([]string, len(*s))
 	i := 0
 	for k := range *s {
-		if len(k) > 0 {
-			keys[i] = k
-		}
+        keys[i] = k
 		i++
 	}
 	return keys
