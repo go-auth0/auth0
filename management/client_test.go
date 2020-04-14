@@ -1,11 +1,13 @@
 package management
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
 	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v4/internal/testing/expect"
 )
 
 func TestClient(t *testing.T) {
@@ -75,6 +77,46 @@ func TestClient(t *testing.T) {
 		err = m.Client.Delete(c.GetClientID())
 		if err != nil {
 			t.Error(err)
+		}
+	})
+}
+
+func TestClientJwtConfig(t *testing.T) {
+	t.Run("Marshal", func(t *testing.T) {
+		for name, tt := range map[string]struct {
+			in       *ClientJWTConfiguration
+			expected string
+		}{
+			"Nil":         {&ClientJWTConfiguration{Scopes: nil}, `{}`},
+			"NilMap":      {&ClientJWTConfiguration{Scopes: (map[string]interface{})(nil)}, `{}`},
+			"EmptyMap":    {&ClientJWTConfiguration{Scopes: map[string]interface{}{}}, `{"scopes":{}}`},
+			"NonEmptyMap": {&ClientJWTConfiguration{Scopes: map[string]interface{}{"foo": "bar"}}, `{"scopes":{"foo":"bar"}}`},
+		} {
+			t.Run(name, func(t *testing.T) {
+				b, err := json.Marshal(tt.in)
+				if err != nil {
+					t.Error(err)
+				}
+				expect.Expect(t, string(b), tt.expected)
+			})
+		}
+	})
+	t.Run("Unmarshal", func(t *testing.T) {
+		for name, tt := range map[string]struct {
+			in       string
+			expected *ClientJWTConfiguration
+		}{
+			"Nil":         {`{}`, &ClientJWTConfiguration{Scopes: nil}},
+			"EmptyMap":    {`{"scopes":{}}`, &ClientJWTConfiguration{Scopes: map[string]interface{}{}}},
+			"NonEmptyMap": {`{"scopes":{"foo":"bar"}}`, &ClientJWTConfiguration{Scopes: map[string]interface{}{"foo": "bar"}}},
+		} {
+			t.Run(name, func(t *testing.T) {
+				var out ClientJWTConfiguration
+				if err := json.Unmarshal([]byte(tt.in), &out); err != nil {
+					t.Error(err)
+				}
+				expect.Expect(t, &out, tt.expected)
+			})
 		}
 	})
 }

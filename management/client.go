@@ -1,5 +1,7 @@
 package management
 
+import "encoding/json"
+
 type Client struct {
 	// The name of the client
 	Name *string `json:"name,omitempty"`
@@ -94,10 +96,44 @@ type ClientJWTConfiguration struct {
 	// true
 	SecretEncoded *bool `json:"secret_encoded,omitempty"`
 
-	Scopes interface{} `json:"scopes,omitempty"`
+	Scopes map[string]interface{} `json:"-"`
 
 	// Algorithm used to sign JWTs. Can be "HS256" or "RS256"
 	Algorithm *string `json:"alg,omitempty"`
+}
+
+func (jwt *ClientJWTConfiguration) MarshalJSON() ([]byte, error) {
+	type alias ClientJWTConfiguration
+	type aliasWrap struct {
+		alias
+		RawScopes json.RawMessage `json:"scopes,omitempty"`
+	}
+	a := aliasWrap{alias(*jwt), nil}
+	if jwt.Scopes != nil {
+		b, err := json.Marshal(jwt.Scopes)
+		if err != nil {
+			return nil, err
+		}
+		a.RawScopes = b
+	}
+	return json.Marshal(a)
+}
+
+func (jwt *ClientJWTConfiguration) UnmarshalJSON(b []byte) error {
+	type alias ClientJWTConfiguration
+	type aliasWrap struct {
+		alias
+		RawScopes json.RawMessage `json:"scopes,omitempty"`
+	}
+	a := aliasWrap{alias(*jwt), nil}
+	if err := json.Unmarshal(b, &a); err != nil {
+		return err
+	}
+	if a.RawScopes != nil {
+		json.Unmarshal(a.RawScopes, &a.Scopes)
+	}
+	jwt.Scopes = a.Scopes
+	return nil
 }
 
 type ClientNativeSocialLogin struct {
