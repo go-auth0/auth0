@@ -1,4 +1,4 @@
-## v4.2.1
+## v4.3.5
 
 * `management.ConnectionOptions*`: `SetScopes()` was ignoring the `enable` argument.
 
