@@ -161,6 +161,19 @@ func TestConnection(t *testing.T) {
 		t.Logf("%s\n", g)
 	})
 
+	t.Run("OIDC", func(t *testing.T) {
+		o := &ConnectionOptionsOIDC{}
+		expect.Expect(t, len(o.Scopes()), 0)
+
+		o.SetScopes(true, "foo", "bar", "baz")
+		expect.Expect(t, len(o.Scopes()), 3)
+		expect.Expect(t, o.Scopes(), []string{"bar", "baz", "foo"})
+
+		o.SetScopes(false, "baz")
+		expect.Expect(t, len(o.Scopes()), 2)
+		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+	})
+
 	t.Run("Email", func(t *testing.T) {
 		name := fmt.Sprintf("Test-Connection-Email-%d", time.Now().Unix())
 		from := "{{application.name}} <test@example.com>"
