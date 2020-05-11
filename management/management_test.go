@@ -1,9 +1,11 @@
 package management
 
 import (
+	"net/http"
 	"net/url"
 	"os"
 	"testing"
+	"time"
 )
 
 var m *Management
@@ -117,5 +119,22 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func TestWithHTTPClient(t *testing.T) {
+	var err error
+
+	timeout := time.Hour * 42
+	expected := &timeout
+	client := &http.Client{Timeout: timeout}
+
+	m, err = New(domain, clientID, clientSecret, WithHTTPClient(client))
+	if err != nil {
+		panic(err)
+	}
+
+	if m.http.Timeout != *expected {
+		t.Errorf("Expected %q, but got %q", expected, m.http.Timeout)
 	}
 }

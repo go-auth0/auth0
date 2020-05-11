@@ -127,17 +127,18 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+	if m.http == nil {
+		oauth2 := client.OAuth2(m.url, clientID, clientSecret)
 
-	_, err = oauth2.Token(m.ctx)
-	if err != nil {
-		return nil, err
+		_, err = oauth2.Token(m.ctx)
+		if err != nil {
+			return nil, err
+		}
+		m.http = client.New(m.ctx, oauth2)
+		m.http = client.WrapDebug(m.http, m.debug)
+		m.http = client.WrapUserAgent(m.http, m.userAgent)
+		m.http = client.WrapRateLimit(m.http)
 	}
-
-	m.http = client.New(m.ctx, oauth2)
-	m.http = client.WrapDebug(m.http, m.debug)
-	m.http = client.WrapUserAgent(m.http, m.userAgent)
-	m.http = client.WrapRateLimit(m.http)
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
@@ -288,6 +289,14 @@ func WithContext(ctx context.Context) apiOption {
 func WithUserAgent(userAgent string) apiOption {
 	return func(m *Management) {
 		m.userAgent = userAgent
+	}
+}
+
+// WithHTTPClient configures the management client to use the provided
+// http.Client instead of the default client.
+func WithHTTPClient(httpClient *http.Client) apiOption {
+	return func(m *Management) {
+		m.http = httpClient
 	}
 }
 
