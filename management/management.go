@@ -135,10 +135,11 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 			return nil, err
 		}
 		m.http = client.New(m.ctx, oauth2)
-		m.http = client.WrapDebug(m.http, m.debug)
-		m.http = client.WrapUserAgent(m.http, m.userAgent)
 		m.http = client.WrapRateLimit(m.http)
 	}
+
+	m.http = client.WrapDebug(m.http, m.debug)
+	m.http = client.WrapUserAgent(m.http, m.userAgent)
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)

@@ -41,13 +41,38 @@ func WrapRateLimit(c *http.Client) *http.Client {
 	}
 }
 
-func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			req.Header.Set("User-Agent", userAgent)
-			return c.Transport.RoundTrip(req)
-		}),
+type Transport struct {
+	roundTripper http.RoundTripper
+	headers      map[string]string
+	debug        bool
+}
+
+func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	for key, value := range t.headers {
+		req.Header.Set(key, value)
 	}
+	if t.debug {
+		dumpRequest(req)
+		res, err := t.roundTripper.RoundTrip(req)
+		if err != nil {
+			return res, err
+		}
+		dumpResponse(res)
+		return res, nil
+	}
+	return t.roundTripper.RoundTrip(req)
+}
+
+func NewTransport(roundTripper http.RoundTripper, headers map[string]string, debug bool) *Transport {
+	if roundTripper == nil {
+		roundTripper = http.DefaultTransport
+	}
+	return &Transport{roundTripper, headers, debug}
+}
+
+func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
+	c.Transport = NewTransport(c.Transport, map[string]string{"User-Agent": userAgent}, false)
+	return c
 }
 
 type RoundTripFunc func(*http.Request) (*http.Response, error)
@@ -70,17 +95,8 @@ func WrapDebug(c *http.Client, debug bool) *http.Client {
 	if !debug {
 		return c
 	}
-	return &http.Client{
-		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			dumpRequest(req)
-			res, err := c.Transport.RoundTrip(req)
-			if err != nil {
-				return res, err
-			}
-			dumpResponse(res)
-			return res, nil
-		}),
-	}
+	c.Transport = NewTransport(c.Transport, map[string]string{}, debug)
+	return c
 }
 
 func New(ctx context.Context, c *clientcredentials.Config) *http.Client {

@@ -2,6 +2,7 @@ package management
 
 import (
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"os"
 	"testing"
@@ -136,5 +137,27 @@ func TestWithHTTPClient(t *testing.T) {
 
 	if m.http.Timeout != *expected {
 		t.Errorf("Expected %q, but got %q", expected, m.http.Timeout)
+	}
+
+	client = &http.Client{}
+
+	m, err = New(domain, clientID, clientSecret, WithHTTPClient(client))
+	if err != nil {
+		panic(err)
+	}
+
+	if m.http.Timeout != 0 {
+		t.Errorf("Expected %q, but got %q", 0, m.http.Timeout)
+	}
+
+	jar, _ := cookiejar.New(&cookiejar.Options{})
+	client = &http.Client{Jar: jar}
+	m, err = New(domain, clientID, clientSecret, WithHTTPClient(client))
+	if err != nil {
+		panic(err)
+	}
+
+	if m.http.Jar != jar {
+		t.Errorf("Expected %#v, but got %#v", jar, m.http.Jar)
 	}
 }
