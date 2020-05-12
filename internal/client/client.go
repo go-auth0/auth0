@@ -20,25 +20,24 @@ import (
 var UserAgent = fmt.Sprintf("Go-Auth0-SDK/%s", auth0.Version)
 
 func WrapRateLimit(c *http.Client) *http.Client {
-	return &http.Client{
-		Transport: rehttp.NewTransport(
-			c.Transport,
-			func(attempt rehttp.Attempt) bool {
-				if attempt.Response == nil {
-					return false
-				}
-				return attempt.Response.StatusCode == http.StatusTooManyRequests
-			},
-			func(attempt rehttp.Attempt) time.Duration {
-				resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
-				resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
-				if err != nil {
-					resetAtUnix = time.Now().Add(5 * time.Second).Unix()
-				}
-				return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
-			},
-		),
-	}
+	c.Transport = rehttp.NewTransport(
+		c.Transport,
+		func(attempt rehttp.Attempt) bool {
+			if attempt.Response == nil {
+				return false
+			}
+			return attempt.Response.StatusCode == http.StatusTooManyRequests
+		},
+		func(attempt rehttp.Attempt) time.Duration {
+			resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
+			resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
+			if err != nil {
+				resetAtUnix = time.Now().Add(5 * time.Second).Unix()
+			}
+			return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
+		},
+	)
+	return c
 }
 
 type Transport struct {
@@ -73,12 +72,6 @@ func NewTransport(roundTripper http.RoundTripper, headers map[string]string, deb
 func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
 	c.Transport = NewTransport(c.Transport, map[string]string{"User-Agent": userAgent}, false)
 	return c
-}
-
-type RoundTripFunc func(*http.Request) (*http.Response, error)
-
-func (rf RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return rf(req)
 }
 
 func dumpRequest(r *http.Request) {
