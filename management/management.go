@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/oauth2/clientcredentials"
 	"gopkg.in/auth0.v4/internal/client"
 )
 
@@ -94,6 +95,7 @@ type Management struct {
 	timeout   time.Duration
 	debug     bool
 	ctx       context.Context
+	oauth2    *clientcredentials.Config
 
 	http *http.Client
 }
@@ -127,14 +129,17 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		option(m)
 	}
 
-	if m.http == nil {
-		oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
+	_, err = oauth2.Token(m.ctx)
+	if err != nil {
+		return nil, err
+	}
+	m.oauth2 = oauth2
 
-		_, err = oauth2.Token(m.ctx)
-		if err != nil {
-			return nil, err
-		}
-		m.http = client.New(m.ctx, oauth2)
+	if m.http == nil {
+		m.http = client.New(m.ctx, m.oauth2)
+	} else {
+		m.http = client.WrapHTTPClientWithOauth2(m.ctx, m.http, m.oauth2)
 	}
 
 	m.http = client.WrapDebug(m.http, m.debug)

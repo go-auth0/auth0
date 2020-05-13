@@ -92,6 +92,13 @@ func WrapDebug(c *http.Client, debug bool) *http.Client {
 	return c
 }
 
+func WrapHTTPClientWithOauth2(ctx context.Context, httpClient *http.Client, clientCredentials *clientcredentials.Config) *http.Client {
+	ctx = context.WithValue(oauth2.NoContext, oauth2.HTTPClient, httpClient)
+	client := oauth2.NewClient(ctx, clientCredentials.TokenSource(ctx))
+	httpClient.Transport = client.Transport
+	return httpClient
+}
+
 func New(ctx context.Context, c *clientcredentials.Config) *http.Client {
 	return oauth2.NewClient(ctx, c.TokenSource(ctx))
 }
