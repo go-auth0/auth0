@@ -41,9 +41,9 @@ func WrapRateLimit(c *http.Client) *http.Client {
 }
 
 type Transport struct {
-	roundTripper http.RoundTripper
-	headers      map[string]string
-	debug        bool
+	base    http.RoundTripper
+	headers map[string]string
+	debug   bool
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -52,21 +52,21 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 	if t.debug {
 		dumpRequest(req)
-		res, err := t.roundTripper.RoundTrip(req)
+		res, err := t.base.RoundTrip(req)
 		if err != nil {
 			return res, err
 		}
 		dumpResponse(res)
 		return res, nil
 	}
-	return t.roundTripper.RoundTrip(req)
+	return t.base.RoundTrip(req)
 }
 
-func NewTransport(roundTripper http.RoundTripper, headers map[string]string, debug bool) *Transport {
-	if roundTripper == nil {
-		roundTripper = http.DefaultTransport
+func NewTransport(base http.RoundTripper, headers map[string]string, debug bool) *Transport {
+	if base == nil {
+		base = http.DefaultTransport
 	}
-	return &Transport{roundTripper, headers, debug}
+	return &Transport{base, headers, debug}
 }
 
 func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
