@@ -3931,6 +3931,22 @@ func (u *User) GetCreatedAt() time.Time {
 	return *u.CreatedAt
 }
 
+// GetDescription returns the Description field if it's non-nil, zero value otherwise.
+func (u *User) GetDescription() string {
+	if u == nil || u.Description == nil {
+		return ""
+	}
+	return *u.Description
+}
+
+// GetDistinguishedName returns the DistinguishedName field if it's non-nil, zero value otherwise.
+func (u *User) GetDistinguishedName() string {
+	if u == nil || u.DistinguishedName == nil {
+		return ""
+	}
+	return *u.DistinguishedName
+}
+
 // GetEmail returns the Email field if it's non-nil, zero value otherwise.
 func (u *User) GetEmail() string {
 	if u == nil || u.Email == nil {
@@ -3979,6 +3995,22 @@ func (u *User) GetLastLogin() time.Time {
 	return *u.LastLogin
 }
 
+// GetLoginsCount returns the LoginsCount field.
+func (u *User) GetLoginsCount() *int32 {
+	if u == nil {
+		return nil
+	}
+	return u.LoginsCount
+}
+
+// GetManager returns the Manager field if it's non-nil, zero value otherwise.
+func (u *User) GetManager() string {
+	if u == nil || u.Manager == nil {
+		return ""
+	}
+	return *u.Manager
+}
+
 // GetName returns the Name field if it's non-nil, zero value otherwise.
 func (u *User) GetName() string {
 	if u == nil || u.Name == nil {
@@ -4025,6 +4057,22 @@ func (u *User) GetPicture() string {
 		return ""
 	}
 	return *u.Picture
+}
+
+// GetStatus returns the Status field if it's non-nil, zero value otherwise.
+func (u *User) GetStatus() string {
+	if u == nil || u.Status == nil {
+		return ""
+	}
+	return *u.Status
+}
+
+// GetTitle returns the Title field if it's non-nil, zero value otherwise.
+func (u *User) GetTitle() string {
+	if u == nil || u.Title == nil {
+		return ""
+	}
+	return *u.Title
 }
 
 // GetUpdatedAt returns the UpdatedAt field if it's non-nil, zero value otherwise.
