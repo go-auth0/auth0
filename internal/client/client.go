@@ -40,12 +40,14 @@ func WrapRateLimit(c *http.Client) *http.Client {
 	return c
 }
 
+// Transport is used to wrap http.Client.Transport when other wrap functions make changes to http.Client.
 type Transport struct {
 	base    http.RoundTripper
 	headers map[string]string
 	debug   bool
 }
 
+// RoundTrip ensures Transport satisfies http.RoundTripper adding the ability to set headers and enable debugging.
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	for key, value := range t.headers {
 		req.Header.Set(key, value)
@@ -62,7 +64,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.base.RoundTrip(req)
 }
 
-func NewTransport(base http.RoundTripper, headers map[string]string, debug bool) *Transport {
+func newTransport(base http.RoundTripper, headers map[string]string, debug bool) *Transport {
 	if base == nil {
 		base = http.DefaultTransport
 	}
@@ -70,7 +72,7 @@ func NewTransport(base http.RoundTripper, headers map[string]string, debug bool)
 }
 
 func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
-	c.Transport = NewTransport(c.Transport, map[string]string{"User-Agent": userAgent}, false)
+	c.Transport = newTransport(c.Transport, map[string]string{"User-Agent": userAgent}, false)
 	return c
 }
 
@@ -88,10 +90,11 @@ func WrapDebug(c *http.Client, debug bool) *http.Client {
 	if !debug {
 		return c
 	}
-	c.Transport = NewTransport(c.Transport, map[string]string{}, debug)
+	c.Transport = newTransport(c.Transport, map[string]string{}, debug)
 	return c
 }
 
+// WrapHTTPClientWithOauth2 is used to supply oauth2 support to a user provided http.Client.
 func WrapHTTPClientWithOauth2(ctx context.Context, httpClient *http.Client, clientCredentials *clientcredentials.Config) *http.Client {
 	ctx = context.WithValue(oauth2.NoContext, oauth2.HTTPClient, httpClient)
 	client := clientCredentials.Client(ctx)
