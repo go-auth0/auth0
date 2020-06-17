@@ -72,6 +72,8 @@ func TestConnection(t *testing.T) {
 				_, ok = c.Options.(*ConnectionOptionsAD)
 			case ConnectionStrategyAzureAD:
 				_, ok = c.Options.(*ConnectionOptionsAzureAD)
+			case ConnectionStrategySAML:
+				_, ok = c.Options.(*ConnectionOptionsSAML)
 			default:
 				_, ok = c.Options.(map[string]interface{})
 			}
@@ -289,5 +291,53 @@ func TestConnection(t *testing.T) {
 		expect.Expect(t, o.GetMessagingServiceSID(), messagingServiceSID)
 
 		t.Logf("%s\n", g)
+	})
+
+	t.Run("SAML", func(t *testing.T) {
+		g := &Connection{
+			Name:     auth0.Stringf("Test-SAML-Connection-%d", time.Now().Unix()),
+			Strategy: auth0.String("samlp"),
+			Options: &ConnectionOptionsSAML{
+				SignInEndpoint: auth0.String("https://saml.identity/provider"),
+				// Sample certificate from https://golang.org/src/crypto/x509/example_test.go
+				SigningCert: auth0.String(`-----BEGIN CERTIFICATE-----
+MIIDujCCAqKgAwIBAgIIE31FZVaPXTUwDQYJKoZIhvcNAQEFBQAwSTELMAkGA1UE
+BhMCVVMxEzARBgNVBAoTCkdvb2dsZSBJbmMxJTAjBgNVBAMTHEdvb2dsZSBJbnRl
+cm5ldCBBdXRob3JpdHkgRzIwHhcNMTQwMTI5MTMyNzQzWhcNMTQwNTI5MDAwMDAw
+WjBpMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwN
+TW91bnRhaW4gVmlldzETMBEGA1UECgwKR29vZ2xlIEluYzEYMBYGA1UEAwwPbWFp
+bC5nb29nbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfRrObuSW5T7q
+5CnSEqefEmtH4CCv6+5EckuriNr1CjfVvqzwfAhopXkLrq45EQm8vkmf7W96XJhC
+7ZM0dYi1/qOCAU8wggFLMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjAa
+BgNVHREEEzARgg9tYWlsLmdvb2dsZS5jb20wCwYDVR0PBAQDAgeAMGgGCCsGAQUF
+BwEBBFwwWjArBggrBgEFBQcwAoYfaHR0cDovL3BraS5nb29nbGUuY29tL0dJQUcy
+LmNydDArBggrBgEFBQcwAYYfaHR0cDovL2NsaWVudHMxLmdvb2dsZS5jb20vb2Nz
+cDAdBgNVHQ4EFgQUiJxtimAuTfwb+aUtBn5UYKreKvMwDAYDVR0TAQH/BAIwADAf
+BgNVHSMEGDAWgBRK3QYWG7z2aLV29YG2u2IaulqBLzAXBgNVHSAEEDAOMAwGCisG
+AQQB1nkCBQEwMAYDVR0fBCkwJzAloCOgIYYfaHR0cDovL3BraS5nb29nbGUuY29t
+L0dJQUcyLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAH6RYHxHdcGpMpFE3oxDoFnP+
+gtuBCHan2yE2GRbJ2Cw8Lw0MmuKqHlf9RSeYfd3BXeKkj1qO6TVKwCh+0HdZk283
+TZZyzmEOyclm3UGFYe82P/iDFt+CeQ3NpmBg+GoaVCuWAARJN/KfglbLyyYygcQq
+0SgeDh8dRKUiaW3HQSoYvTvdTuqzwK4CXsr3b5/dAOY8uMuG/IAR3FgwTbZ1dtoW
+RvOTa8hYiU6A475WuZKyEHcwnGYe57u2I2KbMgcKjPniocj4QzgYsVAVKW3IwaOh
+yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
+-----END CERTIFICATE-----`),
+				TenantDomain: auth0.String("example.con"),
+			},
+		}
+		defer m.Connection.Delete(g.GetID())
+
+		err := m.Connection.Create(g)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		o, ok := g.Options.(*ConnectionOptionsSAML)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+
+		expect.Expect(t, o.GetSignInEndpoint(), "https://saml.identity/provider")
+		expect.Expect(t, o.GetTenantDomain(), "example.con")
 	})
 }
