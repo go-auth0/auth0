@@ -323,7 +323,7 @@ RvOTa8hYiU6A475WuZKyEHcwnGYe57u2I2KbMgcKjPniocj4QzgYsVAVKW3IwaOh
 yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 -----END CERTIFICATE-----`),
 				TenantDomain: auth0.String("example.con"),
-				FieldsMap: map[string]string{
+				FieldsMap: map[string]interface{}{
 					"email":       "EmailAddress",
 					"given_name":  "FirstName",
 					"family_name": "LastName",

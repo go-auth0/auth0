@@ -591,22 +591,22 @@ type ConnectionOptionsADFS struct {
 }
 
 type ConnectionOptionsSAML struct {
-	Cert               *string           `json:"cert,omitempty"`
-	Expires            *string           `json:"expires,omitempty"`
-	SigningCert        *string           `json:"signingCert,omitempty"`
-	Thumbprints        []interface{}     `json:"thumbprints,omitempty"`
-	BindingMethod      *string           `json:"bindingMethod,omitempty"`
-	TenantDomain       *string           `json:"tenant_domain,omitempty"`
-	DomainAliases      []interface{}     `json:"domain_aliases,omitempty"`
-	SignInEndpoint     *string           `json:"signInEndpoint,omitempty"`
-	SignOutEndpoint    *string           `json:"signOutEndpoint,omitempty"`
-	SignatureAlgorithm *string           `json:"signatureAlgorithm,omitempty"`
-	DigestAglorithm    *string           `json:"digestAlgorithm,omitempty"`
-	MetadataXML        *string           `json:"metadataXml,omitempty"`
-	MetadataURL        *string           `json:"metadataUrl,omitempty"`
-	FieldsMap          map[string]string `json:"fieldsMap,omitempty"`
-	Subject            map[string]string `json:"subject,omitempty"`
-	SignSAMLRequest    *bool             `json:"signSAMLRequest,omitempty"`
+	Cert               *string                `json:"cert,omitempty"`
+	Expires            *string                `json:"expires,omitempty"`
+	SigningCert        *string                `json:"signingCert,omitempty"`
+	Thumbprints        []interface{}          `json:"thumbprints,omitempty"`
+	BindingMethod      *string                `json:"bindingMethod,omitempty"`
+	TenantDomain       *string                `json:"tenant_domain,omitempty"`
+	DomainAliases      []interface{}          `json:"domain_aliases,omitempty"`
+	SignInEndpoint     *string                `json:"signInEndpoint,omitempty"`
+	SignOutEndpoint    *string                `json:"signOutEndpoint,omitempty"`
+	SignatureAlgorithm *string                `json:"signatureAlgorithm,omitempty"`
+	DigestAglorithm    *string                `json:"digestAlgorithm,omitempty"`
+	MetadataXML        *string                `json:"metadataXml,omitempty"`
+	MetadataURL        *string                `json:"metadataUrl,omitempty"`
+	FieldsMap          map[string]interface{} `json:"fieldsMap,omitempty"`
+	Subject            map[string]interface{} `json:"subject,omitempty"`
+	SignSAMLRequest    *bool                  `json:"signSAMLRequest,omitempty"`
 }
 
 type ConnectionManager struct {
