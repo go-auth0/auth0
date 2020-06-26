@@ -595,7 +595,7 @@ type ConnectionOptionsSAML struct {
 	Expires            *string                `json:"expires,omitempty"`
 	SigningCert        *string                `json:"signingCert,omitempty"`
 	Thumbprints        []interface{}          `json:"thumbprints,omitempty"`
-	BindingMethod      *string                `json:"bindingMethod,omitempty"`
+	ProtocolBinding      *string                `json:"protocolBinding,omitempty"`
 	TenantDomain       *string                `json:"tenant_domain,omitempty"`
 	DomainAliases      []interface{}          `json:"domain_aliases,omitempty"`
 	SignInEndpoint     *string                `json:"signInEndpoint,omitempty"`
