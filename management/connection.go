@@ -591,30 +591,30 @@ type ConnectionOptionsADFS struct {
 }
 
 type ConnectionOptionsSAMLIdpinitiated struct {
-	ClientID                          *string `json:"client_id,omitempty"`
-	ClientProtocol                *string `json:"client_protocol,omitempty"`
-	ClientAuthorizequery     *string `json:"client_authorizequery"`
+	ClientID             *string `json:"client_id,omitempty"`
+	ClientProtocol       *string `json:"client_protocol,omitempty"`
+	ClientAuthorizequery *string `json:"client_authorizequery,omitempty"`
 }
 
 type ConnectionOptionsSAML struct {
-	Cert               *string                `json:"cert,omitempty"`
-	Debug              *bool                  `json:"debug,omitempty"`
-	Expires            *string                `json:"expires,omitempty"`
-        IdpInitiated        *ConnectionOptionsSAMLIdpinitiated     `json:"idpinitiated,omitempty"`
-	SigningCert        *string                                                        `json:"signingCert,omitempty"`
-	Thumbprints        []interface{}          `json:"thumbprints,omitempty"`
-	ProtocolBinding      *string                `json:"protocolBinding,omitempty"`
-	TenantDomain       *string                `json:"tenant_domain,omitempty"`
-	DomainAliases      []interface{}          `json:"domain_aliases,omitempty"`
-	SignInEndpoint     *string                `json:"signInEndpoint,omitempty"`
-	SignOutEndpoint    *string                `json:"signOutEndpoint,omitempty"`
-	SignatureAlgorithm *string                `json:"signatureAlgorithm,omitempty"`
-	DigestAglorithm    *string                `json:"digestAlgorithm,omitempty"`
-	MetadataXML        *string                `json:"metadataXml,omitempty"`
-	MetadataURL        *string                `json:"metadataUrl,omitempty"`
-	FieldsMap          map[string]interface{} `json:"fieldsMap,omitempty"`
-	Subject            map[string]interface{} `json:"subject,omitempty"`
-	SignSAMLRequest    *bool                  `json:"signSAMLRequest,omitempty"`
+	Cert               *string                            `json:"cert,omitempty"`
+	Debug              *bool                              `json:"debug,omitempty"`
+	Expires            *string                            `json:"expires,omitempty"`
+	IdpInitiated       *ConnectionOptionsSAMLIdpinitiated `json:"idpinitiated,omitempty"`
+	SigningCert        *string                            `json:"signingCert,omitempty"`
+	Thumbprints        []interface{}                      `json:"thumbprints,omitempty"`
+	ProtocolBinding    *string                            `json:"protocolBinding,omitempty"`
+	TenantDomain       *string                            `json:"tenant_domain,omitempty"`
+	DomainAliases      []interface{}                      `json:"domain_aliases,omitempty"`
+	SignInEndpoint     *string                            `json:"signInEndpoint,omitempty"`
+	SignOutEndpoint    *string                            `json:"signOutEndpoint,omitempty"`
+	SignatureAlgorithm *string                            `json:"signatureAlgorithm,omitempty"`
+	DigestAglorithm    *string                            `json:"digestAlgorithm,omitempty"`
+	MetadataXML        *string                            `json:"metadataXml,omitempty"`
+	MetadataURL        *string                            `json:"metadataUrl,omitempty"`
+	FieldsMap          map[string]interface{}             `json:"fieldsMap,omitempty"`
+	Subject            map[string]interface{}             `json:"subject,omitempty"`
+	SignSAMLRequest    *bool                              `json:"signSAMLRequest,omitempty"`
 }
 
 type ConnectionManager struct {
