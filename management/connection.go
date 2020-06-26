@@ -600,7 +600,8 @@ type ConnectionOptionsSAML struct {
 	Cert               *string                `json:"cert,omitempty"`
 	Debug              *bool                  `json:"debug,omitempty"`
 	Expires            *string                `json:"expires,omitempty"`
-	SigningCert        *string                `json:"signingCert,omitempty"`
+        IdpInitiated        *ConnectionOptionsSAMLIdpinitiated     `json:"idpinitiated,omitempty"`
+	SigningCert        *string                                                        `json:"signingCert,omitempty"`
 	Thumbprints        []interface{}          `json:"thumbprints,omitempty"`
 	ProtocolBinding      *string                `json:"protocolBinding,omitempty"`
 	TenantDomain       *string                `json:"tenant_domain,omitempty"`
