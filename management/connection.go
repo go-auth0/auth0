@@ -592,6 +592,7 @@ type ConnectionOptionsADFS struct {
 
 type ConnectionOptionsSAML struct {
 	Cert               *string                `json:"cert,omitempty"`
+	Debug              *bool                  `json:"debug,omitempty"`
 	Expires            *string                `json:"expires,omitempty"`
 	SigningCert        *string                `json:"signingCert,omitempty"`
 	Thumbprints        []interface{}          `json:"thumbprints,omitempty"`
