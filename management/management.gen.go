@@ -2003,7 +2003,7 @@ func (c *ConnectionOptionsSAML) GetExpires() string {
 }
 
 // GetIdpInitiated returns the IdpInitiated field.
-func (c *ConnectionOptionsSAML) GetIdpInitiated() *ConnectionOptionsSAMLIdpinitiated {
+func (c *ConnectionOptionsSAML) GetIdpInitiated() *ConnectionOptionsSAMLIdpInitiated {
 	if c == nil {
 		return nil
 	}
@@ -2087,16 +2087,16 @@ func (c *ConnectionOptionsSAML) String() string {
 	return Stringify(c)
 }
 
-// GetClientAuthorizequery returns the ClientAuthorizequery field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsSAMLIdpinitiated) GetClientAuthorizequery() string {
-	if c == nil || c.ClientAuthorizequery == nil {
+// GetClientAuthorizeQuery returns the ClientAuthorizeQuery field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLIdpInitiated) GetClientAuthorizeQuery() string {
+	if c == nil || c.ClientAuthorizeQuery == nil {
 		return ""
 	}
-	return *c.ClientAuthorizequery
+	return *c.ClientAuthorizeQuery
 }
 
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsSAMLIdpinitiated) GetClientID() string {
+func (c *ConnectionOptionsSAMLIdpInitiated) GetClientID() string {
 	if c == nil || c.ClientID == nil {
 		return ""
 	}
@@ -2104,15 +2104,15 @@ func (c *ConnectionOptionsSAMLIdpinitiated) GetClientID() string {
 }
 
 // GetClientProtocol returns the ClientProtocol field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsSAMLIdpinitiated) GetClientProtocol() string {
+func (c *ConnectionOptionsSAMLIdpInitiated) GetClientProtocol() string {
 	if c == nil || c.ClientProtocol == nil {
 		return ""
 	}
 	return *c.ClientProtocol
 }
 
-// String returns a string representation of ConnectionOptionsSAMLIdpinitiated.
-func (c *ConnectionOptionsSAMLIdpinitiated) String() string {
+// String returns a string representation of ConnectionOptionsSAMLIdpInitiated.
+func (c *ConnectionOptionsSAMLIdpInitiated) String() string {
 	return Stringify(c)
 }
 
