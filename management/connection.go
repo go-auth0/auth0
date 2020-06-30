@@ -590,17 +590,17 @@ type ConnectionOptionsADFS struct {
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
-type ConnectionOptionsSAMLIdpinitiated struct {
+type ConnectionOptionsSAMLIdpInitiated struct {
 	ClientID             *string `json:"client_id,omitempty"`
 	ClientProtocol       *string `json:"client_protocol,omitempty"`
-	ClientAuthorizequery *string `json:"client_authorizequery,omitempty"`
+	ClientAuthorizeQuery *string `json:"client_authorizequery,omitempty"`
 }
 
 type ConnectionOptionsSAML struct {
 	Cert               *string                            `json:"cert,omitempty"`
 	Debug              *bool                              `json:"debug,omitempty"`
 	Expires            *string                            `json:"expires,omitempty"`
-	IdpInitiated       *ConnectionOptionsSAMLIdpinitiated `json:"idpinitiated,omitempty"`
+	IdpInitiated       *ConnectionOptionsSAMLIdpInitiated `json:"idpinitiated,omitempty"`
 	SigningCert        *string                            `json:"signingCert,omitempty"`
 	Thumbprints        []interface{}                      `json:"thumbprints,omitempty"`
 	ProtocolBinding    *string                            `json:"protocolBinding,omitempty"`

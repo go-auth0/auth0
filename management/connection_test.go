@@ -322,7 +322,7 @@ TZZyzmEOyclm3UGFYe82P/iDFt+CeQ3NpmBg+GoaVCuWAARJN/KfglbLyyYygcQq
 RvOTa8hYiU6A475WuZKyEHcwnGYe57u2I2KbMgcKjPniocj4QzgYsVAVKW3IwaOh
 yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 -----END CERTIFICATE-----`),
-				TenantDomain: auth0.String("example.con"),
+				TenantDomain: auth0.String("example.com"),
 				FieldsMap: map[string]interface{}{
 					"email":       "EmailAddress",
 					"given_name":  "FirstName",
@@ -343,6 +343,6 @@ yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 		}
 
 		expect.Expect(t, o.GetSignInEndpoint(), "https://saml.identity/provider")
-		expect.Expect(t, o.GetTenantDomain(), "example.con")
+		expect.Expect(t, o.GetTenantDomain(), "example.com")
 	})
 }
