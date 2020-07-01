@@ -413,6 +413,14 @@ func (c *ClientRefreshToken) GetTokenLifetime() int {
 	return *c.TokenLifetime
 }
 
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetType() string {
+	if c == nil || c.Type == nil {
+		return ""
+	}
+	return *c.Type
+}
+
 // String returns a string representation of ClientRefreshToken.
 func (c *ClientRefreshToken) String() string {
 	return Stringify(c)
