@@ -590,12 +590,6 @@ type ConnectionOptionsADFS struct {
 	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
-type ConnectionOptionsSAMLIdpInitiated struct {
-	ClientID             *string `json:"client_id,omitempty"`
-	ClientProtocol       *string `json:"client_protocol,omitempty"`
-	ClientAuthorizeQuery *string `json:"client_authorizequery,omitempty"`
-}
-
 type ConnectionOptionsSAML struct {
 	Cert               *string                            `json:"cert,omitempty"`
 	Debug              *bool                              `json:"debug,omitempty"`
@@ -615,6 +609,12 @@ type ConnectionOptionsSAML struct {
 	FieldsMap          map[string]interface{}             `json:"fieldsMap,omitempty"`
 	Subject            map[string]interface{}             `json:"subject,omitempty"`
 	SignSAMLRequest    *bool                              `json:"signSAMLRequest,omitempty"`
+}
+
+type ConnectionOptionsSAMLIdpInitiated struct {
+	ClientID             *string `json:"client_id,omitempty"`
+	ClientProtocol       *string `json:"client_protocol,omitempty"`
+	ClientAuthorizeQuery *string `json:"client_authorizequery,omitempty"`
 }
 
 type ConnectionManager struct {
