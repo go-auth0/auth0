@@ -16,7 +16,7 @@ var (
 
 func init() {
 	var err error
-	m, err = New(domain, clientID, clientSecret, WithDebug(false))
+	m, err = New(domain, clientID, clientSecret, WithDebug(true))
 	if err != nil {
 		panic(err)
 	}
