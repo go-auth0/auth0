@@ -1,7 +1,6 @@
 package management
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
@@ -30,7 +29,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.Connection.Read(auth0.StringValue(c.ID))
+		c, err = m.Connection.Read(c.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -88,7 +87,7 @@ func TestConnection(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 
-		id := auth0.StringValue(c.ID)
+		id := c.GetID()
 
 		c.ID = nil       // read-only
 		c.Name = nil     // read-only
@@ -114,7 +113,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Connection.Delete(auth0.StringValue(c.ID))
+		err = m.Connection.Delete(c.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -127,6 +126,8 @@ func TestConnection(t *testing.T) {
 		}
 		t.Logf("%v\n", cs)
 	})
+}
+func TestConnectionOptions(t *testing.T) {
 
 	t.Run("GoogleOAuth2", func(t *testing.T) {
 		g := &Connection{
@@ -143,7 +144,7 @@ func TestConnection(t *testing.T) {
 			},
 		}
 
-		defer m.Connection.Delete(g.GetID())
+		defer func() { m.Connection.Delete(g.GetID()) }()
 
 		err := m.Connection.Create(g)
 		if err != nil {
@@ -177,36 +178,31 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Email", func(t *testing.T) {
-		name := fmt.Sprintf("Test-Connection-Email-%d", time.Now().Unix())
-		from := "{{application.name}} <test@example.com>"
-		subject := "Email Login - {{application.name}}"
-		syntax := "liquid"
-		body := "<html><body>email contents</body></html>"
-		scope := "openid profile"
+
 		e := &Connection{
-			Name:     auth0.String(name),
+			Name:     auth0.Stringf("Test-Connection-Email-%d", time.Now().Unix()),
 			Strategy: auth0.String("email"),
 			Options: &ConnectionOptionsEmail{
 				Email: &ConnectionOptionsEmailSettings{
-					Syntax:  auth0.String(syntax),
-					From:    auth0.String(from),
-					Subject: auth0.String(subject),
-					Body:    auth0.String(body),
+					Syntax:  auth0.String("liquid"),
+					From:    auth0.String("{{application.name}} <test@example.com>"),
+					Subject: auth0.String("Email Login - {{application.name}}"),
+					Body:    auth0.String("<html><body>email contents</body></html>"),
 				},
 				OTP: &ConnectionOptionsOTP{
 					TimeStep: auth0.Int(100),
 					Length:   auth0.Int(4),
 				},
 				AuthParams: map[string]string{
-					"scope": scope,
+					"scope": "openid profile",
 				},
 				BruteForceProtection: auth0.Bool(true),
 				DisableSignup:        auth0.Bool(true),
-				Name:                 auth0.String(name),
+				Name:                 auth0.String("Test-Connection-Email"),
 			},
 		}
 
-		defer m.Connection.Delete(e.GetID())
+		defer func() { m.Connection.Delete(e.GetID()) }()
 
 		err := m.Connection.Create(e)
 		if err != nil {
@@ -218,88 +214,80 @@ func TestConnection(t *testing.T) {
 			t.Fatalf("unexpected type %T", o)
 		}
 
-		expect.Expect(t, o.GetEmail().GetSyntax(), syntax)
-		expect.Expect(t, o.GetEmail().GetFrom(), from)
-		expect.Expect(t, o.GetEmail().GetSubject(), subject)
-		expect.Expect(t, o.GetEmail().GetBody(), body)
+		expect.Expect(t, o.GetEmail().GetSyntax(), "liquid")
+		expect.Expect(t, o.GetEmail().GetFrom(), "{{application.name}} <test@example.com>")
+		expect.Expect(t, o.GetEmail().GetSubject(), "Email Login - {{application.name}}")
+		expect.Expect(t, o.GetEmail().GetBody(), "<html><body>email contents</body></html>")
 		expect.Expect(t, o.GetOTP().GetTimeStep(), 100)
 		expect.Expect(t, o.GetOTP().GetLength(), 4)
-		expect.Expect(t, o.AuthParams["scope"], scope)
+		expect.Expect(t, o.AuthParams["scope"], "openid profile")
 		expect.Expect(t, o.GetBruteForceProtection(), true)
 		expect.Expect(t, o.GetDisableSignup(), true)
-		expect.Expect(t, o.GetName(), name)
+		expect.Expect(t, o.GetName(), "Test-Connection-Email")
 
 		t.Logf("%s\n", e)
 	})
 
 	t.Run("SMS", func(t *testing.T) {
-		name := fmt.Sprintf("Test-Connection-SMS-%d", time.Now().Unix())
-		from := "+17777777777"
-		template := "Your verification code is { code }}"
-		syntax := "liquid"
-		scope := "openid profile"
-		twilioSid := "abc132asdfasdf56"
-		twilioToken := "234127asdfsada23"
-		messagingServiceSID := "273248090982390423"
-		g := &Connection{
-			Name:     auth0.String(name),
+
+		s := &Connection{
+			Name:     auth0.Stringf("Test-Connection-SMS-%d", time.Now().Unix()),
 			Strategy: auth0.String("sms"),
 			Options: &ConnectionOptionsSMS{
-				From:     auth0.String(from),
-				Template: auth0.String(template),
-				Syntax:   auth0.String(syntax),
+				From:     auth0.String("+17777777777"),
+				Template: auth0.String("Your verification code is { code }}"),
+				Syntax:   auth0.String("liquid"),
 				OTP: &ConnectionOptionsOTP{
 					TimeStep: auth0.Int(110),
 					Length:   auth0.Int(5),
 				},
 				AuthParams: map[string]string{
-					"scope": scope,
+					"scope": "openid profile",
 				},
 				BruteForceProtection: auth0.Bool(true),
 				DisableSignup:        auth0.Bool(true),
-				Name:                 auth0.String(name),
-				TwilioSID:            auth0.String(twilioSid),
-				TwilioToken:          auth0.String(twilioToken),
-				MessagingServiceSID:  auth0.String(messagingServiceSID),
+				Name:                 auth0.String("Test-Connection-SMS"),
+				TwilioSID:            auth0.String("abc132asdfasdf56"),
+				TwilioToken:          auth0.String("234127asdfsada23"),
+				MessagingServiceSID:  auth0.String("273248090982390423"),
 			},
 		}
 
-		defer m.Connection.Delete(g.GetID())
+		defer func() { m.Connection.Delete(s.GetID()) }()
 
-		err := m.Connection.Create(g)
+		err := m.Connection.Create(s)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		o, ok := g.Options.(*ConnectionOptionsSMS)
+		o, ok := s.Options.(*ConnectionOptionsSMS)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
 
-		expect.Expect(t, o.GetTemplate(), template)
-		expect.Expect(t, o.GetFrom(), from)
-		expect.Expect(t, o.GetSyntax(), syntax)
+		expect.Expect(t, o.GetTemplate(), "Your verification code is { code }}")
+		expect.Expect(t, o.GetFrom(), "+17777777777")
+		expect.Expect(t, o.GetSyntax(), "liquid")
 		expect.Expect(t, o.GetOTP().GetTimeStep(), 110)
 		expect.Expect(t, o.GetOTP().GetLength(), 5)
-		expect.Expect(t, o.AuthParams["scope"], scope)
+		expect.Expect(t, o.AuthParams["scope"], "openid profile")
 		expect.Expect(t, o.GetBruteForceProtection(), true)
 		expect.Expect(t, o.GetDisableSignup(), true)
-		expect.Expect(t, o.GetName(), name)
-		expect.Expect(t, g.GetName(), name)
-		expect.Expect(t, o.GetTwilioSID(), twilioSid)
-		expect.Expect(t, o.GetTwilioToken(), twilioToken)
-		expect.Expect(t, o.GetMessagingServiceSID(), messagingServiceSID)
+		expect.Expect(t, o.GetName(), "Test-Connection-SMS")
+		expect.Expect(t, o.GetTwilioSID(), "abc132asdfasdf56")
+		expect.Expect(t, o.GetTwilioToken(), "234127asdfsada23")
+		expect.Expect(t, o.GetMessagingServiceSID(), "273248090982390423")
 
-		t.Logf("%s\n", g)
+		t.Logf("%s\n", s)
 	})
 
 	t.Run("SAML", func(t *testing.T) {
+
 		g := &Connection{
 			Name:     auth0.Stringf("Test-SAML-Connection-%d", time.Now().Unix()),
 			Strategy: auth0.String("samlp"),
 			Options: &ConnectionOptionsSAML{
 				SignInEndpoint: auth0.String("https://saml.identity/provider"),
-				// Sample certificate from https://golang.org/src/crypto/x509/example_test.go
 				SigningCert: auth0.String(`-----BEGIN CERTIFICATE-----
 MIIDujCCAqKgAwIBAgIIE31FZVaPXTUwDQYJKoZIhvcNAQEFBQAwSTELMAkGA1UE
 BhMCVVMxEzARBgNVBAoTCkdvb2dsZSBJbmMxJTAjBgNVBAMTHEdvb2dsZSBJbnRl
@@ -330,7 +318,7 @@ yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 				},
 			},
 		}
-		defer m.Connection.Delete(g.GetID())
+		defer func() { m.Connection.Delete(g.GetID()) }()
 
 		err := m.Connection.Create(g)
 		if err != nil {
