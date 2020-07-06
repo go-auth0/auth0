@@ -12,11 +12,13 @@ var (
 	domain       = os.Getenv("AUTH0_DOMAIN")
 	clientID     = os.Getenv("AUTH0_CLIENT_ID")
 	clientSecret = os.Getenv("AUTH0_CLIENT_SECRET")
+	debug        = os.Getenv("AUTH0_DEBUG")
 )
 
 func init() {
 	var err error
-	m, err = New(domain, clientID, clientSecret, WithDebug(false))
+	m, err = New(domain, clientID, clientSecret,
+		WithDebug(debug == "true" || debug == "1" || debug == "on"))
 	if err != nil {
 		panic(err)
 	}
