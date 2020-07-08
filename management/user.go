@@ -103,7 +103,7 @@ type User struct {
 	Emails []string `json:"emails,omitempty"`
 
 	// These Roles may be provided by some connectors
-	ConnectorRoles []string `json:"roles,omitempty"`
+	ConnectorRoles RolesList `json:"roles,omitempty"`
 
 	// DN may be provided by the LDAP connector
 	DistinguishedName *string `json:"dn,omitempty"`
@@ -174,6 +174,29 @@ func (i *UserIdentity) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(alias)
 }
+
+// LDAP returns a string for a single role, or []string for more than one.
+// This type normalizes them into something slice-like
+//
+type RolesList []string
+
+func (l *RolesList) UnmarshalJSON(data []byte) error {
+	if l == nil {
+		return nil
+	}
+	var ret []string
+	if err := json.Unmarshal(data, &ret); err != nil {
+		var single string
+		if err := json.Unmarshal(data, &single); err != nil {
+			return err
+		}
+		ret = []string{single}
+	}
+	*l = ret
+	return nil
+}
+
+var _ json.Unmarshaler = (*RolesList)(nil)
 
 type userBlock struct {
 	BlockedFor []*UserBlock `json:"blocked_for,omitempty"`
