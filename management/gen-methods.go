@@ -15,18 +15,18 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"time"
 	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
-	"regexp"
 	"log"
 	"os"
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
+	"time"
 )
 
 const (
@@ -43,9 +43,9 @@ var (
 )
 
 func logf(fmt string, args ...interface{}) {
-	if *verbose {
+	//if *verbose {
 		log.Printf(fmt, args...)
-	}
+	//}
 }
 
 func main() {

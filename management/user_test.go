@@ -20,7 +20,7 @@ func TestUser(t *testing.T) {
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
 		},
-		EmailVerified: auth0.Bool(true),
+		EmailVerified: auth0.ConvertibleBool(true),
 		VerifyEmail:   auth0.Bool(false),
 		AppMetadata: map[string]interface{}{
 			"facts": []string{

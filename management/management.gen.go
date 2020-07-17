@@ -835,6 +835,14 @@ func (e *EmailCredentials) GetAPIUser() string {
 	return *e.APIUser
 }
 
+// GetDomain returns the Domain field if it's non-nil, zero value otherwise.
+func (e *EmailCredentials) GetDomain() string {
+	if e == nil || e.Domain == nil {
+		return ""
+	}
+	return *e.Domain
+}
+
 // GetRegion returns the Region field if it's non-nil, zero value otherwise.
 func (e *EmailCredentials) GetRegion() string {
 	if e == nil || e.Region == nil {
@@ -2075,14 +2083,6 @@ func (u *User) GetEmail() string {
 		return ""
 	}
 	return *u.Email
-}
-
-// GetEmailVerified returns the EmailVerified field if it's non-nil, zero value otherwise.
-func (u *User) GetEmailVerified() bool {
-	if u == nil || u.EmailVerified == nil {
-		return false
-	}
-	return *u.EmailVerified
 }
 
 // GetFamilyName returns the FamilyName field if it's non-nil, zero value otherwise.
