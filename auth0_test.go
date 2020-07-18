@@ -21,7 +21,6 @@ func TestBool(t *testing.T) {
 	}
 }
 
-
 func TestInt(t *testing.T) {
 	for _, test := range []struct {
 		in       *int
