@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"bytes"
 	"encoding/json"
 	"testing"
 )
@@ -44,7 +45,28 @@ func TestConvertibleBoolean_UnmarshalJSON(t *testing.T) {
 			t.Errorf("unexpected output. have %v, expected %v", ts.Bool, test.expected)
 		}
 	}
-
-
 }
 
+
+func TestConvertibleBoolean_MarshalJSON(t *testing.T) {
+	for _, test := range []struct {
+		in *ConvertibleBoolean
+		expected []byte
+	}{
+		{ConvertibleBool(false), []byte(`{"bool":false}`)},
+		{ConvertibleBool(true), []byte(`{"bool":true}`)},
+	} {
+		var ts struct {
+			Bool *ConvertibleBoolean `json:"bool,omitempty"`
+		}
+		ts.Bool = test.in
+		str, err := json.Marshal(&ts)
+		if err != nil {
+			t.Errorf("expected no error, got %s", err)
+		}
+
+		if !bytes.Equal(str, test.expected) {
+			t.Errorf("unexpected output. have %v, expected %v", ts.Bool, test.expected)
+		}
+	}
+}
