@@ -13,7 +13,7 @@ jobs:
     name: Scan
     runs-on: ubuntu-latest
     steps:
-    
+
       - name: Check out code
         uses: actions/checkout@v2
         with:
@@ -29,3 +29,7 @@ jobs:
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
