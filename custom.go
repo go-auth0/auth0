@@ -45,4 +45,3 @@ func trimQuotes(s string) string {
 	}
 	return s
 }
-

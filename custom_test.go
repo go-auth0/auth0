@@ -24,7 +24,7 @@ func TestConvertibleBool(t *testing.T) {
 
 func TestConvertibleBoolean_UnmarshalJSON(t *testing.T) {
 	for _, test := range []struct {
-		in string
+		in       string
 		expected *ConvertibleBoolean
 	}{
 		{`{"bool": false}`, ConvertibleBool(false)},
@@ -35,7 +35,7 @@ func TestConvertibleBoolean_UnmarshalJSON(t *testing.T) {
 		var ts struct {
 			Bool *ConvertibleBoolean `json:"bool,omitempty"`
 		}
-		err := json.Unmarshal([]byte(test.in),&ts)
+		err := json.Unmarshal([]byte(test.in), &ts)
 		if err != nil {
 			t.Errorf("expected no error, got %s", err)
 		}
@@ -46,10 +46,9 @@ func TestConvertibleBoolean_UnmarshalJSON(t *testing.T) {
 	}
 }
 
-
 func TestConvertibleBoolean_MarshalJSON(t *testing.T) {
 	for _, test := range []struct {
-		in *ConvertibleBoolean
+		in       *ConvertibleBoolean
 		expected []byte
 	}{
 		{ConvertibleBool(false), []byte(`{"bool":false}`)},
