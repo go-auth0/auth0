@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v3"
+	"gopkg.in/auth0.v4"
 )
 
 func TestTenant(t *testing.T) {
@@ -21,9 +21,10 @@ func TestTenant(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 		err = m.Tenant.Update(&Tenant{
-			FriendlyName: auth0.String("My Example Tenant"),
-			SupportURL:   auth0.String("https://support.example.com"),
-			SupportEmail: auth0.String("support@example.com"),
+			FriendlyName:          auth0.String("My Example Tenant"),
+			SupportURL:            auth0.String("https://support.example.com"),
+			SupportEmail:          auth0.String("support@example.com"),
+			DefaultRedirectionURI: auth0.String("https://example.com/login"),
 		})
 		if err != nil {
 			t.Error(err)

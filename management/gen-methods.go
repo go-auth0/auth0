@@ -7,7 +7,7 @@
 
 // Generates accessor methods for structs with pointer fields.
 //
-// This code has been coped from https://github.com/google/go-github and it's 
+// This code has been coped from https://github.com/google/go-github and it's
 // subject to its licence.
 package main
 
@@ -15,18 +15,18 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"time"
 	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
-	"regexp"
 	"log"
 	"os"
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
+	"time"
 )
 
 const (
@@ -84,7 +84,7 @@ func (t *templateData) process(f *ast.File) error {
 		if !ok {
 			continue
 		}
-		specLoop:
+	specLoop:
 		for _, spec := range gd.Specs {
 			ts, ok := spec.(*ast.TypeSpec)
 			if !ok {
@@ -195,7 +195,7 @@ func (t *templateData) addStringer(receiverType string) {
 		sortVal:      strings.ToLower(receiverType) + ".zzz",
 		ReceiverVar:  strings.ToLower(receiverType[:1]),
 		ReceiverType: receiverType,
-		Stringer: true,
+		Stringer:     true,
 	})
 }
 
@@ -300,7 +300,7 @@ type getter struct {
 	FieldType    string
 	ZeroValue    string
 	NamedStruct  bool // Getter for named struct.
-	Stringer bool // Used for the structs String method.
+	Stringer     bool // Used for the structs String method.
 }
 
 type byName []*getter
