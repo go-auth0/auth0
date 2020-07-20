@@ -91,7 +91,7 @@ func OAuth2(u *url.URL, clientID, clientSecret string) *clientcredentials.Config
 	return &clientcredentials.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
-		TokenURL:     u.String() + "/oauth/token",
+		TokenURL:     u.String() + "oauth/token",
 		EndpointParams: url.Values{
 			"audience": {u.String() + "/api/v2/"},
 		},
