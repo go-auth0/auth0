@@ -1,6 +1,7 @@
 package auth0
 
 import (
+	"gopkg.in/auth0.v4/internal/custom"
 	"testing"
 	"time"
 )
@@ -64,6 +65,22 @@ func TestTime(t *testing.T) {
 		{Time(time.Time{}), time.Time{}},
 	} {
 		have := TimeValue(test.in)
+		if have != test.expected {
+			t.Errorf("unexpected output. have %v, expected %v", have, test.expected)
+		}
+	}
+}
+
+func TestConvertibleBool(t *testing.T) {
+	for _, test := range []struct {
+		in       *custom.ConvertibleBoolean
+		expected custom.ConvertibleBoolean
+	}{
+		{nil, false},
+		{ConvertibleBool(false), false},
+		{ConvertibleBool(true), true},
+	} {
+		have := ConvertibleBoolValue(test.in)
 		if have != test.expected {
 			t.Errorf("unexpected output. have %v, expected %v", have, test.expected)
 		}

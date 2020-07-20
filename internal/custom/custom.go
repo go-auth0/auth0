@@ -1,24 +1,9 @@
-package auth0
+package custom
 
 import "strconv"
 
 // ConvertibleBoolean is a custom bool type that is able to unmarshal/marshal from both string and bool types
 type ConvertibleBoolean bool
-
-// ConvertibleBool returns a pointer to the ConvertibleBoolean value passed in.
-func ConvertibleBool(b bool) *ConvertibleBoolean {
-	cb := ConvertibleBoolean(b)
-	return &cb
-}
-
-// ConvertibleBoolValue returns the value of the ConvertibleBoolean pointer passed in or false if the
-// pointer is nil.
-func ConvertibleBoolValue(b *ConvertibleBoolean) ConvertibleBoolean {
-	if b != nil {
-		return *b
-	}
-	return false
-}
 
 // UnmarshalJSON handles unmarshalling of the ConvertibleBoolean value in the case of string and also bool values
 func (bit *ConvertibleBoolean) UnmarshalJSON(data []byte) error {

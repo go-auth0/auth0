@@ -2,6 +2,7 @@ package auth0
 
 import (
 	"fmt"
+	"gopkg.in/auth0.v4/internal/custom"
 	"time"
 )
 
@@ -63,4 +64,19 @@ func TimeValue(t *time.Time) time.Time {
 		return *t
 	}
 	return time.Time{}
+}
+
+// ConvertibleBool returns a pointer to the ConvertibleBoolean value passed in.
+func ConvertibleBool(b bool) *custom.ConvertibleBoolean {
+	cb := custom.ConvertibleBoolean(b)
+	return &cb
+}
+
+// ConvertibleBoolValue returns the value of the ConvertibleBoolean pointer passed in or false if the
+// pointer is nil.
+func ConvertibleBoolValue(b *custom.ConvertibleBoolean) custom.ConvertibleBoolean {
+	if b != nil {
+		return *b
+	}
+	return false
 }
