@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/auth0.v3/internal/client"
+	"gopkg.in/auth0.v4/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -48,6 +48,9 @@ type Management struct {
 
 	// RuleManager manages Auth0 Rules.
 	Rule *RuleManager
+
+	// HookManager manages Auth0 Hooks
+	Hook *HookManager
 
 	// RuleManager manages Auth0 Rule Configurations.
 	RuleConfig *RuleConfigManager
@@ -145,6 +148,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.ResourceServer = newResourceServerManager(m)
 	m.Role = newRoleManager(m)
 	m.Rule = newRuleManager(m)
+	m.Hook = newHookManager(m)
 	m.RuleConfig = newRuleConfigManager(m)
 	m.EmailTemplate = newEmailTemplateManager(m)
 	m.Email = newEmailManager(m)
@@ -223,7 +227,7 @@ func (m *Management) request(method, uri string, v interface{}) error {
 		return newError(res.Body)
 	}
 
-	if res.StatusCode != http.StatusNoContent {
+	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
 		err := json.NewDecoder(res.Body).Decode(v)
 		if err != nil {
 			return err

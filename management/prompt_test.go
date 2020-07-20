@@ -15,11 +15,11 @@ func TestPrompt(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-	    defer func() {
-    		m.Prompt.Update(&Prompt{
-    			UniversalLoginExperience: "classic",
-    		})
-    	}()
+		defer func() {
+			m.Prompt.Update(&Prompt{
+				UniversalLoginExperience: "classic",
+			})
+		}()
 		expected := "new"
 		err := m.Prompt.Update(&Prompt{
 			UniversalLoginExperience: expected,
