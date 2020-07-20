@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-
 func TestConvertibleBoolean_UnmarshalJSON(t *testing.T) {
 	for _, test := range []struct {
 		in       string
