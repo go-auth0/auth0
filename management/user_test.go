@@ -1,6 +1,7 @@
 package management
 
 import (
+	"bytes"
 	"encoding/json"
 	"testing"
 	"time"
@@ -22,7 +23,7 @@ func TestUser(t *testing.T) {
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
 		},
-		EmailVerified: auth0.ConvertibleBool(true),
+		EmailVerified: ConvertibleBool(true),
 		VerifyEmail:   auth0.Bool(false),
 		AppMetadata: map[string]interface{}{
 			"facts": []string{
@@ -292,5 +293,72 @@ func TestUserIdentity(t *testing.T) {
 			}
 			expect.Expect(t, u.GetUserID(), expected.GetUserID())
 		}
+	})
+}
+
+func TestConvertibleBoolean(t *testing.T) {
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for _, test := range []struct {
+			in       *ConvertibleBoolean
+			expected []byte
+		}{
+			{ConvertibleBool(false), []byte(`{"bool":false}`)},
+			{ConvertibleBool(true), []byte(`{"bool":true}`)},
+		} {
+			var ts struct {
+				Bool *ConvertibleBoolean `json:"bool,omitempty"`
+			}
+			ts.Bool = test.in
+			str, err := json.Marshal(&ts)
+			if err != nil {
+				t.Errorf("expected no error, got %s", err)
+			}
+
+			if !bytes.Equal(str, test.expected) {
+				t.Errorf("unexpected output. have %v, expected %v", ts.Bool, test.expected)
+			}
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		for _, test := range []struct {
+			in       string
+			expected *ConvertibleBoolean
+		}{
+			{`{"bool": false}`, ConvertibleBool(false)},
+			{`{"bool": "false"}`, ConvertibleBool(false)},
+			{`{"bool": true}`, ConvertibleBool(true)},
+			{`{"bool": "true"}`, ConvertibleBool(true)},
+		} {
+			var ts struct {
+				Bool *ConvertibleBoolean `json:"bool,omitempty"`
+			}
+			err := json.Unmarshal([]byte(test.in), &ts)
+			if err != nil {
+				t.Errorf("expected no error, got %s", err)
+			}
+
+			if ConvertibleBoolValue(ts.Bool) != ConvertibleBoolValue(test.expected) {
+				t.Errorf("unexpected output. have %v, expected %v", ts.Bool, test.expected)
+			}
+		}
+	})
+
+	t.Run("ConvertibleBoolValue", func(t *testing.T) {
+		for _, test := range []struct {
+			in       *ConvertibleBoolean
+			expected ConvertibleBoolean
+		}{
+			{nil, false},
+			{ConvertibleBool(false), false},
+			{ConvertibleBool(true), true},
+		} {
+			have := ConvertibleBoolValue(test.in)
+			if have != test.expected {
+				t.Errorf("unexpected output. have %v, expected %v", have, test.expected)
+			}
+		}
+
 	})
 }
