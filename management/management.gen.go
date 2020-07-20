@@ -3939,14 +3939,6 @@ func (u *User) GetEmail() string {
 	return *u.Email
 }
 
-// GetEmailVerified returns the EmailVerified field if it's non-nil, zero value otherwise.
-func (u *User) GetEmailVerified() bool {
-	if u == nil || u.EmailVerified == nil {
-		return false
-	}
-	return *u.EmailVerified
-}
-
 // GetFamilyName returns the FamilyName field if it's non-nil, zero value otherwise.
 func (u *User) GetFamilyName() string {
 	if u == nil || u.FamilyName == nil {
