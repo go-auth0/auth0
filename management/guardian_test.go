@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"github.com/dapperlabs/auth0"
 )
 
 func TestGuardian(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/internal/testing/expect"
 )
 
 func TestUser(t *testing.T) {

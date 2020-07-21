@@ -1,10 +1,10 @@
 package management
 
 import (
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"github.com/dapperlabs/auth0/internal/testing/expect"
 	"testing"
+	"github.com/dapperlabs/auth0"
 
-	"gopkg.in/auth0.v4"
 )
 
 func TestHook(t *testing.T) {

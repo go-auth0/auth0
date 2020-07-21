@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/auth0.v4/internal/tag"
+	"github.com/dapperlabs/auth0/internal/tag"
 )
 
 const (
