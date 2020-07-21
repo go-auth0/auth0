@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dapperlabs/auth0"
-	"github.com/dapperlabs/auth0/internal/testing/expect"
+	"github.com/dapperlabs/auth0/v4"
+	"github.com/dapperlabs/auth0/v4/internal/testing/expect"
 )
 
 func TestUser(t *testing.T) {

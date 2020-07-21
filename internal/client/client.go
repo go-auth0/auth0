@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
-	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/v4"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )

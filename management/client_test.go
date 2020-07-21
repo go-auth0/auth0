@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/v4"
 )
 
 func TestClient(t *testing.T) {

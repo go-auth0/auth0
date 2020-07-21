@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/dapperlabs/auth0"
-	"github.com/dapperlabs/auth0/management"
+	"github.com/dapperlabs/auth0/v4"
+	"github.com/dapperlabs/auth0/v4/management"
 )
 
 var (

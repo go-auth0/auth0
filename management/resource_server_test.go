@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/v4"
 )
 
 func TestResourceServer(t *testing.T) {

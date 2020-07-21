@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dapperlabs/auth0/internal/tag"
+	"github.com/dapperlabs/auth0/v4/internal/tag"
 )
 
 const (

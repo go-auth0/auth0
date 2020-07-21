@@ -1,4 +1,4 @@
-module github.com/dapperlabs/auth0
+module github.com/dapperlabs/auth0/v4
 
 go 1.12
 

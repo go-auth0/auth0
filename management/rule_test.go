@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/v4"
 )
 
 func TestRule(t *testing.T) {

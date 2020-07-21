@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/dapperlabs/auth0"
+	"github.com/dapperlabs/auth0/v4"
 )
 
 func TestEmailTemplate(t *testing.T) {
