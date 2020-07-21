@@ -3,7 +3,7 @@ package tag
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"github.com/dapperlabs/auth0/internal/testing/expect"
 )
 
 type test struct {

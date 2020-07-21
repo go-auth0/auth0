@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"github.com/dapperlabs/auth0"
 )
 
 func TestResourceServer(t *testing.T) {

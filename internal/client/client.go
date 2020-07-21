@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/rehttp"
+	"github.com/dapperlabs/auth0"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
-	"gopkg.in/auth0.v4"
 )
 
 // UserAgent is the default user agent string
