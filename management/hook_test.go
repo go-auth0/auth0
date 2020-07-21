@@ -1,10 +1,9 @@
 package management
 
 import (
+	"github.com/dapperlabs/auth0"
 	"github.com/dapperlabs/auth0/internal/testing/expect"
 	"testing"
-	"github.com/dapperlabs/auth0"
-
 )
 
 func TestHook(t *testing.T) {
