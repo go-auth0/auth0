@@ -1,6 +1,6 @@
-module gopkg.in/auth0.v4
+module github.com/dapperlabs/auth0
 
-go 1.12
+go 1.14
 
 require (
 	github.com/PuerkitoBio/rehttp v1.0.0
