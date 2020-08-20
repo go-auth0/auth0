@@ -271,9 +271,9 @@ func TestUserIdentity(t *testing.T) {
 			&UserIdentity{UserID: auth0.String("1")}:   `{"user_id":"1"}`,
 			&UserIdentity{UserID: auth0.String("foo")}: `{"user_id":"foo"}`,
 			&UserIdentity{UserID: auth0.String("foo"),
-				ProfileData: ProfileData{
+				ProfileData: &ProfileData{
 					Email: auth0.String("test@example.com"),
-				}}: `{"user_id":"foo", "profile_data":{"email":"test@example.com"}}`,
+				}}: `{"user_id":"foo", "profileData":{"email":"test@example.com"}}`,
 		} {
 			b, err := json.Marshal(u)
 			if err != nil {
@@ -289,8 +289,8 @@ func TestUserIdentity(t *testing.T) {
 			`{"user_id":1}`:     &UserIdentity{UserID: auth0.String("1")},
 			`{"user_id":"1"}`:   &UserIdentity{UserID: auth0.String("1")},
 			`{"user_id":"foo"}`: &UserIdentity{UserID: auth0.String("foo")},
-			`{"user_id":"foo", "profile_data":{"email":"test@example.com"}}`: &UserIdentity{UserID: auth0.String("foo"),
-				ProfileData: ProfileData{
+			`{"user_id":"foo", "profileData":{"email":"test@example.com"}}`: &UserIdentity{UserID: auth0.String("foo"),
+				ProfileData: &ProfileData{
 					Email: auth0.String("test@example.com"),
 				}},
 		} {

@@ -132,11 +132,11 @@ func trimQuotes(s string) string {
 }
 
 type UserIdentity struct {
-	ProfileData ProfileData `json:"profile_data,omitempty"`
-	Connection  *string     `json:"connection,omitempty"`
-	UserID      *string     `json:"-"`
-	Provider    *string     `json:"provider,omitempty"`
-	IsSocial    *bool       `json:"isSocial,omitempty"`
+	ProfileData *ProfileData `json:"profileData,omitempty"`
+	Connection  *string      `json:"connection,omitempty"`
+	UserID      *string      `json:"-"`
+	Provider    *string      `json:"provider,omitempty"`
+	IsSocial    *bool        `json:"isSocial,omitempty"`
 }
 
 type ProfileData struct {
