@@ -4154,6 +4154,14 @@ func (u *UserIdentity) GetIsSocial() bool {
 	return *u.IsSocial
 }
 
+// GetProfileData returns the ProfileData field.
+func (u *UserIdentity) GetProfileData() *ProfileData {
+	if u == nil {
+		return nil
+	}
+	return u.ProfileData
+}
+
 // GetProvider returns the Provider field if it's non-nil, zero value otherwise.
 func (u *UserIdentity) GetProvider() string {
 	if u == nil || u.Provider == nil {
