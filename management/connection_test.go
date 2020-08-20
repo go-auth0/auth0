@@ -234,7 +234,6 @@ func TestConnectionOptions(t *testing.T) {
 			Name:     auth0.Stringf("Test-Connection-SMS-%d", time.Now().Unix()),
 			Strategy: auth0.String("sms"),
 			Options: &ConnectionOptionsSMS{
-				From:     auth0.String("+17777777777"),
 				Template: auth0.String("Your verification code is { code }}"),
 				Syntax:   auth0.String("liquid"),
 				OTP: &ConnectionOptionsOTP{
@@ -265,8 +264,8 @@ func TestConnectionOptions(t *testing.T) {
 			t.Fatalf("unexpected type %T", o)
 		}
 
+		var nilString *string
 		expect.Expect(t, o.GetTemplate(), "Your verification code is { code }}")
-		expect.Expect(t, o.GetFrom(), "+17777777777")
 		expect.Expect(t, o.GetSyntax(), "liquid")
 		expect.Expect(t, o.GetOTP().GetTimeStep(), 110)
 		expect.Expect(t, o.GetOTP().GetLength(), 5)
@@ -277,6 +276,16 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.GetTwilioSID(), "abc132asdfasdf56")
 		expect.Expect(t, o.GetTwilioToken(), "234127asdfsada23")
 		expect.Expect(t, o.GetMessagingServiceSID(), "273248090982390423")
+		expect.Expect(t, o.From, nilString)
+
+		o.From = auth0.String("+17777777777")
+		o.MessagingServiceSID = nil
+
+		if err := m.Connection.Update(s.GetID(), s); err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, o.GetFrom(), "+17777777777")
+		expect.Expect(t, o.MessagingServiceSID, nilString)
 
 		t.Logf("%s\n", s)
 	})

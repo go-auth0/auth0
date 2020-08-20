@@ -406,7 +406,6 @@ type ConnectionOptionsOTP struct {
 
 type ConnectionOptionsSMS struct {
 	Name     *string `json:"name,omitempty"`
-	From     *string `json:"from,omitempty"`
 	Syntax   *string `json:"syntax,omitempty"`
 	Template *string `json:"template,omitempty"`
 
@@ -414,8 +413,12 @@ type ConnectionOptionsSMS struct {
 
 	AuthParams map[string]string `json:"authParams,omitempty"`
 
-	TwilioSID           *string `json:"twilio_sid"`
-	TwilioToken         *string `json:"twilio_token"`
+	TwilioSID   *string `json:"twilio_sid"`
+	TwilioToken *string `json:"twilio_token"`
+
+	// to swap from using a "From" to using a "MessagingServiceSID", Auth0's API requires
+	// you to send the opposite field as `null`.  To do this we must not use "omitempty".
+	From                *string `json:"from"`
 	MessagingServiceSID *string `json:"messaging_service_sid"`
 
 	DisableSignup        *bool `json:"disable_signup,omitempty"`
