@@ -132,10 +132,21 @@ func trimQuotes(s string) string {
 }
 
 type UserIdentity struct {
-	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"-"`
-	Provider   *string `json:"provider,omitempty"`
-	IsSocial   *bool   `json:"isSocial,omitempty"`
+	ProfileData ProfileData `json:"profile_data,omitempty"`
+	Connection  *string     `json:"connection,omitempty"`
+	UserID      *string     `json:"-"`
+	Provider    *string     `json:"provider,omitempty"`
+	IsSocial    *bool       `json:"isSocial,omitempty"`
+}
+
+type ProfileData struct {
+	Email         *string `json:"email,omitempty"`
+	EmailVerified *bool   `json:"email_verified,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	GivenName     *string `json:"given_name,omitempty"`
+	PhoneNumber   *string `json:"phone_number,omitempty"`
+	PhoneVerified *bool   `json:"phone_verified,omitempty"`
+	FamilyName    *string `json:"family_name,omitempty"`
 }
 
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
