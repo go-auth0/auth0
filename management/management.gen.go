@@ -3233,6 +3233,67 @@ func (p *PermissionList) String() string {
 	return Stringify(p)
 }
 
+// GetEmail returns the Email field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetEmail() string {
+	if p == nil || p.Email == nil {
+		return ""
+	}
+	return *p.Email
+}
+
+// GetEmailVerified returns the EmailVerified field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetEmailVerified() bool {
+	if p == nil || p.EmailVerified == nil {
+		return false
+	}
+	return *p.EmailVerified
+}
+
+// GetFamilyName returns the FamilyName field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetFamilyName() string {
+	if p == nil || p.FamilyName == nil {
+		return ""
+	}
+	return *p.FamilyName
+}
+
+// GetGivenName returns the GivenName field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetGivenName() string {
+	if p == nil || p.GivenName == nil {
+		return ""
+	}
+	return *p.GivenName
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetName() string {
+	if p == nil || p.Name == nil {
+		return ""
+	}
+	return *p.Name
+}
+
+// GetPhoneNumber returns the PhoneNumber field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetPhoneNumber() string {
+	if p == nil || p.PhoneNumber == nil {
+		return ""
+	}
+	return *p.PhoneNumber
+}
+
+// GetPhoneVerified returns the PhoneVerified field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetPhoneVerified() bool {
+	if p == nil || p.PhoneVerified == nil {
+		return false
+	}
+	return *p.PhoneVerified
+}
+
+// String returns a string representation of ProfileData.
+func (p *ProfileData) String() string {
+	return Stringify(p)
+}
+
 // String returns a string representation of Prompt.
 func (p *Prompt) String() string {
 	return Stringify(p)
@@ -3937,6 +3998,14 @@ func (u *User) GetEmail() string {
 		return ""
 	}
 	return *u.Email
+}
+
+// GetEmailVerified returns the EmailVerified field.
+func (u *User) GetEmailVerified() *ConvertibleBoolean {
+	if u == nil {
+		return nil
+	}
+	return u.EmailVerified
 }
 
 // GetFamilyName returns the FamilyName field if it's non-nil, zero value otherwise.
