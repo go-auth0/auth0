@@ -3241,12 +3241,12 @@ func (p *ProfileData) GetEmail() string {
 	return *p.Email
 }
 
-// GetEmailVerified returns the EmailVerified field if it's non-nil, zero value otherwise.
-func (p *ProfileData) GetEmailVerified() bool {
-	if p == nil || p.EmailVerified == nil {
-		return false
+// GetEmailVerified returns the EmailVerified field.
+func (p *ProfileData) GetEmailVerified() *ConvertibleBoolean {
+	if p == nil {
+		return nil
 	}
-	return *p.EmailVerified
+	return p.EmailVerified
 }
 
 // GetFamilyName returns the FamilyName field if it's non-nil, zero value otherwise.
