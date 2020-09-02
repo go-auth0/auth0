@@ -370,3 +370,23 @@ func TestConvertibleBoolean(t *testing.T) {
 
 	})
 }
+
+func TestProfileUnmarshal(t *testing.T) {
+	testEmail := "test@test.com"
+
+	for input, expected := range map[string]ProfileData{
+		`{"email": "test@test.com", "email_verified": "true"}`: {
+			Email:         &testEmail,
+			EmailVerified: ConvertibleBool(true),
+		},
+		`{"email": "test@test.com", "email_verified": true}`: {
+			Email:         &testEmail,
+			EmailVerified: ConvertibleBool(true),
+		},
+	} {
+		result := &ProfileData{}
+		expect.Expect(t, json.Unmarshal([]byte(input), result), nil)
+		expect.Expect(t, *result.Email, *expected.Email)
+		expect.Expect(t, *result.EmailVerified, *expected.EmailVerified)
+	}
+}
