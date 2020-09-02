@@ -68,9 +68,9 @@ func (m *RuleManager) Delete(id string) error {
 
 // List all rules.
 //
-// See: https://auth0.com/docs/api/management/v2#!/Roles/get_roles
+// See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules
 func (m *RuleManager) List(opts ...ListOption) (r *RuleList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("roles")+m.q(opts), &r)
+	err = m.get(m.uri("rules")+m.q(opts), &r)
 	return
 }
