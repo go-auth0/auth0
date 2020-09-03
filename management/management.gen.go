@@ -3971,12 +3971,28 @@ func (u *User) GetID() string {
 	return *u.ID
 }
 
+// GetLastIP returns the LastIP field if it's non-nil, zero value otherwise.
+func (u *User) GetLastIP() string {
+	if u == nil || u.LastIP == nil {
+		return ""
+	}
+	return *u.LastIP
+}
+
 // GetLastLogin returns the LastLogin field if it's non-nil, zero value otherwise.
 func (u *User) GetLastLogin() time.Time {
 	if u == nil || u.LastLogin == nil {
 		return time.Time{}
 	}
 	return *u.LastLogin
+}
+
+// GetLoginsCount returns the LoginsCount field if it's non-nil, zero value otherwise.
+func (u *User) GetLoginsCount() int64 {
+	if u == nil || u.LoginsCount == nil {
+		return 0
+	}
+	return *u.LoginsCount
 }
 
 // GetName returns the Name field if it's non-nil, zero value otherwise.

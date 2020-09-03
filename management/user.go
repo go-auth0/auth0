@@ -85,6 +85,12 @@ type User struct {
 
 	// True if the user is blocked from the application, false if the user is enabled
 	Blocked *bool `json:"blocked,omitempty"`
+
+	// Last IP address from which this user logged in. Read only, cannot be modified.
+	LastIP *string `json:"last_ip,omitempty"`
+
+	// Total number of logins this user has performed. Read only, cannot be modified.
+	LoginsCount *int64 `json:"logins_count,omitempty"`
 }
 
 type UserIdentity struct {
