@@ -1,3 +1,7 @@
+## v4.5.0
+
+* `management.User`: add `LastIP` and `LoginsCount` fields ([#137](https://github.com/go-auth0/auth0/pull/137)).
+
 ## v4.3.6
 
 * `management.ConnectionOptionsOIDC`: add missing `Scopes()` and `SetScopes()` methods.
