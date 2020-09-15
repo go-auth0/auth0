@@ -615,6 +615,7 @@ type ConnectionOptionsSAML struct {
 }
 
 type ConnectionOptionsSAMLIdpInitiated struct {
+	Enabled              *bool   `json:"enabled,omitempty"`
 	ClientID             *string `json:"client_id,omitempty"`
 	ClientProtocol       *string `json:"client_protocol,omitempty"`
 	ClientAuthorizeQuery *string `json:"client_authorizequery,omitempty"`
