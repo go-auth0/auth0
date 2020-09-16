@@ -503,7 +503,7 @@ type ConnectionOptionsOIDC struct {
 	UserInfoEndpoint      *string `json:"userinfo_endpoint"`
 	TokenEndpoint         *string `json:"token_endpoint"`
 
-	Scoper *string `json:"scope,omitempty"`
+	Scope *string `json:"scope,omitempty"`
 }
 
 func (c *ConnectionOptionsOIDC) Scopes() []string {
