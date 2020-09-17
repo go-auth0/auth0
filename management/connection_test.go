@@ -67,6 +67,8 @@ func TestConnection(t *testing.T) {
 				_, ok = c.Options.(*ConnectionOptionsSMS)
 			case ConnectionStrategyOIDC:
 				_, ok = c.Options.(*ConnectionOptionsOIDC)
+			case ConnectionStrategyOauth2:
+				_, ok = c.Options.(*ConnectionOptionsOauth2)
 			case ConnectionStrategyAD:
 				_, ok = c.Options.(*ConnectionOptionsAD)
 			case ConnectionStrategyAzureAD:
@@ -175,6 +177,27 @@ func TestConnectionOptions(t *testing.T) {
 		o.SetScopes(false, "baz")
 		expect.Expect(t, len(o.Scopes()), 2)
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+	})
+
+	t.Run("OAUTH2", func(t *testing.T) {
+		o := &ConnectionOptionsOauth2{
+			Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
+			Strategy: auth0.String("oauth2"),
+			Options: &ConnectionOptionsOAuth2{
+
+				CustomScripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			},
+		}
+		expect.Expect(t, len(o.Scopes()), 0)
+
+		o.SetScopes(true, "foo", "bar", "baz")
+		expect.Expect(t, len(o.Scopes()), 3)
+		expect.Expect(t, o.Scopes(), []string{"bar", "baz", "foo"})
+
+		o.SetScopes(false, "baz")
+		expect.Expect(t, len(o.Scopes()), 2)
+		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+
 	})
 
 	t.Run("Email", func(t *testing.T) {
