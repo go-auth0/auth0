@@ -67,7 +67,7 @@ func TestConnection(t *testing.T) {
 				_, ok = c.Options.(*ConnectionOptionsSMS)
 			case ConnectionStrategyOIDC:
 				_, ok = c.Options.(*ConnectionOptionsOIDC)
-			case ConnectionStrategyOauth2:
+			case ConnectionStrategyOAuth2:
 				_, ok = c.Options.(*ConnectionOptionsOAuth2)
 			case ConnectionStrategyAD:
 				_, ok = c.Options.(*ConnectionOptionsAD)
