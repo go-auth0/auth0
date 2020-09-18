@@ -22,7 +22,7 @@ const (
 	ConnectionStrategyEmail               = "email"
 	ConnectionStrategySMS                 = "sms"
 	ConnectionStrategyOIDC                = "oidc"
-	ConnectionStrategyOauth2              = "oauth2"
+	ConnectionStrategyOAuth2              = "oauth2"
 	ConnectionStrategyAD                  = "ad"
 	ConnectionStrategyAzureAD             = "waad"
 	ConnectionStrategySAML                = "samlp"
@@ -127,8 +127,8 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = &ConnectionOptionsSMS{}
 		case ConnectionStrategyOIDC:
 			v = &ConnectionOptionsOIDC{}
-		case ConnectionStrategyOauth2:
-			v = &ConnectionOptionsOauth2{}
+		case ConnectionStrategyOAuth2:
+			v = &ConnectionOptionsOAuth2{}
 		case ConnectionStrategyAD:
 			v = &ConnectionOptionsAD{}
 		case ConnectionStrategyAzureAD:
@@ -529,7 +529,7 @@ func (c *ConnectionOptionsOIDC) SetScopes(enable bool, scopes ...string) {
 	c.Scope = &scope
 }
 
-type ConnectionOptionsOauth2 struct {
+type ConnectionOptionsOAuth2 struct {
 	ClientID              *string `json:"client_id,omitempty"`
 	ClientSecret          *string `json:"client_secret,omitempty"`
 	AuthorizationEndpoint *string `json:"authorization_endpoint"`
@@ -541,11 +541,11 @@ type ConnectionOptionsOauth2 struct {
 	CustomScripts map[string]interface{} `json:"customScripts,omitempty"`
 }
 
-func (c *ConnectionOptionsOauth2) Scopes() []string {
+func (c *ConnectionOptionsOAuth2) Scopes() []string {
 	return strings.Fields(c.GetScope())
 }
 
-func (c *ConnectionOptionsOauth2) SetScopes(enable bool, scopes ...string) {
+func (c *ConnectionOptionsOAuth2) SetScopes(enable bool, scopes ...string) {
 	scopeMap := make(map[string]bool)
 	for _, scope := range c.Scopes() {
 		scopeMap[scope] = true

@@ -68,7 +68,7 @@ func TestConnection(t *testing.T) {
 			case ConnectionStrategyOIDC:
 				_, ok = c.Options.(*ConnectionOptionsOIDC)
 			case ConnectionStrategyOauth2:
-				_, ok = c.Options.(*ConnectionOptionsOauth2)
+				_, ok = c.Options.(*ConnectionOptionsOAuth2)
 			case ConnectionStrategyAD:
 				_, ok = c.Options.(*ConnectionOptionsAD)
 			case ConnectionStrategyAzureAD:
@@ -180,7 +180,7 @@ func TestConnectionOptions(t *testing.T) {
 	})
 
 	t.Run("OAUTH2", func(t *testing.T) {
-		o := &ConnectionOptionsOauth2{
+		o := &ConnectionOptionsOAuth2{
 			CustomScripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
 		}
 		expect.Expect(t, len(o.Scopes()), 0)
