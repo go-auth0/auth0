@@ -2034,6 +2034,14 @@ func (c *ConnectionOptionsSAML) GetIdpInitiated() *ConnectionOptionsSAMLIdpIniti
 	return c.IdpInitiated
 }
 
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetLogoURL() string {
+	if c == nil || c.LogoURL == nil {
+		return ""
+	}
+	return *c.LogoURL
+}
+
 // GetMetadataURL returns the MetadataURL field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSAML) GetMetadataURL() string {
 	if c == nil || c.MetadataURL == nil {
@@ -2056,6 +2064,14 @@ func (c *ConnectionOptionsSAML) GetProtocolBinding() string {
 		return ""
 	}
 	return *c.ProtocolBinding
+}
+
+// GetRequestTemplate returns the RequestTemplate field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetRequestTemplate() string {
+	if c == nil || c.RequestTemplate == nil {
+		return ""
+	}
+	return *c.RequestTemplate
 }
 
 // GetSignatureAlgorithm returns the SignatureAlgorithm field if it's non-nil, zero value otherwise.
@@ -2106,6 +2122,14 @@ func (c *ConnectionOptionsSAML) GetTenantDomain() string {
 	return *c.TenantDomain
 }
 
+// GetUserIDAttribute returns the UserIDAttribute field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetUserIDAttribute() string {
+	if c == nil || c.UserIDAttribute == nil {
+		return ""
+	}
+	return *c.UserIDAttribute
+}
+
 // String returns a string representation of ConnectionOptionsSAML.
 func (c *ConnectionOptionsSAML) String() string {
 	return Stringify(c)
@@ -2133,6 +2157,14 @@ func (c *ConnectionOptionsSAMLIdpInitiated) GetClientProtocol() string {
 		return ""
 	}
 	return *c.ClientProtocol
+}
+
+// GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLIdpInitiated) GetEnabled() bool {
+	if c == nil || c.Enabled == nil {
+		return false
+	}
+	return *c.Enabled
 }
 
 // String returns a string representation of ConnectionOptionsSAMLIdpInitiated.
