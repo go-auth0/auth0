@@ -181,7 +181,7 @@ func TestConnectionOptions(t *testing.T) {
 
 	t.Run("OAUTH2", func(t *testing.T) {
 		o := &ConnectionOptionsOAuth2{
-			CustomScripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			Scripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
 		}
 		expect.Expect(t, len(o.Scopes()), 0)
 
