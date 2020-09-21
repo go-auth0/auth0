@@ -538,7 +538,7 @@ type ConnectionOptionsOAuth2 struct {
 
 	// Scripts for the connection
 	// Allowed keys are: "fetchUserProfile"
-	CustomScripts map[string]interface{} `json:"customScripts,omitempty"`
+	CustomScripts map[string]interface{} `json:"scripts,omitempty"`
 }
 
 func (c *ConnectionOptionsOAuth2) Scopes() []string {
