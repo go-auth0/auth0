@@ -609,9 +609,13 @@ type ConnectionOptionsSAML struct {
 	FieldsMap          map[string]interface{}             `json:"fieldsMap,omitempty"`
 	Subject            map[string]interface{}             `json:"subject,omitempty"`
 	SignSAMLRequest    *bool                              `json:"signSAMLRequest,omitempty"`
+	RequestTemplate    *string                            `json:"requestTemplate,omitempty"`
+	UserIDAttribute    *string                            `json:"user_id_attribute,omitempty"`
+	LogoURL            *string                            `json:"icon_url,omitempty"`
 }
 
 type ConnectionOptionsSAMLIdpInitiated struct {
+	Enabled              *bool   `json:"enabled,omitempty"`
 	ClientID             *string `json:"client_id,omitempty"`
 	ClientProtocol       *string `json:"client_protocol,omitempty"`
 	ClientAuthorizeQuery *string `json:"client_authorizequery,omitempty"`
