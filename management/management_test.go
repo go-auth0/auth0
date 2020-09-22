@@ -1,8 +1,11 @@
 package management
 
 import (
+	"context"
+	"errors"
 	"net/url"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -119,5 +122,34 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func TestWithContext(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	n := m.WithContext(ctx)
+	if n == m {
+		t.Fatal("WithContext must return new instance")
+	}
+
+	v := reflect.ValueOf(n).Elem()
+
+	for i := 0; i < v.NumField(); i++ {
+		if v.Field(i).CanInterface() { // skip unexported fields
+			fieldName := v.Field(i).Elem().Type().Name()
+			if fieldName != "GuardianManager" { // skip more complicated manager
+				n0 := v.Field(i).Elem().Field(0)
+				if n != n0.Interface() {
+					t.Fatalf("Field %s expected to point to new management struct", fieldName)
+				}
+			}
+		}
+	}
+
+	_, err := n.User.List()
+	if !errors.Is(err, context.Canceled) {
+		t.Errorf("expected err to be context.Canceled, got %v", err)
 	}
 }

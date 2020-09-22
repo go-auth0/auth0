@@ -139,6 +139,11 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.http = client.WrapUserAgent(m.http, m.userAgent)
 	m.http = client.WrapRateLimit(m.http)
 
+	m.initManagers()
+	return m, nil
+}
+
+func (m *Management) initManagers() {
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
 	m.Connection = newConnectionManager(m)
@@ -161,8 +166,6 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Guardian = newGuardianManager(m)
 	m.Prompt = newPromptManager(m)
 	m.Blacklist = newBlacklistManager(m)
-
-	return m, nil
 }
 
 func (m *Management) uri(path ...string) string {
@@ -188,6 +191,22 @@ func (m *Management) defaults(options []ListOption) []ListOption {
 	options = append([]ListOption{PerPage(50)}, options...)
 	options = append(options, IncludeTotals(true))
 	return options
+}
+
+// WithContext allows using a context provided by the caller. If `mgmt` is an
+// instance of `*management.Management`, the caller can use, for example,
+//
+//     mgmt.WithContext(ctx).User.List()
+//
+// to list Auth0 users using the provided context.
+// The method creates a new instance of `*management.Management`, keeping the
+// configured settings and oauth2 clients intact.
+func (m *Management) WithContext(ctx context.Context) *Management {
+	n := &Management{}
+	*n = *m
+	n.ctx = ctx
+	n.initManagers()
+	return n
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
