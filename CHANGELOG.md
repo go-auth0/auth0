@@ -1,3 +1,8 @@
+## v4.6.0
+
+* `management.ConnectionOptions`: Now supports `OAuth2` connection type ([#141](https://github.com/go-auth0/auth0/pull/141)).
+* `management.ConnectionOptionsSAML`: Add missing options ([#138](https://github.com/go-auth0/auth0/pull/138/)).
+
 ## v4.5.0
 
 * `management.User`: add `LastIP` and `LoginsCount` fields ([#137](https://github.com/go-auth0/auth0/pull/137)).
