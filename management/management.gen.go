@@ -1828,6 +1828,51 @@ func (c *ConnectionOptionsLinkedin) String() string {
 }
 
 // GetAuthorizationEndpoint returns the AuthorizationEndpoint field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetAuthorizationEndpoint() string {
+	if c == nil || c.AuthorizationEndpoint == nil {
+		return ""
+	}
+	return *c.AuthorizationEndpoint
+}
+
+// GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetClientID() string {
+	if c == nil || c.ClientID == nil {
+		return ""
+	}
+	return *c.ClientID
+}
+
+// GetClientSecret returns the ClientSecret field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetClientSecret() string {
+	if c == nil || c.ClientSecret == nil {
+		return ""
+	}
+	return *c.ClientSecret
+}
+
+// GetScope returns the Scope field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetScope() string {
+	if c == nil || c.Scope == nil {
+		return ""
+	}
+	return *c.Scope
+}
+
+// GetTokenEndpoint returns the TokenEndpoint field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetTokenEndpoint() string {
+	if c == nil || c.TokenEndpoint == nil {
+		return ""
+	}
+	return *c.TokenEndpoint
+}
+
+// String returns a string representation of ConnectionOptionsOAuth2.
+func (c *ConnectionOptionsOAuth2) String() string {
+	return Stringify(c)
+}
+
+// GetAuthorizationEndpoint returns the AuthorizationEndpoint field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsOIDC) GetAuthorizationEndpoint() string {
 	if c == nil || c.AuthorizationEndpoint == nil {
 		return ""
@@ -2034,6 +2079,14 @@ func (c *ConnectionOptionsSAML) GetIdpInitiated() *ConnectionOptionsSAMLIdpIniti
 	return c.IdpInitiated
 }
 
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetLogoURL() string {
+	if c == nil || c.LogoURL == nil {
+		return ""
+	}
+	return *c.LogoURL
+}
+
 // GetMetadataURL returns the MetadataURL field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSAML) GetMetadataURL() string {
 	if c == nil || c.MetadataURL == nil {
@@ -2056,6 +2109,14 @@ func (c *ConnectionOptionsSAML) GetProtocolBinding() string {
 		return ""
 	}
 	return *c.ProtocolBinding
+}
+
+// GetRequestTemplate returns the RequestTemplate field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetRequestTemplate() string {
+	if c == nil || c.RequestTemplate == nil {
+		return ""
+	}
+	return *c.RequestTemplate
 }
 
 // GetSignatureAlgorithm returns the SignatureAlgorithm field if it's non-nil, zero value otherwise.
@@ -2106,6 +2167,14 @@ func (c *ConnectionOptionsSAML) GetTenantDomain() string {
 	return *c.TenantDomain
 }
 
+// GetUserIDAttribute returns the UserIDAttribute field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetUserIDAttribute() string {
+	if c == nil || c.UserIDAttribute == nil {
+		return ""
+	}
+	return *c.UserIDAttribute
+}
+
 // String returns a string representation of ConnectionOptionsSAML.
 func (c *ConnectionOptionsSAML) String() string {
 	return Stringify(c)
@@ -2133,6 +2202,14 @@ func (c *ConnectionOptionsSAMLIdpInitiated) GetClientProtocol() string {
 		return ""
 	}
 	return *c.ClientProtocol
+}
+
+// GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLIdpInitiated) GetEnabled() bool {
+	if c == nil || c.Enabled == nil {
+		return false
+	}
+	return *c.Enabled
 }
 
 // String returns a string representation of ConnectionOptionsSAMLIdpInitiated.
