@@ -22,6 +22,7 @@ const (
 	ConnectionStrategyEmail               = "email"
 	ConnectionStrategySMS                 = "sms"
 	ConnectionStrategyOIDC                = "oidc"
+	ConnectionStrategyOAuth2              = "oauth2"
 	ConnectionStrategyAD                  = "ad"
 	ConnectionStrategyAzureAD             = "waad"
 	ConnectionStrategySAML                = "samlp"
@@ -126,6 +127,8 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = &ConnectionOptionsSMS{}
 		case ConnectionStrategyOIDC:
 			v = &ConnectionOptionsOIDC{}
+		case ConnectionStrategyOAuth2:
+			v = &ConnectionOptionsOAuth2{}
 		case ConnectionStrategyAD:
 			v = &ConnectionOptionsAD{}
 		case ConnectionStrategyAzureAD:
@@ -508,6 +511,41 @@ func (c *ConnectionOptionsOIDC) Scopes() []string {
 }
 
 func (c *ConnectionOptionsOIDC) SetScopes(enable bool, scopes ...string) {
+	scopeMap := make(map[string]bool)
+	for _, scope := range c.Scopes() {
+		scopeMap[scope] = true
+	}
+	for _, scope := range scopes {
+		scopeMap[scope] = enable
+	}
+	scopeSlice := make([]string, 0, len(scopeMap))
+	for scope, enabled := range scopeMap {
+		if enabled {
+			scopeSlice = append(scopeSlice, scope)
+		}
+	}
+	sort.Strings(scopeSlice)
+	scope := strings.Join(scopeSlice, " ")
+	c.Scope = &scope
+}
+
+type ConnectionOptionsOAuth2 struct {
+	ClientID              *string `json:"client_id,omitempty"`
+	ClientSecret          *string `json:"client_secret,omitempty"`
+	AuthorizationEndpoint *string `json:"authorization_endpoint"`
+	TokenEndpoint         *string `json:"token_endpoint"`
+	Scope                 *string `json:"scope,omitempty"`
+
+	// Scripts for the connection
+	// Allowed keys are: "fetchUserProfile"
+	Scripts map[string]interface{} `json:"scripts,omitempty"`
+}
+
+func (c *ConnectionOptionsOAuth2) Scopes() []string {
+	return strings.Fields(c.GetScope())
+}
+
+func (c *ConnectionOptionsOAuth2) SetScopes(enable bool, scopes ...string) {
 	scopeMap := make(map[string]bool)
 	for _, scope := range c.Scopes() {
 		scopeMap[scope] = true

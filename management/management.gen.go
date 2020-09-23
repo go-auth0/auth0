@@ -1828,6 +1828,51 @@ func (c *ConnectionOptionsLinkedin) String() string {
 }
 
 // GetAuthorizationEndpoint returns the AuthorizationEndpoint field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetAuthorizationEndpoint() string {
+	if c == nil || c.AuthorizationEndpoint == nil {
+		return ""
+	}
+	return *c.AuthorizationEndpoint
+}
+
+// GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetClientID() string {
+	if c == nil || c.ClientID == nil {
+		return ""
+	}
+	return *c.ClientID
+}
+
+// GetClientSecret returns the ClientSecret field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetClientSecret() string {
+	if c == nil || c.ClientSecret == nil {
+		return ""
+	}
+	return *c.ClientSecret
+}
+
+// GetScope returns the Scope field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetScope() string {
+	if c == nil || c.Scope == nil {
+		return ""
+	}
+	return *c.Scope
+}
+
+// GetTokenEndpoint returns the TokenEndpoint field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetTokenEndpoint() string {
+	if c == nil || c.TokenEndpoint == nil {
+		return ""
+	}
+	return *c.TokenEndpoint
+}
+
+// String returns a string representation of ConnectionOptionsOAuth2.
+func (c *ConnectionOptionsOAuth2) String() string {
+	return Stringify(c)
+}
+
+// GetAuthorizationEndpoint returns the AuthorizationEndpoint field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsOIDC) GetAuthorizationEndpoint() string {
 	if c == nil || c.AuthorizationEndpoint == nil {
 		return ""
