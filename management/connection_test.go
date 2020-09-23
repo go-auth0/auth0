@@ -179,7 +179,7 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
 	})
 
-	t.Run("OAUTH2", func(t *testing.T) {
+	t.Run("OAuth2", func(t *testing.T) {
 		o := &ConnectionOptionsOAuth2{
 			Scripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
 		}
