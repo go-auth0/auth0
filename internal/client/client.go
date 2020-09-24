@@ -23,19 +23,14 @@ func WrapRateLimit(c *http.Client) *http.Client {
 	return &http.Client{
 		Transport: rehttp.NewTransport(
 			c.Transport,
-			func(attempt rehttp.Attempt) bool {
-				if attempt.Response == nil {
-					return false
-				}
-				return attempt.Response.StatusCode == http.StatusTooManyRequests
-			},
+			rehttp.RetryStatuses(http.StatusTooManyRequests),
 			func(attempt rehttp.Attempt) time.Duration {
 				resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
 				resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
 				if err != nil {
-					resetAtUnix = time.Now().Add(5 * time.Second).Unix()
+					return 5 * time.Second
 				}
-				return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
+				return time.Until(time.Unix(resetAtUnix, 0))
 			},
 		),
 	}
