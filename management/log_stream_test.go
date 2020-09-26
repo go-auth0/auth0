@@ -124,7 +124,8 @@ func TestSinks(t *testing.T) {
 
 		expect.Expect(t, o.GetAWSAccountID(), "999999999999")
 		expect.Expect(t, o.GetAWSRegion(), "us-west-2")
-		expect.Expect(t, o.GetAWSPartnerEventSource(), false)
+		// TODO: check for not empty
+		//expect.Expect(t, o.GetAWSPartnerEventSource(), false)
 
 		t.Logf("%s\n", g)
 	})
@@ -134,9 +135,9 @@ func TestSinks(t *testing.T) {
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
 			Type: auth0.String(LogStreamSinkEventGrid),
 			Sink: &AzureSink{
-				AzureSubscriptionID: auth0.String("0dec0946-7b8d-4d29-90c2-f3f9869dd334"),
-				AzureRegion:         auth0.String("north-europe"),
-				AzureResourceGroup:  auth0.String("logs-rg"),
+				AzureSubscriptionID: auth0.String("b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
+				AzureRegion:         auth0.String("northeurope"),
+				AzureResourceGroup:  auth0.String("azure-logs-rg"),
 			},
 		}
 
@@ -152,9 +153,10 @@ func TestSinks(t *testing.T) {
 			t.Fatalf("unexpected type %T", o)
 		}
 
-		expect.Expect(t, o.GetAzureSubscriptionID(), "0dec0946-7b8d-4d29-90c2-f3f9869dd334")
-		expect.Expect(t, o.GetAzureRegion(), "north-europe")
-		expect.Expect(t, o.GetAzureResourceGroup(), "logs-rg")
+		expect.Expect(t, o.GetAzureSubscriptionID(), "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5")
+		expect.Expect(t, o.GetAzureRegion(), "northeurope")
+		expect.Expect(t, o.GetAzureResourceGroup(), "azure-logs-rg")
+		// TODO: check for not empty
 		//expect.Expect(t, o.GetAzurePartnerTopic(), "ddd")
 
 		t.Logf("%s\n", g)
@@ -185,7 +187,7 @@ func TestSinks(t *testing.T) {
 		}
 
 		expect.Expect(t, o.GetHTTPEndpoint(), "https://example.com/logs")
-		expect.Expect(t, o.GetHTTPAuthorization(), "bearer xxxxxfjdfkjndsknfk")
+		expect.Expect(t, o.GetHTTPAuthorization(), "Bearer sfjkdshfkjsdhfæadkjhhags")
 		expect.Expect(t, o.GetHTTPContentFormat(), "JSONLINES")
 		expect.Expect(t, o.GetHTTPContentType(), "application/json")
 
@@ -242,11 +244,10 @@ func TestSinks(t *testing.T) {
 			t.Fatalf("unexpected type %T", o)
 		}
 
-		expect.Expect(t, o.GetSplunkDomain(), "sdemo.splunk.com")
+		expect.Expect(t, o.GetSplunkDomain(), "demo.splunk.com")
 		expect.Expect(t, o.GetSplunkPort(), "8080")
 		expect.Expect(t, o.GetSplunkSecure(), true)
 		expect.Expect(t, o.GetSplunkToken(), "12a34ab5-c6d7-8901-23ef-456b7c89d0c1")
 		t.Logf("%s\n", g)
 	})
-
 }
