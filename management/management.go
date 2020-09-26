@@ -43,6 +43,9 @@ type Management struct {
 	// Log reads Auth0 Logs.
 	Log *LogManager
 
+	// LogStream reads Auth0 Logs.
+	LogStream *LogStreamManager
+
 	// RoleManager manages Auth0 Roles.
 	Role *RoleManager
 
@@ -144,6 +147,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	m.Connection = newConnectionManager(m)
 	m.CustomDomain = newCustomDomainManager(m)
 	m.Grant = newGrantManager(m)
+	m.LogStream = newLogStreamManager(m)
 	m.Log = newLogManager(m)
 	m.ResourceServer = newResourceServerManager(m)
 	m.Role = newRoleManager(m)

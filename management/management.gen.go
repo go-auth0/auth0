@@ -6,6 +6,72 @@ import (
 	"time"
 )
 
+// GetAWSAccountID returns the AWSAccountID field if it's non-nil, zero value otherwise.
+func (a *AWSSink) GetAWSAccountID() string {
+	if a == nil || a.AWSAccountID == nil {
+		return ""
+	}
+	return *a.AWSAccountID
+}
+
+// GetAWSPartnerEventSource returns the AWSPartnerEventSource field if it's non-nil, zero value otherwise.
+func (a *AWSSink) GetAWSPartnerEventSource() string {
+	if a == nil || a.AWSPartnerEventSource == nil {
+		return ""
+	}
+	return *a.AWSPartnerEventSource
+}
+
+// GetAWSRegion returns the AWSRegion field if it's non-nil, zero value otherwise.
+func (a *AWSSink) GetAWSRegion() string {
+	if a == nil || a.AWSRegion == nil {
+		return ""
+	}
+	return *a.AWSRegion
+}
+
+// String returns a string representation of AWSSink.
+func (a *AWSSink) String() string {
+	return Stringify(a)
+}
+
+// GetAzurePartnerTopic returns the AzurePartnerTopic field if it's non-nil, zero value otherwise.
+func (a *AzureSink) GetAzurePartnerTopic() string {
+	if a == nil || a.AzurePartnerTopic == nil {
+		return ""
+	}
+	return *a.AzurePartnerTopic
+}
+
+// GetAzureRegion returns the AzureRegion field if it's non-nil, zero value otherwise.
+func (a *AzureSink) GetAzureRegion() string {
+	if a == nil || a.AzureRegion == nil {
+		return ""
+	}
+	return *a.AzureRegion
+}
+
+// GetAzureResourceGroup returns the AzureResourceGroup field if it's non-nil, zero value otherwise.
+func (a *AzureSink) GetAzureResourceGroup() string {
+	if a == nil || a.AzureResourceGroup == nil {
+		return ""
+	}
+	return *a.AzureResourceGroup
+}
+
+// GetAzureSubscriptionID returns the AzureSubscriptionID field if it's non-nil, zero value otherwise.
+func (a *AzureSink) GetAzureSubscriptionID() string {
+	if a == nil || a.AzureSubscriptionID == nil {
+		return ""
+	}
+	return *a.AzureSubscriptionID
+}
+
+// String returns a string representation of AzureSink.
+func (a *AzureSink) String() string {
+	return Stringify(a)
+}
+
 // String returns a string representation of BlacklistToken.
 func (b *BlacklistToken) String() string {
 	return Stringify(b)
@@ -2634,6 +2700,27 @@ func (d *DailyStat) String() string {
 	return Stringify(d)
 }
 
+// GetDatadogAPIKey returns the DatadogAPIKey field if it's non-nil, zero value otherwise.
+func (d *DatadogSink) GetDatadogAPIKey() string {
+	if d == nil || d.DatadogAPIKey == nil {
+		return ""
+	}
+	return *d.DatadogAPIKey
+}
+
+// GetDatadogRegion returns the DatadogRegion field if it's non-nil, zero value otherwise.
+func (d *DatadogSink) GetDatadogRegion() string {
+	if d == nil || d.DatadogRegion == nil {
+		return ""
+	}
+	return *d.DatadogRegion
+}
+
+// String returns a string representation of DatadogSink.
+func (d *DatadogSink) String() string {
+	return Stringify(d)
+}
+
 // GetCredentials returns the Credentials field.
 func (e *Email) GetCredentials() *EmailCredentials {
 	if e == nil {
@@ -2912,6 +2999,43 @@ func (h *HookList) String() string {
 	return Stringify(h)
 }
 
+// GetHTTPAuthorization returns the HTTPAuthorization field if it's non-nil, zero value otherwise.
+func (h *HTTPSink) GetHTTPAuthorization() string {
+	if h == nil || h.HTTPAuthorization == nil {
+		return ""
+	}
+	return *h.HTTPAuthorization
+}
+
+// GetHTTPContentFormat returns the HTTPContentFormat field if it's non-nil, zero value otherwise.
+func (h *HTTPSink) GetHTTPContentFormat() string {
+	if h == nil || h.HTTPContentFormat == nil {
+		return ""
+	}
+	return *h.HTTPContentFormat
+}
+
+// GetHTTPContentType returns the HTTPContentType field if it's non-nil, zero value otherwise.
+func (h *HTTPSink) GetHTTPContentType() string {
+	if h == nil || h.HTTPContentType == nil {
+		return ""
+	}
+	return *h.HTTPContentType
+}
+
+// GetHTTPEndpoint returns the HTTPEndpoint field if it's non-nil, zero value otherwise.
+func (h *HTTPSink) GetHTTPEndpoint() string {
+	if h == nil || h.HTTPEndpoint == nil {
+		return ""
+	}
+	return *h.HTTPEndpoint
+}
+
+// String returns a string representation of HTTPSink.
+func (h *HTTPSink) String() string {
+	return Stringify(h)
+}
+
 // GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
 func (j *Job) GetClientID() string {
 	if j == nil || j.ClientID == nil {
@@ -3108,6 +3232,43 @@ func (l *Log) GetUserID() string {
 
 // String returns a string representation of Log.
 func (l *Log) String() string {
+	return Stringify(l)
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetID() string {
+	if l == nil || l.ID == nil {
+		return ""
+	}
+	return *l.ID
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetName() string {
+	if l == nil || l.Name == nil {
+		return ""
+	}
+	return *l.Name
+}
+
+// GetStatus returns the Status field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetStatus() string {
+	if l == nil || l.Status == nil {
+		return ""
+	}
+	return *l.Status
+}
+
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetType() string {
+	if l == nil || l.Type == nil {
+		return ""
+	}
+	return *l.Type
+}
+
+// String returns a string representation of LogStream.
+func (l *LogStream) String() string {
 	return Stringify(l)
 }
 
@@ -3545,6 +3706,43 @@ func (r *RuleConfig) String() string {
 // String returns a string representation of RuleList.
 func (r *RuleList) String() string {
 	return Stringify(r)
+}
+
+// GetSplunkDomain returns the SplunkDomain field if it's non-nil, zero value otherwise.
+func (s *SplunkSink) GetSplunkDomain() string {
+	if s == nil || s.SplunkDomain == nil {
+		return ""
+	}
+	return *s.SplunkDomain
+}
+
+// GetSplunkPort returns the SplunkPort field if it's non-nil, zero value otherwise.
+func (s *SplunkSink) GetSplunkPort() string {
+	if s == nil || s.SplunkPort == nil {
+		return ""
+	}
+	return *s.SplunkPort
+}
+
+// GetSplunkSecure returns the SplunkSecure field if it's non-nil, zero value otherwise.
+func (s *SplunkSink) GetSplunkSecure() bool {
+	if s == nil || s.SplunkSecure == nil {
+		return false
+	}
+	return *s.SplunkSecure
+}
+
+// GetSplunkToken returns the SplunkToken field if it's non-nil, zero value otherwise.
+func (s *SplunkSink) GetSplunkToken() string {
+	if s == nil || s.SplunkToken == nil {
+		return ""
+	}
+	return *s.SplunkToken
+}
+
+// String returns a string representation of SplunkSink.
+func (s *SplunkSink) String() string {
+	return Stringify(s)
 }
 
 // GetChangePassword returns the ChangePassword field.
