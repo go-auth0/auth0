@@ -530,11 +530,11 @@ func (c *ConnectionOptionsOIDC) SetScopes(enable bool, scopes ...string) {
 }
 
 type ConnectionOptionsOAuth2 struct {
-	ClientID              *string `json:"client_id,omitempty"`
-	ClientSecret          *string `json:"client_secret,omitempty"`
-	AuthorizationEndpoint *string `json:"authorization_endpoint"`
-	TokenEndpoint         *string `json:"token_endpoint"`
-	Scope                 *string `json:"scope,omitempty"`
+	ClientID         *string `json:"client_id,omitempty"`
+	ClientSecret     *string `json:"client_secret,omitempty"`
+	AuthorizationURL *string `json:"authorizationURL"`
+	TokenURL         *string `json:"tokenURL"`
+	Scope            *string `json:"scope,omitempty"`
 
 	// Scripts for the connection
 	// Allowed keys are: "fetchUserProfile"
