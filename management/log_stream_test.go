@@ -129,6 +129,7 @@ func TestLogStreamSinks(t *testing.T) {
 
 		t.Logf("%s\n", g)
 	})
+	//This test fails it subscription key is not valid, or Eventgrid Resource Provider is not registered in the subscription
 	/*
 		t.Run(LogStreamSinkEventGrid, func(t *testing.T) {
 			g := &LogStream{
