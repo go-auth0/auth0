@@ -49,9 +49,9 @@ func TestLogStream(t *testing.T) {
 
 			switch ls.GetType() {
 			case LogStreamSinkEventBridge:
-				_, ok = ls.Sink.(*AWSSink)
+				_, ok = ls.Sink.(*EventBridgeSink)
 			case LogStreamSinkEventGrid:
-				_, ok = ls.Sink.(*AzureSink)
+				_, ok = ls.Sink.(*EventGridSink)
 			case LogStreamSinkHTTP:
 				_, ok = ls.Sink.(*HTTPSink)
 			case LogStreamSinkDatadog:
@@ -104,7 +104,7 @@ func TestLogStreamSinks(t *testing.T) {
 		g := &LogStream{
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
 			Type: auth0.String(LogStreamSinkEventBridge),
-			Sink: &AWSSink{
+			Sink: &EventBridgeSink{
 				AWSAccountID: auth0.String("999999999999"),
 				AWSRegion:    auth0.String("us-west-2"),
 			},
@@ -117,7 +117,7 @@ func TestLogStreamSinks(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		o, ok := g.Sink.(*AWSSink)
+		o, ok := g.Sink.(*EventBridgeSink)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
@@ -125,8 +125,7 @@ func TestLogStreamSinks(t *testing.T) {
 		expect.Expect(t, g.GetType(), LogStreamSinkEventBridge)
 		expect.Expect(t, o.GetAWSAccountID(), "999999999999")
 		expect.Expect(t, o.GetAWSRegion(), "us-west-2")
-		// TODO: check for not empty
-		//expect.Expect(t, o.GetAWSPartnerEventSource(), false)
+		expect.Expect(t, len(o.GetAWSPartnerEventSource()) > 0, true)
 
 		t.Logf("%s\n", g)
 	})
@@ -135,7 +134,7 @@ func TestLogStreamSinks(t *testing.T) {
 			g := &LogStream{
 				Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
 				Type: auth0.String(LogStreamSinkEventGrid),
-				Sink: &AzureSink{
+				Sink: &EventGridSink{
 					AzureSubscriptionID: auth0.String("b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
 					AzureRegion:         auth0.String("northeurope"),
 					AzureResourceGroup:  auth0.String("azure-logs-rg"),
@@ -149,7 +148,7 @@ func TestLogStreamSinks(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			o, ok := g.Sink.(*AzureSink)
+			o, ok := g.Sink.(*EventGridSink)
 			if !ok {
 				t.Fatalf("unexpected type %T", o)
 			}
@@ -157,8 +156,7 @@ func TestLogStreamSinks(t *testing.T) {
 			expect.Expect(t, o.GetAzureSubscriptionID(), "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5")
 			expect.Expect(t, o.GetAzureRegion(), "northeurope")
 			expect.Expect(t, o.GetAzureResourceGroup(), "azure-logs-rg")
-			// TODO: check for not empty
-			//expect.Expect(t, o.GetAzurePartnerTopic(), "ddd")
+			expect.Expect(t, len(o.GetAzurePartnerTopic()) > 0, true)
 
 			t.Logf("%s\n", g)
 		})
@@ -235,7 +233,7 @@ func TestLogStreamSinks(t *testing.T) {
 			},
 		}
 
-		//defer func() { m.LogStream.Delete(g.GetID()) }()
+		defer func() { m.LogStream.Delete(g.GetID()) }()
 
 		err := m.LogStream.Create(g)
 		if err != nil {
