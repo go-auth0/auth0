@@ -17,6 +17,12 @@ import (
 	"github.com/dapperlabs/auth0/v4/internal/client"
 )
 
+const (
+	RateLimitReset     = "x-ratelimit-reset"
+	RateLimitLimit     = "x-ratelimit-limit"
+	RateLimitRemaining = "x-ratelimit-remaining"
+)
+
 // Management is an Auth0 management client used to interact with the Auth0
 // Management API v2.
 //
@@ -220,6 +226,25 @@ func (m *Management) request(method, uri string, v interface{}) error {
 			return ctx.Err()
 		default:
 			return err
+		}
+	}
+
+	if res.StatusCode == http.StatusTooManyRequests {
+		// Rate limited, check headers for rate Limit details
+		managementErr := newError(res.Body)
+		rateLimit, err := newRateLimit(res.Header)
+		if err != nil {
+			msg := fmt.Sprintf("error handling rate Limit response: %s: original error: %s", err, managementErr)
+			return &managementError{
+				StatusCode: res.StatusCode,
+				Err:        msg,
+				Message:    msg,
+			}
+		}
+
+		return &RateLimitError{
+			error:     managementErr,
+			RateLimit: *rateLimit,
 		}
 	}
 
