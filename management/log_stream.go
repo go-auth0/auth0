@@ -30,7 +30,7 @@ type LogStream struct {
 	RawSink json.RawMessage `json:"sink,omitempty"`
 }
 
-type AWSSink struct {
+type EventBridgeSink struct {
 	// AWS Account Id
 	AWSAccountID *string `json:"awsAccountId,omitempty"`
 	// AWS Region
@@ -38,7 +38,7 @@ type AWSSink struct {
 	// AWS Partner Event Source
 	AWSPartnerEventSource *string `json:"awsPartnerEventSource,omitempty"`
 }
-type AzureSink struct {
+type EventGridSink struct {
 	// Azure Subscription Id
 	AzureSubscriptionID *string `json:"azureSubscriptionId,omitempty"`
 	// Azure Resource Group
@@ -57,7 +57,10 @@ type HTTPSink struct {
 	HTTPEndpoint *string `json:"httpEndpoint,omitempty"`
 	// Http Authorization
 	HTTPAuthorization *string `json:"httpAuthorization,omitempty"`
+	// List of acceptable Grant Types for this Client
+	HTTPCustomHeaders []interface{} `json:"httpCustomHeaders,omitempty"`
 }
+
 type DatadogSink struct {
 	// Datadog Region
 	DatadogRegion *string `json:"datadogRegion,omitempty"`
@@ -113,9 +116,9 @@ func (ls *LogStream) UnmarshalJSON(b []byte) error {
 
 		switch *ls.Type {
 		case LogStreamSinkEventBridge:
-			v = &AWSSink{}
+			v = &EventBridgeSink{}
 		case LogStreamSinkEventGrid:
-			v = &AzureSink{}
+			v = &EventGridSink{}
 		case LogStreamSinkHTTP:
 			v = &HTTPSink{}
 		case LogStreamSinkDatadog:
