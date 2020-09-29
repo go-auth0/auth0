@@ -6,72 +6,6 @@ import (
 	"time"
 )
 
-// GetAWSAccountID returns the AWSAccountID field if it's non-nil, zero value otherwise.
-func (a *AWSSink) GetAWSAccountID() string {
-	if a == nil || a.AWSAccountID == nil {
-		return ""
-	}
-	return *a.AWSAccountID
-}
-
-// GetAWSPartnerEventSource returns the AWSPartnerEventSource field if it's non-nil, zero value otherwise.
-func (a *AWSSink) GetAWSPartnerEventSource() string {
-	if a == nil || a.AWSPartnerEventSource == nil {
-		return ""
-	}
-	return *a.AWSPartnerEventSource
-}
-
-// GetAWSRegion returns the AWSRegion field if it's non-nil, zero value otherwise.
-func (a *AWSSink) GetAWSRegion() string {
-	if a == nil || a.AWSRegion == nil {
-		return ""
-	}
-	return *a.AWSRegion
-}
-
-// String returns a string representation of AWSSink.
-func (a *AWSSink) String() string {
-	return Stringify(a)
-}
-
-// GetAzurePartnerTopic returns the AzurePartnerTopic field if it's non-nil, zero value otherwise.
-func (a *AzureSink) GetAzurePartnerTopic() string {
-	if a == nil || a.AzurePartnerTopic == nil {
-		return ""
-	}
-	return *a.AzurePartnerTopic
-}
-
-// GetAzureRegion returns the AzureRegion field if it's non-nil, zero value otherwise.
-func (a *AzureSink) GetAzureRegion() string {
-	if a == nil || a.AzureRegion == nil {
-		return ""
-	}
-	return *a.AzureRegion
-}
-
-// GetAzureResourceGroup returns the AzureResourceGroup field if it's non-nil, zero value otherwise.
-func (a *AzureSink) GetAzureResourceGroup() string {
-	if a == nil || a.AzureResourceGroup == nil {
-		return ""
-	}
-	return *a.AzureResourceGroup
-}
-
-// GetAzureSubscriptionID returns the AzureSubscriptionID field if it's non-nil, zero value otherwise.
-func (a *AzureSink) GetAzureSubscriptionID() string {
-	if a == nil || a.AzureSubscriptionID == nil {
-		return ""
-	}
-	return *a.AzureSubscriptionID
-}
-
-// String returns a string representation of AzureSink.
-func (a *AzureSink) String() string {
-	return Stringify(a)
-}
-
 // String returns a string representation of BlacklistToken.
 func (b *BlacklistToken) String() string {
 	return Stringify(b)
@@ -2909,6 +2843,72 @@ func (e *EmailTemplate) GetURLLifetimeInSecoonds() int {
 
 // String returns a string representation of EmailTemplate.
 func (e *EmailTemplate) String() string {
+	return Stringify(e)
+}
+
+// GetAWSAccountID returns the AWSAccountID field if it's non-nil, zero value otherwise.
+func (e *EventBridgeSink) GetAWSAccountID() string {
+	if e == nil || e.AWSAccountID == nil {
+		return ""
+	}
+	return *e.AWSAccountID
+}
+
+// GetAWSPartnerEventSource returns the AWSPartnerEventSource field if it's non-nil, zero value otherwise.
+func (e *EventBridgeSink) GetAWSPartnerEventSource() string {
+	if e == nil || e.AWSPartnerEventSource == nil {
+		return ""
+	}
+	return *e.AWSPartnerEventSource
+}
+
+// GetAWSRegion returns the AWSRegion field if it's non-nil, zero value otherwise.
+func (e *EventBridgeSink) GetAWSRegion() string {
+	if e == nil || e.AWSRegion == nil {
+		return ""
+	}
+	return *e.AWSRegion
+}
+
+// String returns a string representation of EventBridgeSink.
+func (e *EventBridgeSink) String() string {
+	return Stringify(e)
+}
+
+// GetAzurePartnerTopic returns the AzurePartnerTopic field if it's non-nil, zero value otherwise.
+func (e *EventGridSink) GetAzurePartnerTopic() string {
+	if e == nil || e.AzurePartnerTopic == nil {
+		return ""
+	}
+	return *e.AzurePartnerTopic
+}
+
+// GetAzureRegion returns the AzureRegion field if it's non-nil, zero value otherwise.
+func (e *EventGridSink) GetAzureRegion() string {
+	if e == nil || e.AzureRegion == nil {
+		return ""
+	}
+	return *e.AzureRegion
+}
+
+// GetAzureResourceGroup returns the AzureResourceGroup field if it's non-nil, zero value otherwise.
+func (e *EventGridSink) GetAzureResourceGroup() string {
+	if e == nil || e.AzureResourceGroup == nil {
+		return ""
+	}
+	return *e.AzureResourceGroup
+}
+
+// GetAzureSubscriptionID returns the AzureSubscriptionID field if it's non-nil, zero value otherwise.
+func (e *EventGridSink) GetAzureSubscriptionID() string {
+	if e == nil || e.AzureSubscriptionID == nil {
+		return ""
+	}
+	return *e.AzureSubscriptionID
+}
+
+// String returns a string representation of EventGridSink.
+func (e *EventGridSink) String() string {
 	return Stringify(e)
 }
 

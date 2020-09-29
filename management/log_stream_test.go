@@ -98,7 +98,7 @@ func TestLogStream(t *testing.T) {
 		}
 	})
 }
-func TestSinks(t *testing.T) {
+func TestLogStreamSinks(t *testing.T) {
 
 	t.Run(LogStreamSinkEventBridge, func(t *testing.T) {
 		g := &LogStream{
@@ -121,7 +121,8 @@ func TestSinks(t *testing.T) {
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
+		expect.Expect(t, g.GetStatus(), "active")
+		expect.Expect(t, g.GetType(), LogStreamSinkEventBridge)
 		expect.Expect(t, o.GetAWSAccountID(), "999999999999")
 		expect.Expect(t, o.GetAWSRegion(), "us-west-2")
 		// TODO: check for not empty
@@ -129,39 +130,39 @@ func TestSinks(t *testing.T) {
 
 		t.Logf("%s\n", g)
 	})
+	/*
+		t.Run(LogStreamSinkEventGrid, func(t *testing.T) {
+			g := &LogStream{
+				Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
+				Type: auth0.String(LogStreamSinkEventGrid),
+				Sink: &AzureSink{
+					AzureSubscriptionID: auth0.String("b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
+					AzureRegion:         auth0.String("northeurope"),
+					AzureResourceGroup:  auth0.String("azure-logs-rg"),
+				},
+			}
 
-	t.Run(LogStreamSinkEventGrid, func(t *testing.T) {
-		g := &LogStream{
-			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
-			Type: auth0.String(LogStreamSinkEventGrid),
-			Sink: &AzureSink{
-				AzureSubscriptionID: auth0.String("b69a6835-57c7-4d53-b0d5-1c6ae580b6d5"),
-				AzureRegion:         auth0.String("northeurope"),
-				AzureResourceGroup:  auth0.String("azure-logs-rg"),
-			},
-		}
+			defer func() { m.LogStream.Delete(g.GetID()) }()
 
-		defer func() { m.LogStream.Delete(g.GetID()) }()
+			err := m.LogStream.Create(g)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-		err := m.LogStream.Create(g)
-		if err != nil {
-			t.Fatal(err)
-		}
+			o, ok := g.Sink.(*AzureSink)
+			if !ok {
+				t.Fatalf("unexpected type %T", o)
+			}
 
-		o, ok := g.Sink.(*AzureSink)
-		if !ok {
-			t.Fatalf("unexpected type %T", o)
-		}
+			expect.Expect(t, o.GetAzureSubscriptionID(), "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5")
+			expect.Expect(t, o.GetAzureRegion(), "northeurope")
+			expect.Expect(t, o.GetAzureResourceGroup(), "azure-logs-rg")
+			// TODO: check for not empty
+			//expect.Expect(t, o.GetAzurePartnerTopic(), "ddd")
 
-		expect.Expect(t, o.GetAzureSubscriptionID(), "b69a6835-57c7-4d53-b0d5-1c6ae580b6d5")
-		expect.Expect(t, o.GetAzureRegion(), "northeurope")
-		expect.Expect(t, o.GetAzureResourceGroup(), "azure-logs-rg")
-		// TODO: check for not empty
-		//expect.Expect(t, o.GetAzurePartnerTopic(), "ddd")
-
-		t.Logf("%s\n", g)
-	})
-
+			t.Logf("%s\n", g)
+		})
+	*/
 	t.Run(LogStreamSinkHTTP, func(t *testing.T) {
 		g := &LogStream{
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
@@ -185,7 +186,8 @@ func TestSinks(t *testing.T) {
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
+		expect.Expect(t, g.GetStatus(), "active")
+		expect.Expect(t, g.GetType(), LogStreamSinkHTTP)
 		expect.Expect(t, o.GetHTTPEndpoint(), "https://example.com/logs")
 		expect.Expect(t, o.GetHTTPAuthorization(), "Bearer sfjkdshfkjsdhfæadkjhhags")
 		expect.Expect(t, o.GetHTTPContentFormat(), "JSONLINES")
@@ -214,7 +216,8 @@ func TestSinks(t *testing.T) {
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
+		expect.Expect(t, g.GetStatus(), "active")
+		expect.Expect(t, g.GetType(), LogStreamSinkDatadog)
 		expect.Expect(t, o.GetDatadogAPIKey(), "121233123455")
 		expect.Expect(t, o.GetDatadogRegion(), "us")
 
@@ -232,7 +235,7 @@ func TestSinks(t *testing.T) {
 			},
 		}
 
-		defer func() { m.LogStream.Delete(g.GetID()) }()
+		//defer func() { m.LogStream.Delete(g.GetID()) }()
 
 		err := m.LogStream.Create(g)
 		if err != nil {
@@ -243,7 +246,8 @@ func TestSinks(t *testing.T) {
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
+		expect.Expect(t, g.GetStatus(), "active")
+		expect.Expect(t, g.GetType(), LogStreamSinkSplunk)
 		expect.Expect(t, o.GetSplunkDomain(), "demo.splunk.com")
 		expect.Expect(t, o.GetSplunkPort(), "8080")
 		expect.Expect(t, o.GetSplunkSecure(), true)
