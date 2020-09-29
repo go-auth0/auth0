@@ -3299,6 +3299,16 @@ func (p *Prompt) String() string {
 	return Stringify(p)
 }
 
+// String returns a string representation of RateLimit.
+func (r *RateLimit) String() string {
+	return Stringify(r)
+}
+
+// String returns a string representation of RateLimitError.
+func (r *RateLimitError) String() string {
+	return Stringify(r)
+}
+
 // GetAllowOfflineAccess returns the AllowOfflineAccess field if it's non-nil, zero value otherwise.
 func (r *ResourceServer) GetAllowOfflineAccess() bool {
 	if r == nil || r.AllowOfflineAccess == nil {

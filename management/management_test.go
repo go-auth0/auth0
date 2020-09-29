@@ -1,9 +1,15 @@
 package management
 
 import (
+	"context"
+	"errors"
+	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
+	"strconv"
 	"testing"
+	"time"
 )
 
 var m *Management
@@ -119,5 +125,45 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func TestRequest_RateLimited(t *testing.T) {
+	expectedReset := time.Now()
+	expectedLimit := 2
+	expectedRemaining := 3
+
+	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Set(RateLimitReset, strconv.Itoa(int(expectedReset.Unix())))
+		rw.Header().Set(RateLimitLimit, strconv.Itoa(expectedLimit))
+		rw.Header().Set(RateLimitRemaining, strconv.Itoa(expectedRemaining))
+		rw.WriteHeader(http.StatusTooManyRequests)
+		rw.Write([]byte(`{"statusCode": 429, "error": "too many requests", "message": "get outta here"}`))
+	}))
+	defer server.Close()
+
+	m := &Management{
+		timeout: time.Second,
+		ctx:     context.Background(),
+		http:    http.DefaultClient,
+	}
+
+	err := m.request("GET", server.URL, nil)
+	var rateLimitErr *RateLimitError
+	if !errors.As(err, &rateLimitErr) {
+		t.Errorf("expected RateLimitError, but got %s", err)
+	}
+
+	actualLimit := rateLimitErr.RateLimit.Limit
+	if int(actualLimit) != expectedLimit {
+		t.Errorf("expected Limit to be %d, got %d", expectedLimit, actualLimit)
+	}
+	actualReset := rateLimitErr.RateLimit.Reset
+	if actualReset.Unix() != expectedReset.Unix() {
+		t.Errorf("expected Reset to be %d, got %d", expectedReset.Unix(), actualReset.Unix())
+	}
+	actualRemaining := rateLimitErr.RateLimit.Remaining
+	if int(actualRemaining) != expectedRemaining {
+		t.Errorf("expected Remaining to be %d, got %d", expectedRemaining, actualRemaining)
 	}
 }
