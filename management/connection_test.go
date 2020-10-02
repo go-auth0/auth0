@@ -181,7 +181,11 @@ func TestConnectionOptions(t *testing.T) {
 
 	t.Run("OAuth2", func(t *testing.T) {
 		o := &ConnectionOptionsOAuth2{
-			Scripts: map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			Scripts:          map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			TokenURL:         auth0.String("https://example.com/oauth2/token"),
+			AuthorizationURL: auth0.String("https://example.com/oauth2/authorize"),
+			ClientID:         auth0.String("test-client"),
+			ClientSecret:     auth0.String("superSecretKey"),
 		}
 		expect.Expect(t, len(o.Scopes()), 0)
 
