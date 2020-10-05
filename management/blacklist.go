@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type BlacklistToken struct {
 
 	// The "aud" (audience) claim identifies the recipients that the JWT is
@@ -34,14 +36,14 @@ func newBlacklistManager(m *Management) *BlacklistManager {
 // and let expire.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Blacklists/get_tokens
-func (m *BlacklistManager) List(opts ...ListOption) (bl []*BlacklistToken, err error) {
-	err = m.get(m.uri("blacklists", "tokens")+m.q(opts), &bl)
+func (m *BlacklistManager) List(ctx context.Context, opts ...ListOption) (bl []*BlacklistToken, err error) {
+	err = m.get(ctx, m.uri("blacklists", "tokens")+m.q(opts), &bl)
 	return
 }
 
 // Create a blacklist for a token.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Blacklists/post_tokens
-func (m *BlacklistManager) Create(t *BlacklistToken) error {
-	return m.post(m.uri("blacklists", "tokens"), t)
+func (m *BlacklistManager) Create(ctx context.Context, t *BlacklistToken) error {
+	return m.post(ctx, m.uri("blacklists", "tokens"), t)
 }

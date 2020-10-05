@@ -4,28 +4,29 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestBlacklist(t *testing.T) {
 	c := &Client{
 		Name: auth0.Stringf("Test Client - Blacklist (%s)", time.Now().Format(time.StampMilli)),
 	}
-	err := m.Client.Create(c)
+
+	err := m.Client.Create(mctx, c)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.Client.Delete(auth0.StringValue(c.ClientID))
+	defer m.Client.Delete(mctx, auth0.StringValue(c.ClientID))
 
 	t.Run("Create", func(t *testing.T) {
-		err := m.Blacklist.Create(&BlacklistToken{
+		err := m.Blacklist.Create(mctx, &BlacklistToken{
 			Audience: auth0.StringValue(c.ClientID),
 			JTI:      "test",
 		})
 		if err != nil {
 			t.Error(err)
 		}
-		bl, err := m.Blacklist.List()
+		bl, err := m.Blacklist.List(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -36,7 +37,7 @@ func TestBlacklist(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		bl, err := m.Blacklist.List(Parameter("aud", auth0.StringValue(c.ClientID)))
+		bl, err := m.Blacklist.List(mctx, Parameter("aud", auth0.StringValue(c.ClientID)))
 		if err != nil {
 			t.Error(err)
 		}

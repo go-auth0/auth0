@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestRuleConfig(t *testing.T) {
@@ -14,7 +14,7 @@ func TestRuleConfig(t *testing.T) {
 	var err error
 
 	t.Run("Upsert", func(t *testing.T) {
-		err = m.RuleConfig.Upsert(key, r)
+		err = m.RuleConfig.Upsert(mctx, key, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -26,7 +26,7 @@ func TestRuleConfig(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		r, err = m.RuleConfig.Read(key)
+		r, err = m.RuleConfig.Read(mctx, key)
 		if err != nil {
 			t.Error(err)
 		}
@@ -36,7 +36,7 @@ func TestRuleConfig(t *testing.T) {
 	t.Run("Upsert", func(t *testing.T) {
 		r.Key = nil // read-only
 		r.Value = auth0.String("baz")
-		err = m.RuleConfig.Upsert(key, r)
+		err = m.RuleConfig.Upsert(mctx, key, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -44,7 +44,7 @@ func TestRuleConfig(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.RuleConfig.Delete(key)
+		err = m.RuleConfig.Delete(mctx, key)
 		if err != nil {
 			t.Error(err)
 		}

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestResourceServer(t *testing.T) {
@@ -28,7 +28,7 @@ func TestResourceServer(t *testing.T) {
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.ResourceServer.Create(s)
+		err = m.ResourceServer.Create(mctx, s)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -36,7 +36,7 @@ func TestResourceServer(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		s, err = m.ResourceServer.Read(auth0.StringValue(s.ID))
+		s, err = m.ResourceServer.Read(mctx, s.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -62,7 +62,7 @@ func TestResourceServer(t *testing.T) {
 			Description: auth0.String("Update Resource"),
 		})
 
-		err = m.ResourceServer.Update(id, s)
+		err = m.ResourceServer.Update(mctx, id, s)
 		if err != nil {
 			t.Error(err)
 		}
@@ -70,7 +70,7 @@ func TestResourceServer(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.ResourceServer.Delete(auth0.StringValue(s.ID))
+		err = m.ResourceServer.Delete(mctx, s.GetID())
 		if err != nil {
 			t.Error(err)
 		}

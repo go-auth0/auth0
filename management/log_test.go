@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestLog(t *testing.T) {
@@ -14,7 +14,7 @@ func TestLog(t *testing.T) {
 	t.Run("List", func(t *testing.T) {
 
 		// Limit results to 5 entries, starting from the first page
-		logs, err := m.Log.List(Page(1), PerPage(5))
+		logs, err := m.Log.List(mctx, Page(1), PerPage(5))
 		if err != nil {
 			t.Error(err)
 		}
@@ -31,7 +31,7 @@ func TestLog(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		log, err := m.Log.Read(auth0.StringValue(firstLog.ID))
+		log, err := m.Log.Read(mctx, auth0.StringValue(firstLog.ID))
 		if err != nil {
 			t.Error(err)
 		}
@@ -40,7 +40,7 @@ func TestLog(t *testing.T) {
 
 	t.Run("Search", func(t *testing.T) {
 		// Search by type "Success Exchange" and limit results to 5 entries
-		logs, err := m.Log.List(Parameter("q", `type:"seacft"`), PerPage(5))
+		logs, err := m.Log.List(mctx, Parameter("q", `type:"seacft"`), PerPage(5))
 		if err != nil {
 			t.Error(err)
 		}

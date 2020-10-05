@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Rule struct {
 
 	// The rule's identifier.
@@ -40,37 +42,37 @@ func newRuleManager(m *Management) *RuleManager {
 // can change the rule's function signature to have user omitted.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/post_rules
-func (m *RuleManager) Create(r *Rule) error {
-	return m.post(m.uri("rules"), r)
+func (m *RuleManager) Create(ctx context.Context, r *Rule) error {
+	return m.post(ctx, m.uri("rules"), r)
 }
 
 // Retrieve rule details. Accepts a list of fields to include or exclude in the result.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules_by_id
-func (m *RuleManager) Read(id string) (r *Rule, err error) {
-	err = m.get(m.uri("rules", id), &r)
+func (m *RuleManager) Read(ctx context.Context, id string) (r *Rule, err error) {
+	err = m.get(ctx, m.uri("rules", id), &r)
 	return
 }
 
 // Update an existing rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/patch_rules_by_id
-func (m *RuleManager) Update(id string, r *Rule) error {
-	return m.patch(m.uri("rules", id), r)
+func (m *RuleManager) Update(ctx context.Context, id string, r *Rule) error {
+	return m.patch(ctx, m.uri("rules", id), r)
 }
 
 // Delete a rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/delete_rules_by_id
-func (m *RuleManager) Delete(id string) error {
-	return m.delete(m.uri("rules", id))
+func (m *RuleManager) Delete(ctx context.Context, id string) error {
+	return m.delete(ctx, m.uri("rules", id))
 }
 
 // List all rules.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules
-func (m *RuleManager) List(opts ...ListOption) (r *RuleList, err error) {
+func (m *RuleManager) List(ctx context.Context, opts ...ListOption) (r *RuleList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("rules")+m.q(opts), &r)
+	err = m.get(ctx, m.uri("rules")+m.q(opts), &r)
 	return
 }

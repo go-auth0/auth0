@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/auth0.v4/internal/client"
+	"gopkg.in/auth0.v5/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -129,11 +129,6 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 
 	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
 
-	_, err = oauth2.Token(m.ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	m.http = client.New(m.ctx, oauth2)
 	m.http = client.WrapDebug(m.http, m.debug)
 	m.http = client.WrapUserAgent(m.http, m.userAgent)
@@ -190,7 +185,7 @@ func (m *Management) defaults(options []ListOption) []ListOption {
 	return options
 }
 
-func (m *Management) request(method, uri string, v interface{}) error {
+func (m *Management) request(ctx context.Context, method, uri string, v interface{}) error {
 
 	var payload bytes.Buffer
 	if v != nil {
@@ -200,20 +195,13 @@ func (m *Management) request(method, uri string, v interface{}) error {
 		}
 	}
 
-	req, err := http.NewRequest(method, uri, &payload)
+	req, err := http.NewRequestWithContext(ctx, method, uri, &payload)
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
-	ctx, cancel := context.WithTimeout(m.ctx, m.timeout)
-	defer cancel()
-
-	if m.http == nil {
-		m.http = http.DefaultClient
-	}
-
-	res, err := m.http.Do(req.WithContext(ctx))
+	res, err := m.http.Do(req)
 	if err != nil {
 		select {
 		case <-ctx.Done():
@@ -238,24 +226,24 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	return nil
 }
 
-func (m *Management) get(uri string, v interface{}) error {
-	return m.request("GET", uri, v)
+func (m *Management) get(ctx context.Context, uri string, v interface{}) error {
+	return m.request(ctx, "GET", uri, v)
 }
 
-func (m *Management) post(uri string, v interface{}) error {
-	return m.request("POST", uri, v)
+func (m *Management) post(ctx context.Context, uri string, v interface{}) error {
+	return m.request(ctx, "POST", uri, v)
 }
 
-func (m *Management) put(uri string, v interface{}) error {
-	return m.request("PUT", uri, v)
+func (m *Management) put(ctx context.Context, uri string, v interface{}) error {
+	return m.request(ctx, "PUT", uri, v)
 }
 
-func (m *Management) patch(uri string, v interface{}) error {
-	return m.request("PATCH", uri, v)
+func (m *Management) patch(ctx context.Context, uri string, v interface{}) error {
+	return m.request(ctx, "PATCH", uri, v)
 }
 
-func (m *Management) delete(uri string) error {
-	return m.request("DELETE", uri, nil)
+func (m *Management) delete(ctx context.Context, uri string) error {
+	return m.request(ctx, "DELETE", uri, nil)
 }
 
 type apiOption func(*Management)
@@ -275,8 +263,7 @@ func WithDebug(d bool) apiOption {
 	}
 }
 
-// WitContext configures the management client to use the provided context
-// instead of the provided one.
+// WitContext configures the management client to use the provided context.
 func WithContext(ctx context.Context) apiOption {
 	return func(m *Management) {
 		m.ctx = ctx

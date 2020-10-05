@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Ticket struct {
 	// The user will be redirected to this endpoint once the ticket is used
 	ResultURL *string `json:"result_url,omitempty"`
@@ -46,13 +48,13 @@ func newTicketManager(m *Management) *TicketManager {
 // VerifyEmail creates a ticket to verify a user's email address.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification
-func (m *TicketManager) VerifyEmail(t *Ticket) error {
-	return m.post(m.uri("tickets", "email-verification"), t)
+func (m *TicketManager) VerifyEmail(ctx context.Context, t *Ticket) error {
+	return m.post(ctx, m.uri("tickets", "email-verification"), t)
 }
 
 // ChangePassword creates a password change ticket for a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_password_change
-func (m *TicketManager) ChangePassword(t *Ticket) error {
-	return m.post(m.uri("tickets", "password-change"), t)
+func (m *TicketManager) ChangePassword(ctx context.Context, t *Ticket) error {
+	return m.post(ctx, m.uri("tickets", "password-change"), t)
 }

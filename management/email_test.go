@@ -3,8 +3,8 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestEmail(t *testing.T) {
@@ -24,7 +24,7 @@ func TestEmail(t *testing.T) {
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Email.Create(e)
+		err = m.Email.Create(mctx, e)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -32,7 +32,7 @@ func TestEmail(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		e, err = m.Email.Read()
+		e, err = m.Email.Read(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -49,7 +49,7 @@ func TestEmail(t *testing.T) {
 		e.Enabled = auth0.Bool(false)
 		e.DefaultFromAddress = auth0.String("info@example.com")
 
-		err = m.Email.Update(e)
+		err = m.Email.Update(mctx, e)
 		if err != nil {
 			t.Error(err)
 		}
@@ -57,7 +57,7 @@ func TestEmail(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Email.Delete()
+		err = m.Email.Delete(mctx)
 		if err != nil {
 			t.Error(err)
 		}

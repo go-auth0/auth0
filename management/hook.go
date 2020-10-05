@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Hook struct {
 
 	// The hook's identifier.
@@ -46,53 +48,53 @@ func newHookManager(m *Management) *HookManager {
 // Note: Changing a hook's trigger changes the signature of the script and should be done with caution.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/post_hooks
-func (m *HookManager) Create(r *Hook) error {
-	return m.post(m.uri("hooks"), r)
+func (m *HookManager) Create(ctx context.Context, r *Hook) error {
+	return m.post(ctx, m.uri("hooks"), r)
 }
 
 // Retrieve hook details. Accepts a list of fields to include or exclude in the result.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_hooks_by_id
-func (m *HookManager) Read(id string) (r *Hook, err error) {
-	err = m.get(m.uri("hooks", id), &r)
+func (m *HookManager) Read(ctx context.Context, id string) (r *Hook, err error) {
+	err = m.get(ctx, m.uri("hooks", id), &r)
 	return
 }
 
 // Update an existing hook.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/patch_hooks_by_id
-func (m *HookManager) Update(id string, r *Hook) error {
-	return m.patch(m.uri("hooks", id), r)
+func (m *HookManager) Update(ctx context.Context, id string, r *Hook) error {
+	return m.patch(ctx, m.uri("hooks", id), r)
 }
 
 // Delete a hook.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/delete_hooks_by_id
-func (m *HookManager) Delete(id string) error {
-	return m.delete(m.uri("hooks", id))
+func (m *HookManager) Delete(ctx context.Context, id string) error {
+	return m.delete(ctx, m.uri("hooks", id))
 }
 
 // List all hooks.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_hooks
-func (m *HookManager) List(opts ...ListOption) (r *HookList, err error) {
+func (m *HookManager) List(ctx context.Context, opts ...ListOption) (r *HookList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("roles")+m.q(opts), &r)
+	err = m.get(ctx, m.uri("roles")+m.q(opts), &r)
 	return
 }
 
 // CreateSecrets creates hook secrets on a hook that has no secrets defined
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/post_secrets
-func (m *HookManager) CreateSecrets(hookID string, r *HookSecrets) (err error) {
-	return m.post(m.uri("hooks", hookID, "secrets"), r)
+func (m *HookManager) CreateSecrets(ctx context.Context, hookID string, r *HookSecrets) (err error) {
+	return m.post(ctx, m.uri("hooks", hookID, "secrets"), r)
 }
 
 // UpdateSecrets updates the values of a hook's secrets that have previously been created
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
-func (m *HookManager) UpdateSecrets(hookID string, r *HookSecrets) (err error) {
-	return m.patch(m.uri("hooks", hookID, "secrets"), r)
+func (m *HookManager) UpdateSecrets(ctx context.Context, hookID string, r *HookSecrets) (err error) {
+	return m.patch(ctx, m.uri("hooks", hookID, "secrets"), r)
 }
 
 // Secrets list all secrets configured for the given hook
@@ -101,25 +103,25 @@ func (m *HookManager) UpdateSecrets(hookID string, r *HookSecrets) (err error) {
 // execution (they all appear as "_VALUE_NOT_SHOWN_")
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_secrets
-func (m *HookManager) Secrets(hookID string) (r *HookSecrets, err error) {
-	err = m.get(m.uri("hooks", hookID, "secrets"), &r)
+func (m *HookManager) Secrets(ctx context.Context, hookID string) (r *HookSecrets, err error) {
+	err = m.get(ctx, m.uri("hooks", hookID, "secrets"), &r)
 	return
 }
 
 // RemoveSecrets removes a list of hook secret keys from a given hook's secrets by the keys of the secrets
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/delete_secrets
-func (m *HookManager) RemoveSecrets(hookID string, keys ...string) (err error) {
-	return m.request("DELETE", m.uri("hooks", hookID, "secrets"), keys)
+func (m *HookManager) RemoveSecrets(ctx context.Context, hookID string, keys ...string) (err error) {
+	return m.request(ctx, "DELETE", m.uri("hooks", hookID, "secrets"), keys)
 }
 
 // RemoveAllSecrets removes all secrets associated with a given hook
-func (m *HookManager) RemoveAllSecrets(hookID string) (err error) {
-	r, err := m.Secrets(hookID)
+func (m *HookManager) RemoveAllSecrets(ctx context.Context, hookID string) (err error) {
+	r, err := m.Secrets(ctx, hookID)
 	if err == nil {
 		keys := r.Keys()
 		if len(keys) > 0 {
-			err = m.RemoveSecrets(hookID, keys...)
+			err = m.RemoveSecrets(ctx, hookID, keys...)
 		}
 	}
 	return err

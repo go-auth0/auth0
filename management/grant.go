@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Grant struct {
 
 	// The id of the grant.
@@ -28,13 +30,13 @@ func newGrantManager(m *Management) *GrantManager {
 // List the grants associated with your account.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
-func (m *GrantManager) List(opts ...ListOption) (g []*Grant, err error) {
-	err = m.get(m.uri("grants")+m.q(opts), &g)
+func (m *GrantManager) List(ctx context.Context, opts ...ListOption) (g []*Grant, err error) {
+	err = m.get(ctx, m.uri("grants")+m.q(opts), &g)
 	return
 }
 
 // Delete revokes a grant associated with a user-id
 // https://auth0.com/docs/api/management/v2#!/Grants/delete_grants_by_id
-func (m *GrantManager) Delete(id string, opts ...ListOption) error {
-	return m.delete(m.uri("grants", id) + m.q(opts))
+func (m *GrantManager) Delete(ctx context.Context, id string, opts ...ListOption) error {
+	return m.delete(ctx, m.uri("grants", id)+m.q(opts))
 }

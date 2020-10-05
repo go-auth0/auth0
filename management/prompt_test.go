@@ -7,7 +7,7 @@ import (
 func TestPrompt(t *testing.T) {
 
 	t.Run("Read", func(t *testing.T) {
-		ps, err := m.Prompt.Read()
+		ps, err := m.Prompt.Read(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -16,19 +16,19 @@ func TestPrompt(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 		defer func() {
-			m.Prompt.Update(&Prompt{
+			m.Prompt.Update(mctx, &Prompt{
 				UniversalLoginExperience: "classic",
 			})
 		}()
 		expected := "new"
-		err := m.Prompt.Update(&Prompt{
+		err := m.Prompt.Update(mctx, &Prompt{
 			UniversalLoginExperience: expected,
 		})
 		if err != nil {
 			t.Error(err)
 		}
 
-		ps, err := m.Prompt.Read()
+		ps, err := m.Prompt.Read(mctx)
 		if err != nil {
 			t.Error(err)
 		}

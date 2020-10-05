@@ -1,6 +1,8 @@
 package management
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGrant(t *testing.T) {
 
@@ -8,7 +10,7 @@ func TestGrant(t *testing.T) {
 
 	t.Run("List", func(t *testing.T) {
 		var gs []*Grant
-		gs, err = m.Grant.List()
+		gs, err = m.Grant.List(mctx)
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestTicket(t *testing.T) {
@@ -16,11 +16,11 @@ func TestTicket(t *testing.T) {
 		Username:   auth0.String("chuck"),
 		Password:   auth0.String("I have a password and its a secret"),
 	}
-	m.User.Create(u)
+	m.User.Create(mctx, u)
 
 	userID := auth0.StringValue(u.ID)
 
-	defer m.User.Delete(userID)
+	defer m.User.Delete(mctx, userID)
 
 	t.Run("VerifyEmail", func(t *testing.T) {
 
@@ -30,7 +30,7 @@ func TestTicket(t *testing.T) {
 			TTLSec:    auth0.Int(3600),
 		}
 
-		err = m.Ticket.VerifyEmail(v)
+		err = m.Ticket.VerifyEmail(mctx, v)
 		if err != nil {
 			t.Error(err)
 		}
@@ -47,7 +47,7 @@ func TestTicket(t *testing.T) {
 			MarkEmailAsVerified: auth0.Bool(true),
 		}
 
-		err = m.Ticket.ChangePassword(v)
+		err = m.Ticket.ChangePassword(mctx, v)
 		if err != nil {
 			t.Error(err)
 		}

@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestConnection(t *testing.T) {
@@ -18,7 +18,7 @@ func TestConnection(t *testing.T) {
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Connection.Create(c)
+		err = m.Connection.Create(mctx, c)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -29,7 +29,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.Connection.Read(c.GetID())
+		c, err = m.Connection.Read(mctx, c.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -37,7 +37,7 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		cs, err := m.Connection.List()
+		cs, err := m.Connection.List(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -106,7 +106,7 @@ func TestConnection(t *testing.T) {
 			Configuration: map[string]interface{}{"foo": "bar"},
 		}
 
-		err = m.Connection.Update(id, c)
+		err = m.Connection.Update(mctx, id, c)
 		if err != nil {
 			t.Error(err)
 		}
@@ -115,14 +115,14 @@ func TestConnection(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Connection.Delete(c.GetID())
+		err = m.Connection.Delete(mctx, c.GetID())
 		if err != nil {
 			t.Error(err)
 		}
 	})
 
 	t.Run("ReadByName", func(t *testing.T) {
-		cs, err := m.Connection.ReadByName("Username-Password-Authentication")
+		cs, err := m.Connection.ReadByName(mctx, "Username-Password-Authentication")
 		if err != nil {
 			t.Error(err)
 		}
@@ -146,9 +146,9 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() { m.Connection.Delete(mctx, g.GetID()) }()
 
-		err := m.Connection.Create(g)
+		err := m.Connection.Create(mctx, g)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -220,9 +220,9 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(e.GetID()) }()
+		defer func() { m.Connection.Delete(mctx, e.GetID()) }()
 
-		err := m.Connection.Create(e)
+		err := m.Connection.Create(mctx, e)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -271,9 +271,9 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(s.GetID()) }()
+		defer func() { m.Connection.Delete(mctx, s.GetID()) }()
 
-		err := m.Connection.Create(s)
+		err := m.Connection.Create(mctx, s)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -336,9 +336,9 @@ yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 				},
 			},
 		}
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() { m.Connection.Delete(mctx, g.GetID()) }()
 
-		err := m.Connection.Create(g)
+		err := m.Connection.Create(mctx, g)
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestTenant(t *testing.T) {
@@ -12,7 +12,7 @@ func TestTenant(t *testing.T) {
 	var err error
 
 	t.Run("Read", func(t *testing.T) {
-		tn, err = m.Tenant.Read()
+		tn, err = m.Tenant.Read(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -20,7 +20,7 @@ func TestTenant(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		err = m.Tenant.Update(&Tenant{
+		err = m.Tenant.Update(mctx, &Tenant{
 			FriendlyName:          auth0.String("My Example Tenant"),
 			SupportURL:            auth0.String("https://support.example.com"),
 			SupportEmail:          auth0.String("support@example.com"),
@@ -29,7 +29,7 @@ func TestTenant(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		tn, _ = m.Tenant.Read()
+		tn, _ = m.Tenant.Read(mctx)
 		t.Logf("%v\n", tn)
 	})
 }

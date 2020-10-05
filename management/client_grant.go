@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type ClientGrant struct {
 
 	// A generated string identifying the client grant.
@@ -30,8 +32,8 @@ func newClientGrantManager(m *Management) *ClientGrantManager {
 // Create a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/post_client_grants
-func (m *ClientGrantManager) Create(g *ClientGrant) (err error) {
-	return m.post(m.uri("client-grants"), g)
+func (m *ClientGrantManager) Create(ctx context.Context, g *ClientGrant) (err error) {
+	return m.post(ctx, m.uri("client-grants"), g)
 }
 
 // Retrieves a client grant by its id.
@@ -39,10 +41,10 @@ func (m *ClientGrantManager) Create(g *ClientGrant) (err error) {
 // The Auth0 Management API does not offer a method to retrieve a client grant
 // by id, we fake this by listing all client grants and matching by id on the
 // client side. For this reason this method should be used with caution.
-func (m *ClientGrantManager) Read(id string) (*ClientGrant, error) {
+func (m *ClientGrantManager) Read(ctx context.Context, id string) (*ClientGrant, error) {
 	var page int
 	for {
-		l, err := m.List(Page(page))
+		l, err := m.List(ctx, Page(page))
 		if err != nil {
 			return nil, err
 		}
@@ -66,15 +68,15 @@ func (m *ClientGrantManager) Read(id string) (*ClientGrant, error) {
 // Update a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/patch_client_grants_by_id
-func (m *ClientGrantManager) Update(id string, g *ClientGrant) (err error) {
-	return m.patch(m.uri("client-grants", id), g)
+func (m *ClientGrantManager) Update(ctx context.Context, id string, g *ClientGrant) (err error) {
+	return m.patch(ctx, m.uri("client-grants", id), g)
 }
 
 // Delete a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/delete_client_grants_by_id
-func (m *ClientGrantManager) Delete(id string) (err error) {
-	return m.delete(m.uri("client-grants", id))
+func (m *ClientGrantManager) Delete(ctx context.Context, id string) (err error) {
+	return m.delete(ctx, m.uri("client-grants", id))
 }
 
 // List all client grants.
@@ -83,8 +85,8 @@ func (m *ClientGrantManager) Delete(id string) (err error) {
 // not provided.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants
-func (m *ClientGrantManager) List(opts ...ListOption) (gs *ClientGrantList, err error) {
+func (m *ClientGrantManager) List(ctx context.Context, opts ...ListOption) (gs *ClientGrantList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("client-grants")+m.q(opts), &gs)
+	err = m.get(ctx, m.uri("client-grants")+m.q(opts), &gs)
 	return
 }

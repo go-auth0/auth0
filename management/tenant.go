@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Tenant struct {
 	// Change password page settings
 	ChangePassword *TenantChangePassword `json:"change_password,omitempty"`
@@ -178,14 +180,14 @@ func newTenantManager(m *Management) *TenantManager {
 // specified.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/get_settings
-func (m *TenantManager) Read() (t *Tenant, err error) {
-	err = m.get(m.uri("tenants", "settings"), &t)
+func (m *TenantManager) Read(ctx context.Context) (t *Tenant, err error) {
+	err = m.get(ctx, m.uri("tenants", "settings"), &t)
 	return
 }
 
 // Update settings for a tenant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/patch_settings
-func (m *TenantManager) Update(t *Tenant) (err error) {
-	return m.patch(m.uri("tenants", "settings"), t)
+func (m *TenantManager) Update(ctx context.Context, t *Tenant) (err error) {
+	return m.patch(ctx, m.uri("tenants", "settings"), t)
 }

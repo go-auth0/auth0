@@ -1,11 +1,12 @@
 package management
 
 import (
+	"context"
 	"encoding/json"
 	"sort"
 	"strings"
 
-	"gopkg.in/auth0.v4/internal/tag"
+	"gopkg.in/auth0.v5/internal/tag"
 )
 
 const (
@@ -675,24 +676,24 @@ func newConnectionManager(m *Management) *ConnectionManager {
 // Create a new connection.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/post_connections
-func (m *ConnectionManager) Create(c *Connection) error {
-	return m.post(m.uri("connections"), c)
+func (m *ConnectionManager) Create(ctx context.Context, c *Connection) error {
+	return m.post(ctx, m.uri("connections"), c)
 }
 
 // Read retrieves a connection by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
-func (m *ConnectionManager) Read(id string) (c *Connection, err error) {
-	err = m.get(m.uri("connections", id), &c)
+func (m *ConnectionManager) Read(ctx context.Context, id string) (c *Connection, err error) {
+	err = m.get(ctx, m.uri("connections", id), &c)
 	return
 }
 
 // List all connections.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
-func (m *ConnectionManager) List(opts ...ListOption) (c *ConnectionList, err error) {
+func (m *ConnectionManager) List(ctx context.Context, opts ...ListOption) (c *ConnectionList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("connections")+m.q(opts), &c)
+	err = m.get(ctx, m.uri("connections")+m.q(opts), &c)
 	return
 }
 
@@ -702,21 +703,21 @@ func (m *ConnectionManager) List(opts ...ListOption) (c *ConnectionList, err err
 // overridden, so ensure that all parameters are present.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/patch_connections_by_id
-func (m *ConnectionManager) Update(id string, c *Connection) (err error) {
-	return m.patch(m.uri("connections", id), c)
+func (m *ConnectionManager) Update(ctx context.Context, id string, c *Connection) (err error) {
+	return m.patch(ctx, m.uri("connections", id), c)
 }
 
 // Delete a connection and all its users.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/delete_connections_by_id
-func (m *ConnectionManager) Delete(id string) (err error) {
-	return m.delete(m.uri("connections", id))
+func (m *ConnectionManager) Delete(ctx context.Context, id string) (err error) {
+	return m.delete(ctx, m.uri("connections", id))
 }
 
 // ReadByName retrieves a connection by its name. This is a helper method when a
 // connection id is not readily available.
-func (m *ConnectionManager) ReadByName(name string) (*Connection, error) {
-	c, err := m.List(Parameter("name", name))
+func (m *ConnectionManager) ReadByName(ctx context.Context, name string) (*Connection, error) {
+	c, err := m.List(ctx, Parameter("name", name))
 	if err != nil {
 		return nil, err
 	}

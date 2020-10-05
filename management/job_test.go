@@ -3,14 +3,14 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestJob(t *testing.T) {
 
 	var err error
 
-	c, err := m.Connection.ReadByName("Username-Password-Authentication")
+	c, err := m.Connection.ReadByName(mctx, "Username-Password-Authentication")
 	if err != nil {
 		t.Error(err)
 	}
@@ -22,13 +22,13 @@ func TestJob(t *testing.T) {
 		Username:   auth0.String("example"),
 		Password:   auth0.String("I have a password and its a secret"),
 	}
-	err = m.User.Create(u)
+	err = m.User.Create(mctx, u)
 	if err != nil {
 		t.Error(err)
 	}
 	userID := auth0.StringValue(u.ID)
 
-	defer m.User.Delete(userID)
+	defer m.User.Delete(mctx, userID)
 
 	var jobID string
 
@@ -37,7 +37,7 @@ func TestJob(t *testing.T) {
 			UserID: auth0.String(userID),
 		}
 
-		err = m.Job.VerifyEmail(job)
+		err = m.Job.VerifyEmail(mctx, job)
 		if err != nil {
 			t.Error(err)
 		}
@@ -50,7 +50,7 @@ func TestJob(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		job, err := m.Job.Read(jobID)
+		job, err := m.Job.Read(mctx, jobID)
 		if err != nil {
 			t.Error(err)
 		}
@@ -68,7 +68,7 @@ func TestJob(t *testing.T) {
 				{"name": "identities[0].connection"},
 			},
 		}
-		err := m.Job.ExportUsers(job)
+		err := m.Job.ExportUsers(mctx, job)
 		if err != nil {
 			t.Error(err)
 		}
@@ -84,7 +84,7 @@ func TestJob(t *testing.T) {
 				{"email": "alex@example.com", "email_verified": true},
 			},
 		}
-		err = m.Job.ImportUsers(job)
+		err = m.Job.ImportUsers(mctx, job)
 		if err != nil {
 			t.Error(err)
 		}

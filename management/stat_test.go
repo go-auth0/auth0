@@ -5,7 +5,7 @@ import "testing"
 func TestStat(t *testing.T) {
 
 	t.Run("ActiveUsers", func(t *testing.T) {
-		i, err := m.Stat.ActiveUsers()
+		i, err := m.Stat.ActiveUsers(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -13,7 +13,7 @@ func TestStat(t *testing.T) {
 	})
 
 	t.Run("Daily", func(t *testing.T) {
-		s, err := m.Stat.Daily()
+		s, err := m.Stat.Daily(mctx)
 		if err != nil {
 			t.Error(err)
 		}

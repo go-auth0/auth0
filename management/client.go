@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Client struct {
 	// The name of the client
 	Name *string `json:"name,omitempty"`
@@ -141,42 +143,49 @@ func newClientManager(m *Management) *ClientManager {
 	return &ClientManager{m}
 }
 
+func (m *ClientManager) WithContext(ctx context.Context) *ClientManager {
+	mm := &Management{}
+	*mm = *m.Management
+	mm.ctx = ctx
+	return newClientManager(mm)
+}
+
 // Create a new client application.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/post_clients
-func (m *ClientManager) Create(c *Client) (err error) {
-	return m.post(m.uri("clients"), c)
+func (m *ClientManager) Create(ctx context.Context, c *Client) (err error) {
+	return m.post(ctx, m.uri("clients"), c)
 }
 
 // Read a client by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients_by_id
-func (m *ClientManager) Read(id string) (c *Client, err error) {
-	err = m.get(m.uri("clients", id), &c)
+func (m *ClientManager) Read(ctx context.Context, id string) (c *Client, err error) {
+	err = m.get(ctx, m.uri("clients", id), &c)
 	return
 }
 
 // List all client applications.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients
-func (m *ClientManager) List(opts ...ListOption) (c *ClientList, err error) {
+func (m *ClientManager) List(ctx context.Context, opts ...ListOption) (c *ClientList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("clients")+m.q(opts), &c)
+	err = m.get(ctx, m.uri("clients")+m.q(opts), &c)
 	return
 }
 
 // Update a client.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/patch_clients_by_id
-func (m *ClientManager) Update(id string, c *Client) (err error) {
-	return m.patch(m.uri("clients", id), c)
+func (m *ClientManager) Update(ctx context.Context, id string, c *Client) (err error) {
+	return m.patch(ctx, m.uri("clients", id), c)
 }
 
 // RotateSecret rotates a client secret.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/post_rotate_secret
-func (m *ClientManager) RotateSecret(id string) (c *Client, err error) {
-	err = m.post(m.uri("clients", id, "rotate-secret"), &c)
+func (m *ClientManager) RotateSecret(ctx context.Context, id string) (c *Client, err error) {
+	err = m.post(ctx, m.uri("clients", id, "rotate-secret"), &c)
 	return
 }
 
@@ -184,6 +193,6 @@ func (m *ClientManager) RotateSecret(id string) (c *Client, err error) {
 // given its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/delete_clients_by_id
-func (m *ClientManager) Delete(id string) error {
-	return m.delete(m.uri("clients", id))
+func (m *ClientManager) Delete(ctx context.Context, id string) error {
+	return m.delete(ctx, m.uri("clients", id))
 }

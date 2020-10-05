@@ -1,12 +1,16 @@
 package management
 
 import (
+	"context"
 	"net/url"
 	"os"
 	"testing"
 )
 
-var m *Management
+var (
+	m    *Management
+	mctx = context.Background()
+)
 
 var (
 	domain       = os.Getenv("AUTH0_DOMAIN")
@@ -18,7 +22,8 @@ var (
 func init() {
 	var err error
 	m, err = New(domain, clientID, clientSecret,
-		WithDebug(debug == "true" || debug == "1" || debug == "on"))
+		WithDebug(debug == "true" || debug == "1" || debug == "on"),
+		WithContext(mctx))
 	if err != nil {
 		panic(err)
 	}

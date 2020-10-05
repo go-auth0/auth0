@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestEmailTemplate(t *testing.T) {
@@ -21,11 +21,11 @@ func TestEmailTemplate(t *testing.T) {
 		},
 	}
 
-	err := m.Email.Create(e)
+	err := m.Email.Create(mctx, e)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.Email.Delete()
+	defer m.Email.Delete(mctx)
 
 	et := &EmailTemplate{
 		Template:  auth0.String("verify_email"),
@@ -38,7 +38,7 @@ func TestEmailTemplate(t *testing.T) {
 	}
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.EmailTemplate.Create(et)
+		err = m.EmailTemplate.Create(mctx, et)
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() != http.StatusConflict {
 				t.Fatal(err)
@@ -48,7 +48,7 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		et, err = m.EmailTemplate.Read(auth0.StringValue(et.Template))
+		et, err = m.EmailTemplate.Read(mctx, et.GetTemplate())
 		if err != nil {
 			t.Error(err)
 		}
@@ -56,7 +56,7 @@ func TestEmailTemplate(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), &EmailTemplate{
+		err = m.EmailTemplate.Update(mctx, et.GetTemplate(), &EmailTemplate{
 			Body: auth0.String("<html><body><h1>Let's get you verified!</h1></body></html>"),
 		})
 		if err != nil {
@@ -71,7 +71,7 @@ func TestEmailTemplate(t *testing.T) {
 		et.Body = auth0.String("<html><body><h1>Let's get you verified!</h1></body></html>")
 		et.From = auth0.String("someone@example.com")
 
-		err = m.EmailTemplate.Replace(auth0.StringValue(et.Template), et)
+		err = m.EmailTemplate.Replace(mctx, et.GetTemplate(), et)
 		if err != nil {
 			t.Error(err)
 		}
@@ -80,7 +80,7 @@ func TestEmailTemplate(t *testing.T) {
 
 	t.Run("Delete", func(t *testing.T) {
 		et.Enabled = auth0.Bool(false)
-		err = m.EmailTemplate.Update(auth0.StringValue(et.Template), et)
+		err = m.EmailTemplate.Update(mctx, et.GetTemplate(), et)
 		if err != nil {
 			t.Error(err)
 		}

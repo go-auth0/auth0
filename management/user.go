@@ -1,6 +1,7 @@
 package management
 
 import (
+	"context"
 	"encoding/json"
 	"reflect"
 	"strconv"
@@ -189,16 +190,16 @@ func newUserManager(m *Management) *UserManager {
 // connections require `email` and `password`.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_users
-func (m *UserManager) Create(u *User) error {
-	return m.post(m.uri("users"), u)
+func (m *UserManager) Create(ctx context.Context, u *User) error {
+	return m.post(ctx, m.uri("users"), u)
 }
 
 // Read user details for a given user_id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users_by_id
-func (m *UserManager) Read(id string) (*User, error) {
+func (m *UserManager) Read(ctx context.Context, id string) (*User, error) {
 	u := new(User)
-	err := m.get(m.uri("users", id), u)
+	err := m.get(ctx, m.uri("users", id), u)
 	return u, err
 }
 
@@ -223,29 +224,29 @@ func (m *UserManager) Read(id string) (*User, error) {
 // - `verify_email`
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
-func (m *UserManager) Update(id string, u *User) (err error) {
-	return m.patch(m.uri("users", id), u)
+func (m *UserManager) Update(ctx context.Context, id string, u *User) (err error) {
+	return m.patch(ctx, m.uri("users", id), u)
 }
 
 // Delete a single user based on its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_users_by_id
-func (m *UserManager) Delete(id string) (err error) {
-	return m.delete(m.uri("users", id))
+func (m *UserManager) Delete(ctx context.Context, id string) (err error) {
+	return m.delete(ctx, m.uri("users", id))
 }
 
 // List all users. This method forces the `include_totals` option.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users
-func (m *UserManager) List(opts ...ListOption) (ul *UserList, err error) {
+func (m *UserManager) List(ctx context.Context, opts ...ListOption) (ul *UserList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("users")+m.q(opts), &ul)
+	err = m.get(ctx, m.uri("users")+m.q(opts), &ul)
 	return
 }
 
 // Search is an alias for List.
-func (m *UserManager) Search(opts ...ListOption) (ul *UserList, err error) {
-	return m.List(opts...)
+func (m *UserManager) Search(ctx context.Context, opts ...ListOption) (ul *UserList, err error) {
+	return m.List(ctx, opts...)
 }
 
 // ListByEmail retrieves all users matching a given email.
@@ -262,78 +263,78 @@ func (m *UserManager) Search(opts ...ListOption) (ul *UserList, err error) {
 // email addresses using the correct case.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email
-func (m *UserManager) ListByEmail(email string, opts ...ListOption) (us []*User, err error) {
+func (m *UserManager) ListByEmail(ctx context.Context, email string, opts ...ListOption) (us []*User, err error) {
 	opts = append(opts, Parameter("email", email))
-	err = m.get(m.uri("users-by-email")+m.q(opts), &us)
+	err = m.get(ctx, m.uri("users-by-email")+m.q(opts), &us)
 	return
 }
 
 // Roles lists all roles associated with a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_user_roles
-func (m *UserManager) Roles(id string, opts ...ListOption) (r *RoleList, err error) {
+func (m *UserManager) Roles(ctx context.Context, id string, opts ...ListOption) (r *RoleList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("users", id, "roles")+m.q(opts), &r)
+	err = m.get(ctx, m.uri("users", id, "roles")+m.q(opts), &r)
 	return r, err
 }
 
 // AssignRoles assignes roles to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_user_roles
-func (m *UserManager) AssignRoles(id string, roles ...*Role) error {
+func (m *UserManager) AssignRoles(ctx context.Context, id string, roles ...*Role) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
 		r["roles"][i] = role.ID
 	}
-	return m.post(m.uri("users", id, "roles"), &r)
+	return m.post(ctx, m.uri("users", id, "roles"), &r)
 }
 
 // RemoveRoles removes any roles associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_user_roles
-func (m *UserManager) RemoveRoles(id string, roles ...*Role) error {
+func (m *UserManager) RemoveRoles(ctx context.Context, id string, roles ...*Role) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
 		r["roles"][i] = role.ID
 	}
-	return m.request("DELETE", m.uri("users", id, "roles"), &r)
+	return m.request(ctx, "DELETE", m.uri("users", id, "roles"), &r)
 }
 
 // Permissions lists the permissions associated to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_permissions
-func (m *UserManager) Permissions(id string, opts ...ListOption) (p *PermissionList, err error) {
+func (m *UserManager) Permissions(ctx context.Context, id string, opts ...ListOption) (p *PermissionList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("users", id, "permissions")+m.q(opts), &p)
+	err = m.get(ctx, m.uri("users", id, "permissions")+m.q(opts), &p)
 	return p, err
 }
 
 // AssignPermissions assigns permissions to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_permissions
-func (m *UserManager) AssignPermissions(id string, permissions ...*Permission) error {
+func (m *UserManager) AssignPermissions(ctx context.Context, id string, permissions ...*Permission) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
-	return m.post(m.uri("users", id, "permissions"), &p)
+	return m.post(ctx, m.uri("users", id, "permissions"), &p)
 }
 
 // RemovePermissions removes any permissions associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_permissions
-func (m *UserManager) RemovePermissions(id string, permissions ...*Permission) error {
+func (m *UserManager) RemovePermissions(ctx context.Context, id string, permissions ...*Permission) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
-	return m.request("DELETE", m.uri("users", id, "permissions"), &p)
+	return m.request(ctx, "DELETE", m.uri("users", id, "permissions"), &p)
 }
 
 // Blocks retrieves a list of blocked IP addresses of a particular user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks_by_id
-func (m *UserManager) Blocks(id string) ([]*UserBlock, error) {
+func (m *UserManager) Blocks(ctx context.Context, id string) ([]*UserBlock, error) {
 	b := new(userBlock)
-	err := m.get(m.uri("user-blocks", id), &b)
+	err := m.get(ctx, m.uri("user-blocks", id), &b)
 	return b.BlockedFor, err
 }
 
@@ -343,6 +344,6 @@ func (m *UserManager) Blocks(id string) ([]*UserBlock, error) {
 // Note: This endpoint does not unblock users that were blocked by admins.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
-func (m *UserManager) Unblock(id string) error {
-	return m.delete(m.uri("user-blocks", id))
+func (m *UserManager) Unblock(ctx context.Context, id string) error {
+	return m.delete(ctx, m.uri("user-blocks", id))
 }

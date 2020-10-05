@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestGuardian(t *testing.T) {
@@ -11,7 +11,7 @@ func TestGuardian(t *testing.T) {
 	t.Run("MultiFactor", func(t *testing.T) {
 
 		t.Run("List", func(t *testing.T) {
-			mfa, err := m.Guardian.MultiFactor.List()
+			mfa, err := m.Guardian.MultiFactor.List(mctx)
 			if err != nil {
 				t.Error(err)
 			}
@@ -21,24 +21,24 @@ func TestGuardian(t *testing.T) {
 		t.Run("SMS", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.SMS.Enable(false)
+				defer m.Guardian.MultiFactor.SMS.Enable(mctx, false)
 
-				err := m.Guardian.MultiFactor.SMS.Enable(true)
+				err := m.Guardian.MultiFactor.SMS.Enable(mctx, true)
 				if err != nil {
 					t.Error(err)
 				}
 
-				mfa, _ := m.Guardian.MultiFactor.List()
+				mfa, _ := m.Guardian.MultiFactor.List(mctx)
 				t.Logf("%v\n", mfa)
 			})
 
 			t.Run("Template", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.SMS.UpdateTemplate(&MultiFactorSMSTemplate{
+				defer m.Guardian.MultiFactor.SMS.UpdateTemplate(mctx, &MultiFactorSMSTemplate{
 					EnrollmentMessage:   auth0.String(""),
 					VerificationMessage: auth0.String(""),
 				})
 
-				err := m.Guardian.MultiFactor.SMS.UpdateTemplate(&MultiFactorSMSTemplate{
+				err := m.Guardian.MultiFactor.SMS.UpdateTemplate(mctx, &MultiFactorSMSTemplate{
 					EnrollmentMessage:   auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
 					VerificationMessage: auth0.String("Test {{code}} for {{tenant.friendly_name}}"),
 				})
@@ -46,7 +46,7 @@ func TestGuardian(t *testing.T) {
 					t.Error(err)
 				}
 
-				template, err := m.Guardian.MultiFactor.SMS.Template()
+				template, err := m.Guardian.MultiFactor.SMS.Template(mctx)
 				if err != nil {
 					t.Error(err)
 				}
@@ -54,13 +54,13 @@ func TestGuardian(t *testing.T) {
 			})
 
 			t.Run("Twilio", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.SMS.UpdateTwilio(&MultiFactorProviderTwilio{
+				defer m.Guardian.MultiFactor.SMS.UpdateTwilio(mctx, &MultiFactorProviderTwilio{
 					From:      auth0.String(""),
 					AuthToken: auth0.String(""),
 					SID:       auth0.String(""),
 				})
 
-				err := m.Guardian.MultiFactor.SMS.UpdateTwilio(&MultiFactorProviderTwilio{
+				err := m.Guardian.MultiFactor.SMS.UpdateTwilio(mctx, &MultiFactorProviderTwilio{
 					From:      auth0.String("123456789"),
 					AuthToken: auth0.String("test_token"),
 					SID:       auth0.String("test_sid"),
@@ -69,7 +69,7 @@ func TestGuardian(t *testing.T) {
 					t.Error(err)
 				}
 
-				twilio, err := m.Guardian.MultiFactor.SMS.Twilio()
+				twilio, err := m.Guardian.MultiFactor.SMS.Twilio(mctx)
 				if err != nil {
 					t.Error(err)
 				}
@@ -80,19 +80,19 @@ func TestGuardian(t *testing.T) {
 		t.Run("Push", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.Push.Enable(false)
+				defer m.Guardian.MultiFactor.Push.Enable(mctx, false)
 
-				err := m.Guardian.MultiFactor.Push.Enable(true)
+				err := m.Guardian.MultiFactor.Push.Enable(mctx, true)
 				if err != nil {
 					t.Error(err)
 				}
 
-				mfa, _ := m.Guardian.MultiFactor.List()
+				mfa, _ := m.Guardian.MultiFactor.List(mctx)
 				t.Logf("%v\n", mfa)
 			})
 
 			t.Run("AmazonSNS", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.Push.UpdateAmazonSNS(&MultiFactorProviderAmazonSNS{
+				defer m.Guardian.MultiFactor.Push.UpdateAmazonSNS(mctx, &MultiFactorProviderAmazonSNS{
 					AccessKeyID:                auth0.String(""),
 					SecretAccessKeyID:          auth0.String(""),
 					Region:                     auth0.String(""),
@@ -100,7 +100,7 @@ func TestGuardian(t *testing.T) {
 					GCMPlatformApplicationARN:  auth0.String(""),
 				})
 
-				err := m.Guardian.MultiFactor.Push.UpdateAmazonSNS(&MultiFactorProviderAmazonSNS{
+				err := m.Guardian.MultiFactor.Push.UpdateAmazonSNS(mctx, &MultiFactorProviderAmazonSNS{
 					AccessKeyID:                auth0.String("test"),
 					SecretAccessKeyID:          auth0.String("test_secret"),
 					Region:                     auth0.String("us-west-1"),
@@ -111,7 +111,7 @@ func TestGuardian(t *testing.T) {
 					t.Error(err)
 				}
 
-				sns, err := m.Guardian.MultiFactor.Push.AmazonSNS()
+				sns, err := m.Guardian.MultiFactor.Push.AmazonSNS(mctx)
 				if err != nil {
 					t.Error(err)
 				}
@@ -122,14 +122,14 @@ func TestGuardian(t *testing.T) {
 		t.Run("Email", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.Email.Enable(false)
+				defer m.Guardian.MultiFactor.Email.Enable(mctx, false)
 
-				err := m.Guardian.MultiFactor.Email.Enable(true)
+				err := m.Guardian.MultiFactor.Email.Enable(mctx, true)
 				if err != nil {
 					t.Error(err)
 				}
 
-				mfa, _ := m.Guardian.MultiFactor.List()
+				mfa, _ := m.Guardian.MultiFactor.List(mctx)
 				t.Logf("%v\n", mfa)
 			})
 		})
@@ -137,14 +137,14 @@ func TestGuardian(t *testing.T) {
 		t.Run("DUO", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.DUO.Enable(false)
+				defer m.Guardian.MultiFactor.DUO.Enable(mctx, false)
 
-				err := m.Guardian.MultiFactor.DUO.Enable(true)
+				err := m.Guardian.MultiFactor.DUO.Enable(mctx, true)
 				if err != nil {
 					t.Error(err)
 				}
 
-				mfa, _ := m.Guardian.MultiFactor.List()
+				mfa, _ := m.Guardian.MultiFactor.List(mctx)
 				t.Logf("%v\n", mfa)
 			})
 		})
@@ -152,14 +152,14 @@ func TestGuardian(t *testing.T) {
 		t.Run("OTP", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
-				defer m.Guardian.MultiFactor.OTP.Enable(false)
+				defer m.Guardian.MultiFactor.OTP.Enable(mctx, false)
 
-				err := m.Guardian.MultiFactor.OTP.Enable(true)
+				err := m.Guardian.MultiFactor.OTP.Enable(mctx, true)
 				if err != nil {
 					t.Error(err)
 				}
 
-				mfa, _ := m.Guardian.MultiFactor.List()
+				mfa, _ := m.Guardian.MultiFactor.List(mctx)
 				t.Logf("%v\n", mfa)
 			})
 		})

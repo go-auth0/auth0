@@ -1,6 +1,7 @@
 package management
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 )
@@ -135,15 +136,15 @@ func newBrandingManager(m *Management) *BrandingManager {
 // Retrieve various settings related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
-func (m *BrandingManager) Read() (*Branding, error) {
-	branding := new(Branding)
-	err := m.get(m.uri("branding"), branding)
-	return branding, err
+func (m *BrandingManager) Read(ctx context.Context) (*Branding, error) {
+	var b *Branding
+	err := m.get(ctx, m.uri("branding"), b)
+	return b, err
 }
 
 // Update various fields related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
-func (m *BrandingManager) Update(t *Branding) (err error) {
-	return m.patch(m.uri("branding"), t)
+func (m *BrandingManager) Update(ctx context.Context, t *Branding) (err error) {
+	return m.patch(ctx, m.uri("branding"), t)
 }

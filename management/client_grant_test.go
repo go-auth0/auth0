@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestClientGrant(t *testing.T) {
@@ -18,11 +18,12 @@ func TestClientGrant(t *testing.T) {
 		Name: auth0.Stringf("Test Client - Client Grant (%s)",
 			time.Now().Format(time.StampMilli)),
 	}
-	err = m.Client.Create(c)
+
+	err = m.Client.Create(mctx, c)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.Client.Delete(auth0.StringValue(c.ClientID))
+	defer m.Client.Delete(mctx, auth0.StringValue(c.ClientID))
 
 	s := &ResourceServer{
 		Name: auth0.Stringf("Test Client Grant (%s)",
@@ -39,11 +40,11 @@ func TestClientGrant(t *testing.T) {
 			},
 		},
 	}
-	err = m.ResourceServer.Create(s)
+	err = m.ResourceServer.Create(mctx, s)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
+	defer m.ResourceServer.Delete(mctx, auth0.StringValue(s.ID))
 
 	g := &ClientGrant{
 		ClientID: c.ClientID,
@@ -52,7 +53,7 @@ func TestClientGrant(t *testing.T) {
 	}
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.ClientGrant.Create(g)
+		err = m.ClientGrant.Create(mctx, g)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -60,7 +61,7 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		g, err = m.ClientGrant.Read(auth0.StringValue(g.ID))
+		g, err = m.ClientGrant.Read(mctx, auth0.StringValue(g.ID))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -74,7 +75,7 @@ func TestClientGrant(t *testing.T) {
 		g.ClientID = nil // read-only
 		g.Scope = append(g.Scope, "update:resource")
 
-		err = m.ClientGrant.Update(id, g)
+		err = m.ClientGrant.Update(mctx, id, g)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -82,7 +83,7 @@ func TestClientGrant(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.ClientGrant.Delete(auth0.StringValue(g.ID))
+		err = m.ClientGrant.Delete(mctx, auth0.StringValue(g.ID))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -90,6 +91,7 @@ func TestClientGrant(t *testing.T) {
 
 	t.Run("List", func(t *testing.T) {
 		gs, err := m.ClientGrant.List(
+			mctx,
 			PerPage(10),          // overwrites the default 50
 			IncludeTotals(false), // has no effect as it is enforced internally
 		)

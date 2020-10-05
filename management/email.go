@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type Email struct {
 
 	// The name of the email provider. Can be one of "mandrill", "sendgrid",
@@ -73,15 +75,15 @@ func newEmailManager(m *Management) *EmailManager {
 // `X-SES-Configuration-Set` header. The value must be a string.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/post_provider
-func (m *EmailManager) Create(e *Email) error {
-	return m.post(m.uri("emails", "provider"), e)
+func (m *EmailManager) Create(ctx context.Context, e *Email) error {
+	return m.post(ctx, m.uri("emails", "provider"), e)
 }
 
 // Retrieve email provider details.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/get_provider
-func (m *EmailManager) Read() (e *Email, err error) {
-	err = m.get(m.uri("emails", "provider")+m.q([]ListOption{
+func (m *EmailManager) Read(ctx context.Context) (e *Email, err error) {
+	err = m.get(ctx, m.uri("emails", "provider")+m.q([]ListOption{
 		WithFields("name", "enabled", "default_from_address", "credentials", "settings"),
 	}), &e)
 	return
@@ -90,13 +92,13 @@ func (m *EmailManager) Read() (e *Email, err error) {
 // Update an email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/patch_provider
-func (m *EmailManager) Update(e *Email) (err error) {
-	return m.patch(m.uri("emails", "provider"), e)
+func (m *EmailManager) Update(ctx context.Context, e *Email) (err error) {
+	return m.patch(ctx, m.uri("emails", "provider"), e)
 }
 
 // Delete the email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/delete_provider
-func (m *EmailManager) Delete() (err error) {
-	return m.delete(m.uri("emails", "provider"))
+func (m *EmailManager) Delete(ctx context.Context) (err error) {
+	return m.delete(ctx, m.uri("emails", "provider"))
 }

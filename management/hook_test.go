@@ -1,10 +1,11 @@
 package management
 
 import (
-	"gopkg.in/auth0.v4/internal/testing/expect"
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5/internal/testing/expect"
+
+	"gopkg.in/auth0.v5"
 )
 
 func TestHook(t *testing.T) {
@@ -19,7 +20,7 @@ func TestHook(t *testing.T) {
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Hook.Create(r)
+		err = m.Hook.Create(mctx, r)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -27,7 +28,7 @@ func TestHook(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		r, err = m.Hook.Read(r.GetID())
+		r, err = m.Hook.Read(mctx, r.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -42,7 +43,7 @@ func TestHook(t *testing.T) {
 		r.Script = auth0.String("function (user, context, callback) { console.log('hooked!'); callback(null, { user }); }")
 		r.Enabled = auth0.Bool(true)
 
-		err = m.Hook.Update(id, r)
+		err = m.Hook.Update(mctx, id, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -50,7 +51,7 @@ func TestHook(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		r, err := m.Hook.List()
+		r, err := m.Hook.List(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -58,7 +59,7 @@ func TestHook(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Hook.Delete(auth0.StringValue(r.ID))
+		err = m.Hook.Delete(mctx, r.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -79,19 +80,19 @@ func TestHookSecrets(t *testing.T) {
 		Enabled:   auth0.Bool(false),
 	}
 
-	err := m.Hook.Create(hook)
+	err := m.Hook.Create(mctx, hook)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		if err = m.Hook.Delete(hook.GetID()); err != nil {
+		if err = m.Hook.Delete(mctx, hook.GetID()); err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Hook.CreateSecrets(hook.GetID(), r)
+		err = m.Hook.CreateSecrets(mctx, hook.GetID(), r)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -101,7 +102,7 @@ func TestHookSecrets(t *testing.T) {
 	t.Run("Update", func(t *testing.T) {
 		(*r)["SECRET1"] = "othervalue"
 		delete(*r, "SECRET2") // patch allows only specifying one property
-		err = m.Hook.UpdateSecrets(hook.GetID(), r)
+		err = m.Hook.UpdateSecrets(mctx, hook.GetID(), r)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -109,7 +110,7 @@ func TestHookSecrets(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		result, err := m.Hook.Secrets(hook.GetID())
+		result, err := m.Hook.Secrets(mctx, hook.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -120,12 +121,12 @@ func TestHookSecrets(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Hook.RemoveSecrets(hook.GetID(), "SECRET1")
+		err = m.Hook.RemoveSecrets(mctx, hook.GetID(), "SECRET1")
 		if err != nil {
 			t.Error(err)
 		}
 
-		result, err := m.Hook.Secrets(hook.GetID())
+		result, err := m.Hook.Secrets(mctx, hook.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -136,7 +137,7 @@ func TestHookSecrets(t *testing.T) {
 	})
 
 	t.Run("RemoveAllSecrets", func(t *testing.T) {
-		err = m.Hook.RemoveAllSecrets(hook.GetID())
+		err = m.Hook.RemoveAllSecrets(mctx, hook.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -145,12 +146,12 @@ func TestHookSecrets(t *testing.T) {
 			"SECRET3": "secret3",
 		}
 
-		err = m.Hook.CreateSecrets(hook.GetID(), r)
+		err = m.Hook.CreateSecrets(mctx, hook.GetID(), r)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		result, err := m.Hook.Secrets(hook.GetID())
+		result, err := m.Hook.Secrets(mctx, hook.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}

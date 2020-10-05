@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type ResourceServer struct {
 
 	// A generated string identifying the resource server.
@@ -74,46 +76,46 @@ func newResourceServerManager(m *Management) *ResourceServerManager {
 // Create a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/post_resource_servers
-func (m *ResourceServerManager) Create(rs *ResourceServer) (err error) {
-	return m.post(m.uri("resource-servers"), rs)
+func (m *ResourceServerManager) Create(ctx context.Context, rs *ResourceServer) (err error) {
+	return m.post(ctx, m.uri("resource-servers"), rs)
 }
 
 // Read retrieves a resource server by its id or audience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers_by_id
-func (m *ResourceServerManager) Read(id string) (rs *ResourceServer, err error) {
-	err = m.get(m.uri("resource-servers", id), &rs)
+func (m *ResourceServerManager) Read(ctx context.Context, id string) (rs *ResourceServer, err error) {
+	err = m.get(ctx, m.uri("resource-servers", id), &rs)
 	return
 }
 
 // Update a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/patch_resource_servers_by_id
-func (m *ResourceServerManager) Update(id string, rs *ResourceServer) (err error) {
-	return m.patch(m.uri("resource-servers", id), rs)
+func (m *ResourceServerManager) Update(ctx context.Context, id string, rs *ResourceServer) (err error) {
+	return m.patch(ctx, m.uri("resource-servers", id), rs)
 }
 
 // Delete a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/delete_resource_servers_by_id
-func (m *ResourceServerManager) Delete(id string) (err error) {
-	return m.delete(m.uri("resource-servers", id))
+func (m *ResourceServerManager) Delete(ctx context.Context, id string) (err error) {
+	return m.delete(ctx, m.uri("resource-servers", id))
 }
 
 // List all resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers
-func (m *ResourceServerManager) List(opts ...ListOption) (rl *ResourceServerList, err error) {
+func (m *ResourceServerManager) List(ctx context.Context, opts ...ListOption) (rl *ResourceServerList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("users")+m.q(opts), &rl)
+	err = m.get(ctx, m.uri("users")+m.q(opts), &rl)
 	return
 }
 
 // Stream is a helper method which handles pagination
-func (m *ResourceServerManager) Stream(fn func(s *ResourceServer)) error {
+func (m *ResourceServerManager) Stream(ctx context.Context, fn func(s *ResourceServer)) error {
 	var page int
 	for {
-		l, err := m.List(Page(page))
+		l, err := m.List(ctx, Page(page))
 		if err != nil {
 			return err
 		}

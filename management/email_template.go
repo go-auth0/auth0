@@ -1,5 +1,7 @@
 package management
 
+import "context"
+
 type EmailTemplate struct {
 
 	// The template name. Can be one of "verify_email", "reset_email",
@@ -41,8 +43,8 @@ func newEmailTemplateManager(m *Management) *EmailTemplateManager {
 // Create an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/post_email_templates
-func (m *EmailTemplateManager) Create(e *EmailTemplate) error {
-	return m.post(m.uri("email-templates"), e)
+func (m *EmailTemplateManager) Create(ctx context.Context, e *EmailTemplate) error {
+	return m.post(ctx, m.uri("email-templates"), e)
 }
 
 // Retrieve an email template by pre-defined name.
@@ -55,22 +57,22 @@ func (m *EmailTemplateManager) Create(e *EmailTemplate) error {
 // legacy scenarios.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
-func (m *EmailTemplateManager) Read(template string) (*EmailTemplate, error) {
+func (m *EmailTemplateManager) Read(ctx context.Context, template string) (*EmailTemplate, error) {
 	e := new(EmailTemplate)
-	err := m.get(m.uri("email-templates", template), e)
+	err := m.get(ctx, m.uri("email-templates", template), e)
 	return e, err
 }
 
 // Modify an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/patch_email_templates_by_templateName
-func (m *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
-	return m.patch(m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Update(ctx context.Context, template string, e *EmailTemplate) (err error) {
+	return m.patch(ctx, m.uri("email-templates", template), e)
 }
 
 // Replace an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/put_email_templates_by_templateName
-func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
-	return m.put(m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Replace(ctx context.Context, template string, e *EmailTemplate) (err error) {
+	return m.put(ctx, m.uri("email-templates", template), e)
 }

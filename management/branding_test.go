@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestBranding(t *testing.T) {
@@ -14,7 +14,7 @@ func TestBranding(t *testing.T) {
 	var err error
 
 	t.Run("Read", func(t *testing.T) {
-		branding, err = m.Branding.Read()
+		branding, err = m.Branding.Read(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -23,7 +23,7 @@ func TestBranding(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 
-		err = m.Branding.Update(&Branding{
+		err = m.Branding.Update(mctx, &Branding{
 			Colors: &BrandingColors{
 				Primary:        auth0.String("#ea5323"),
 				PageBackground: auth0.String("#000000"),
@@ -38,12 +38,12 @@ func TestBranding(t *testing.T) {
 			t.Error(err)
 		}
 
-		branding, _ = m.Branding.Read()
+		branding, _ = m.Branding.Read(mctx)
 		t.Logf("%v\n", branding)
 
 		t.Run("BrandingColors", func(t *testing.T) {
 
-			err = m.Branding.Update(&Branding{
+			err = m.Branding.Update(mctx, &Branding{
 				Colors: &BrandingColors{
 					Primary: auth0.String("#ea5323"),
 					PageBackgroundGradient: &BrandingPageBackgroundGradient{
@@ -63,7 +63,7 @@ func TestBranding(t *testing.T) {
 				t.Error(err)
 			}
 
-			branding, _ = m.Branding.Read()
+			branding, _ = m.Branding.Read(mctx)
 			t.Logf("%v\n", branding)
 		})
 	})

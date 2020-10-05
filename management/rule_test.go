@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestRule(t *testing.T) {
@@ -17,7 +17,7 @@ func TestRule(t *testing.T) {
 	var err error
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Rule.Create(r)
+		err = m.Rule.Create(mctx, r)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -25,7 +25,7 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		r, err = m.Rule.Read(auth0.StringValue(r.ID))
+		r, err = m.Rule.Read(mctx, r.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -39,7 +39,7 @@ func TestRule(t *testing.T) {
 		r.Order = auth0.Int(5)
 		r.Enabled = auth0.Bool(true)
 
-		err = m.Rule.Update(id, r)
+		err = m.Rule.Update(mctx, id, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -47,7 +47,7 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("List", func(t *testing.T) {
-		r, err := m.Rule.List()
+		r, err := m.Rule.List(mctx)
 		if err != nil {
 			t.Error(err)
 		}
@@ -55,7 +55,7 @@ func TestRule(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Rule.Delete(auth0.StringValue(r.ID))
+		err = m.Rule.Delete(mctx, r.GetID())
 		if err != nil {
 			t.Error(err)
 		}

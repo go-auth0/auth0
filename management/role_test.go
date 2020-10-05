@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestRole(t *testing.T) {
@@ -22,11 +22,12 @@ func TestRole(t *testing.T) {
 		Username:   auth0.String("chuck"),
 		Password:   auth0.String("Passwords hide their Chuck"),
 	}
-	err = m.User.Create(u)
+
+	err = m.User.Create(mctx, u)
 	if err != nil {
 		t.Error(err)
 	}
-	defer m.User.Delete(auth0.StringValue(u.ID))
+	defer m.User.Delete(mctx, u.GetID())
 
 	s := &ResourceServer{
 		Name: auth0.Stringf("Test Role (%s)",
@@ -43,14 +44,14 @@ func TestRole(t *testing.T) {
 			},
 		},
 	}
-	err = m.ResourceServer.Create(s)
+	err = m.ResourceServer.Create(mctx, s)
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
+	defer m.ResourceServer.Delete(mctx, s.GetID())
 
 	t.Run("Create", func(t *testing.T) {
-		err = m.Role.Create(r)
+		err = m.Role.Create(mctx, r)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -58,7 +59,7 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		r, err = m.Role.Read(auth0.StringValue(r.ID))
+		r, err = m.Role.Read(mctx, r.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -71,7 +72,7 @@ func TestRole(t *testing.T) {
 		r.ID = nil // read-only
 		r.Description = auth0.String("The Administrator")
 
-		err = m.Role.Update(id, r)
+		err = m.Role.Update(mctx, id, r)
 		if err != nil {
 			t.Error(err)
 		}
@@ -80,7 +81,7 @@ func TestRole(t *testing.T) {
 
 	t.Run("List", func(t *testing.T) {
 		var rs *RoleList
-		rs, err = m.Role.List()
+		rs, err = m.Role.List(mctx)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -88,14 +89,14 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("AssignUsers", func(t *testing.T) {
-		err = m.Role.AssignUsers(auth0.StringValue(r.ID), u)
+		err = m.Role.AssignUsers(mctx, r.GetID(), u)
 		if err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("Users", func(t *testing.T) {
-		l, err := m.Role.Users(auth0.StringValue(r.ID))
+		l, err := m.Role.Users(mctx, r.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -107,14 +108,14 @@ func TestRole(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.Role.AssociatePermissions(auth0.StringValue(r.ID), ps...)
+		err = m.Role.AssociatePermissions(mctx, r.GetID(), ps...)
 		if err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("Permissions", func(t *testing.T) {
-		l, err := m.Role.Permissions(auth0.StringValue(r.ID))
+		l, err := m.Role.Permissions(mctx, r.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -126,14 +127,14 @@ func TestRole(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.Role.RemovePermissions(auth0.StringValue(r.ID), ps...)
+		err = m.Role.RemovePermissions(mctx, r.GetID(), ps...)
 		if err != nil {
 			t.Fatal(err)
 		}
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Role.Delete(auth0.StringValue(r.ID))
+		err = m.Role.Delete(mctx, r.GetID())
 		if err != nil {
 			t.Error(err)
 		}
