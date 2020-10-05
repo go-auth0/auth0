@@ -136,10 +136,9 @@ func newBrandingManager(m *Management) *BrandingManager {
 // Retrieve various settings related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
-func (m *BrandingManager) Read(ctx context.Context) (*Branding, error) {
-	var b *Branding
-	err := m.get(ctx, m.uri("branding"), b)
-	return b, err
+func (m *BrandingManager) Read(ctx context.Context) (b *Branding, err error) {
+	err = m.get(ctx, m.uri("branding"), b)
+	return
 }
 
 // Update various fields related to branding.
