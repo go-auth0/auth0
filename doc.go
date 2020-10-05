@@ -49,7 +49,7 @@ new client.
 
     m, err := management.New(domain, id, secret,
         management.WithDebug(true),
-        management.WithContext(context.Background()),
+        management.WithContext(ctx),
         management.WithTimeout(5 * time.Seconds))
 
 Request Configuration

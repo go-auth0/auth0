@@ -143,13 +143,6 @@ func newClientManager(m *Management) *ClientManager {
 	return &ClientManager{m}
 }
 
-func (m *ClientManager) WithContext(ctx context.Context) *ClientManager {
-	mm := &Management{}
-	*mm = *m.Management
-	mm.ctx = ctx
-	return newClientManager(mm)
-}
-
 // Create a new client application.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/post_clients
