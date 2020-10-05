@@ -126,11 +126,6 @@ func (t *templateData) process(f *ast.File) error {
 					logf("Field %v is unexported; skipping.", fieldName)
 					continue
 				}
-				// // Check if "struct.method" is blacklisted.
-				// if key := fmt.Sprintf("%v.Get%v", ts.Name, fieldName); blacklistStructMethod[key] {
-				// 	logf("Method %v is blacklisted; skipping.", key)
-				// 	continue
-				// }
 
 				switch x := se.X.(type) {
 				case *ast.ArrayType:

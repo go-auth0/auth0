@@ -41,14 +41,6 @@ type BrandingPageBackgroundGradient struct {
 	AngleDegree *int    `json:"angle_deg,omitempty"`
 }
 
-type jsonPageBackgroundSolid struct {
-	PageBackground *string `json:"page_background,omitempty"`
-}
-
-type jsonPageBackgroundGradient struct {
-	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"page_background,omitempty"`
-}
-
 // MarshalJSON implements the json.Marshaler interface.
 //
 // It is required to handle the json field page_background, which can either
@@ -137,13 +129,13 @@ func newBrandingManager(m *Management) *BrandingManager {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
 func (m *BrandingManager) Read(ctx context.Context) (b *Branding, err error) {
-	err = m.get(ctx, m.uri("branding"), b)
+	err = m.get(ctx, m.uri("branding"), &b)
 	return
 }
 
 // Update various fields related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
-func (m *BrandingManager) Update(ctx context.Context, t *Branding) (err error) {
-	return m.patch(ctx, m.uri("branding"), t)
+func (m *BrandingManager) Update(ctx context.Context, b *Branding) (err error) {
+	return m.patch(ctx, m.uri("branding"), &b)
 }
