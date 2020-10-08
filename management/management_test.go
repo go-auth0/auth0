@@ -1,7 +1,7 @@
 package management
 
 import (
-	"net/url"
+	"net/http"
 	"os"
 	"testing"
 )
@@ -40,8 +40,10 @@ func TestNew(t *testing.T) {
 }
 
 func TestOptionFields(t *testing.T) {
-	v := make(url.Values)
-	WithFields("foo", "bar")(v)
+	r, _ := http.NewRequest("GET", "/", nil)
+	WithFields("foo", "bar").apply(r)
+
+	v := r.URL.Query()
 
 	fields := v.Get("fields")
 	if fields != "foo,bar" {
@@ -53,18 +55,20 @@ func TestOptionFields(t *testing.T) {
 		t.Errorf("Expected %q, but got %q", includeFields, "true")
 	}
 
-	WithoutFields("foo", "bar")(v)
+	WithoutFields("foo", "bar").apply(r)
 
 	includeFields = v.Get("include_fields")
-	if includeFields != "false" {
+	if includeFields != "true" {
 		t.Errorf("Expected %q, but got %q", includeFields, "true")
 	}
 }
 
 func TestOptionPage(t *testing.T) {
-	v := make(url.Values)
-	Page(3)(v)
-	PerPage(10)(v)
+	r, _ := http.NewRequest("GET", "/", nil)
+	Page(3).apply(r)
+	PerPage(10).apply(r)
+
+	v := r.URL.Query()
 
 	page := v.Get("page")
 	if page != "3" {
@@ -78,8 +82,10 @@ func TestOptionPage(t *testing.T) {
 }
 
 func TestOptionTotals(t *testing.T) {
-	v := make(url.Values)
-	IncludeTotals(true)(v)
+	r, _ := http.NewRequest("GET", "/", nil)
+	IncludeTotals(true).apply(r)
+
+	v := r.URL.Query()
 
 	includeTotals := v.Get("include_totals")
 	if includeTotals != "true" {
@@ -88,9 +94,11 @@ func TestOptionTotals(t *testing.T) {
 }
 
 func TestOptionParameter(t *testing.T) {
-	v := make(url.Values)
-	Parameter("foo", "123")(v)
-	Parameter("bar", "xyz")(v)
+	r, _ := http.NewRequest("GET", "/", nil)
+	Parameter("foo", "123").apply(r)
+	Parameter("bar", "xyz").apply(r)
+
+	v := r.URL.Query()
 
 	foo := v.Get("foo")
 	if foo != "123" {
@@ -100,6 +108,26 @@ func TestOptionParameter(t *testing.T) {
 	bar := v.Get("bar")
 	if bar != "xyz" {
 		t.Errorf("Expected %q, but got %q", bar, "xyz")
+	}
+}
+
+func TestOptionDefauls(t *testing.T) {
+	r, _ := http.NewRequest("GET", "/", nil)
+	withPageDefaults([]Option{
+		PerPage(20),          // should be persist (default is 50)
+		IncludeTotals(false), // should be altered to true
+	}).apply(r)
+
+	v := r.URL.Query()
+
+	perPage := v.Get("per_page")
+	if perPage != "20" {
+		t.Errorf("Expected %q, but got %q", perPage, "20")
+	}
+
+	includeTotals := v.Get("include_totals")
+	if includeTotals != "true" {
+		t.Errorf("Expected %q, but got %q", includeTotals, "true")
 	}
 }
 

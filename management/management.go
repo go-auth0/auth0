@@ -165,7 +165,7 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	return m, nil
 }
 
-func (m *Management) uri(path ...string) string {
+func (m *Management) URI(path ...string) string {
 	return (&url.URL{
 		Scheme: m.url.Scheme,
 		Host:   m.url.Host,
@@ -173,21 +173,93 @@ func (m *Management) uri(path ...string) string {
 	}).String()
 }
 
-func (m *Management) q(options []ListOption) string {
+func (m *Management) q(options []Option) string {
 	if len(options) == 0 {
 		return ""
 	}
-	v := make(url.Values)
+	r, _ := http.NewRequest("GET", "/", nil) // TODO: hack, remove when no longer needed
 	for _, option := range options {
-		option(v)
+		option.apply(r)
 	}
-	return "?" + v.Encode()
+	return "?" + r.URL.RawQuery
 }
 
-func (m *Management) defaults(options []ListOption) []ListOption {
-	options = append([]ListOption{PerPage(50)}, options...)
+func (m *Management) defaults(options []Option) []Option {
+	options = append([]Option{PerPage(50)}, options...)
 	options = append(options, IncludeTotals(true))
 	return options
+}
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+func (m *Management) NewRequest(method, uri string, v interface{}, options ...Option) (r *http.Request, err error) {
+
+	var buf bytes.Buffer
+	if v != nil {
+		err := json.NewEncoder(&buf).Encode(v)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	r, err = http.NewRequest(method, uri, &buf)
+	if err != nil {
+		return nil, err
+	}
+	r.Header.Add("Content-Type", "application/json")
+
+	for _, option := range options {
+		option.apply(r)
+	}
+
+	return
+}
+
+func (m *Management) Do(req *http.Request) (*http.Response, error) {
+
+	ctx := req.Context()
+
+	res, err := m.http.Do(req)
+	if err != nil {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+			return nil, err
+		}
+	}
+
+	return res, nil
+}
+
+func (m *Management) Request(method, uri string, v interface{}, options ...Option) error {
+
+	req, err := m.NewRequest(method, uri, v, options...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		return newError(res.Body)
+	}
+
+	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
+		err := json.NewDecoder(res.Body).Decode(v)
+		if err != nil {
+			return err
+		}
+		return res.Body.Close()
+	}
+
+	return nil
 }
 
 func (m *Management) request(method, uri string, v interface{}) error {
@@ -337,46 +409,86 @@ func (l List) HasNext() bool {
 	return l.Total > l.Start+l.Limit
 }
 
-// ListOption configures a call (typically to retrieve a resource) to Auth0 with
+// Option configures a call (typically to retrieve a resource) to Auth0 with
 // query parameters.
-type ListOption func(url.Values)
+type Option interface {
+	apply(*http.Request)
+}
+
+type option struct {
+	applyFn func(r *http.Request)
+}
+
+func newOption(fn func(r *http.Request)) *option {
+	return &option{applyFn: fn}
+}
+
+func (o *option) apply(r *http.Request) {
+	o.applyFn(r)
+}
+
+func withPageDefaults(options []Option) Option {
+	return newOption(func(r *http.Request) {
+		PerPage(50).apply(r)
+		for _, option := range options {
+			option.apply(r)
+		}
+		IncludeTotals(true).apply(r)
+	})
+}
+
+func WithCtx(ctx context.Context) Option {
+	return newOption(func(r *http.Request) {
+		*r = *r.WithContext(ctx)
+	})
+}
 
 // WithFields configures a call to include the desired fields.
-func WithFields(fields ...string) ListOption {
-	return func(v url.Values) {
-		v.Set("fields", strings.Join(fields, ","))
-		v.Set("include_fields", "true")
-	}
+func WithFields(fields ...string) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("fields", strings.Join(fields, ","))
+		q.Set("include_fields", "true")
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // WithoutFields configures a call to exclude the desired fields.
-func WithoutFields(fields ...string) ListOption {
-	return func(v url.Values) {
-		v.Set("fields", strings.Join(fields, ","))
-		v.Set("include_fields", "false")
-	}
+func WithoutFields(fields ...string) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("fields", strings.Join(fields, ","))
+		q.Set("include_fields", "false")
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Page configures a call to receive a specific page, if the results where
 // concatenated.
-func Page(page int) ListOption {
-	return func(v url.Values) {
-		v.Set("page", strconv.FormatInt(int64(page), 10))
-	}
+func Page(page int) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("page", strconv.FormatInt(int64(page), 10))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // PerPage configures a call to limit the amount of items in the result.
-func PerPage(items int) ListOption {
-	return func(v url.Values) {
-		v.Set("per_page", strconv.FormatInt(int64(items), 10))
-	}
+func PerPage(items int) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("per_page", strconv.FormatInt(int64(items), 10))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // IncludeTotals configures a call to include totals.
-func IncludeTotals(include bool) ListOption {
-	return func(v url.Values) {
-		v.Set("include_totals", strconv.FormatBool(include))
-	}
+func IncludeTotals(include bool) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("include_totals", strconv.FormatBool(include))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Query configures a call to search on specific query parameters.
@@ -388,19 +500,23 @@ func IncludeTotals(include bool) ListOption {
 //   List(Query(`logins_count:{100 TO *]`))
 //
 // See: https://auth0.com/docs/users/search/v3/query-syntax
-func Query(q string) ListOption {
-	return func(v url.Values) {
-		v.Set("search_engine", "v3")
-		v.Set("q", q)
-	}
+func Query(s string) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("search_engine", "v3")
+		q.Set("q", s)
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Parameter is a generic configuration to add arbitrary query parameters to
 // calls made to Auth0.
-func Parameter(key, value string) ListOption {
-	return func(v url.Values) {
-		v.Set(key, value)
-	}
+func Parameter(key, value string) Option {
+	return newOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set(key, value)
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Stringify returns a string representation of the value passed as an argument.
