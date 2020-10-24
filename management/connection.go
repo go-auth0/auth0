@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"gopkg.in/auth0.v4/internal/tag"
+	"gopkg.in/auth0.v5/internal/tag"
 )
 
 const (
@@ -675,24 +675,23 @@ func newConnectionManager(m *Management) *ConnectionManager {
 // Create a new connection.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/post_connections
-func (m *ConnectionManager) Create(c *Connection) error {
-	return m.post(m.uri("connections"), c)
+func (m *ConnectionManager) Create(c *Connection, opts ...Option) error {
+	return m.Request("POST", m.URI("connections"), c, opts...)
 }
 
 // Read retrieves a connection by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
-func (m *ConnectionManager) Read(id string) (c *Connection, err error) {
-	err = m.get(m.uri("connections", id), &c)
+func (m *ConnectionManager) Read(id string, opts ...Option) (c *Connection, err error) {
+	err = m.Request("GET", m.URI("connections", id), &c, opts...)
 	return
 }
 
 // List all connections.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
-func (m *ConnectionManager) List(opts ...ListOption) (c *ConnectionList, err error) {
-	opts = m.defaults(opts)
-	err = m.get(m.uri("connections")+m.q(opts), &c)
+func (m *ConnectionManager) List(opts ...Option) (c *ConnectionList, err error) {
+	err = m.Request("GET", m.URI("connections"), &c, applyListDefaults(opts))
 	return
 }
 
@@ -702,21 +701,21 @@ func (m *ConnectionManager) List(opts ...ListOption) (c *ConnectionList, err err
 // overridden, so ensure that all parameters are present.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/patch_connections_by_id
-func (m *ConnectionManager) Update(id string, c *Connection) (err error) {
-	return m.patch(m.uri("connections", id), c)
+func (m *ConnectionManager) Update(id string, c *Connection, opts ...Option) (err error) {
+	return m.Request("PATCH", m.URI("connections", id), c, opts...)
 }
 
 // Delete a connection and all its users.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/delete_connections_by_id
-func (m *ConnectionManager) Delete(id string) (err error) {
-	return m.delete(m.uri("connections", id))
+func (m *ConnectionManager) Delete(id string, opts ...Option) (err error) {
+	return m.Request("DELETE", m.URI("connections", id), nil, opts...)
 }
 
 // ReadByName retrieves a connection by its name. This is a helper method when a
 // connection id is not readily available.
-func (m *ConnectionManager) ReadByName(name string) (*Connection, error) {
-	c, err := m.List(Parameter("name", name))
+func (m *ConnectionManager) ReadByName(name string, opts ...Option) (*Connection, error) {
+	c, err := m.List(append(opts, Parameter("name", name))...)
 	if err != nil {
 		return nil, err
 	}

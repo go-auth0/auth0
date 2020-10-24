@@ -16,15 +16,14 @@ func newPromptManager(m *Management) *PromptManager {
 // Read retrieves prompts settings.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_prompts
-func (m *PromptManager) Read() (*Prompt, error) {
-	p := new(Prompt)
-	err := m.get(m.uri("prompts"), p)
-	return p, err
+func (m *PromptManager) Read(opts ...Option) (p *Prompt, err error) {
+	err = m.Request("GET", m.URI("prompts"), &p, opts...)
+	return
 }
 
 // Update prompts settings.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/patch_prompts
-func (m *PromptManager) Update(p *Prompt) error {
-	return m.patch(m.uri("prompts"), p)
+func (m *PromptManager) Update(p *Prompt, opts ...Option) error {
+	return m.Request("PATCH", m.URI("prompts"), p, opts...)
 }

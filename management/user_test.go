@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestUser(t *testing.T) {
@@ -139,7 +139,7 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("AssignRoles", func(t *testing.T) {
-		err = m.User.AssignRoles(auth0.StringValue(u.ID), r1, r2)
+		err = m.User.AssignRoles(auth0.StringValue(u.ID), []*Role{r1, r2})
 		if err != nil {
 			t.Error(err)
 		}
@@ -148,7 +148,7 @@ func TestUser(t *testing.T) {
 
 	t.Run("RemoveRoles", func(t *testing.T) {
 		roles := []*Role{r1, r2}
-		err = m.User.RemoveRoles(auth0.StringValue(u.ID), roles...)
+		err = m.User.RemoveRoles(auth0.StringValue(u.ID), roles)
 		if err != nil {
 			t.Error(err)
 		}
@@ -167,7 +167,7 @@ func TestUser(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.User.AssignPermissions(auth0.StringValue(u.ID), permissions...)
+		err = m.User.AssignPermissions(auth0.StringValue(u.ID), permissions)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -178,7 +178,7 @@ func TestUser(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.User.RemovePermissions(auth0.StringValue(u.ID), permissions...)
+		err = m.User.RemovePermissions(auth0.StringValue(u.ID), permissions)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -266,9 +266,9 @@ func TestUserIdentity(t *testing.T) {
 
 	t.Run("MarshalJSON", func(t *testing.T) {
 		for u, expected := range map[*UserIdentity]string{
-			&UserIdentity{}:                            `{}`,
-			&UserIdentity{UserID: auth0.String("1")}:   `{"user_id":"1"}`,
-			&UserIdentity{UserID: auth0.String("foo")}: `{"user_id":"foo"}`,
+			{}:                            `{}`,
+			{UserID: auth0.String("1")}:   `{"user_id":"1"}`,
+			{UserID: auth0.String("foo")}: `{"user_id":"foo"}`,
 		} {
 			b, err := json.Marshal(u)
 			if err != nil {
@@ -280,10 +280,10 @@ func TestUserIdentity(t *testing.T) {
 
 	t.Run("UnmarshalJSON", func(t *testing.T) {
 		for b, expected := range map[string]*UserIdentity{
-			`{}`:                &UserIdentity{UserID: nil},
-			`{"user_id":1}`:     &UserIdentity{UserID: auth0.String("1")},
-			`{"user_id":"1"}`:   &UserIdentity{UserID: auth0.String("1")},
-			`{"user_id":"foo"}`: &UserIdentity{UserID: auth0.String("foo")},
+			`{}`:                {UserID: nil},
+			`{"user_id":1}`:     {UserID: auth0.String("1")},
+			`{"user_id":"1"}`:   {UserID: auth0.String("1")},
+			`{"user_id":"foo"}`: {UserID: auth0.String("foo")},
 		} {
 			var u UserIdentity
 			err := json.Unmarshal([]byte(b), &u)

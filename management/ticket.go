@@ -46,13 +46,13 @@ func newTicketManager(m *Management) *TicketManager {
 // VerifyEmail creates a ticket to verify a user's email address.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification
-func (m *TicketManager) VerifyEmail(t *Ticket) error {
-	return m.post(m.uri("tickets", "email-verification"), t)
+func (m *TicketManager) VerifyEmail(t *Ticket, opts ...Option) error {
+	return m.Request("POST", m.URI("tickets", "email-verification"), t, opts...)
 }
 
 // ChangePassword creates a password change ticket for a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tickets/post_password_change
-func (m *TicketManager) ChangePassword(t *Ticket) error {
-	return m.post(m.uri("tickets", "password-change"), t)
+func (m *TicketManager) ChangePassword(t *Ticket, opts ...Option) error {
+	return m.Request("POST", m.URI("tickets", "password-change"), t, opts...)
 }

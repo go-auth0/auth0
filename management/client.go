@@ -160,7 +160,7 @@ func (m *ClientManager) Read(id string, opts ...Option) (c *Client, err error) {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Clients/get_clients
 func (m *ClientManager) List(opts ...Option) (c *ClientList, err error) {
-	err = m.Request("GET", m.URI("clients"), &c, withPageDefaults(opts))
+	err = m.Request("GET", m.URI("clients"), &c, applyListDefaults(opts))
 	return
 }
 

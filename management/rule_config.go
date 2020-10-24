@@ -20,8 +20,8 @@ func newRuleConfigManager(m *Management) *RuleConfigManager {
 // Upsert sets a rule configuration variable.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/put_rules_configs_by_key
-func (m *RuleConfigManager) Upsert(key string, r *RuleConfig) (err error) {
-	return m.put(m.uri("rules-configs", key), r)
+func (m *RuleConfigManager) Upsert(key string, r *RuleConfig, opts ...Option) (err error) {
+	return m.Request("PUT", m.URI("rules-configs", key), r, opts...)
 }
 
 // Read a rule configuration variable by key.
@@ -30,8 +30,8 @@ func (m *RuleConfigManager) Upsert(key string, r *RuleConfig) (err error) {
 // execution.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs
-func (m *RuleConfigManager) Read(key string) (*RuleConfig, error) {
-	rs, err := m.List()
+func (m *RuleConfigManager) Read(key string, opts ...Option) (*RuleConfig, error) {
+	rs, err := m.List(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,14 +46,14 @@ func (m *RuleConfigManager) Read(key string) (*RuleConfig, error) {
 // Delete a rule configuration variable identified by its key.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/delete_rules_configs_by_key
-func (m *RuleConfigManager) Delete(key string) (err error) {
-	return m.delete(m.uri("rules-configs", key))
+func (m *RuleConfigManager) Delete(key string, opts ...Option) (err error) {
+	return m.Request("DELETE", m.URI("rules-configs", key), nil, opts...)
 }
 
 // List all rule configuration variables.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules_Configs/get_rules_configs
-func (m *RuleConfigManager) List(opts ...ListOption) (r []*RuleConfig, err error) {
-	err = m.get(m.uri("rules-configs")+m.q(opts), &r)
+func (m *RuleConfigManager) List(opts ...Option) (r []*RuleConfig, err error) {
+	err = m.Request("GET", m.URI("rules-configs"), &r, applyListDefaults(opts))
 	return
 }

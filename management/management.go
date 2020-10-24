@@ -12,9 +12,8 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 
-	"gopkg.in/auth0.v4/internal/client"
+	"gopkg.in/auth0.v5/internal/client"
 )
 
 // Management is an Auth0 management client used to interact with the Auth0
@@ -91,7 +90,6 @@ type Management struct {
 	url       *url.URL
 	basePath  string
 	userAgent string
-	timeout   time.Duration
 	debug     bool
 	ctx       context.Context
 
@@ -100,7 +98,7 @@ type Management struct {
 
 // New creates a new Auth0 Management client by authenticating using the
 // supplied client id and secret.
-func New(domain, clientID, clientSecret string, options ...apiOption) (*Management, error) {
+func New(domain, clientID, clientSecret string, options ...ApiOption) (*Management, error) {
 
 	// Ignore the scheme if it was defined in the domain variable. Then prefix
 	// with https as its the only scheme supported by the Auth0 API.
@@ -118,7 +116,6 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		url:       u,
 		basePath:  "api/v2",
 		userAgent: client.UserAgent,
-		timeout:   1 * time.Minute,
 		debug:     false,
 		ctx:       context.Background(),
 	}
@@ -129,10 +126,10 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 
 	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
 
-	_, err = oauth2.Token(m.ctx)
-	if err != nil {
-		return nil, err
-	}
+	// _, err = oauth2.Token(m.ctx)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	m.http = client.New(m.ctx, oauth2)
 	m.http = client.WrapDebug(m.http, m.debug)
@@ -172,28 +169,6 @@ func (m *Management) URI(path ...string) string {
 		Path:   m.basePath + "/" + strings.Join(path, "/"),
 	}).String()
 }
-
-func (m *Management) q(options []Option) string {
-	if len(options) == 0 {
-		return ""
-	}
-	r, _ := http.NewRequest("GET", "/", nil) // TODO: hack, remove when no longer needed
-	for _, option := range options {
-		option.apply(r)
-	}
-	return "?" + r.URL.RawQuery
-}
-
-func (m *Management) defaults(options []Option) []Option {
-	options = append([]Option{PerPage(50)}, options...)
-	options = append(options, IncludeTotals(true))
-	return options
-}
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 
 func (m *Management) NewRequest(method, uri string, v interface{}, options ...Option) (r *http.Request, err error) {
 
@@ -262,86 +237,11 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Optio
 	return nil
 }
 
-func (m *Management) request(method, uri string, v interface{}) error {
-
-	var payload bytes.Buffer
-	if v != nil {
-		err := json.NewEncoder(&payload).Encode(v)
-		if err != nil {
-			return err
-		}
-	}
-
-	req, err := http.NewRequest(method, uri, &payload)
-	if err != nil {
-		return err
-	}
-	req.Header.Add("Content-Type", "application/json")
-
-	ctx, cancel := context.WithTimeout(m.ctx, m.timeout)
-	defer cancel()
-
-	if m.http == nil {
-		m.http = http.DefaultClient
-	}
-
-	res, err := m.http.Do(req.WithContext(ctx))
-	if err != nil {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-			return err
-		}
-	}
-
-	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
-		return newError(res.Body)
-	}
-
-	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
-		err := json.NewDecoder(res.Body).Decode(v)
-		if err != nil {
-			return err
-		}
-		return res.Body.Close()
-	}
-
-	return nil
-}
-
-func (m *Management) get(uri string, v interface{}) error {
-	return m.request("GET", uri, v)
-}
-
-func (m *Management) post(uri string, v interface{}) error {
-	return m.request("POST", uri, v)
-}
-
-func (m *Management) put(uri string, v interface{}) error {
-	return m.request("PUT", uri, v)
-}
-
-func (m *Management) patch(uri string, v interface{}) error {
-	return m.request("PATCH", uri, v)
-}
-
-func (m *Management) delete(uri string) error {
-	return m.request("DELETE", uri, nil)
-}
-
-type apiOption func(*Management)
-
-// WithTimeout configures the management client with a request timeout.
-func WithTimeout(t time.Duration) apiOption {
-	return func(m *Management) {
-		m.timeout = t
-	}
-}
+type ApiOption func(*Management)
 
 // WithDebug configures the management client to dump http requests and
 // responses to stdout.
-func WithDebug(d bool) apiOption {
+func WithDebug(d bool) ApiOption {
 	return func(m *Management) {
 		m.debug = d
 	}
@@ -349,7 +249,7 @@ func WithDebug(d bool) apiOption {
 
 // WitContext configures the management client to use the provided context
 // instead of the provided one.
-func WithContext(ctx context.Context) apiOption {
+func WithContext(ctx context.Context) ApiOption {
 	return func(m *Management) {
 		m.ctx = ctx
 	}
@@ -357,7 +257,7 @@ func WithContext(ctx context.Context) apiOption {
 
 // WithUserAgent configures the management client to use the provided user agent
 // string instead of the default one.
-func WithUserAgent(userAgent string) apiOption {
+func WithUserAgent(userAgent string) ApiOption {
 	return func(m *Management) {
 		m.userAgent = userAgent
 	}
@@ -427,7 +327,7 @@ func (o *option) apply(r *http.Request) {
 	o.applyFn(r)
 }
 
-func withPageDefaults(options []Option) Option {
+func applyListDefaults(options []Option) Option {
 	return newOption(func(r *http.Request) {
 		PerPage(50).apply(r)
 		for _, option := range options {
@@ -437,14 +337,27 @@ func withPageDefaults(options []Option) Option {
 	})
 }
 
-func WithCtx(ctx context.Context) Option {
+func Context(ctx context.Context) Option {
 	return newOption(func(r *http.Request) {
 		*r = *r.WithContext(ctx)
 	})
 }
 
 // WithFields configures a call to include the desired fields.
+//
+// Deprecated: use IncludeFields instead.
 func WithFields(fields ...string) Option {
+	return IncludeFields(fields...)
+}
+
+// WithoutFields configures a call to exclude the desired fields.
+//
+// Deprecated: use ExcludeFields instead.
+func WithoutFields(fields ...string) Option {
+	return ExcludeFields(fields...)
+}
+
+func IncludeFields(fields ...string) Option {
 	return newOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("fields", strings.Join(fields, ","))
@@ -453,8 +366,7 @@ func WithFields(fields ...string) Option {
 	})
 }
 
-// WithoutFields configures a call to exclude the desired fields.
-func WithoutFields(fields ...string) Option {
+func ExcludeFields(fields ...string) Option {
 	return newOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("fields", strings.Join(fields, ","))

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/management"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/management"
 )
 
 var (
@@ -49,7 +49,7 @@ func ExampleClientManager_Create() {
 	_ = c.GetClientSecret() // Generated values are available after creation
 }
 
-func ExampleResourceServer_List() {
+func ExampleResourceServerManager_List() {
 	l, err := api.ResourceServer.List()
 	if err != nil {
 		// handle err
@@ -93,11 +93,11 @@ var (
 )
 
 func ExampleUserManager_AssignRoles() {
-	err := api.User.AssignRoles(user.GetID(), admin)
+	err := api.User.AssignRoles(user.GetID(), []*management.Role{admin})
 	if err != nil {
 		// handle err
 	}
-	defer api.User.RemoveRoles(user.GetID(), admin)
+	defer api.User.RemoveRoles(user.GetID(), []*management.Role{admin})
 }
 
 func ExampleUserManager_List() {

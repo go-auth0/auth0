@@ -107,8 +107,8 @@ func newLogManager(m *Management) *LogManager {
 // single log entry representation as specified in the schema.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs_by_id
-func (m *LogManager) Read(id string) (l *Log, err error) {
-	err = m.get(m.uri("logs", id), &l)
+func (m *LogManager) Read(id string, opts ...Option) (l *Log, err error) {
+	err = m.Request("GET", m.URI("logs", id), &l, opts...)
 	return
 }
 
@@ -120,12 +120,12 @@ func (m *LogManager) Read(id string) (l *Log, err error) {
 // and descriptions, Log Data Event Listing.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Logs/get_logs
-func (m *LogManager) List(opts ...ListOption) (l []*Log, err error) {
-	err = m.get(m.uri("logs")+m.q(opts), &l)
+func (m *LogManager) List(opts ...Option) (l []*Log, err error) {
+	err = m.Request("GET", m.URI("logs"), &l, opts...)
 	return
 }
 
 // Search is an alias for List
-func (m *LogManager) Search(opts ...ListOption) ([]*Log, error) {
+func (m *LogManager) Search(opts ...Option) ([]*Log, error) {
 	return m.List(opts...)
 }

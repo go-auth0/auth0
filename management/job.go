@@ -2,7 +2,6 @@ package management
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"mime/multipart"
 	"net/http"
@@ -66,30 +65,29 @@ func newJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 
-func (m *JobManager) VerifyEmail(j *Job) error {
-	return m.post(m.uri("jobs", "verification-email"), j)
+func (m *JobManager) VerifyEmail(j *Job, opts ...Option) error {
+	return m.Request("POST", m.URI("jobs", "verification-email"), j, opts...)
 }
 
 // Retrieves a job. Useful to check its status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
-func (m *JobManager) Read(id string) (*Job, error) {
-	j := new(Job)
-	err := m.get(m.uri("jobs", id), j)
-	return j, err
+func (m *JobManager) Read(id string, opts ...Option) (j *Job, err error) {
+	err = m.Request("GET", m.URI("jobs", id), &j)
+	return
 }
 
 // Export all users to a file via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports
-func (m *JobManager) ExportUsers(j *Job) error {
-	return m.post(m.uri("jobs", "users-exports"), j)
+func (m *JobManager) ExportUsers(j *Job, opts ...Option) error {
+	return m.Request("POST", m.URI("jobs", "users-exports"), j, opts...)
 }
 
 // Import users from a formatted file into a connection via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_imports
-func (m *JobManager) ImportUsers(j *Job) error {
+func (m *JobManager) ImportUsers(j *Job, opts ...Option) error {
 
 	var payload bytes.Buffer
 	mp := multipart.NewWriter(&payload)
@@ -122,27 +120,19 @@ func (m *JobManager) ImportUsers(j *Job) error {
 	}
 	mp.Close()
 
-	req, err := http.NewRequest("POST", m.uri("jobs", "users-imports"), &payload)
+	req, err := http.NewRequest("POST", m.URI("jobs", "users-imports"), &payload)
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Content-Type", mp.FormDataContentType())
 
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
-	defer cancel()
-
-	if m.http == nil {
-		m.http = http.DefaultClient
+	for _, option := range opts {
+		option.apply(req)
 	}
 
-	res, err := m.http.Do(req.WithContext(ctx))
+	res, err := m.Do(req)
 	if err != nil {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-			return err
-		}
+		return err
 	}
 
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {

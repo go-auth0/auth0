@@ -64,7 +64,9 @@ func TestOptionFields(t *testing.T) {
 }
 
 func TestOptionPage(t *testing.T) {
+
 	r, _ := http.NewRequest("GET", "/", nil)
+
 	Page(3).apply(r)
 	PerPage(10).apply(r)
 
@@ -82,7 +84,9 @@ func TestOptionPage(t *testing.T) {
 }
 
 func TestOptionTotals(t *testing.T) {
+
 	r, _ := http.NewRequest("GET", "/", nil)
+
 	IncludeTotals(true).apply(r)
 
 	v := r.URL.Query()
@@ -94,7 +98,9 @@ func TestOptionTotals(t *testing.T) {
 }
 
 func TestOptionParameter(t *testing.T) {
+
 	r, _ := http.NewRequest("GET", "/", nil)
+
 	Parameter("foo", "123").apply(r)
 	Parameter("bar", "xyz").apply(r)
 
@@ -112,10 +118,12 @@ func TestOptionParameter(t *testing.T) {
 }
 
 func TestOptionDefauls(t *testing.T) {
+
 	r, _ := http.NewRequest("GET", "/", nil)
-	withPageDefaults([]Option{
+
+	applyListDefaults([]Option{
 		PerPage(20),          // should be persist (default is 50)
-		IncludeTotals(false), // should be altered to true
+		IncludeTotals(false), // should be altered to true by withListDefaults
 	}).apply(r)
 
 	v := r.URL.Query()
