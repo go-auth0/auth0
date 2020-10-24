@@ -3,6 +3,7 @@ package management
 import (
 	"net/http"
 	"testing"
+	"time"
 
 	"gopkg.in/auth0.v5"
 )
@@ -10,7 +11,7 @@ import (
 func TestCustomDomain(t *testing.T) {
 
 	c := &CustomDomain{
-		Domain:             auth0.String("auth.example.com"),
+		Domain:             auth0.Stringf("auth.%d.alexkappa.com", time.Now().UTC().Unix()),
 		Type:               auth0.String("auth0_managed_certs"),
 		VerificationMethod: auth0.String("txt"),
 	}
