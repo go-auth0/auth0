@@ -19,41 +19,53 @@ import (
 // UserAgent is the default user agent string
 var UserAgent = fmt.Sprintf("Go-Auth0-SDK/%s", auth0.Version)
 
-func WrapRateLimit(c *http.Client) *http.Client {
-	return &http.Client{
-		Transport: rehttp.NewTransport(
-			c.Transport,
-			func(attempt rehttp.Attempt) bool {
-				if attempt.Response == nil {
-					return false
-				}
-				return attempt.Response.StatusCode == http.StatusTooManyRequests
-			},
-			func(attempt rehttp.Attempt) time.Duration {
-				resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
-				resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
-				if err != nil {
-					resetAtUnix = time.Now().Add(5 * time.Second).Unix()
-				}
-				return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
-			},
-		),
-	}
-}
-
-func WrapUserAgent(c *http.Client, userAgent string) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			req.Header.Set("User-Agent", userAgent)
-			return c.Transport.RoundTrip(req)
-		}),
-	}
-}
-
+// RoundTripFunc is an adapter to allow the use of ordinary functions as HTTP
+// round trips.
 type RoundTripFunc func(*http.Request) (*http.Response, error)
 
+// RoundTrip executes a single HTTP transaction, returning
+// a Response for the provided Request.
 func (rf RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return rf(req)
+}
+
+// RateLimitTransport wraps base transport with rate limiting functionality.
+//
+// When a 429 status code is returned by the remote server, the
+// "X-RateLimit-Reset" header is used to determine how long the transport will
+// wait until re-issuing the failed request.
+func RateLimitTransport(base http.RoundTripper) http.RoundTripper {
+	if base == nil {
+		base = http.DefaultTransport
+	}
+	return rehttp.NewTransport(base, retry, delay)
+}
+
+func retry(attempt rehttp.Attempt) bool {
+	if attempt.Response == nil {
+		return false
+	}
+	return attempt.Response.StatusCode == http.StatusTooManyRequests
+}
+
+func delay(attempt rehttp.Attempt) time.Duration {
+	resetAt := attempt.Response.Header.Get("X-RateLimit-Reset")
+	resetAtUnix, err := strconv.ParseInt(resetAt, 10, 64)
+	if err != nil {
+		resetAtUnix = time.Now().Add(5 * time.Second).Unix()
+	}
+	return time.Duration(resetAtUnix-time.Now().Unix()) * time.Second
+}
+
+// RateLimitTransport wraps base transport with a customized "User-Agent" header
+func UserAgentTransport(base http.RoundTripper, userAgent string) http.RoundTripper {
+	if base == nil {
+		base = http.DefaultTransport
+	}
+	return RoundTripFunc(func(req *http.Request) (*http.Response, error) {
+		req.Header.Set("User-Agent", userAgent)
+		return base.RoundTrip(req)
+	})
 }
 
 func dumpRequest(r *http.Request) {
@@ -66,34 +78,79 @@ func dumpResponse(r *http.Response) {
 	log.Printf("\n%s\n\n", b)
 }
 
-func WrapDebug(c *http.Client, debug bool) *http.Client {
+// RateLimitTransport wraps base transport with the ability to log the contents
+// of requests and responses.
+func DebugTransport(base http.RoundTripper, debug bool) http.RoundTripper {
+	if base == nil {
+		base = http.DefaultTransport
+	}
 	if !debug {
-		return c
+		return base
 	}
-	return &http.Client{
-		Transport: RoundTripFunc(func(req *http.Request) (*http.Response, error) {
-			dumpRequest(req)
-			res, err := c.Transport.RoundTrip(req)
-			if err != nil {
-				return res, err
-			}
-			dumpResponse(res)
-			return res, nil
-		}),
+	return RoundTripFunc(func(req *http.Request) (*http.Response, error) {
+		dumpRequest(req)
+		res, err := base.RoundTrip(req)
+		if err != nil {
+			return res, err
+		}
+		dumpResponse(res)
+		return res, nil
+	})
+}
+
+// Option is the type used to configure a client.
+type Option func(*http.Client)
+
+// WithDebug configures the client to enable debug.
+func WithDebug(debug bool) Option {
+	return func(c *http.Client) {
+		c.Transport = DebugTransport(c.Transport, debug)
 	}
 }
 
-func New(ctx context.Context, c *clientcredentials.Config) *http.Client {
-	return oauth2.NewClient(ctx, c.TokenSource(ctx))
+// WithRateLimit configures the client to enable rate limiting.
+func WithRateLimit() Option {
+	return func(c *http.Client) {
+		c.Transport = RateLimitTransport(c.Transport)
+	}
 }
 
-func OAuth2(u *url.URL, clientID, clientSecret string) *clientcredentials.Config {
-	return &clientcredentials.Config{
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		TokenURL:     u.String() + "/oauth/token",
-		EndpointParams: url.Values{
-			"audience": {u.String() + "/api/v2/"},
+// WithUserAgent configures the client to overwrite the user agent header.
+func WithUserAgent(userAgent string) Option {
+	return func(c *http.Client) {
+		c.Transport = UserAgentTransport(c.Transport, userAgent)
+	}
+}
+
+// Wrap the base client with transports that enable OAuth2 authentication.
+func Wrap(base *http.Client, tokenSource oauth2.TokenSource, options ...Option) *http.Client {
+	if base == nil {
+		base = http.DefaultClient
+	}
+	client := &http.Client{
+		Timeout: base.Timeout,
+		Transport: &oauth2.Transport{
+			Base:   base.Transport,
+			Source: tokenSource,
 		},
 	}
+	for _, option := range options {
+		option(client)
+	}
+	return client
+}
+
+func ClientCredentials(ctx context.Context, uri, clientID, clientSecret string) oauth2.TokenSource {
+	return (&clientcredentials.Config{
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		TokenURL:     uri + "/oauth/token",
+		EndpointParams: url.Values{
+			"audience": {uri + "/api/v2/"},
+		},
+	}).TokenSource(ctx)
+}
+
+func StaticToken(token string) oauth2.TokenSource {
+	return oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 }
