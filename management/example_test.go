@@ -19,14 +19,14 @@ var (
 
 func init() {
 	var err error
-	api, err = management.New(domain, id, secret)
+	api, err = management.New(domain, management.WithClientCredentials(id, secret))
 	if err != nil {
 		panic(err)
 	}
 }
 
 func ExampleNew() {
-	api, err := management.New(domain, id, secret)
+	api, err := management.New(domain, management.WithClientCredentials(id, secret))
 	if err != nil {
 		// handle err
 	}
