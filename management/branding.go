@@ -135,7 +135,7 @@ func newBrandingManager(m *Management) *BrandingManager {
 // Retrieve various settings related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_branding
-func (m *BrandingManager) Read(opts ...Option) (b *Branding, err error) {
+func (m *BrandingManager) Read(opts ...RequestOption) (b *Branding, err error) {
 	err = m.Request("GET", m.URI("branding"), &b, opts...)
 	return
 }
@@ -143,6 +143,6 @@ func (m *BrandingManager) Read(opts ...Option) (b *Branding, err error) {
 // Update various fields related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
-func (m *BrandingManager) Update(t *Branding, opts ...Option) (err error) {
+func (m *BrandingManager) Update(t *Branding, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("branding"), t, opts...)
 }

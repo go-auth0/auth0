@@ -40,14 +40,14 @@ func newRuleManager(m *Management) *RuleManager {
 // can change the rule's function signature to have user omitted.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/post_rules
-func (m *RuleManager) Create(r *Rule, opts ...Option) error {
+func (m *RuleManager) Create(r *Rule, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("rules"), r, opts...)
 }
 
 // Retrieve rule details. Accepts a list of fields to include or exclude in the result.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules_by_id
-func (m *RuleManager) Read(id string, opts ...Option) (r *Rule, err error) {
+func (m *RuleManager) Read(id string, opts ...RequestOption) (r *Rule, err error) {
 	err = m.Request("GET", m.URI("rules", id), &r, opts...)
 	return
 }
@@ -55,21 +55,21 @@ func (m *RuleManager) Read(id string, opts ...Option) (r *Rule, err error) {
 // Update an existing rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/patch_rules_by_id
-func (m *RuleManager) Update(id string, r *Rule, opts ...Option) error {
+func (m *RuleManager) Update(id string, r *Rule, opts ...RequestOption) error {
 	return m.Request("PATCH", m.URI("rules", id), r, opts...)
 }
 
 // Delete a rule.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/delete_rules_by_id
-func (m *RuleManager) Delete(id string, opts ...Option) error {
+func (m *RuleManager) Delete(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("rules", id), nil, opts...)
 }
 
 // List all rules.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Rules/get_rules
-func (m *RuleManager) List(opts ...Option) (r *RuleList, err error) {
+func (m *RuleManager) List(opts ...RequestOption) (r *RuleList, err error) {
 	err = m.Request("GET", m.URI("rules"), &r, applyListDefaults(opts))
 	return
 }

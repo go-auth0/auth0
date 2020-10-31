@@ -189,14 +189,14 @@ func newUserManager(m *Management) *UserManager {
 // connections require `email` and `password`.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_users
-func (m *UserManager) Create(u *User, opts ...Option) error {
+func (m *UserManager) Create(u *User, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("users"), u, opts...)
 }
 
 // Read user details for a given user_id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users_by_id
-func (m *UserManager) Read(id string, opts ...Option) (u *User, err error) {
+func (m *UserManager) Read(id string, opts ...RequestOption) (u *User, err error) {
 	err = m.Request("GET", m.URI("users", id), &u, opts...)
 	return
 }
@@ -222,27 +222,27 @@ func (m *UserManager) Read(id string, opts ...Option) (u *User, err error) {
 // - `verify_email`
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/patch_users_by_id
-func (m *UserManager) Update(id string, u *User, opts ...Option) (err error) {
+func (m *UserManager) Update(id string, u *User, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("users", id), u, opts...)
 }
 
 // Delete a single user based on its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_users_by_id
-func (m *UserManager) Delete(id string, opts ...Option) (err error) {
+func (m *UserManager) Delete(id string, opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("users", id), nil, opts...)
 }
 
 // List all users. This method forces the `include_totals` option.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_users
-func (m *UserManager) List(opts ...Option) (ul *UserList, err error) {
+func (m *UserManager) List(opts ...RequestOption) (ul *UserList, err error) {
 	err = m.Request("GET", m.URI("users"), &ul, applyListDefaults(opts))
 	return
 }
 
 // Search is an alias for List.
-func (m *UserManager) Search(opts ...Option) (ul *UserList, err error) {
+func (m *UserManager) Search(opts ...RequestOption) (ul *UserList, err error) {
 	return m.List(opts...)
 }
 
@@ -260,7 +260,7 @@ func (m *UserManager) Search(opts ...Option) (ul *UserList, err error) {
 // email addresses using the correct case.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users_By_Email/get_users_by_email
-func (m *UserManager) ListByEmail(email string, opts ...Option) (us []*User, err error) {
+func (m *UserManager) ListByEmail(email string, opts ...RequestOption) (us []*User, err error) {
 	opts = append(opts, Parameter("email", email))
 	err = m.Request("GET", m.URI("users-by-email"), &us, opts...)
 	return
@@ -269,7 +269,7 @@ func (m *UserManager) ListByEmail(email string, opts ...Option) (us []*User, err
 // Roles lists all roles associated with a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_user_roles
-func (m *UserManager) Roles(id string, opts ...Option) (r *RoleList, err error) {
+func (m *UserManager) Roles(id string, opts ...RequestOption) (r *RoleList, err error) {
 	err = m.Request("GET", m.URI("users", id, "roles"), &r, applyListDefaults(opts))
 	return
 }
@@ -277,7 +277,7 @@ func (m *UserManager) Roles(id string, opts ...Option) (r *RoleList, err error) 
 // AssignRoles assignes roles to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_user_roles
-func (m *UserManager) AssignRoles(id string, roles []*Role, opts ...Option) error {
+func (m *UserManager) AssignRoles(id string, roles []*Role, opts ...RequestOption) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
@@ -289,7 +289,7 @@ func (m *UserManager) AssignRoles(id string, roles []*Role, opts ...Option) erro
 // RemoveRoles removes any roles associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_user_roles
-func (m *UserManager) RemoveRoles(id string, roles []*Role, opts ...Option) error {
+func (m *UserManager) RemoveRoles(id string, roles []*Role, opts ...RequestOption) error {
 	r := make(map[string][]*string)
 	r["roles"] = make([]*string, len(roles))
 	for i, role := range roles {
@@ -301,7 +301,7 @@ func (m *UserManager) RemoveRoles(id string, roles []*Role, opts ...Option) erro
 // Permissions lists the permissions associated to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_permissions
-func (m *UserManager) Permissions(id string, opts ...Option) (p *PermissionList, err error) {
+func (m *UserManager) Permissions(id string, opts ...RequestOption) (p *PermissionList, err error) {
 	err = m.Request("GET", m.URI("users", id, "permissions"), &p, applyListDefaults(opts))
 	return
 }
@@ -309,7 +309,7 @@ func (m *UserManager) Permissions(id string, opts ...Option) (p *PermissionList,
 // AssignPermissions assigns permissions to the user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_permissions
-func (m *UserManager) AssignPermissions(id string, permissions []*Permission, opts ...Option) error {
+func (m *UserManager) AssignPermissions(id string, permissions []*Permission, opts ...RequestOption) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
 	return m.Request("POST", m.URI("users", id, "permissions"), &p, opts...)
@@ -318,7 +318,7 @@ func (m *UserManager) AssignPermissions(id string, permissions []*Permission, op
 // RemovePermissions removes any permissions associated to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/delete_permissions
-func (m *UserManager) RemovePermissions(id string, permissions []*Permission, opts ...Option) error {
+func (m *UserManager) RemovePermissions(id string, permissions []*Permission, opts ...RequestOption) error {
 	p := make(map[string][]*Permission)
 	p["permissions"] = permissions
 	return m.Request("DELETE", m.URI("users", id, "permissions"), &p, opts...)
@@ -327,7 +327,7 @@ func (m *UserManager) RemovePermissions(id string, permissions []*Permission, op
 // Blocks retrieves a list of blocked IP addresses of a particular user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks_by_id
-func (m *UserManager) Blocks(id string, opts ...Option) ([]*UserBlock, error) {
+func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, error) {
 	b := new(userBlock)
 	err := m.Request("GET", m.URI("user-blocks", id), &b, opts...)
 	return b.BlockedFor, err
@@ -339,6 +339,6 @@ func (m *UserManager) Blocks(id string, opts ...Option) ([]*UserBlock, error) {
 // Note: This endpoint does not unblock users that were blocked by admins.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
-func (m *UserManager) Unblock(id string, opts ...Option) error {
+func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("user-blocks", id), nil, opts...)
 }

@@ -28,13 +28,13 @@ func newGrantManager(m *Management) *GrantManager {
 // List the grants associated with your account.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
-func (m *GrantManager) List(opts ...Option) (g []*Grant, err error) {
+func (m *GrantManager) List(opts ...RequestOption) (g []*Grant, err error) {
 	err = m.Request("GET", m.URI("grants"), &g, opts...)
 	return
 }
 
 // Delete revokes a grant associated with a user-id
 // https://auth0.com/docs/api/management/v2#!/Grants/delete_grants_by_id
-func (m *GrantManager) Delete(id string, opts ...Option) error {
+func (m *GrantManager) Delete(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("grants", id), nil, opts...)
 }

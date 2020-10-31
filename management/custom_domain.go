@@ -46,14 +46,14 @@ func newCustomDomainManager(m *Management) *CustomDomainManager {
 // requests.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/post_custom_domains
-func (m *CustomDomainManager) Create(c *CustomDomain, opts ...Option) (err error) {
+func (m *CustomDomainManager) Create(c *CustomDomain, opts ...RequestOption) (err error) {
 	return m.Request("POST", m.URI("custom-domains"), c, opts...)
 }
 
 // Retrieve a custom domain configuration and status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains_by_id
-func (m *CustomDomainManager) Read(id string, opts ...Option) (c *CustomDomain, err error) {
+func (m *CustomDomainManager) Read(id string, opts ...RequestOption) (c *CustomDomain, err error) {
 	err = m.Request("GET", m.URI("custom-domains", id), &c, opts...)
 	return
 }
@@ -61,7 +61,7 @@ func (m *CustomDomainManager) Read(id string, opts ...Option) (c *CustomDomain, 
 // Run the verification process on a custom domain.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/post_verify
-func (m *CustomDomainManager) Verify(id string, opts ...Option) (c *CustomDomain, err error) {
+func (m *CustomDomainManager) Verify(id string, opts ...RequestOption) (c *CustomDomain, err error) {
 	err = m.Request("POST", m.URI("custom-domains", id, "verify"), &c, opts...)
 	return
 }
@@ -69,14 +69,14 @@ func (m *CustomDomainManager) Verify(id string, opts ...Option) (c *CustomDomain
 // Delete a custom domain and stop serving requests for it.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/delete_custom_domains_by_id
-func (m *CustomDomainManager) Delete(id string, opts ...Option) (err error) {
+func (m *CustomDomainManager) Delete(id string, opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("custom-domains", id), nil, opts...)
 }
 
 // List all custom domains.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Custom_Domains/get_custom_domains
-func (m *CustomDomainManager) List(opts ...Option) (c []*CustomDomain, err error) {
+func (m *CustomDomainManager) List(opts ...RequestOption) (c []*CustomDomain, err error) {
 	err = m.Request("GET", m.URI("custom-domains"), &c, opts...)
 	return
 }

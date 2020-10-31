@@ -23,7 +23,7 @@ type Job struct {
 	// The user_id of the user to whom the email will be sent
 	UserID *string `json:"user_id,omitempty"`
 	// The id of the client, if not provided the global one will be used
-	ClientID *string `json:"cliend_id,omitempty"`
+	ClientID *string `json:"client_id,omitempty"`
 
 	// The id of the connection.
 	ConnectionID *string `json:"connection_id,omitempty"`
@@ -65,14 +65,14 @@ func newJobManager(m *Management) *JobManager {
 	return &JobManager{m}
 }
 
-func (m *JobManager) VerifyEmail(j *Job, opts ...Option) error {
+func (m *JobManager) VerifyEmail(j *Job, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("jobs", "verification-email"), j, opts...)
 }
 
 // Retrieves a job. Useful to check its status.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/get_jobs_by_id
-func (m *JobManager) Read(id string, opts ...Option) (j *Job, err error) {
+func (m *JobManager) Read(id string, opts ...RequestOption) (j *Job, err error) {
 	err = m.Request("GET", m.URI("jobs", id), &j)
 	return
 }
@@ -80,14 +80,14 @@ func (m *JobManager) Read(id string, opts ...Option) (j *Job, err error) {
 // Export all users to a file via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_exports
-func (m *JobManager) ExportUsers(j *Job, opts ...Option) error {
+func (m *JobManager) ExportUsers(j *Job, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("jobs", "users-exports"), j, opts...)
 }
 
 // Import users from a formatted file into a connection via a long-running job.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Jobs/post_users_imports
-func (m *JobManager) ImportUsers(j *Job, opts ...Option) error {
+func (m *JobManager) ImportUsers(j *Job, opts ...RequestOption) error {
 
 	var payload bytes.Buffer
 	mp := multipart.NewWriter(&payload)

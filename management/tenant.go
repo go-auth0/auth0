@@ -178,7 +178,7 @@ func newTenantManager(m *Management) *TenantManager {
 // specified.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/get_settings
-func (m *TenantManager) Read(opts ...Option) (t *Tenant, err error) {
+func (m *TenantManager) Read(opts ...RequestOption) (t *Tenant, err error) {
 	err = m.Request("GET", m.URI("tenants", "settings"), &t, opts...)
 	return
 }
@@ -186,6 +186,6 @@ func (m *TenantManager) Read(opts ...Option) (t *Tenant, err error) {
 // Update settings for a tenant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Tenants/patch_settings
-func (m *TenantManager) Update(t *Tenant, opts ...Option) (err error) {
+func (m *TenantManager) Update(t *Tenant, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("tenants", "settings"), t, opts...)
 }

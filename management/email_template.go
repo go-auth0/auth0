@@ -41,7 +41,7 @@ func newEmailTemplateManager(m *Management) *EmailTemplateManager {
 // Create an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/post_email_templates
-func (m *EmailTemplateManager) Create(e *EmailTemplate, opts ...Option) error {
+func (m *EmailTemplateManager) Create(e *EmailTemplate, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("email-templates"), e, opts...)
 }
 
@@ -55,7 +55,7 @@ func (m *EmailTemplateManager) Create(e *EmailTemplate, opts ...Option) error {
 // legacy scenarios.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
-func (m *EmailTemplateManager) Read(template string, opts ...Option) (e *EmailTemplate, err error) {
+func (m *EmailTemplateManager) Read(template string, opts ...RequestOption) (e *EmailTemplate, err error) {
 	err = m.Request("GET", m.URI("email-templates", template), &e, opts...)
 	return
 }
@@ -63,13 +63,13 @@ func (m *EmailTemplateManager) Read(template string, opts ...Option) (e *EmailTe
 // Modify an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/patch_email_templates_by_templateName
-func (m *EmailTemplateManager) Update(template string, e *EmailTemplate, opts ...Option) (err error) {
+func (m *EmailTemplateManager) Update(template string, e *EmailTemplate, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("email-templates", template), e, opts...)
 }
 
 // Replace an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/put_email_templates_by_templateName
-func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate, opts ...Option) (err error) {
+func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate, opts ...RequestOption) (err error) {
 	return m.Request("PUT", m.URI("email-templates", template), e, opts...)
 }

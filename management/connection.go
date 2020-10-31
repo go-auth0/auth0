@@ -675,14 +675,14 @@ func newConnectionManager(m *Management) *ConnectionManager {
 // Create a new connection.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/post_connections
-func (m *ConnectionManager) Create(c *Connection, opts ...Option) error {
+func (m *ConnectionManager) Create(c *Connection, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("connections"), c, opts...)
 }
 
 // Read retrieves a connection by its id.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections_by_id
-func (m *ConnectionManager) Read(id string, opts ...Option) (c *Connection, err error) {
+func (m *ConnectionManager) Read(id string, opts ...RequestOption) (c *Connection, err error) {
 	err = m.Request("GET", m.URI("connections", id), &c, opts...)
 	return
 }
@@ -690,7 +690,7 @@ func (m *ConnectionManager) Read(id string, opts ...Option) (c *Connection, err 
 // List all connections.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/get_connections
-func (m *ConnectionManager) List(opts ...Option) (c *ConnectionList, err error) {
+func (m *ConnectionManager) List(opts ...RequestOption) (c *ConnectionList, err error) {
 	err = m.Request("GET", m.URI("connections"), &c, applyListDefaults(opts))
 	return
 }
@@ -701,20 +701,20 @@ func (m *ConnectionManager) List(opts ...Option) (c *ConnectionList, err error) 
 // overridden, so ensure that all parameters are present.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/patch_connections_by_id
-func (m *ConnectionManager) Update(id string, c *Connection, opts ...Option) (err error) {
+func (m *ConnectionManager) Update(id string, c *Connection, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("connections", id), c, opts...)
 }
 
 // Delete a connection and all its users.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Connections/delete_connections_by_id
-func (m *ConnectionManager) Delete(id string, opts ...Option) (err error) {
+func (m *ConnectionManager) Delete(id string, opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("connections", id), nil, opts...)
 }
 
 // ReadByName retrieves a connection by its name. This is a helper method when a
 // connection id is not readily available.
-func (m *ConnectionManager) ReadByName(name string, opts ...Option) (*Connection, error) {
+func (m *ConnectionManager) ReadByName(name string, opts ...RequestOption) (*Connection, error) {
 	c, err := m.List(append(opts, Parameter("name", name))...)
 	if err != nil {
 		return nil, err

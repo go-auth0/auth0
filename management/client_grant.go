@@ -30,7 +30,7 @@ func newClientGrantManager(m *Management) *ClientGrantManager {
 // Create a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/post_client_grants
-func (m *ClientGrantManager) Create(g *ClientGrant, opts ...Option) (err error) {
+func (m *ClientGrantManager) Create(g *ClientGrant, opts ...RequestOption) (err error) {
 	return m.Request("POST", m.URI("client-grants"), g, opts...)
 }
 
@@ -39,7 +39,7 @@ func (m *ClientGrantManager) Create(g *ClientGrant, opts ...Option) (err error) 
 // The Auth0 Management API does not offer a method to retrieve a client grant
 // by id, we fake this by listing all client grants and matching by id on the
 // client side. For this reason this method should be used with caution.
-func (m *ClientGrantManager) Read(id string, opts ...Option) (*ClientGrant, error) {
+func (m *ClientGrantManager) Read(id string, opts ...RequestOption) (*ClientGrant, error) {
 	var page int
 	for {
 		l, err := m.List(append(opts, Page(page))...)
@@ -66,14 +66,14 @@ func (m *ClientGrantManager) Read(id string, opts ...Option) (*ClientGrant, erro
 // Update a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/patch_client_grants_by_id
-func (m *ClientGrantManager) Update(id string, g *ClientGrant, opts ...Option) (err error) {
+func (m *ClientGrantManager) Update(id string, g *ClientGrant, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("client-grants", id), g, opts...)
 }
 
 // Delete a client grant.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/delete_client_grants_by_id
-func (m *ClientGrantManager) Delete(id string, opts ...Option) (err error) {
+func (m *ClientGrantManager) Delete(id string, opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("client-grants", id), nil, opts...)
 }
 
@@ -83,7 +83,7 @@ func (m *ClientGrantManager) Delete(id string, opts ...Option) (err error) {
 // not provided.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants
-func (m *ClientGrantManager) List(opts ...Option) (gs *ClientGrantList, err error) {
+func (m *ClientGrantManager) List(opts ...RequestOption) (gs *ClientGrantList, err error) {
 	err = m.Request("GET", m.URI("client-grants"), &gs, applyListDefaults(opts))
 	return
 }

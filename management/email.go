@@ -73,14 +73,14 @@ func newEmailManager(m *Management) *EmailManager {
 // `X-SES-Configuration-Set` header. The value must be a string.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/post_provider
-func (m *EmailManager) Create(e *Email, opts ...Option) error {
+func (m *EmailManager) Create(e *Email, opts ...RequestOption) error {
 	return m.Request("POST", m.URI("emails", "provider"), e, opts...)
 }
 
 // Retrieve email provider details.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/get_provider
-func (m *EmailManager) Read(opts ...Option) (e *Email, err error) {
+func (m *EmailManager) Read(opts ...RequestOption) (e *Email, err error) {
 	opts = append(opts,
 		WithFields("name", "enabled", "default_from_address", "credentials", "settings"))
 	err = m.Request("GET", m.URI("emails", "provider"), &e, opts...)
@@ -90,13 +90,13 @@ func (m *EmailManager) Read(opts ...Option) (e *Email, err error) {
 // Update an email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/patch_provider
-func (m *EmailManager) Update(e *Email, opts ...Option) (err error) {
+func (m *EmailManager) Update(e *Email, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("emails", "provider"), e, opts...)
 }
 
 // Delete the email provider.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Emails/delete_provider
-func (m *EmailManager) Delete(opts ...Option) (err error) {
+func (m *EmailManager) Delete(opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("emails", "provider"), nil, opts...)
 }
