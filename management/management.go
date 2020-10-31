@@ -13,8 +13,58 @@ import (
 	"strconv"
 	"strings"
 
+	"golang.org/x/oauth2"
 	"gopkg.in/auth0.v5/internal/client"
 )
+
+type ManagementOption func(*Management)
+
+// WithDebug configures the management client to dump http requests and
+// responses to stdout.
+func WithDebug(d bool) ManagementOption {
+	return func(m *Management) {
+		m.debug = d
+	}
+}
+
+// WitContext configures the management client to use the provided context
+// instead of the provided one.
+func WithContext(ctx context.Context) ManagementOption {
+	return func(m *Management) {
+		m.ctx = ctx
+	}
+}
+
+// WithUserAgent configures the management client to use the provided user agent
+// string instead of the default one.
+func WithUserAgent(userAgent string) ManagementOption {
+	return func(m *Management) {
+		m.userAgent = userAgent
+	}
+}
+
+// WithClientCredentials configures management to authenticate using the client
+// credentials authentication flow.
+func WithClientCredentials(clientID, clientSecret string) ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.ClientCredentials(m.ctx, m.url.String(), clientID, clientSecret)
+	}
+}
+
+// WithStaticToken configures management to authenticate using a static
+// authentication token.
+func WithStaticToken(token string) ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.StaticToken(token)
+	}
+}
+
+// WithClient configures management to use the provided client.
+func WithClient(client *http.Client) ManagementOption {
+	return func(m *Management) {
+		m.http = client
+	}
+}
 
 // Management is an Auth0 management client used to interact with the Auth0
 // Management API v2.
@@ -87,18 +137,18 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
-	url       *url.URL
-	basePath  string
-	userAgent string
-	debug     bool
-	ctx       context.Context
-
-	http *http.Client
+	url         *url.URL
+	basePath    string
+	userAgent   string
+	debug       bool
+	ctx         context.Context
+	tokenSource oauth2.TokenSource
+	http        *http.Client
 }
 
 // New creates a new Auth0 Management client by authenticating using the
 // supplied client id and secret.
-func New(domain, clientID, clientSecret string, options ...ApiOption) (*Management, error) {
+func New(domain string, options ...ManagementOption) (*Management, error) {
 
 	// Ignore the scheme if it was defined in the domain variable. Then prefix
 	// with https as its the only scheme supported by the Auth0 API.
@@ -118,23 +168,17 @@ func New(domain, clientID, clientSecret string, options ...ApiOption) (*Manageme
 		userAgent: client.UserAgent,
 		debug:     false,
 		ctx:       context.Background(),
+		http:      http.DefaultClient,
 	}
 
 	for _, option := range options {
 		option(m)
 	}
 
-	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
-
-	// _, err = oauth2.Token(m.ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	m.http = client.New(m.ctx, oauth2)
-	m.http = client.WrapDebug(m.http, m.debug)
-	m.http = client.WrapUserAgent(m.http, m.userAgent)
-	m.http = client.WrapRateLimit(m.http)
+	m.http = client.Wrap(m.http, m.tokenSource,
+		client.WithRateLimit(),
+		client.WithUserAgent(m.userAgent),
+		client.WithDebug(m.debug))
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
@@ -170,7 +214,7 @@ func (m *Management) URI(path ...string) string {
 	}).String()
 }
 
-func (m *Management) NewRequest(method, uri string, v interface{}, options ...Option) (r *http.Request, err error) {
+func (m *Management) NewRequest(method, uri string, v interface{}, options ...RequestOption) (r *http.Request, err error) {
 
 	var buf bytes.Buffer
 	if v != nil {
@@ -210,7 +254,7 @@ func (m *Management) Do(req *http.Request) (*http.Response, error) {
 	return res, nil
 }
 
-func (m *Management) Request(method, uri string, v interface{}, options ...Option) error {
+func (m *Management) Request(method, uri string, v interface{}, options ...RequestOption) error {
 
 	req, err := m.NewRequest(method, uri, v, options...)
 	if err != nil {
@@ -235,32 +279,6 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Optio
 	}
 
 	return nil
-}
-
-type ApiOption func(*Management)
-
-// WithDebug configures the management client to dump http requests and
-// responses to stdout.
-func WithDebug(d bool) ApiOption {
-	return func(m *Management) {
-		m.debug = d
-	}
-}
-
-// WitContext configures the management client to use the provided context
-// instead of the provided one.
-func WithContext(ctx context.Context) ApiOption {
-	return func(m *Management) {
-		m.ctx = ctx
-	}
-}
-
-// WithUserAgent configures the management client to use the provided user agent
-// string instead of the default one.
-func WithUserAgent(userAgent string) ApiOption {
-	return func(m *Management) {
-		m.userAgent = userAgent
-	}
 }
 
 type Error interface {
@@ -309,26 +327,26 @@ func (l List) HasNext() bool {
 	return l.Total > l.Start+l.Limit
 }
 
-// Option configures a call (typically to retrieve a resource) to Auth0 with
+// RequestOption configures a call (typically to retrieve a resource) to Auth0 with
 // query parameters.
-type Option interface {
+type RequestOption interface {
 	apply(*http.Request)
 }
 
-type option struct {
+func newRequestOption(fn func(r *http.Request)) *requestOption {
+	return &requestOption{applyFn: fn}
+}
+
+type requestOption struct {
 	applyFn func(r *http.Request)
 }
 
-func newOption(fn func(r *http.Request)) *option {
-	return &option{applyFn: fn}
-}
-
-func (o *option) apply(r *http.Request) {
+func (o *requestOption) apply(r *http.Request) {
 	o.applyFn(r)
 }
 
-func applyListDefaults(options []Option) Option {
-	return newOption(func(r *http.Request) {
+func applyListDefaults(options []RequestOption) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		PerPage(50).apply(r)
 		for _, option := range options {
 			option.apply(r)
@@ -337,28 +355,30 @@ func applyListDefaults(options []Option) Option {
 	})
 }
 
-func Context(ctx context.Context) Option {
-	return newOption(func(r *http.Request) {
+// Context configures a request to use the specified context.
+func Context(ctx context.Context) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		*r = *r.WithContext(ctx)
 	})
 }
 
-// WithFields configures a call to include the desired fields.
+// WithFields configures a request to include the desired fields.
 //
 // Deprecated: use IncludeFields instead.
-func WithFields(fields ...string) Option {
+func WithFields(fields ...string) RequestOption {
 	return IncludeFields(fields...)
 }
 
-// WithoutFields configures a call to exclude the desired fields.
+// WithoutFields configures a request to exclude the desired fields.
 //
 // Deprecated: use ExcludeFields instead.
-func WithoutFields(fields ...string) Option {
+func WithoutFields(fields ...string) RequestOption {
 	return ExcludeFields(fields...)
 }
 
-func IncludeFields(fields ...string) Option {
-	return newOption(func(r *http.Request) {
+// IncludeFields configures a request to include the desired fields.
+func IncludeFields(fields ...string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("fields", strings.Join(fields, ","))
 		q.Set("include_fields", "true")
@@ -366,8 +386,9 @@ func IncludeFields(fields ...string) Option {
 	})
 }
 
-func ExcludeFields(fields ...string) Option {
-	return newOption(func(r *http.Request) {
+// ExcludeFields configures a request to exclude the desired fields.
+func ExcludeFields(fields ...string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("fields", strings.Join(fields, ","))
 		q.Set("include_fields", "false")
@@ -375,35 +396,35 @@ func ExcludeFields(fields ...string) Option {
 	})
 }
 
-// Page configures a call to receive a specific page, if the results where
+// Page configures a request to receive a specific page, if the results where
 // concatenated.
-func Page(page int) Option {
-	return newOption(func(r *http.Request) {
+func Page(page int) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("page", strconv.FormatInt(int64(page), 10))
 		r.URL.RawQuery = q.Encode()
 	})
 }
 
-// PerPage configures a call to limit the amount of items in the result.
-func PerPage(items int) Option {
-	return newOption(func(r *http.Request) {
+// PerPage configures a request to limit the amount of items in the result.
+func PerPage(items int) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("per_page", strconv.FormatInt(int64(items), 10))
 		r.URL.RawQuery = q.Encode()
 	})
 }
 
-// IncludeTotals configures a call to include totals.
-func IncludeTotals(include bool) Option {
-	return newOption(func(r *http.Request) {
+// IncludeTotals configures a request to include totals.
+func IncludeTotals(include bool) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("include_totals", strconv.FormatBool(include))
 		r.URL.RawQuery = q.Encode()
 	})
 }
 
-// Query configures a call to search on specific query parameters.
+// Query configures a request to search on specific query parameters.
 //
 // For example:
 //   List(Query(`email:"alice@example.com"`))
@@ -412,8 +433,8 @@ func IncludeTotals(include bool) Option {
 //   List(Query(`logins_count:{100 TO *]`))
 //
 // See: https://auth0.com/docs/users/search/v3/query-syntax
-func Query(s string) Option {
-	return newOption(func(r *http.Request) {
+func Query(s string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set("search_engine", "v3")
 		q.Set("q", s)
@@ -422,9 +443,9 @@ func Query(s string) Option {
 }
 
 // Parameter is a generic configuration to add arbitrary query parameters to
-// calls made to Auth0.
-func Parameter(key, value string) Option {
-	return newOption(func(r *http.Request) {
+// requests made to Auth0.
+func Parameter(key, value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()

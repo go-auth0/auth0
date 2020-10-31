@@ -17,7 +17,8 @@ var (
 
 func init() {
 	var err error
-	m, err = New(domain, clientID, clientSecret,
+	m, err = New(domain,
+		WithClientCredentials(clientID, clientSecret),
 		WithDebug(debug == "true" || debug == "1" || debug == "on"))
 	if err != nil {
 		panic(err)
@@ -32,7 +33,7 @@ func TestNew(t *testing.T) {
 		"%2Fexample.com",
 		" a.b.c.example.com",
 	} {
-		_, err := New(domain, "", "")
+		_, err := New(domain)
 		if err == nil {
 			t.Errorf("expected New to fail with domain %q", domain)
 		}
@@ -121,7 +122,7 @@ func TestOptionDefauls(t *testing.T) {
 
 	r, _ := http.NewRequest("GET", "/", nil)
 
-	applyListDefaults([]Option{
+	applyListDefaults([]RequestOption{
 		PerPage(20),          // should be persist (default is 50)
 		IncludeTotals(false), // should be altered to true by withListDefaults
 	}).apply(r)
