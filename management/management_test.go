@@ -1,9 +1,12 @@
 package management
 
 import (
+	"context"
+	"errors"
 	"net/http"
 	"os"
 	"testing"
+	"time"
 )
 
 var m *Management
@@ -156,5 +159,29 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func TestRequestOptionContextCancel(t *testing.T) {
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel() // cancel the request
+
+	err := m.Request("GET", "/", nil, Context(ctx))
+	if !errors.Is(err, context.Canceled) {
+		t.Errorf("expected err to be context.Canceled, got %v", err)
+	}
+}
+
+func TestRequestOptionContextTimeout(t *testing.T) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Millisecond)
+	defer cancel()
+
+	time.Sleep(50 * time.Millisecond) // delay until the deadline is exceeded
+
+	err := m.Request("GET", "/", nil, Context(ctx))
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Errorf("expected err to be context.DeadlineExceeded, got %v", err)
 	}
 }
