@@ -67,7 +67,7 @@ func newGuardianManager(m *Management) *GuardianManager {
 }
 
 type MultiFactorManager struct {
-	m *Management
+	*Management
 
 	SMS   *MultiFactorSMS
 	Push  *MultiFactorPush
@@ -79,115 +79,112 @@ type MultiFactorManager struct {
 // Retrieves all factors.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_factors
-func (mfm *MultiFactorManager) List(opts ...ListOption) (mf []*MultiFactor, err error) {
-	err = mfm.m.get(mfm.m.uri("guardian", "factors")+mfm.m.q(opts), &mf)
+func (m *MultiFactorManager) List(opts ...RequestOption) (mf []*MultiFactor, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors"), &mf, opts...)
 	return
 }
 
-type MultiFactorSMS struct{ m *Management }
+type MultiFactorSMS struct{ *Management }
 
 // Enable enables or disables the SMS Multi-factor Authentication.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_factors_by_name
-func (sm *MultiFactorSMS) Enable(enabled bool) error {
-	return sm.m.put(sm.m.uri("guardian", "factors", "sms"), &MultiFactor{
+func (m *MultiFactorSMS) Enable(enabled bool, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "sms"), &MultiFactor{
 		Enabled: &enabled,
-	})
+	}, opts...)
 }
 
 // Template retrieves enrollment and verification templates. You can use this to
 // check the current values for your templates.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_templates
-func (sm *MultiFactorSMS) Template() (*MultiFactorSMSTemplate, error) {
-	t := new(MultiFactorSMSTemplate)
-	err := sm.m.get(sm.m.uri("guardian", "factors", "sms", "templates"), t)
-	return t, err
+func (m *MultiFactorSMS) Template(opts ...RequestOption) (t *MultiFactorSMSTemplate, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors", "sms", "templates"), &t, opts...)
+	return
 }
 
 // UpdateTemplate updates the enrollment and verification templates. It's useful
 // to send custom messages on SMS enrollment and verification.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_templates
-func (sm *MultiFactorSMS) UpdateTemplate(st *MultiFactorSMSTemplate) error {
-	return sm.m.put(sm.m.uri("guardian", "factors", "sms", "templates"), st)
+func (m *MultiFactorSMS) UpdateTemplate(t *MultiFactorSMSTemplate, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "sms", "templates"), t, opts...)
 }
 
 // Twilio returns the Twilio provider configuration.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_twilio
-func (sm *MultiFactorSMS) Twilio() (*MultiFactorProviderTwilio, error) {
-	tc := new(MultiFactorProviderTwilio)
-	err := sm.m.get(sm.m.uri("guardian", "factors", "sms", "providers", "twilio"), tc)
-	return tc, err
+func (m *MultiFactorSMS) Twilio(opts ...RequestOption) (t *MultiFactorProviderTwilio, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors", "sms", "providers", "twilio"), &t, opts...)
+	return
 }
 
 // UpdateTwilio updates the Twilio provider configuration.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_twilio
-func (sm *MultiFactorSMS) UpdateTwilio(twilio *MultiFactorProviderTwilio) error {
-	return sm.m.put(sm.m.uri("guardian", "factors", "sms", "providers", "twilio"), twilio)
+func (m *MultiFactorSMS) UpdateTwilio(t *MultiFactorProviderTwilio, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "sms", "providers", "twilio"), t, opts...)
 }
 
-type MultiFactorPush struct{ m *Management }
+type MultiFactorPush struct{ *Management }
 
 // Enable enables or disables the Push Notification (via Auth0 Guardian)
 // Multi-factor Authentication.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_factors_by_name
-func (pm *MultiFactorPush) Enable(enabled bool) error {
-	return pm.m.put(pm.m.uri("guardian", "factors", "push-notification"), &MultiFactor{
+func (m *MultiFactorPush) Enable(enabled bool, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "push-notification"), &MultiFactor{
 		Enabled: &enabled,
-	})
+	}, opts...)
 }
 
 // AmazonSNS returns the Amazon Web Services (AWS) Simple Notification Service
 // (SNS) provider configuration.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/get_sns
-func (pm *MultiFactorPush) AmazonSNS() (*MultiFactorProviderAmazonSNS, error) {
-	sc := new(MultiFactorProviderAmazonSNS)
-	err := pm.m.get(pm.m.uri("guardian", "factors", "push-notification", "providers", "sns"), sc)
-	return sc, err
+func (m *MultiFactorPush) AmazonSNS(opts ...RequestOption) (s *MultiFactorProviderAmazonSNS, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors", "push-notification", "providers", "sns"), &s, opts...)
+	return
 }
 
 // UpdateAmazonSNS updates the Amazon Web Services (AWS) Simple Notification
 // Service (SNS) provider configuration.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_sns
-func (pm *MultiFactorPush) UpdateAmazonSNS(sc *MultiFactorProviderAmazonSNS) error {
-	return pm.m.put(pm.m.uri("guardian", "factors", "push-notification", "providers", "sns"), sc)
+func (m *MultiFactorPush) UpdateAmazonSNS(sc *MultiFactorProviderAmazonSNS, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "push-notification", "providers", "sns"), sc, opts...)
 }
 
-type MultiFactorEmail struct{ m *Management }
+type MultiFactorEmail struct{ *Management }
 
 // Enable enables or disables the Email Multi-factor Authentication.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_factors_by_name
-func (em *MultiFactorEmail) Enable(enabled bool) error {
-	return em.m.put(em.m.uri("guardian", "factors", "email"), &MultiFactor{
+func (m *MultiFactorEmail) Enable(enabled bool, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "email"), &MultiFactor{
 		Enabled: &enabled,
-	})
+	}, opts...)
 }
 
-type MultiFactorDUO struct{ m *Management }
+type MultiFactorDUO struct{ *Management }
 
 // Enable enables or disables DUO Security Multi-factor Authentication.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_factors_by_name
-func (em *MultiFactorDUO) Enable(enabled bool) error {
-	return em.m.put(em.m.uri("guardian", "factors", "duo"), &MultiFactor{
+func (m *MultiFactorDUO) Enable(enabled bool, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "duo"), &MultiFactor{
 		Enabled: &enabled,
-	})
+	}, opts...)
 }
 
-type MultiFactorOTP struct{ m *Management }
+type MultiFactorOTP struct{ *Management }
 
 // Enable enables or disables One-time Password Multi-factor Authentication.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Guardian/put_factors_by_name
-func (em *MultiFactorOTP) Enable(enabled bool) error {
-	return em.m.put(em.m.uri("guardian", "factors", "otp"), &MultiFactor{
+func (m *MultiFactorOTP) Enable(enabled bool, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "otp"), &MultiFactor{
 		Enabled: &enabled,
-	})
+	}, opts...)
 }

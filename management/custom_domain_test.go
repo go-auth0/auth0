@@ -3,14 +3,15 @@ package management
 import (
 	"net/http"
 	"testing"
+	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestCustomDomain(t *testing.T) {
 
 	c := &CustomDomain{
-		Domain:             auth0.String("auth.example.com"),
+		Domain:             auth0.Stringf("auth.%d.alexkappa.com", time.Now().UTC().Unix()),
 		Type:               auth0.String("auth0_managed_certs"),
 		VerificationMethod: auth0.String("txt"),
 	}
@@ -30,7 +31,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		c, err = m.CustomDomain.Read(auth0.StringValue(c.ID))
+		c, err = m.CustomDomain.Read(c.GetID())
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 				t.Skip(err)
@@ -42,7 +43,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Verify", func(t *testing.T) {
-		c, err := m.CustomDomain.Verify(auth0.StringValue(c.ID))
+		c, err := m.CustomDomain.Verify(c.GetID())
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 				t.Skip(err)
@@ -54,7 +55,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.CustomDomain.Delete(auth0.StringValue(c.ID))
+		err = m.CustomDomain.Delete(c.GetID())
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
 				t.Skip(err)

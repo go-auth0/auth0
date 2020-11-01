@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
-	"gopkg.in/auth0.v4/internal/testing/expect"
+	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestConnection(t *testing.T) {

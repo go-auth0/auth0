@@ -41,8 +41,8 @@ func newEmailTemplateManager(m *Management) *EmailTemplateManager {
 // Create an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/post_email_templates
-func (m *EmailTemplateManager) Create(e *EmailTemplate) error {
-	return m.post(m.uri("email-templates"), e)
+func (m *EmailTemplateManager) Create(e *EmailTemplate, opts ...RequestOption) error {
+	return m.Request("POST", m.URI("email-templates"), e, opts...)
 }
 
 // Retrieve an email template by pre-defined name.
@@ -55,22 +55,21 @@ func (m *EmailTemplateManager) Create(e *EmailTemplate) error {
 // legacy scenarios.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/get_email_templates_by_templateName
-func (m *EmailTemplateManager) Read(template string) (*EmailTemplate, error) {
-	e := new(EmailTemplate)
-	err := m.get(m.uri("email-templates", template), e)
-	return e, err
+func (m *EmailTemplateManager) Read(template string, opts ...RequestOption) (e *EmailTemplate, err error) {
+	err = m.Request("GET", m.URI("email-templates", template), &e, opts...)
+	return
 }
 
 // Modify an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/patch_email_templates_by_templateName
-func (m *EmailTemplateManager) Update(template string, e *EmailTemplate) (err error) {
-	return m.patch(m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Update(template string, e *EmailTemplate, opts ...RequestOption) (err error) {
+	return m.Request("PATCH", m.URI("email-templates", template), e, opts...)
 }
 
 // Replace an email template.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Email_Templates/put_email_templates_by_templateName
-func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate) (err error) {
-	return m.put(m.uri("email-templates", template), e)
+func (m *EmailTemplateManager) Replace(template string, e *EmailTemplate, opts ...RequestOption) (err error) {
+	return m.Request("PUT", m.URI("email-templates", template), e, opts...)
 }

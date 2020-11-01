@@ -74,46 +74,45 @@ func newResourceServerManager(m *Management) *ResourceServerManager {
 // Create a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/post_resource_servers
-func (m *ResourceServerManager) Create(rs *ResourceServer) (err error) {
-	return m.post(m.uri("resource-servers"), rs)
+func (m *ResourceServerManager) Create(rs *ResourceServer, opts ...RequestOption) (err error) {
+	return m.Request("POST", m.URI("resource-servers"), rs, opts...)
 }
 
 // Read retrieves a resource server by its id or audience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers_by_id
-func (m *ResourceServerManager) Read(id string) (rs *ResourceServer, err error) {
-	err = m.get(m.uri("resource-servers", id), &rs)
+func (m *ResourceServerManager) Read(id string, opts ...RequestOption) (rs *ResourceServer, err error) {
+	err = m.Request("GET", m.URI("resource-servers", id), &rs, opts...)
 	return
 }
 
 // Update a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/patch_resource_servers_by_id
-func (m *ResourceServerManager) Update(id string, rs *ResourceServer) (err error) {
-	return m.patch(m.uri("resource-servers", id), rs)
+func (m *ResourceServerManager) Update(id string, rs *ResourceServer, opts ...RequestOption) (err error) {
+	return m.Request("PATCH", m.URI("resource-servers", id), rs, opts...)
 }
 
 // Delete a resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/delete_resource_servers_by_id
-func (m *ResourceServerManager) Delete(id string) (err error) {
-	return m.delete(m.uri("resource-servers", id))
+func (m *ResourceServerManager) Delete(id string, opts ...RequestOption) (err error) {
+	return m.Request("DELETE", m.URI("resource-servers", id), nil, opts...)
 }
 
 // List all resource server.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers
-func (m *ResourceServerManager) List(opts ...ListOption) (rl *ResourceServerList, err error) {
-	opts = m.defaults(opts)
-	err = m.get(m.uri("users")+m.q(opts), &rl)
+func (m *ResourceServerManager) List(opts ...RequestOption) (rl *ResourceServerList, err error) {
+	err = m.Request("GET", m.URI("users"), &rl, applyListDefaults(opts))
 	return
 }
 
 // Stream is a helper method which handles pagination
-func (m *ResourceServerManager) Stream(fn func(s *ResourceServer)) error {
+func (m *ResourceServerManager) Stream(fn func(s *ResourceServer), opts ...RequestOption) error {
 	var page int
 	for {
-		l, err := m.List(Page(page))
+		l, err := m.List(append(opts, Page(page))...)
 		if err != nil {
 			return err
 		}

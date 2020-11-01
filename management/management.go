@@ -12,10 +12,59 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 
-	"gopkg.in/auth0.v4/internal/client"
+	"golang.org/x/oauth2"
+	"gopkg.in/auth0.v5/internal/client"
 )
+
+type ManagementOption func(*Management)
+
+// WithDebug configures the management client to dump http requests and
+// responses to stdout.
+func WithDebug(d bool) ManagementOption {
+	return func(m *Management) {
+		m.debug = d
+	}
+}
+
+// WitContext configures the management client to use the provided context
+// instead of the provided one.
+func WithContext(ctx context.Context) ManagementOption {
+	return func(m *Management) {
+		m.ctx = ctx
+	}
+}
+
+// WithUserAgent configures the management client to use the provided user agent
+// string instead of the default one.
+func WithUserAgent(userAgent string) ManagementOption {
+	return func(m *Management) {
+		m.userAgent = userAgent
+	}
+}
+
+// WithClientCredentials configures management to authenticate using the client
+// credentials authentication flow.
+func WithClientCredentials(clientID, clientSecret string) ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.ClientCredentials(m.ctx, m.url.String(), clientID, clientSecret)
+	}
+}
+
+// WithStaticToken configures management to authenticate using a static
+// authentication token.
+func WithStaticToken(token string) ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.StaticToken(token)
+	}
+}
+
+// WithClient configures management to use the provided client.
+func WithClient(client *http.Client) ManagementOption {
+	return func(m *Management) {
+		m.http = client
+	}
+}
 
 // Management is an Auth0 management client used to interact with the Auth0
 // Management API v2.
@@ -88,19 +137,18 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
-	url       *url.URL
-	basePath  string
-	userAgent string
-	timeout   time.Duration
-	debug     bool
-	ctx       context.Context
-
-	http *http.Client
+	url         *url.URL
+	basePath    string
+	userAgent   string
+	debug       bool
+	ctx         context.Context
+	tokenSource oauth2.TokenSource
+	http        *http.Client
 }
 
 // New creates a new Auth0 Management client by authenticating using the
 // supplied client id and secret.
-func New(domain, clientID, clientSecret string, options ...apiOption) (*Management, error) {
+func New(domain string, options ...ManagementOption) (*Management, error) {
 
 	// Ignore the scheme if it was defined in the domain variable. Then prefix
 	// with https as its the only scheme supported by the Auth0 API.
@@ -118,26 +166,19 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 		url:       u,
 		basePath:  "api/v2",
 		userAgent: client.UserAgent,
-		timeout:   1 * time.Minute,
 		debug:     false,
 		ctx:       context.Background(),
+		http:      http.DefaultClient,
 	}
 
 	for _, option := range options {
 		option(m)
 	}
 
-	oauth2 := client.OAuth2(m.url, clientID, clientSecret)
-
-	_, err = oauth2.Token(m.ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	m.http = client.New(m.ctx, oauth2)
-	m.http = client.WrapDebug(m.http, m.debug)
-	m.http = client.WrapUserAgent(m.http, m.userAgent)
-	m.http = client.WrapRateLimit(m.http)
+	m.http = client.Wrap(m.http, m.tokenSource,
+		client.WithRateLimit(),
+		client.WithUserAgent(m.userAgent),
+		client.WithDebug(m.debug))
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
@@ -165,7 +206,9 @@ func New(domain, clientID, clientSecret string, options ...apiOption) (*Manageme
 	return m, nil
 }
 
-func (m *Management) uri(path ...string) string {
+// URI returns the absolute URL of the Management API with any path segments
+// appended to the end.
+func (m *Management) URI(path ...string) string {
 	return (&url.URL{
 		Scheme: m.url.Scheme,
 		Host:   m.url.Host,
@@ -173,54 +216,62 @@ func (m *Management) uri(path ...string) string {
 	}).String()
 }
 
-func (m *Management) q(options []ListOption) string {
-	if len(options) == 0 {
-		return ""
-	}
-	v := make(url.Values)
-	for _, option := range options {
-		option(v)
-	}
-	return "?" + v.Encode()
-}
+// NewRequest returns a new HTTP request. If the payload is not nil it will be
+// encoded as JSON.
+func (m *Management) NewRequest(method, uri string, payload interface{}, options ...RequestOption) (r *http.Request, err error) {
 
-func (m *Management) defaults(options []ListOption) []ListOption {
-	options = append([]ListOption{PerPage(50)}, options...)
-	options = append(options, IncludeTotals(true))
-	return options
-}
-
-func (m *Management) request(method, uri string, v interface{}) error {
-
-	var payload bytes.Buffer
-	if v != nil {
-		err := json.NewEncoder(&payload).Encode(v)
+	var buf bytes.Buffer
+	if payload != nil {
+		err := json.NewEncoder(&buf).Encode(payload)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	req, err := http.NewRequest(method, uri, &payload)
+	r, err = http.NewRequest(method, uri, &buf)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	req.Header.Add("Content-Type", "application/json")
+	r.Header.Add("Content-Type", "application/json")
 
-	ctx, cancel := context.WithTimeout(m.ctx, m.timeout)
-	defer cancel()
-
-	if m.http == nil {
-		m.http = http.DefaultClient
+	for _, option := range options {
+		option.apply(r)
 	}
 
-	res, err := m.http.Do(req.WithContext(ctx))
+	return
+}
+
+// Do sends an HTTP request and returns an HTTP response, handling any context
+// cancellations or timeouts.
+func (m *Management) Do(req *http.Request) (*http.Response, error) {
+
+	ctx := req.Context()
+
+	res, err := m.http.Do(req)
 	if err != nil {
 		select {
 		case <-ctx.Done():
-			return ctx.Err()
+			return nil, ctx.Err()
 		default:
-			return err
+			return nil, err
 		}
+	}
+
+	return res, nil
+}
+
+// Request combines NewRequest and Do, while also handling decoding of response
+// payload.
+func (m *Management) Request(method, uri string, v interface{}, options ...RequestOption) error {
+
+	req, err := m.NewRequest(method, uri, v, options...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
 	}
 
 	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
@@ -238,60 +289,11 @@ func (m *Management) request(method, uri string, v interface{}) error {
 	return nil
 }
 
-func (m *Management) get(uri string, v interface{}) error {
-	return m.request("GET", uri, v)
-}
-
-func (m *Management) post(uri string, v interface{}) error {
-	return m.request("POST", uri, v)
-}
-
-func (m *Management) put(uri string, v interface{}) error {
-	return m.request("PUT", uri, v)
-}
-
-func (m *Management) patch(uri string, v interface{}) error {
-	return m.request("PATCH", uri, v)
-}
-
-func (m *Management) delete(uri string) error {
-	return m.request("DELETE", uri, nil)
-}
-
-type apiOption func(*Management)
-
-// WithTimeout configures the management client with a request timeout.
-func WithTimeout(t time.Duration) apiOption {
-	return func(m *Management) {
-		m.timeout = t
-	}
-}
-
-// WithDebug configures the management client to dump http requests and
-// responses to stdout.
-func WithDebug(d bool) apiOption {
-	return func(m *Management) {
-		m.debug = d
-	}
-}
-
-// WitContext configures the management client to use the provided context
-// instead of the provided one.
-func WithContext(ctx context.Context) apiOption {
-	return func(m *Management) {
-		m.ctx = ctx
-	}
-}
-
-// WithUserAgent configures the management client to use the provided user agent
-// string instead of the default one.
-func WithUserAgent(userAgent string) apiOption {
-	return func(m *Management) {
-		m.userAgent = userAgent
-	}
-}
-
+// Error is an interface describing any error which could be returned by the
+// Auth0 Management API.
 type Error interface {
+	// Status returns the status code returned by the server together with the
+	// present error.
 	Status() int
 	error
 }
@@ -337,49 +339,104 @@ func (l List) HasNext() bool {
 	return l.Total > l.Start+l.Limit
 }
 
-// ListOption configures a call (typically to retrieve a resource) to Auth0 with
+// RequestOption configures a call (typically to retrieve a resource) to Auth0 with
 // query parameters.
-type ListOption func(url.Values)
-
-// WithFields configures a call to include the desired fields.
-func WithFields(fields ...string) ListOption {
-	return func(v url.Values) {
-		v.Set("fields", strings.Join(fields, ","))
-		v.Set("include_fields", "true")
-	}
+type RequestOption interface {
+	apply(*http.Request)
 }
 
-// WithoutFields configures a call to exclude the desired fields.
-func WithoutFields(fields ...string) ListOption {
-	return func(v url.Values) {
-		v.Set("fields", strings.Join(fields, ","))
-		v.Set("include_fields", "false")
-	}
+func newRequestOption(fn func(r *http.Request)) *requestOption {
+	return &requestOption{applyFn: fn}
 }
 
-// Page configures a call to receive a specific page, if the results where
+type requestOption struct {
+	applyFn func(r *http.Request)
+}
+
+func (o *requestOption) apply(r *http.Request) {
+	o.applyFn(r)
+}
+
+func applyListDefaults(options []RequestOption) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		PerPage(50).apply(r)
+		for _, option := range options {
+			option.apply(r)
+		}
+		IncludeTotals(true).apply(r)
+	})
+}
+
+// Context configures a request to use the specified context.
+func Context(ctx context.Context) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		*r = *r.WithContext(ctx)
+	})
+}
+
+// WithFields configures a request to include the desired fields.
+//
+// Deprecated: use IncludeFields instead.
+func WithFields(fields ...string) RequestOption {
+	return IncludeFields(fields...)
+}
+
+// WithoutFields configures a request to exclude the desired fields.
+//
+// Deprecated: use ExcludeFields instead.
+func WithoutFields(fields ...string) RequestOption {
+	return ExcludeFields(fields...)
+}
+
+// IncludeFields configures a request to include the desired fields.
+func IncludeFields(fields ...string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("fields", strings.Join(fields, ","))
+		q.Set("include_fields", "true")
+		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// ExcludeFields configures a request to exclude the desired fields.
+func ExcludeFields(fields ...string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("fields", strings.Join(fields, ","))
+		q.Set("include_fields", "false")
+		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// Page configures a request to receive a specific page, if the results where
 // concatenated.
-func Page(page int) ListOption {
-	return func(v url.Values) {
-		v.Set("page", strconv.FormatInt(int64(page), 10))
-	}
+func Page(page int) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("page", strconv.FormatInt(int64(page), 10))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
-// PerPage configures a call to limit the amount of items in the result.
-func PerPage(items int) ListOption {
-	return func(v url.Values) {
-		v.Set("per_page", strconv.FormatInt(int64(items), 10))
-	}
+// PerPage configures a request to limit the amount of items in the result.
+func PerPage(items int) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("per_page", strconv.FormatInt(int64(items), 10))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
-// IncludeTotals configures a call to include totals.
-func IncludeTotals(include bool) ListOption {
-	return func(v url.Values) {
-		v.Set("include_totals", strconv.FormatBool(include))
-	}
+// IncludeTotals configures a request to include totals.
+func IncludeTotals(include bool) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("include_totals", strconv.FormatBool(include))
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
-// Query configures a call to search on specific query parameters.
+// Query configures a request to search on specific query parameters.
 //
 // For example:
 //   List(Query(`email:"alice@example.com"`))
@@ -388,19 +445,23 @@ func IncludeTotals(include bool) ListOption {
 //   List(Query(`logins_count:{100 TO *]`))
 //
 // See: https://auth0.com/docs/users/search/v3/query-syntax
-func Query(q string) ListOption {
-	return func(v url.Values) {
-		v.Set("search_engine", "v3")
-		v.Set("q", q)
-	}
+func Query(s string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set("search_engine", "v3")
+		q.Set("q", s)
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Parameter is a generic configuration to add arbitrary query parameters to
-// calls made to Auth0.
-func Parameter(key, value string) ListOption {
-	return func(v url.Values) {
-		v.Set(key, value)
-	}
+// requests made to Auth0.
+func Parameter(key, value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		q := r.URL.Query()
+		q.Set(key, value)
+		r.URL.RawQuery = q.Encode()
+	})
 }
 
 // Stringify returns a string representation of the value passed as an argument.

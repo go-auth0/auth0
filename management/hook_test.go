@@ -1,10 +1,11 @@
 package management
 
 import (
-	"gopkg.in/auth0.v4/internal/testing/expect"
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5/internal/testing/expect"
+
+	"gopkg.in/auth0.v5"
 )
 
 func TestHook(t *testing.T) {
@@ -120,7 +121,7 @@ func TestHookSecrets(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		err = m.Hook.RemoveSecrets(hook.GetID(), "SECRET1")
+		err = m.Hook.RemoveSecrets(hook.GetID(), []string{"SECRET1"})
 		if err != nil {
 			t.Error(err)
 		}

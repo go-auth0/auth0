@@ -1,9 +1,12 @@
 package management
 
 import (
-	"net/url"
+	"context"
+	"errors"
+	"net/http"
 	"os"
 	"testing"
+	"time"
 )
 
 var m *Management
@@ -17,7 +20,8 @@ var (
 
 func init() {
 	var err error
-	m, err = New(domain, clientID, clientSecret,
+	m, err = New(domain,
+		WithClientCredentials(clientID, clientSecret),
 		WithDebug(debug == "true" || debug == "1" || debug == "on"))
 	if err != nil {
 		panic(err)
@@ -32,7 +36,7 @@ func TestNew(t *testing.T) {
 		"%2Fexample.com",
 		" a.b.c.example.com",
 	} {
-		_, err := New(domain, "", "")
+		_, err := New(domain)
 		if err == nil {
 			t.Errorf("expected New to fail with domain %q", domain)
 		}
@@ -40,8 +44,10 @@ func TestNew(t *testing.T) {
 }
 
 func TestOptionFields(t *testing.T) {
-	v := make(url.Values)
-	WithFields("foo", "bar")(v)
+	r, _ := http.NewRequest("GET", "/", nil)
+	WithFields("foo", "bar").apply(r)
+
+	v := r.URL.Query()
 
 	fields := v.Get("fields")
 	if fields != "foo,bar" {
@@ -53,18 +59,22 @@ func TestOptionFields(t *testing.T) {
 		t.Errorf("Expected %q, but got %q", includeFields, "true")
 	}
 
-	WithoutFields("foo", "bar")(v)
+	WithoutFields("foo", "bar").apply(r)
 
 	includeFields = v.Get("include_fields")
-	if includeFields != "false" {
+	if includeFields != "true" {
 		t.Errorf("Expected %q, but got %q", includeFields, "true")
 	}
 }
 
 func TestOptionPage(t *testing.T) {
-	v := make(url.Values)
-	Page(3)(v)
-	PerPage(10)(v)
+
+	r, _ := http.NewRequest("GET", "/", nil)
+
+	Page(3).apply(r)
+	PerPage(10).apply(r)
+
+	v := r.URL.Query()
 
 	page := v.Get("page")
 	if page != "3" {
@@ -78,8 +88,12 @@ func TestOptionPage(t *testing.T) {
 }
 
 func TestOptionTotals(t *testing.T) {
-	v := make(url.Values)
-	IncludeTotals(true)(v)
+
+	r, _ := http.NewRequest("GET", "/", nil)
+
+	IncludeTotals(true).apply(r)
+
+	v := r.URL.Query()
 
 	includeTotals := v.Get("include_totals")
 	if includeTotals != "true" {
@@ -88,9 +102,13 @@ func TestOptionTotals(t *testing.T) {
 }
 
 func TestOptionParameter(t *testing.T) {
-	v := make(url.Values)
-	Parameter("foo", "123")(v)
-	Parameter("bar", "xyz")(v)
+
+	r, _ := http.NewRequest("GET", "/", nil)
+
+	Parameter("foo", "123").apply(r)
+	Parameter("bar", "xyz").apply(r)
+
+	v := r.URL.Query()
 
 	foo := v.Get("foo")
 	if foo != "123" {
@@ -100,6 +118,28 @@ func TestOptionParameter(t *testing.T) {
 	bar := v.Get("bar")
 	if bar != "xyz" {
 		t.Errorf("Expected %q, but got %q", bar, "xyz")
+	}
+}
+
+func TestOptionDefauls(t *testing.T) {
+
+	r, _ := http.NewRequest("GET", "/", nil)
+
+	applyListDefaults([]RequestOption{
+		PerPage(20),          // should be persist (default is 50)
+		IncludeTotals(false), // should be altered to true by withListDefaults
+	}).apply(r)
+
+	v := r.URL.Query()
+
+	perPage := v.Get("per_page")
+	if perPage != "20" {
+		t.Errorf("Expected %q, but got %q", perPage, "20")
+	}
+
+	includeTotals := v.Get("include_totals")
+	if includeTotals != "true" {
+		t.Errorf("Expected %q, but got %q", includeTotals, "true")
 	}
 }
 
@@ -119,5 +159,29 @@ func TestStringify(t *testing.T) {
 
 	if s != expected {
 		t.Errorf("Expected %q, but got %q", expected, s)
+	}
+}
+
+func TestRequestOptionContextCancel(t *testing.T) {
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel() // cancel the request
+
+	err := m.Request("GET", "/", nil, Context(ctx))
+	if !errors.Is(err, context.Canceled) {
+		t.Errorf("expected err to be context.Canceled, got %v", err)
+	}
+}
+
+func TestRequestOptionContextTimeout(t *testing.T) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Millisecond)
+	defer cancel()
+
+	time.Sleep(50 * time.Millisecond) // delay until the deadline is exceeded
+
+	err := m.Request("GET", "/", nil, Context(ctx))
+	if !errors.Is(err, context.DeadlineExceeded) {
+		t.Errorf("expected err to be context.DeadlineExceeded, got %v", err)
 	}
 }

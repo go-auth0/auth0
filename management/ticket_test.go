@@ -3,7 +3,7 @@ package management
 import (
 	"testing"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestTicket(t *testing.T) {

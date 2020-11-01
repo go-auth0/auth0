@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/auth0.v4"
+	"gopkg.in/auth0.v5"
 )
 
 func TestRole(t *testing.T) {
@@ -88,7 +88,7 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("AssignUsers", func(t *testing.T) {
-		err = m.Role.AssignUsers(auth0.StringValue(r.ID), u)
+		err = m.Role.AssignUsers(auth0.StringValue(r.ID), []*User{u})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -107,7 +107,7 @@ func TestRole(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.Role.AssociatePermissions(auth0.StringValue(r.ID), ps...)
+		err = m.Role.AssociatePermissions(auth0.StringValue(r.ID), ps)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -126,7 +126,7 @@ func TestRole(t *testing.T) {
 			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
 		}
-		err = m.Role.RemovePermissions(auth0.StringValue(r.ID), ps...)
+		err = m.Role.RemovePermissions(auth0.StringValue(r.ID), ps)
 		if err != nil {
 			t.Fatal(err)
 		}
