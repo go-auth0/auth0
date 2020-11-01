@@ -206,6 +206,8 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	return m, nil
 }
 
+// URI returns the absolute URL of the Management API with any path segments
+// appended to the end.
 func (m *Management) URI(path ...string) string {
 	return (&url.URL{
 		Scheme: m.url.Scheme,
@@ -214,11 +216,13 @@ func (m *Management) URI(path ...string) string {
 	}).String()
 }
 
-func (m *Management) NewRequest(method, uri string, v interface{}, options ...RequestOption) (r *http.Request, err error) {
+// NewRequest returns a new HTTP request. If the payload is not nil it will be
+// encoded as JSON.
+func (m *Management) NewRequest(method, uri string, payload interface{}, options ...RequestOption) (r *http.Request, err error) {
 
 	var buf bytes.Buffer
-	if v != nil {
-		err := json.NewEncoder(&buf).Encode(v)
+	if payload != nil {
+		err := json.NewEncoder(&buf).Encode(payload)
 		if err != nil {
 			return nil, err
 		}
@@ -237,6 +241,8 @@ func (m *Management) NewRequest(method, uri string, v interface{}, options ...Re
 	return
 }
 
+// Do sends an HTTP request and returns an HTTP response, handling any context
+// cancellations or timeouts.
 func (m *Management) Do(req *http.Request) (*http.Response, error) {
 
 	ctx := req.Context()
@@ -254,6 +260,8 @@ func (m *Management) Do(req *http.Request) (*http.Response, error) {
 	return res, nil
 }
 
+// Request combines NewRequest and Do, while also handling decoding of response
+// payload.
 func (m *Management) Request(method, uri string, v interface{}, options ...RequestOption) error {
 
 	req, err := m.NewRequest(method, uri, v, options...)
@@ -281,7 +289,11 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Reque
 	return nil
 }
 
+// Error is an interface describing any error which could be returned by the
+// Auth0 Management API.
 type Error interface {
+	// Status returns the status code returned by the server together with the
+	// present error.
 	Status() int
 	error
 }
