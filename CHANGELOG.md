@@ -1,3 +1,8 @@
+## v4.7.0
+
+* `management.Job`: Fix typo in JSON tag ([#154](https://github.com/go-auth0/auth0/pull/154)).
+* `management.ConnectionOptionsOAuth2`: Add `AuthorizationURL` and `TokenURL` ([#147](https://github.com/go-auth0/auth0/pull/147)).
+
 ## v4.6.0
 
 * `management.ConnectionOptions`: Now supports `OAuth2` connection type ([#141](https://github.com/go-auth0/auth0/pull/141)).
