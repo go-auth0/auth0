@@ -24,7 +24,7 @@ type Job struct {
 	// The user_id of the user to whom the email will be sent
 	UserID *string `json:"user_id,omitempty"`
 	// The id of the client, if not provided the global one will be used
-	ClientID *string `json:"cliend_id,omitempty"`
+	ClientID *string `json:"client_id,omitempty"`
 
 	// The id of the connection.
 	ConnectionID *string `json:"connection_id,omitempty"`
