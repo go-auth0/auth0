@@ -40,14 +40,6 @@ type BrandingPageBackgroundGradient struct {
 	AngleDegree *int    `json:"angle_deg,omitempty"`
 }
 
-type jsonPageBackgroundSolid struct {
-	PageBackground *string `json:"page_background,omitempty"`
-}
-
-type jsonPageBackgroundGradient struct {
-	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"page_background,omitempty"`
-}
-
 // MarshalJSON implements the json.Marshaler interface.
 //
 // It is required to handle the json field page_background, which can either
