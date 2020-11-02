@@ -1,3 +1,10 @@
+## v5.0.0
+
+* `management.RequestOption`: renamed from `management.ListOption` and is now used with all requests to the Auth0 Management API ([#151](https://github.com/go-auth0/auth0/pull/151)).
+* `management.ManagementOption`: renamed from the private `apiOption` and added several more options.
+* `management.New`: now takes only one mandatory argument (domain). Authentication can is configured using `WithClientCredentials` or `WithStaticToken`.
+* `management.Request`, `management.NewRequest` and `management.Do`: exposed a set of functions to allow more control over the request/response.
+
 ## v4.7.0
 
 * `management.Job`: Fix typo in JSON tag ([#154](https://github.com/go-auth0/auth0/pull/154)).
