@@ -1,5 +1,12 @@
 package management
 
+import (
+	"encoding/json"
+	"math"
+
+	"gopkg.in/auth0.v5"
+)
+
 type Tenant struct {
 	// Change password page settings
 	ChangePassword *TenantChangePassword `json:"change_password,omitempty"`
@@ -41,10 +48,10 @@ type Tenant struct {
 
 	// Login session lifetime, how long the session will stay valid (unit:
 	// hours).
-	SessionLifetime *int `json:"session_lifetime,omitempty"`
+	SessionLifetime *float64 `json:"session_lifetime,omitempty"`
 
 	// Force a user to login after they have been inactive for the specified number (unit: hours)
-	IdleSessionLifetime *int `json:"idle_session_lifetime,omitempty"`
+	IdleSessionLifetime *float64 `json:"idle_session_lifetime,omitempty"`
 
 	// The selected sandbox version to be used for the extensibility environment
 	SandboxVersion *string `json:"sandbox_version,omitempty"`
@@ -58,6 +65,41 @@ type Tenant struct {
 
 	// Supported locales for the UI
 	EnabledLocales []interface{} `json:"enabled_locales,omitempty"`
+}
+
+func (t *Tenant) MarshalJSON() ([]byte, error) {
+	type tenant Tenant
+	type tenantWrapper struct {
+		*tenant
+		SessionLifetimeInMinutes     *int `json:"session_lifetime_in_minutes,omitempty"`
+		IdleSessionLifetimeInMinutes *int `json:"idle_session_lifetime_in_minutes,omitempty"`
+	}
+
+	alias := &tenantWrapper{(*tenant)(t), nil, nil}
+
+	if t.SessionLifetime != nil && *t.SessionLifetime < 1 {
+
+		sessionLifetime := t.GetSessionLifetime()
+
+		alias.SessionLifetimeInMinutes = auth0.Int(int(math.Round(sessionLifetime * 60.0)))
+		alias.SessionLifetime = nil
+		defer func() {
+			alias.SessionLifetime = &sessionLifetime
+		}()
+	}
+
+	if t.IdleSessionLifetime != nil && *t.IdleSessionLifetime < 1 {
+
+		idleSessionLifetime := t.GetIdleSessionLifetime()
+
+		alias.IdleSessionLifetimeInMinutes = auth0.Int(int(math.Round(idleSessionLifetime * 60.0)))
+		alias.IdleSessionLifetime = nil
+		defer func() {
+			alias.IdleSessionLifetime = &idleSessionLifetime
+		}()
+	}
+
+	return json.Marshal(alias)
 }
 
 type TenantChangePassword struct {

@@ -31,6 +31,20 @@ func IntValue(i *int) int {
 	return 0
 }
 
+// Float64 returns a pointer to the float64 value passed in.
+func Float64(f float64) *float64 {
+	return &f
+}
+
+// Float64Value returns the value of the float64 pointer passed in or 0 if the pointer
+// is nil.
+func Float64Value(f *float64) float64 {
+	if f != nil {
+		return *f
+	}
+	return 0.00
+}
+
 // String returns a pointer to the string value passed in.
 func String(s string) *string {
 	return &s

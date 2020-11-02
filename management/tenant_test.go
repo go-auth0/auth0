@@ -1,9 +1,11 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
 
 	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestTenant(t *testing.T) {
@@ -25,11 +27,33 @@ func TestTenant(t *testing.T) {
 			SupportURL:            auth0.String("https://support.example.com"),
 			SupportEmail:          auth0.String("support@example.com"),
 			DefaultRedirectionURI: auth0.String("https://example.com/login"),
+			SessionLifetime:       auth0.Float64(1080),
+			IdleSessionLifetime:   auth0.Float64(720),
 		})
 		if err != nil {
 			t.Error(err)
 		}
 		tn, _ = m.Tenant.Read()
 		t.Logf("%v\n", tn)
+	})
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for tenant, expected := range map[*Tenant]string{
+			{}:                                         `{}`,
+			{SessionLifetime: auth0.Float64(1)}:        `{"session_lifetime":1}`,
+			{SessionLifetime: auth0.Float64(720)}:      `{"session_lifetime":720}`,
+			{IdleSessionLifetime: auth0.Float64(1)}:    `{"idle_session_lifetime":1}`,
+			{SessionLifetime: auth0.Float64(0.25)}:     `{"session_lifetime_in_minutes":15}`,
+			{SessionLifetime: auth0.Float64(0.5)}:      `{"session_lifetime_in_minutes":30}`,
+			{SessionLifetime: auth0.Float64(0.99)}:     `{"session_lifetime_in_minutes":59}`,
+			{IdleSessionLifetime: auth0.Float64(0.25)}: `{"idle_session_lifetime_in_minutes":15}`,
+		} {
+			b, err := json.Marshal(tenant)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, string(b), expected)
+			t.Logf("%v\n", tenant)
+		}
 	})
 }
