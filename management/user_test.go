@@ -207,6 +207,13 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", r)
 	})
 
+	t.Run("InvalidateRememberBrowser", func(t *testing.T) {
+		err := m.User.InvalidateRememberBrowser(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(u.GetID())
 		if err != nil {

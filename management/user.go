@@ -355,3 +355,18 @@ func (m *UserManager) RegenerateRecoveryCode(id string, opts ...RequestOption) (
 	err := m.Request("POST", m.URI("users", id, "recovery-code-regeneration"), &r, opts...)
 	return r, err
 }
+
+// InvalidateRememberBrowser invalidates all remembered browsers across all authentication factors for a user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/post_invalidate_remember_browser
+func (m *UserManager) InvalidateRememberBrowser(id string, opts ...RequestOption) error {
+	uri := m.URI(
+		"users",
+		id,
+		"multifactor",
+		"actions",
+		"invalidate-remember-browser",
+	)
+	err := m.Request("POST", uri, nil, opts...)
+	return err
+}
