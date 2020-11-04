@@ -162,6 +162,10 @@ type UserBlock struct {
 	IP         *string `json:"ip,omitempty"`
 }
 
+type UserRecoveryCode struct {
+	RecoveryCode *string `json:"recovery_code,omitempty"`
+}
+
 // UserList is an envelope struct which is used when calling List() or Search()
 // methods.
 //
@@ -341,4 +345,13 @@ func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, er
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
 func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("user-blocks", id), nil, opts...)
+}
+
+// RegenerateRecoveryCode removes the current multi-factor authentication recovery code and generate a new one.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/post_recovery_code_regeneration
+func (m *UserManager) RegenerateRecoveryCode(id string, opts ...RequestOption) (*UserRecoveryCode, error) {
+	r := new(UserRecoveryCode)
+	err := m.Request("POST", m.URI("users", id, "recovery-code-regeneration"), &r, opts...)
+	return r, err
 }
