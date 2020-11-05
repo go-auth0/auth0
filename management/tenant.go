@@ -46,11 +46,19 @@ type Tenant struct {
 	// A set of URLs that are valid to redirect to after logout from Auth0.
 	AllowedLogoutURLs []interface{} `json:"allowed_logout_urls,omitempty"`
 
-	// Login session lifetime, how long the session will stay valid (unit:
-	// hours).
+	// Login session lifetime, how long the session will stay valid (hours).
+	//
+	// When marshalling, values are rounded to the nearest integer. If the value
+	// is smaller than 1, hours are transformed to minutes and marshaled as
+	// session_lifetime_in_minutes instead.
 	SessionLifetime *float64 `json:"session_lifetime,omitempty"`
 
-	// Force a user to login after they have been inactive for the specified number (unit: hours)
+	// Force a user to login after they have been inactive for the specified
+	// number (hours).
+	//
+	// When marshalling, values are rounded to the nearest integer. If the value
+	// is smaller than 1, hours are transformed to minutes and marshaled as
+	// idle_session_lifetime_in_minutes instead.
 	IdleSessionLifetime *float64 `json:"idle_session_lifetime,omitempty"`
 
 	// The selected sandbox version to be used for the extensibility environment
@@ -68,6 +76,7 @@ type Tenant struct {
 }
 
 func (t *Tenant) MarshalJSON() ([]byte, error) {
+
 	type tenant Tenant
 	type tenantWrapper struct {
 		*tenant
@@ -75,31 +84,36 @@ func (t *Tenant) MarshalJSON() ([]byte, error) {
 		IdleSessionLifetimeInMinutes *int `json:"idle_session_lifetime_in_minutes,omitempty"`
 	}
 
-	alias := &tenantWrapper{(*tenant)(t), nil, nil}
+	w := &tenantWrapper{(*tenant)(t), nil, nil}
 
-	if t.SessionLifetime != nil && *t.SessionLifetime < 1 {
+	if t.SessionLifetime != nil {
 
 		sessionLifetime := t.GetSessionLifetime()
 
-		alias.SessionLifetimeInMinutes = auth0.Int(int(math.Round(sessionLifetime * 60.0)))
-		alias.SessionLifetime = nil
-		defer func() {
-			alias.SessionLifetime = &sessionLifetime
-		}()
+		if sessionLifetime < 1 {
+			w.SessionLifetimeInMinutes = auth0.Int(int(math.Round(sessionLifetime * 60.0)))
+			w.SessionLifetime = nil
+			defer func() { w.SessionLifetime = &sessionLifetime }()
+		} else {
+			w.SessionLifetime = auth0.Float64(math.Round(sessionLifetime))
+		}
 	}
 
-	if t.IdleSessionLifetime != nil && *t.IdleSessionLifetime < 1 {
+	if t.IdleSessionLifetime != nil {
 
 		idleSessionLifetime := t.GetIdleSessionLifetime()
 
-		alias.IdleSessionLifetimeInMinutes = auth0.Int(int(math.Round(idleSessionLifetime * 60.0)))
-		alias.IdleSessionLifetime = nil
-		defer func() {
-			alias.IdleSessionLifetime = &idleSessionLifetime
-		}()
+		if idleSessionLifetime < 1 {
+			w.IdleSessionLifetimeInMinutes = auth0.Int(int(math.Round(idleSessionLifetime * 60.0)))
+			w.IdleSessionLifetime = nil
+			defer func() { w.IdleSessionLifetime = &idleSessionLifetime }()
+		} else {
+			w.IdleSessionLifetime = auth0.Float64(idleSessionLifetime)
+		}
+
 	}
 
-	return json.Marshal(alias)
+	return json.Marshal(w)
 }
 
 type TenantChangePassword struct {

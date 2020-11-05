@@ -40,6 +40,8 @@ func TestTenant(t *testing.T) {
 	t.Run("MarshalJSON", func(t *testing.T) {
 		for tenant, expected := range map[*Tenant]string{
 			{}:                                         `{}`,
+			{SessionLifetime: auth0.Float64(1.2)}:      `{"session_lifetime":1}`,
+			{SessionLifetime: auth0.Float64(1.19)}:     `{"session_lifetime":1}`,
 			{SessionLifetime: auth0.Float64(1)}:        `{"session_lifetime":1}`,
 			{SessionLifetime: auth0.Float64(720)}:      `{"session_lifetime":720}`,
 			{IdleSessionLifetime: auth0.Float64(1)}:    `{"idle_session_lifetime":1}`,
