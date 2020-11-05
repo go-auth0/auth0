@@ -166,6 +166,28 @@ type UserRecoveryCode struct {
 	RecoveryCode *string `json:"recovery_code,omitempty"`
 }
 
+// UserEnrollment contains information about the Guardian enrollments for the user
+type UserEnrollment struct {
+	// Authentication method for this enrollment. Can be `authentication`, `guardian`, or `sms`.
+	AuthMethod *string `json:"auth_method,omitempty"`
+	// Start date and time of this enrollment.
+	EnrolledAt *time.Time `json:"enrolled_at,omitempty"`
+	// ID of this enrollment.
+	ID *string `json:"id,omitempty"`
+	// Device identifier (usually phone identifier) of this enrollment.
+	Identifier *string `json:"identifier,omitempty"`
+	// Last authentication date and time of this enrollment.
+	LastAuth *time.Time `json:"last_auth,omitempty"`
+	// Name of enrollment (usually phone number).
+	Name *string `json:"name,omitempty"`
+	// Phone number for this enrollment.
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	// Status of this enrollment. Can be `pending` or `confirmed`.
+	Status *string `json:"status,omitempty"`
+	// Type of enrollment.
+	Type *string `json:"type,omitempty"`
+}
+
 // UserList is an envelope struct which is used when calling List() or Search()
 // methods.
 //
@@ -345,6 +367,14 @@ func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, er
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
 func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("user-blocks", id), nil, opts...)
+}
+
+// Enrollments retrieves all Guardian enrollments for a user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/get_enrollments
+func (m *UserManager) Enrollments(id string, opts ...RequestOption) (enrolls []*UserEnrollment, err error) {
+	err = m.Request("GET", m.URI("users", id, "enrollments"), &enrolls, opts...)
+	return
 }
 
 // RegenerateRecoveryCode removes the current multi-factor authentication recovery code and generate a new one.
