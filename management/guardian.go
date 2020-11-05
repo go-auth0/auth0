@@ -1,5 +1,24 @@
 package management
 
+import "time"
+
+type Enrollment struct {
+	// ID for this enrollment
+	ID *string `json:"id,omitempty"`
+	// Status of this enrollment. Can be 'pending' or 'confirmed'
+	Status *string `json:"status,omitempty"`
+	// Device name (only for push notification).
+	Name *string `json:"name,omitempty"`
+	// Device identifier. This is usually the phone identifier.
+	Identifier *string `json:"identifier,omitempty"`
+	// Phone number.
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	// Enrollment date and time.
+	EnrolledAt *time.Time `json:"enrolled_at,omitempty"`
+	// Last authentication date and time.
+	LastAuth *time.Time `json:"last_auth,omitempty"`
+}
+
 type MultiFactor struct {
 	// States if this factor is enabled
 	Enabled *bool `json:"enabled,omitempty"`
@@ -70,6 +89,14 @@ func newGuardianManager(m *Management) *GuardianManager {
 
 type EnrollmentManager struct {
 	*Management
+}
+
+// Get retrieves an enrollment (including its status and type).
+//
+// See: https://auth0.com/docs/api/management/v2#!/Guardian/get_enrollments_by_id
+func (m *EnrollmentManager) Get(id string, opts ...RequestOption) (en *Enrollment, err error) {
+	err = m.Request("GET", m.URI("guardian", "enrollments", id), &en, opts...)
+	return
 }
 
 type MultiFactorManager struct {
