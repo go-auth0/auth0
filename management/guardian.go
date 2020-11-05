@@ -99,6 +99,14 @@ func (m *EnrollmentManager) Get(id string, opts ...RequestOption) (en *Enrollmen
 	return
 }
 
+// Delete an enrollment to allow the user to enroll with multi-factor authentication again.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Guardian/delete_enrollments_by_id
+func (m *EnrollmentManager) Delete(id string, opts ...RequestOption) (err error) {
+	err = m.Request("DELETE", m.URI("guardian", "enrollments", id), nil, opts...)
+	return
+}
+
 type MultiFactorManager struct {
 	*Management
 
