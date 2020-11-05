@@ -51,11 +51,13 @@ type MultiFactorProviderTwilio struct {
 }
 
 type GuardianManager struct {
+	Enrollment  *EnrollmentManager
 	MultiFactor *MultiFactorManager
 }
 
 func newGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{
+		&EnrollmentManager{m},
 		&MultiFactorManager{m,
 			&MultiFactorSMS{m},
 			&MultiFactorPush{m},
@@ -64,6 +66,10 @@ func newGuardianManager(m *Management) *GuardianManager {
 			&MultiFactorOTP{m},
 		},
 	}
+}
+
+type EnrollmentManager struct {
+	*Management
 }
 
 type MultiFactorManager struct {
