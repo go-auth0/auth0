@@ -1,3 +1,8 @@
+## v5.2.2
+
+* `management.UserIdentity`: Add `AccessToken` field ([#113](https://github.com/go-auth0/auth0/pull/113)).
+* `management.ConnectionOptionsSAML`: Add missing `SetUserAttributes` field ([#159](https://github.com/go-auth0/auth0/pull/159)).
+
 ## v5.2.1
 
 * `management.WithInsecure`: allow insecure HTTP scheme to enable testing / mocking.
