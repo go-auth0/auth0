@@ -661,6 +661,8 @@ type ConnectionOptionsSAML struct {
 	RequestTemplate    *string                            `json:"requestTemplate,omitempty"`
 	UserIDAttribute    *string                            `json:"user_id_attribute,omitempty"`
 	LogoURL            *string                            `json:"icon_url,omitempty"`
+
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
 type ConnectionOptionsSAMLIdpInitiated struct {

@@ -2119,6 +2119,14 @@ func (c *ConnectionOptionsSAML) GetRequestTemplate() string {
 	return *c.RequestTemplate
 }
 
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
 // GetSignatureAlgorithm returns the SignatureAlgorithm field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSAML) GetSignatureAlgorithm() string {
 	if c == nil || c.SignatureAlgorithm == nil {
