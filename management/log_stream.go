@@ -3,11 +3,11 @@ package management
 import "encoding/json"
 
 const (
-	LogStreamSinkEventBridge = "eventbridge"
-	LogStreamSinkEventGrid   = "eventgrid"
-	LogStreamSinkHTTP        = "http"
-	LogStreamSinkDatadog     = "datadog"
-	LogStreamSinkSplunk      = "splunk"
+	LogStreamTypeAmazonEventBridge = "eventbridge"
+	LogStreamTypeAzureEventGrid    = "eventgrid"
+	LogStreamTypeHTTP              = "http"
+	LogStreamTypeDatadog           = "datadog"
+	LogStreamTypeSplunk            = "splunk"
 )
 
 type LogStream struct {
@@ -26,86 +26,41 @@ type LogStream struct {
 	Status *string `json:"status,omitempty"`
 
 	// Sink for validation.
-	Sink    interface{}     `json:"-"`
-	RawSink json.RawMessage `json:"sink,omitempty"`
-}
-
-type EventBridgeSink struct {
-	// AWS Account Id
-	AWSAccountID *string `json:"awsAccountId,omitempty"`
-	// AWS Region
-	AWSRegion *string `json:"awsRegion,omitempty"`
-	// AWS Partner Event Source
-	AWSPartnerEventSource *string `json:"awsPartnerEventSource,omitempty"`
-}
-type EventGridSink struct {
-	// Azure Subscription Id
-	AzureSubscriptionID *string `json:"azureSubscriptionId,omitempty"`
-	// Azure Resource Group
-	AzureResourceGroup *string `json:"azureResourceGroup,omitempty"`
-	// Azure Region
-	AzureRegion *string `json:"azureRegion,omitempty"`
-	// Azure Partner Topic
-	AzurePartnerTopic *string `json:"azurePartnerTopic,omitempty"`
-}
-type HTTPSink struct {
-	// Http ContentFormat
-	HTTPContentFormat *string `json:"httpContentFormat,omitempty"`
-	// Http ContentType
-	HTTPContentType *string `json:"httpContentType,omitempty"`
-	// Http Endpoint
-	HTTPEndpoint *string `json:"httpEndpoint,omitempty"`
-	// Http Authorization
-	HTTPAuthorization *string `json:"httpAuthorization,omitempty"`
-	// List of acceptable Grant Types for this Client
-	HTTPCustomHeaders []interface{} `json:"httpCustomHeaders,omitempty"`
-}
-
-type DatadogSink struct {
-	// Datadog Region
-	DatadogRegion *string `json:"datadogRegion,omitempty"`
-	// Datadog Api Key
-	DatadogAPIKey *string `json:"datadogApiKey,omitempty"`
-}
-type SplunkSink struct {
-	// Splunk Domain
-	SplunkDomain *string `json:"splunkDomain,omitempty"`
-	// Splunk Token
-	SplunkToken *string `json:"splunkToken,omitempty"`
-	// Splunk Port
-	SplunkPort *string `json:"splunkPort,omitempty"`
-	// Splunk Secure
-	SplunkSecure *bool `json:"splunkSecure,omitempty"`
-}
-
-type LogStreamManager struct {
-	*Management
-}
-
-func newLogStreamManager(m *Management) *LogStreamManager {
-	return &LogStreamManager{m}
+	Sink interface{} `json:"-"`
 }
 
 func (ls *LogStream) MarshalJSON() ([]byte, error) {
 
 	type logStream LogStream
+	type logStreamWrapper struct {
+		*logStream
+		RawSink json.RawMessage `json:"sink,omitempty"`
+	}
+
+	w := &logStreamWrapper{(*logStream)(ls), nil}
 
 	if ls.Sink != nil {
 		b, err := json.Marshal(ls.Sink)
 		if err != nil {
 			return nil, err
 		}
-		ls.RawSink = b
+		w.RawSink = b
 	}
 
-	return json.Marshal((*logStream)(ls))
+	return json.Marshal(w)
 }
 
 func (ls *LogStream) UnmarshalJSON(b []byte) error {
 
 	type logStream LogStream
+	type logStreamWrapper struct {
+		*logStream
+		RawSink json.RawMessage `json:"sink,omitempty"`
+	}
 
-	err := json.Unmarshal(b, (*logStream)(ls))
+	w := &logStreamWrapper{(*logStream)(ls), nil}
+
+	err := json.Unmarshal(b, w)
 	if err != nil {
 		return err
 	}
@@ -115,21 +70,21 @@ func (ls *LogStream) UnmarshalJSON(b []byte) error {
 		var v interface{}
 
 		switch *ls.Type {
-		case LogStreamSinkEventBridge:
-			v = &EventBridgeSink{}
-		case LogStreamSinkEventGrid:
-			v = &EventGridSink{}
-		case LogStreamSinkHTTP:
-			v = &HTTPSink{}
-		case LogStreamSinkDatadog:
-			v = &DatadogSink{}
-		case LogStreamSinkSplunk:
-			v = &SplunkSink{}
+		case LogStreamTypeAmazonEventBridge:
+			v = &LogStreamSinkAmazonEventBridge{}
+		case LogStreamTypeAzureEventGrid:
+			v = &LogStreamSinkAzureEventGrid{}
+		case LogStreamTypeHTTP:
+			v = &LogStreamSinkHTTP{}
+		case LogStreamTypeDatadog:
+			v = &LogStreamSinkDatadog{}
+		case LogStreamTypeSplunk:
+			v = &LogStreamSinkSplunk{}
 		default:
 			v = make(map[string]interface{})
 		}
 
-		err = json.Unmarshal(ls.RawSink, &v)
+		err = json.Unmarshal(w.RawSink, &v)
 		if err != nil {
 			return err
 		}
@@ -140,48 +95,103 @@ func (ls *LogStream) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Create a Log Stream sink.
-//
-// The LogStream object requires different properties depending on the type
-// of sin (which is specified using the type property):
-//
-// - `http` requires `httpEndpoint`, `httpContentType`, `httpContentFormat`, and `httpAuthorization`
-// - `eventbridge` requires `awsAccountId`, and `awsRegion`
-// - `eventgrid` requires `azureSubscriptionId`, `azureResourceGroup`, and `azureRegion`
-// - `datadog` requires `datadogRegion`, and `datadogApiKey`
-// - `splunk` requires `splunkDomain`, `splunkToken`, `splunkPort`, and `splunkSecure`
-//
-// See: https://auth0.com/docs/api/management/v2#!/log-streams
-func (m *LogStreamManager) Create(e *LogStream) error {
-	return m.post(m.uri("log-streams"), e)
+type LogStreamSinkAmazonEventBridge struct {
+	// AWS Account Id
+	AccountID *string `json:"awsAccountId,omitempty"`
+	// AWS Region
+	Region *string `json:"awsRegion,omitempty"`
+	// AWS Partner Event Source
+	PartnerEventSource *string `json:"awsPartnerEventSource,omitempty"`
 }
 
-// Retrieve log-stream detail by its id.
+type LogStreamSinkAzureEventGrid struct {
+	// Azure Subscription Id
+	SubscriptionID *string `json:"azureSubscriptionId,omitempty"`
+	// Azure Resource Group
+	ResourceGroup *string `json:"azureResourceGroup,omitempty"`
+	// Azure Region
+	Region *string `json:"azureRegion,omitempty"`
+	// Azure Partner Topic
+	PartnerTopic *string `json:"azurePartnerTopic,omitempty"`
+}
+
+type LogStreamSinkHTTP struct {
+	// HTTP ContentFormat
+	ContentFormat *string `json:"httpContentFormat,omitempty"`
+	// HTTP ContentType
+	ContentType *string `json:"httpContentType,omitempty"`
+	// HTTP Endpoint
+	Endpoint *string `json:"httpEndpoint,omitempty"`
+	// HTTP Authorization
+	Authorization *string `json:"httpAuthorization,omitempty"`
+	// Custom HTTP headers
+	CustomHeaders []interface{} `json:"httpCustomHeaders,omitempty"`
+}
+
+type LogStreamSinkDatadog struct {
+	// Datadog Region
+	Region *string `json:"datadogRegion,omitempty"`
+	// Datadog Api Key
+	APIKey *string `json:"datadogApiKey,omitempty"`
+}
+
+type LogStreamSinkSplunk struct {
+	// Splunk Domain
+	Domain *string `json:"splunkDomain,omitempty"`
+	// Splunk Token
+	Token *string `json:"splunkToken,omitempty"`
+	// Splunk Port
+	Port *string `json:"splunkPort,omitempty"`
+	// Splunk Secure
+	Secure *bool `json:"splunkSecure,omitempty"`
+}
+
+type LogStreamManager struct {
+	*Management
+}
+
+func newLogStreamManager(m *Management) *LogStreamManager {
+	return &LogStreamManager{m}
+}
+
+// Create a log stream.
+//
+// See: https://auth0.com/docs/api/management/v2#!/log-streams
+func (m *LogStreamManager) Create(l *LogStream, opts ...RequestOption) error {
+	return m.Request("POST", m.URI("log-streams"), l, opts...)
+}
+
+// Read a log stream.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Log_Streams/get_log_streams_by_id
-func (m *LogStreamManager) Read(id string) (e *LogStream, err error) {
-	err = m.get(m.uri("log-streams", id), &e)
+func (m *LogStreamManager) Read(id string, opts ...RequestOption) (l *LogStream, err error) {
+	err = m.Request("GET", m.URI("log-streams", id), &l, opts...)
 	return
 }
 
-// List all connections.
+// List all log streams.
 //
 // See: https://auth0.com/docs/api/management/v2#!/log-streams/get_log_streams
-func (m *LogStreamManager) List() (ls []*LogStream, err error) {
-	err = m.get(m.uri("log-streams"), &ls)
+func (m *LogStreamManager) List(opts ...RequestOption) (ls []*LogStream, err error) {
+	err = m.Request("GET", m.URI("log-streams"), &ls, opts...)
 	return
 }
 
-// Update log-stream.
+// Update a log stream.
+//
+// The following fields may be updated in a PATCH operation: Name, Status, Sink.
+//
+// Note: For log streams of type eventbridge and eventgrid, updating the sink is
+// not permitted.
 //
 // See: https://auth0.com/docs/api/management/v2#!/log-streams
-func (m *LogStreamManager) Update(id string, e *LogStream) (err error) {
-	return m.patch(m.uri("log-streams", id), e)
+func (m *LogStreamManager) Update(id string, l *LogStream, opts ...RequestOption) (err error) {
+	return m.Request("PATCH", m.URI("log-streams", id), l, opts...)
 }
 
-// Delete the log-stream.
+// Delete a log stream.
 //
 // See: https://auth0.com/docs/api/management/v2#!/log-streams
-func (m *LogStreamManager) Delete(id string) (err error) {
-	return m.delete(m.uri("log-streams", id))
+func (m *LogStreamManager) Delete(id string, opts ...RequestOption) (err error) {
+	return m.Request("DELETE", m.URI("log-streams", id), nil, opts...)
 }
