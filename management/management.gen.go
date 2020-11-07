@@ -2634,27 +2634,6 @@ func (d *DailyStat) String() string {
 	return Stringify(d)
 }
 
-// GetDatadogAPIKey returns the DatadogAPIKey field if it's non-nil, zero value otherwise.
-func (d *DatadogSink) GetDatadogAPIKey() string {
-	if d == nil || d.DatadogAPIKey == nil {
-		return ""
-	}
-	return *d.DatadogAPIKey
-}
-
-// GetDatadogRegion returns the DatadogRegion field if it's non-nil, zero value otherwise.
-func (d *DatadogSink) GetDatadogRegion() string {
-	if d == nil || d.DatadogRegion == nil {
-		return ""
-	}
-	return *d.DatadogRegion
-}
-
-// String returns a string representation of DatadogSink.
-func (d *DatadogSink) String() string {
-	return Stringify(d)
-}
-
 // GetCredentials returns the Credentials field.
 func (e *Email) GetCredentials() *EmailCredentials {
 	if e == nil {
@@ -2846,72 +2825,6 @@ func (e *EmailTemplate) String() string {
 	return Stringify(e)
 }
 
-// GetAWSAccountID returns the AWSAccountID field if it's non-nil, zero value otherwise.
-func (e *EventBridgeSink) GetAWSAccountID() string {
-	if e == nil || e.AWSAccountID == nil {
-		return ""
-	}
-	return *e.AWSAccountID
-}
-
-// GetAWSPartnerEventSource returns the AWSPartnerEventSource field if it's non-nil, zero value otherwise.
-func (e *EventBridgeSink) GetAWSPartnerEventSource() string {
-	if e == nil || e.AWSPartnerEventSource == nil {
-		return ""
-	}
-	return *e.AWSPartnerEventSource
-}
-
-// GetAWSRegion returns the AWSRegion field if it's non-nil, zero value otherwise.
-func (e *EventBridgeSink) GetAWSRegion() string {
-	if e == nil || e.AWSRegion == nil {
-		return ""
-	}
-	return *e.AWSRegion
-}
-
-// String returns a string representation of EventBridgeSink.
-func (e *EventBridgeSink) String() string {
-	return Stringify(e)
-}
-
-// GetAzurePartnerTopic returns the AzurePartnerTopic field if it's non-nil, zero value otherwise.
-func (e *EventGridSink) GetAzurePartnerTopic() string {
-	if e == nil || e.AzurePartnerTopic == nil {
-		return ""
-	}
-	return *e.AzurePartnerTopic
-}
-
-// GetAzureRegion returns the AzureRegion field if it's non-nil, zero value otherwise.
-func (e *EventGridSink) GetAzureRegion() string {
-	if e == nil || e.AzureRegion == nil {
-		return ""
-	}
-	return *e.AzureRegion
-}
-
-// GetAzureResourceGroup returns the AzureResourceGroup field if it's non-nil, zero value otherwise.
-func (e *EventGridSink) GetAzureResourceGroup() string {
-	if e == nil || e.AzureResourceGroup == nil {
-		return ""
-	}
-	return *e.AzureResourceGroup
-}
-
-// GetAzureSubscriptionID returns the AzureSubscriptionID field if it's non-nil, zero value otherwise.
-func (e *EventGridSink) GetAzureSubscriptionID() string {
-	if e == nil || e.AzureSubscriptionID == nil {
-		return ""
-	}
-	return *e.AzureSubscriptionID
-}
-
-// String returns a string representation of EventGridSink.
-func (e *EventGridSink) String() string {
-	return Stringify(e)
-}
-
 // GetAudience returns the Audience field if it's non-nil, zero value otherwise.
 func (g *Grant) GetAudience() string {
 	if g == nil || g.Audience == nil {
@@ -2996,43 +2909,6 @@ func (h *Hook) String() string {
 
 // String returns a string representation of HookList.
 func (h *HookList) String() string {
-	return Stringify(h)
-}
-
-// GetHTTPAuthorization returns the HTTPAuthorization field if it's non-nil, zero value otherwise.
-func (h *HTTPSink) GetHTTPAuthorization() string {
-	if h == nil || h.HTTPAuthorization == nil {
-		return ""
-	}
-	return *h.HTTPAuthorization
-}
-
-// GetHTTPContentFormat returns the HTTPContentFormat field if it's non-nil, zero value otherwise.
-func (h *HTTPSink) GetHTTPContentFormat() string {
-	if h == nil || h.HTTPContentFormat == nil {
-		return ""
-	}
-	return *h.HTTPContentFormat
-}
-
-// GetHTTPContentType returns the HTTPContentType field if it's non-nil, zero value otherwise.
-func (h *HTTPSink) GetHTTPContentType() string {
-	if h == nil || h.HTTPContentType == nil {
-		return ""
-	}
-	return *h.HTTPContentType
-}
-
-// GetHTTPEndpoint returns the HTTPEndpoint field if it's non-nil, zero value otherwise.
-func (h *HTTPSink) GetHTTPEndpoint() string {
-	if h == nil || h.HTTPEndpoint == nil {
-		return ""
-	}
-	return *h.HTTPEndpoint
-}
-
-// String returns a string representation of HTTPSink.
-func (h *HTTPSink) String() string {
 	return Stringify(h)
 }
 
@@ -3269,6 +3145,167 @@ func (l *LogStream) GetType() string {
 
 // String returns a string representation of LogStream.
 func (l *LogStream) String() string {
+	return Stringify(l)
+}
+
+// GetAccountID returns the AccountID field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetAccountID() string {
+	if l == nil || l.AccountID == nil {
+		return ""
+	}
+	return *l.AccountID
+}
+
+// GetPartnerEventSource returns the PartnerEventSource field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetPartnerEventSource() string {
+	if l == nil || l.PartnerEventSource == nil {
+		return ""
+	}
+	return *l.PartnerEventSource
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// String returns a string representation of LogStreamSinkAmazonEventBridge.
+func (l *LogStreamSinkAmazonEventBridge) String() string {
+	return Stringify(l)
+}
+
+// GetPartnerTopic returns the PartnerTopic field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetPartnerTopic() string {
+	if l == nil || l.PartnerTopic == nil {
+		return ""
+	}
+	return *l.PartnerTopic
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// GetResourceGroup returns the ResourceGroup field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetResourceGroup() string {
+	if l == nil || l.ResourceGroup == nil {
+		return ""
+	}
+	return *l.ResourceGroup
+}
+
+// GetSubscriptionID returns the SubscriptionID field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetSubscriptionID() string {
+	if l == nil || l.SubscriptionID == nil {
+		return ""
+	}
+	return *l.SubscriptionID
+}
+
+// String returns a string representation of LogStreamSinkAzureEventGrid.
+func (l *LogStreamSinkAzureEventGrid) String() string {
+	return Stringify(l)
+}
+
+// GetAPIKey returns the APIKey field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkDatadog) GetAPIKey() string {
+	if l == nil || l.APIKey == nil {
+		return ""
+	}
+	return *l.APIKey
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkDatadog) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// String returns a string representation of LogStreamSinkDatadog.
+func (l *LogStreamSinkDatadog) String() string {
+	return Stringify(l)
+}
+
+// GetAuthorization returns the Authorization field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetAuthorization() string {
+	if l == nil || l.Authorization == nil {
+		return ""
+	}
+	return *l.Authorization
+}
+
+// GetContentFormat returns the ContentFormat field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetContentFormat() string {
+	if l == nil || l.ContentFormat == nil {
+		return ""
+	}
+	return *l.ContentFormat
+}
+
+// GetContentType returns the ContentType field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetContentType() string {
+	if l == nil || l.ContentType == nil {
+		return ""
+	}
+	return *l.ContentType
+}
+
+// GetEndpoint returns the Endpoint field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetEndpoint() string {
+	if l == nil || l.Endpoint == nil {
+		return ""
+	}
+	return *l.Endpoint
+}
+
+// String returns a string representation of LogStreamSinkHTTP.
+func (l *LogStreamSinkHTTP) String() string {
+	return Stringify(l)
+}
+
+// GetDomain returns the Domain field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetDomain() string {
+	if l == nil || l.Domain == nil {
+		return ""
+	}
+	return *l.Domain
+}
+
+// GetPort returns the Port field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetPort() string {
+	if l == nil || l.Port == nil {
+		return ""
+	}
+	return *l.Port
+}
+
+// GetSecure returns the Secure field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetSecure() bool {
+	if l == nil || l.Secure == nil {
+		return false
+	}
+	return *l.Secure
+}
+
+// GetToken returns the Token field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetToken() string {
+	if l == nil || l.Token == nil {
+		return ""
+	}
+	return *l.Token
+}
+
+// String returns a string representation of LogStreamSinkSplunk.
+func (l *LogStreamSinkSplunk) String() string {
 	return Stringify(l)
 }
 
@@ -3706,43 +3743,6 @@ func (r *RuleConfig) String() string {
 // String returns a string representation of RuleList.
 func (r *RuleList) String() string {
 	return Stringify(r)
-}
-
-// GetSplunkDomain returns the SplunkDomain field if it's non-nil, zero value otherwise.
-func (s *SplunkSink) GetSplunkDomain() string {
-	if s == nil || s.SplunkDomain == nil {
-		return ""
-	}
-	return *s.SplunkDomain
-}
-
-// GetSplunkPort returns the SplunkPort field if it's non-nil, zero value otherwise.
-func (s *SplunkSink) GetSplunkPort() string {
-	if s == nil || s.SplunkPort == nil {
-		return ""
-	}
-	return *s.SplunkPort
-}
-
-// GetSplunkSecure returns the SplunkSecure field if it's non-nil, zero value otherwise.
-func (s *SplunkSink) GetSplunkSecure() bool {
-	if s == nil || s.SplunkSecure == nil {
-		return false
-	}
-	return *s.SplunkSecure
-}
-
-// GetSplunkToken returns the SplunkToken field if it's non-nil, zero value otherwise.
-func (s *SplunkSink) GetSplunkToken() string {
-	if s == nil || s.SplunkToken == nil {
-		return ""
-	}
-	return *s.SplunkToken
-}
-
-// String returns a string representation of SplunkSink.
-func (s *SplunkSink) String() string {
-	return Stringify(s)
 }
 
 // GetChangePassword returns the ChangePassword field.
