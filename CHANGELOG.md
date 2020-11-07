@@ -1,6 +1,10 @@
+## v5.2.0
+
+* `management.LogStream`: new resource now available ([#144](https://github.com/go-auth0/auth0/pull/144))
+
 ## v5.1.0
 
-* `management.Tenant`: changed `SessionTimeout` and `IdleSessionTimeout` to `float64`. Values smaller than 1 will be marshalled with a `_in_minutes` suffix ([156](https://github.com/go-auth0/auth0/pull/156)).
+* `management.Tenant`: changed `SessionTimeout` and `IdleSessionTimeout` to `float64`. Values smaller than 1 will be marshalled with a `_in_minutes` suffix ([#156](https://github.com/go-auth0/auth0/pull/156)).
 * `management.Connection`: removed `RawOptions` and handle (un-)marshalling internally.
 
 ## v5.0.0
