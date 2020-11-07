@@ -59,6 +59,18 @@ func WithStaticToken(token string) ManagementOption {
 	}
 }
 
+// WithInsecure configures management to not use an authentication token and
+// use HTTP instead of HTTPS.
+//
+// This options is available for testing purposes and should not be used in
+// production.
+func WithInsecure() ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.StaticToken("insecure")
+		m.url.Scheme = "http"
+	}
+}
+
 // WithClient configures management to use the provided client.
 func WithClient(client *http.Client) ManagementOption {
 	return func(m *Management) {

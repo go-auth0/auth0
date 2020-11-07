@@ -4,9 +4,12 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 	"time"
+
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 var m *Management
@@ -184,4 +187,29 @@ func TestRequestOptionContextTimeout(t *testing.T) {
 	if !errors.Is(err, context.DeadlineExceeded) {
 		t.Errorf("expected err to be context.DeadlineExceeded, got %v", err)
 	}
+}
+
+func TestNew_WithInsecure(t *testing.T) {
+
+	h := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/v2/users/123":
+			w.Write([]byte(`{"user_id":"123"}`))
+		default:
+			http.NotFound(w, r)
+		}
+	})
+	s := httptest.NewServer(h)
+
+	m, err := New(s.URL, WithInsecure())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	u, err := m.User.Read("123")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expect.Expect(t, u.GetID(), "123")
 }
