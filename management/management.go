@@ -176,9 +176,9 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	}
 
 	m.http = client.Wrap(m.http, m.tokenSource,
-		client.WithRateLimit(),
+		client.WithDebug(m.debug),
 		client.WithUserAgent(m.userAgent),
-		client.WithDebug(m.debug))
+		client.WithRateLimit())
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
