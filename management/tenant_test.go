@@ -28,7 +28,7 @@ func TestTenant(t *testing.T) {
 			SupportEmail:          auth0.String("support@example.com"),
 			DefaultRedirectionURI: auth0.String("https://example.com/login"),
 			SessionLifetime:       auth0.Float64(1080),
-			IdleSessionLifetime:   auth0.Float64(720),
+			IdleSessionLifetime:   auth0.Float64(720.2), // will be rounded off
 		})
 		if err != nil {
 			t.Error(err)
@@ -45,6 +45,7 @@ func TestTenant(t *testing.T) {
 			{SessionLifetime: auth0.Float64(1)}:        `{"session_lifetime":1}`,
 			{SessionLifetime: auth0.Float64(720)}:      `{"session_lifetime":720}`,
 			{IdleSessionLifetime: auth0.Float64(1)}:    `{"idle_session_lifetime":1}`,
+			{IdleSessionLifetime: auth0.Float64(1.2)}:  `{"idle_session_lifetime":1}`,
 			{SessionLifetime: auth0.Float64(0.25)}:     `{"session_lifetime_in_minutes":15}`,
 			{SessionLifetime: auth0.Float64(0.5)}:      `{"session_lifetime_in_minutes":30}`,
 			{SessionLifetime: auth0.Float64(0.99)}:     `{"session_lifetime_in_minutes":59}`,

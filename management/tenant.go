@@ -108,7 +108,7 @@ func (t *Tenant) MarshalJSON() ([]byte, error) {
 			w.IdleSessionLifetime = nil
 			defer func() { w.IdleSessionLifetime = &idleSessionLifetime }()
 		} else {
-			w.IdleSessionLifetime = auth0.Float64(idleSessionLifetime)
+			w.IdleSessionLifetime = auth0.Float64(math.Round(idleSessionLifetime))
 		}
 
 	}
