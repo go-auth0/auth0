@@ -58,8 +58,7 @@ type Connection struct {
 	IsDomainConnection *bool `json:"is_domain_connection,omitempty"`
 
 	// Options for validation.
-	Options    interface{}     `json:"-"`
-	RawOptions json.RawMessage `json:"options,omitempty"`
+	Options interface{} `json:"-"`
 
 	// The identifiers of the clients for which the connection is to be
 	// enabled. If the array is empty or the property is not specified, no
@@ -77,23 +76,35 @@ type Connection struct {
 func (c *Connection) MarshalJSON() ([]byte, error) {
 
 	type connection Connection
+	type connectionWrapper struct {
+		*connection
+		RawOptions json.RawMessage `json:"options,omitempty"`
+	}
+
+	w := &connectionWrapper{(*connection)(c), nil}
 
 	if c.Options != nil {
 		b, err := json.Marshal(c.Options)
 		if err != nil {
 			return nil, err
 		}
-		c.RawOptions = b
+		w.RawOptions = b
 	}
 
-	return json.Marshal((*connection)(c))
+	return json.Marshal(w)
 }
 
 func (c *Connection) UnmarshalJSON(b []byte) error {
 
 	type connection Connection
+	type connectionWrapper struct {
+		*connection
+		RawOptions json.RawMessage `json:"options,omitempty"`
+	}
 
-	err := json.Unmarshal(b, (*connection)(c))
+	w := &connectionWrapper{(*connection)(c), nil}
+
+	err := json.Unmarshal(b, w)
 	if err != nil {
 		return err
 	}
@@ -139,7 +150,7 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = make(map[string]interface{})
 		}
 
-		err = json.Unmarshal(c.RawOptions, &v)
+		err = json.Unmarshal(w.RawOptions, &v)
 		if err != nil {
 			return err
 		}
