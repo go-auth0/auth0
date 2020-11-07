@@ -3620,7 +3620,7 @@ func (t *Tenant) GetGuardianMFAPage() *TenantGuardianMFAPage {
 }
 
 // GetIdleSessionLifetime returns the IdleSessionLifetime field if it's non-nil, zero value otherwise.
-func (t *Tenant) GetIdleSessionLifetime() int {
+func (t *Tenant) GetIdleSessionLifetime() float64 {
 	if t == nil || t.IdleSessionLifetime == nil {
 		return 0
 	}
@@ -3644,7 +3644,7 @@ func (t *Tenant) GetSandboxVersion() string {
 }
 
 // GetSessionLifetime returns the SessionLifetime field if it's non-nil, zero value otherwise.
-func (t *Tenant) GetSessionLifetime() int {
+func (t *Tenant) GetSessionLifetime() float64 {
 	if t == nil || t.SessionLifetime == nil {
 		return 0
 	}
