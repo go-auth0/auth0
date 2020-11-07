@@ -94,10 +94,11 @@ type User struct {
 }
 
 type UserIdentity struct {
-	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"-"`
-	Provider   *string `json:"provider,omitempty"`
-	IsSocial   *bool   `json:"isSocial,omitempty"`
+	Connection  *string `json:"connection,omitempty"`
+	UserID      *string `json:"-"`
+	Provider    *string `json:"provider,omitempty"`
+	IsSocial    *bool   `json:"isSocial,omitempty"`
+	AccessToken *string `json:"access_token,omitempty"`
 }
 
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
