@@ -1,3 +1,7 @@
+## v5.2.1
+
+* `management.WithInsecure`: allow insecure HTTP scheme to enable testing / mocking.
+
 ## v5.2.0
 
 * `management.LogStream`: new resource now available ([#144](https://github.com/go-auth0/auth0/pull/144))
