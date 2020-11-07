@@ -1,3 +1,8 @@
+## v5.1.0
+
+* `management.Tenant`: changed `SessionTimeout` and `IdleSessionTimeout` to `float64`. Values smaller than 1 will be marshalled with a `_in_minutes` suffix ([156](https://github.com/go-auth0/auth0/pull/156)).
+* `management.Connection`: removed `RawOptions` and handle (un-)marshalling internally.
+
 ## v5.0.0
 
 * `management.RequestOption`: renamed from `management.ListOption` and is now used with all requests to the Auth0 Management API ([#151](https://github.com/go-auth0/auth0/pull/151)).
