@@ -308,6 +308,10 @@ func TestConnectionOptions(t *testing.T) {
 		g := &Connection{
 			Name:     auth0.Stringf("Test-SAML-Connection-%d", time.Now().Unix()),
 			Strategy: auth0.String("samlp"),
+			Metadata: map[string]string{
+				"foo": "bar",
+				"bat": "baz",
+			},
 			Options: &ConnectionOptionsSAML{
 				SignInEndpoint: auth0.String("https://saml.identity/provider"),
 				SigningCert: auth0.String(`-----BEGIN CERTIFICATE-----
@@ -354,5 +358,7 @@ yE+vPxsiUkvQHdO2fojCkY8jg70jxM+gu59tPDNbw3Uh/2Ij310FgTHsnGQMyA==
 
 		expect.Expect(t, o.GetSignInEndpoint(), "https://saml.identity/provider")
 		expect.Expect(t, o.GetTenantDomain(), "example.com")
+		expect.Expect(t, g.Metadata["foo"], "bar")
+		expect.Expect(t, g.Metadata["bat"], "baz")
 	})
 }

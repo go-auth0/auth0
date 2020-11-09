@@ -70,7 +70,7 @@ type Connection struct {
 	// connection name will be added as realm.
 	Realms []interface{} `json:"realms,omitempty"`
 
-	Metadata *interface{} `json:"metadata,omitempty"`
+	Metadata map[string]string `json:"metadata,omitempty"`
 }
 
 func (c *Connection) MarshalJSON() ([]byte, error) {
