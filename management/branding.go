@@ -116,6 +116,10 @@ type BrandingFont struct {
 	URL *string `json:"url,omitempty"`
 }
 
+type BrandingTemplateUniversalLogin struct {
+	Body *string `json:"body,omitempty"`
+}
+
 type BrandingManager struct {
 	*Management
 }
@@ -137,4 +141,26 @@ func (m *BrandingManager) Read(opts ...RequestOption) (b *Branding, err error) {
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
 func (m *BrandingManager) Update(t *Branding, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("branding"), t, opts...)
+}
+
+// Retrieve template for New Universal Login Experience related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login
+func (m *BrandingManager) ReadTemplateUniversalLogin(opts ...RequestOption) (b *BrandingTemplateUniversalLogin, err error) {
+	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &b, opts...)
+	return
+}
+
+// Update template for New Universal Login Experience related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/put_universal_login
+func (m *BrandingManager) UpdateTemplateUniversalLogin(t *BrandingTemplateUniversalLogin, opts ...RequestOption) (err error) {
+	return m.Request("PUT", m.URI("branding", "templates", "universal-login"), t, opts...)
+}
+
+// Delete template for New Universal Login Experience related to branding.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/delete_universal_login
+func (m *BrandingManager) DeleteTemplateUniversalLogin(opts ...RequestOption) (err error) {
+	return m.Request("PATCH", m.URI("branding", "templates", "universal-login"), nil, opts...)
 }

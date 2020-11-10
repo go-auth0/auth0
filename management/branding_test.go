@@ -126,3 +126,40 @@ func TestBrandingColors(t *testing.T) {
 		})
 	}
 }
+
+func TestBrandingTemplateUniversalLogin(t *testing.T) {
+	var brandingTemplateUniversalLogin *BrandingTemplateUniversalLogin
+	var err error
+
+	t.Run("ReadTemplateUniversalLogin", func(t *testing.T) {
+		brandingTemplateUniversalLogin, err = m.Branding.ReadTemplateUniversalLogin()
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", brandingTemplateUniversalLogin)
+	})
+
+	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
+
+		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingUpdateTemplateUniversalLogin{
+			body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
+		})
+		if err != nil {
+			t.Error(err)
+		}
+
+		brandingTemplateUniversalLogin, _ = m.Branding.ReadTemplateUniversalLogin()
+		t.Logf("%v\n", brandingTemplateUniversalLogin)
+	})
+
+	t.Run("DeleteTemplateUniversalLogin", func(t *testing.T) {
+
+		err = m.Branding.DeleteTemplateUniversalLogin()
+		if err != nil {
+			t.Error(err)
+		}
+
+		brandingTemplateUniversalLogin, _ = m.Branding.ReadTemplateUniversalLogin()
+		t.Logf("%v\n", brandingTemplateUniversalLogin)
+	})
+}
