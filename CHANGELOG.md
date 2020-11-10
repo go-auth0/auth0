@@ -1,3 +1,7 @@
+## next
+
+* `management.Branding`: add `BrandingUpdateTemplateUniversalLogin` field ([#161](https://github.com/go-auth0/auth0/pull/161))
+
 ## v5.2.2
 
 * `management.UserIdentity`: Add `AccessToken` field ([#113](https://github.com/go-auth0/auth0/pull/113)).
