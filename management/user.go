@@ -172,6 +172,46 @@ type UserList struct {
 	Users []*User `json:"users"`
 }
 
+// UserRecoveryCode contains the new recovery code for the user
+type UserRecoveryCode struct {
+	// RecoveryCode is the new account recovery code
+	RecoveryCode *string `json:"recovery_code"`
+}
+
+// UserEnrollment contains information about the Guardian enrollments for the user
+type UserEnrollment struct {
+	// Authentication method for this enrollment. Can be `authentication`, `guardian`, or `sms`.
+	AuthMethod *string `json:"auth_method,omitempty"`
+	// Start date and time of this enrollment.
+	EnrolledAt *time.Time `json:"enrolled_at,omitempty"`
+	// ID of this enrollment.
+	ID *string `json:"id,omitempty"`
+	// Device identifier (usually phone identifier) of this enrollment.
+	Identifier *string `json:"identifier,omitempty"`
+	// Last authentication date and time of this enrollment.
+	LastAuth *time.Time `json:"last_auth,omitempty"`
+	// Name of enrollment (usually phone number).
+	Name *string `json:"name,omitempty"`
+	// Phone number for this enrollment.
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	// Status of this enrollment. Can be `pending` or `confirmed`.
+	Status *string `json:"status,omitempty"`
+	// Type of enrollment.
+	Type *string `json:"type,omitempty"`
+}
+
+// UserAuthenticator contains information about an Authenticator
+type UserAuthenticator struct {
+	// ID of this authenticator.
+	ID *string `json:"id,omitempty"`
+	// Type of authenticator
+	Type *string `json:"type,omitempty"`
+	// Status of the enrollment for this authenticator
+	Confirmed *bool `json:"confirmed,omitempty"`
+	// Start date and time of this enrollment.
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+}
+
 // UserManager manages Auth0 User resources.
 type UserManager struct {
 	*Management
@@ -342,4 +382,29 @@ func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, er
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
 func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("user-blocks", id), nil, opts...)
+}
+
+// RegenerateRecoveryCode removes the current multi-factor authentication recovery code and generates a new one.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/post_recovery_code_regeneration
+func (m *UserManager) RegenerateRecoveryCode(id string) (*UserRecoveryCode, error) {
+	r := new(UserRecoveryCode)
+	err := m.Request("POST", m.URI("users", id, "recovery-code-regeneration"), r)
+	return r, err
+}
+
+// Enrollments retrieves all Guardian enrollments for a user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/get_enrollments
+func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err error) {
+	err = m.Request("POST", m.URI("users", id, "enrollments"), &enrols)
+	return enrols, err
+}
+
+// ListAuthenticators retrieves all authenticators for a user.
+//
+// It's an undocumented API ¯\_(ツ)_/¯
+func (m *UserManager) ListAuthenticators(id string) (enrols []*UserAuthenticator, err error) {
+	err = m.Request("POST", m.URI("users", id, "authenticators"), &enrols)
+	return enrols, err
 }
