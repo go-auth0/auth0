@@ -141,8 +141,8 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 
 	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
 
-		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingUpdateTemplateUniversalLogin{
-			body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
+		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingTemplateUniversalLogin{
+			Body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
 		})
 		if err != nil {
 			t.Error(err)
