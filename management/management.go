@@ -248,7 +248,7 @@ func (m *Management) NewRequest(method, uri string, payload interface{}, options
 	if err != nil {
 		return nil, err
 	}
-	r.Header.Add("Content-Type", "application/json")
+	ContentType("application/json").apply(r)
 
 	for _, option := range options {
 		option.apply(r)
@@ -477,6 +477,13 @@ func Parameter(key, value string) RequestOption {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// ContentType configure the Content-Type request header.
+func ContentType(value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Header.Set("Content-Type", value)
 	})
 }
 

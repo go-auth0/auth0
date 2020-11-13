@@ -128,15 +128,15 @@ func TestBrandingColors(t *testing.T) {
 }
 
 func TestBrandingTemplateUniversalLogin(t *testing.T) {
-	var brandingTemplateUniversalLogin *BrandingTemplateUniversalLogin
+	var btul *BrandingTemplateUniversalLogin
 	var err error
 
 	t.Run("ReadTemplateUniversalLogin", func(t *testing.T) {
-		brandingTemplateUniversalLogin, err = m.Branding.ReadTemplateUniversalLogin()
+		btul, err = m.Branding.ReadTemplateUniversalLogin()
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", brandingTemplateUniversalLogin)
+		t.Logf("%v\n", btul)
 	})
 
 	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
@@ -148,8 +148,8 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 			t.Error(err)
 		}
 
-		brandingTemplateUniversalLogin, _ = m.Branding.ReadTemplateUniversalLogin()
-		t.Logf("%v\n", brandingTemplateUniversalLogin)
+		btul, _ = m.Branding.ReadTemplateUniversalLogin()
+		t.Logf("%v\n", btul)
 	})
 
 	t.Run("DeleteTemplateUniversalLogin", func(t *testing.T) {
@@ -159,7 +159,7 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 			t.Error(err)
 		}
 
-		brandingTemplateUniversalLogin, _ = m.Branding.ReadTemplateUniversalLogin()
-		t.Logf("%v\n", brandingTemplateUniversalLogin)
+		btul, _ = m.Branding.ReadTemplateUniversalLogin()
+		t.Logf("%v\n", btul)
 	})
 }
