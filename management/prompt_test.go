@@ -1,7 +1,10 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
+
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestPrompt(t *testing.T) {
@@ -36,5 +39,69 @@ func TestPrompt(t *testing.T) {
 			t.Errorf("unexpected output. have %v, expected %v", ps.UniversalLoginExperience, expected)
 		}
 		t.Logf("%v\n", ps)
+	})
+}
+
+func TestPromptCustomText(t *testing.T) {
+
+	t.Run("ReadCustomText", func(t *testing.T) {
+		prompts := [16]string{
+			PromptConsent,
+			PromptDeviceFlow,
+			PromptEmailOtpChallengeFlow,
+			PromptEmailVerificationFlow,
+			PromptLogin,
+			PromptLoginEmailVerification,
+			PromptMfa,
+			PromptMfaEmail,
+			PromptMfaOtp,
+			PromptMfaPhone,
+			PromptMfaPush,
+			PromptMfaRecoveryCode,
+			PromptMfaSms,
+			PromptMfaVoice,
+			PromptResetPassword,
+			PromptSignup,
+		}
+		for _, prompt := range prompts {
+			pct, err := m.Prompt.ReadCustomText(prompt, "en")
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, pct.Prompt, prompt)
+			expect.Expect(t, pct.Language, "en")
+			b, err := json.Marshal(pct.Screens)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, b, "{}")
+			t.Logf("%v\n", pct)
+		}
+	})
+
+	t.Run("UpdateCustomText", func(t *testing.T) {
+		pct := &PromptCustomText{
+			Prompt: PromptConsent,
+			Language: "en",
+			Screens: &ConsentScreens{
+				Consent: map[string]interface{}{ "test": "test value" },
+			},
+		}
+		err := m.Prompt.UpdateCustomText(pct)
+		if err != nil {
+			t.Error(err)
+		}
+		pct, err = m.Prompt.ReadCustomText(PromptConsent, "en")
+		if err != nil {
+			t.Error(err)
+		}
+		expect.Expect(t, pct.Prompt, PromptConsent)
+		expect.Expect(t, pct.Language, "en")
+		b, err := json.Marshal(pct.Screens)
+		if err != nil {
+			t.Error(err)
+		}
+		expect.Expect(t, b, "{}")
+		t.Logf("%v\n", pct)
 	})
 }
