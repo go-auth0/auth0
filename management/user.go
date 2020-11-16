@@ -403,7 +403,7 @@ func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err erro
 
 // ListAuthenticators retrieves all authenticators for a user.
 //
-// It's an undocumented API ¯\_(ツ)_/¯
+// It's an undocumented API, see: https://community.auth0.com/t/when-will-api-v2-users-userid-authenticators-be-documented/52722
 func (m *UserManager) ListAuthenticators(id string) (enrols []*UserAuthenticator, err error) {
 	err = m.Request("POST", m.URI("users", id, "authenticators"), &enrols)
 	return enrols, err
