@@ -184,8 +184,10 @@ func (m *PromptManager) Update(p *Prompt, opts ...RequestOption) error {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
 func (m *PromptManager) ReadCustomText(prompt string, language string, opts ...RequestOption) (pct *PromptCustomText, err error) {
-	pct.Prompt = prompt
-	pct.Language = language
+	pct = &PromptCustomText{
+		Prompt:   prompt,
+		Language: language,
+	}
 	err = m.Request("GET", m.URI("prompts", prompt, "custom-text", language), &pct, opts...)
 	return
 }
@@ -194,5 +196,5 @@ func (m *PromptManager) ReadCustomText(prompt string, language string, opts ...R
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
 func (m *PromptManager) UpdateCustomText(pct *PromptCustomText, opts ...RequestOption) error {
-	return m.Request("PATCH", m.URI("prompts", pct.Prompt, "custom-text", pct.Language), pct, opts...)
+	return m.Request("PUT", m.URI("prompts", pct.Prompt, "custom-text", pct.Language), pct, opts...)
 }

@@ -74,24 +74,29 @@ func TestPromptCustomText(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			expect.Expect(t, b, "{}")
+			expect.Expect(t, string(b), "{}")
 			t.Logf("%v\n", pct)
 		}
 	})
 
 	t.Run("UpdateCustomText", func(t *testing.T) {
-		pct := &PromptCustomText{
+		defer m.Prompt.UpdateCustomText(&PromptCustomText{
+			Prompt: PromptConsent,
+			Language: "en",
+			Screens: &ConsentScreens{},
+		})
+
+		err := m.Prompt.UpdateCustomText(&PromptCustomText{
 			Prompt: PromptConsent,
 			Language: "en",
 			Screens: &ConsentScreens{
-				Consent: map[string]interface{}{ "test": "test value" },
+				Consent: map[string]interface{}{ "pageTitle": "new page title" },
 			},
-		}
-		err := m.Prompt.UpdateCustomText(pct)
+		})
 		if err != nil {
 			t.Error(err)
 		}
-		pct, err = m.Prompt.ReadCustomText(PromptConsent, "en")
+		pct, err := m.Prompt.ReadCustomText(PromptConsent, "en")
 		if err != nil {
 			t.Error(err)
 		}
@@ -101,7 +106,7 @@ func TestPromptCustomText(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		expect.Expect(t, b, "{}")
+		expect.Expect(t, string(b), `{"consent":{"pageTitle":"new page title"}}`)
 		t.Logf("%v\n", pct)
 	})
 }
