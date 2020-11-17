@@ -180,9 +180,9 @@ func (m *PromptManager) Update(p *Prompt, opts ...RequestOption) error {
 	return m.Request("PATCH", m.URI("prompts"), p, opts...)
 }
 
-// Read retrieves prompts settings.
+// ReadCustomText retrieve custom text for a specific prompt and language.
 //
-// See: https://auth0.com/docs/api/management/v2#!/Prompts/get_prompts
+// See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
 func (m *PromptManager) ReadCustomText(prompt string, language string, opts ...RequestOption) (pct *PromptCustomText, err error) {
 	pct.Prompt = prompt
 	pct.Language = language
@@ -190,9 +190,9 @@ func (m *PromptManager) ReadCustomText(prompt string, language string, opts ...R
 	return
 }
 
-// Update prompts settings.
+// UpdateCustomText set custom text for a specific prompt. Existing texts will be overwritten.
 //
-// See: https://auth0.com/docs/api/management/v2#!/Prompts/patch_prompts
+// See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
 func (m *PromptManager) UpdateCustomText(pct *PromptCustomText, opts ...RequestOption) error {
 	return m.Request("PATCH", m.URI("prompts", pct.Prompt, "custom-text", pct.Language), pct, opts...)
 }

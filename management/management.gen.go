@@ -2523,6 +2523,11 @@ func (c *ConnectionOptionsWindowsLive) String() string {
 	return Stringify(c)
 }
 
+// String returns a string representation of ConsentScreens.
+func (c *ConsentScreens) String() string {
+	return Stringify(c)
+}
+
 // GetDomain returns the Domain field if it's non-nil, zero value otherwise.
 func (c *CustomDomain) GetDomain() string {
 	if c == nil || c.Domain == nil {
@@ -2639,6 +2644,11 @@ func (d *DailyStat) GetUpdatedAt() time.Time {
 
 // String returns a string representation of DailyStat.
 func (d *DailyStat) String() string {
+	return Stringify(d)
+}
+
+// String returns a string representation of DeviceFlowScreens.
+func (d *DeviceFlowScreens) String() string {
 	return Stringify(d)
 }
 
@@ -2764,6 +2774,11 @@ func (e *EmailCredentials) String() string {
 	return Stringify(e)
 }
 
+// String returns a string representation of EmailOtpChallengeScreens.
+func (e *EmailOtpChallengeScreens) String() string {
+	return Stringify(e)
+}
+
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
 func (e *EmailTemplate) GetBody() string {
 	if e == nil || e.Body == nil {
@@ -2830,6 +2845,11 @@ func (e *EmailTemplate) GetURLLifetimeInSecoonds() int {
 
 // String returns a string representation of EmailTemplate.
 func (e *EmailTemplate) String() string {
+	return Stringify(e)
+}
+
+// String returns a string representation of EmailVerificationScreens.
+func (e *EmailVerificationScreens) String() string {
 	return Stringify(e)
 }
 
@@ -3119,6 +3139,16 @@ func (l *Log) String() string {
 	return Stringify(l)
 }
 
+// String returns a string representation of LoginEmailVerificationScreens.
+func (l *LoginEmailVerificationScreens) String() string {
+	return Stringify(l)
+}
+
+// String returns a string representation of LoginScreens.
+func (l *LoginScreens) String() string {
+	return Stringify(l)
+}
+
 // GetID returns the ID field if it's non-nil, zero value otherwise.
 func (l *LogStream) GetID() string {
 	if l == nil || l.ID == nil {
@@ -3315,6 +3345,46 @@ func (l *LogStreamSinkSplunk) GetToken() string {
 // String returns a string representation of LogStreamSinkSplunk.
 func (l *LogStreamSinkSplunk) String() string {
 	return Stringify(l)
+}
+
+// String returns a string representation of MfaEmailScreens.
+func (m *MfaEmailScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaOtpScreens.
+func (m *MfaOtpScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaPhoneScreens.
+func (m *MfaPhoneScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaPushScreens.
+func (m *MfaPushScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaRecoveryCodeScreens.
+func (m *MfaRecoveryCodeScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaScreens.
+func (m *MfaScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaSmsScreens.
+func (m *MfaSmsScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaVoiceScreens.
+func (m *MfaVoiceScreens) String() string {
+	return Stringify(m)
 }
 
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
@@ -3519,6 +3589,16 @@ func (p *PermissionList) String() string {
 // String returns a string representation of Prompt.
 func (p *Prompt) String() string {
 	return Stringify(p)
+}
+
+// String returns a string representation of PromptCustomText.
+func (p *PromptCustomText) String() string {
+	return Stringify(p)
+}
+
+// String returns a string representation of ResetPasswordScreens.
+func (r *ResetPasswordScreens) String() string {
+	return Stringify(r)
 }
 
 // GetAllowOfflineAccess returns the AllowOfflineAccess field if it's non-nil, zero value otherwise.
@@ -3751,6 +3831,11 @@ func (r *RuleConfig) String() string {
 // String returns a string representation of RuleList.
 func (r *RuleList) String() string {
 	return Stringify(r)
+}
+
+// String returns a string representation of SignupScreens.
+func (s *SignupScreens) String() string {
+	return Stringify(s)
 }
 
 // GetChangePassword returns the ChangePassword field.
@@ -4374,6 +4459,14 @@ func (u *UserBlock) GetIP() string {
 // String returns a string representation of UserBlock.
 func (u *UserBlock) String() string {
 	return Stringify(u)
+}
+
+// GetAccessToken returns the AccessToken field if it's non-nil, zero value otherwise.
+func (u *UserIdentity) GetAccessToken() string {
+	if u == nil || u.AccessToken == nil {
+		return ""
+	}
+	return *u.AccessToken
 }
 
 // GetConnection returns the Connection field if it's non-nil, zero value otherwise.
