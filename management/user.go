@@ -220,6 +220,40 @@ type UserList struct {
 	Users []*User `json:"users"`
 }
 
+// UserEnrollment contains information about the Guardian enrollments for the user
+type UserEnrollment struct {
+	// Authentication method for this enrollment. Can be `authentication`, `guardian`, or `sms`.
+	AuthMethod *string `json:"auth_method,omitempty"`
+	// Start date and time of this enrollment.
+	EnrolledAt *time.Time `json:"enrolled_at,omitempty"`
+	// ID of this enrollment.
+	ID *string `json:"id,omitempty"`
+	// Device identifier (usually phone identifier) of this enrollment.
+	Identifier *string `json:"identifier,omitempty"`
+	// Last authentication date and time of this enrollment.
+	LastAuth *time.Time `json:"last_auth,omitempty"`
+	// Name of enrollment (usually phone number).
+	Name *string `json:"name,omitempty"`
+	// Phone number for this enrollment.
+	PhoneNumber *string `json:"phone_number,omitempty"`
+	// Status of this enrollment. Can be `pending` or `confirmed`.
+	Status *string `json:"status,omitempty"`
+	// Type of enrollment.
+	Type *string `json:"type,omitempty"`
+}
+
+// UserAuthenticator contains information about an Authenticator
+type UserAuthenticator struct {
+	// ID of this authenticator.
+	ID *string `json:"id,omitempty"`
+	// Type of authenticator
+	Type *string `json:"type,omitempty"`
+	// Status of the enrollment for this authenticator
+	Confirmed *bool `json:"confirmed,omitempty"`
+	// Start date and time of this enrollment.
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+}
+
 // UserManager manages Auth0 User resources.
 type UserManager struct {
 	*Management
@@ -394,4 +428,20 @@ func (m *UserManager) Blocks(id string) ([]*UserBlock, error) {
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
 func (m *UserManager) Unblock(id string) error {
 	return m.delete(m.uri("user-blocks", id))
+}
+
+// Enrollments retrieves all Guardian enrollments for a user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/get_enrollments
+func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err error) {
+	err = m.request("POST", m.uri("users", id, "enrollments"), &enrols)
+	return enrols, err
+}
+
+// ListAuthenticators retrieves all authenticators for a user.
+//
+// It's an undocumented API, see: https://community.auth0.com/t/when-will-api-v2-users-userid-authenticators-be-documented/52722
+func (m *UserManager) ListAuthenticators(id string) (enrols []*UserAuthenticator, err error) {
+	err = m.request("POST", m.uri("users", id, "authenticators"), &enrols)
+	return enrols, err
 }
