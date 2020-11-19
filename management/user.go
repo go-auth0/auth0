@@ -250,6 +250,8 @@ type UserAuthenticator struct {
 	Type *string `json:"type,omitempty"`
 	// Status of the enrollment for this authenticator
 	Confirmed *bool `json:"confirmed,omitempty"`
+	// Name is the phone number of this authenticator.
+	Name *string `json:"name,omitempty"`
 	// Start date and time of this enrollment.
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
