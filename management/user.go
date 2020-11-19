@@ -254,6 +254,8 @@ type UserAuthenticator struct {
 	Name *string `json:"name,omitempty"`
 	// Start date and time of this enrollment.
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// Last auth date and time of this enrollment.
+	LastAuthAt *time.Time `json:"last_auth_at,omitempty"`
 }
 
 // UserManager manages Auth0 User resources.
