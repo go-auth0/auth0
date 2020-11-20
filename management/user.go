@@ -397,7 +397,7 @@ func (m *UserManager) RegenerateRecoveryCode(id string) (*UserRecoveryCode, erro
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_enrollments
 func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err error) {
-	err = m.Request("POST", m.URI("users", id, "enrollments"), &enrols)
+	err = m.Request("GET", m.URI("users", id, "enrollments"), &enrols)
 	return enrols, err
 }
 
@@ -405,6 +405,6 @@ func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err erro
 //
 // It's an undocumented API, see: https://community.auth0.com/t/when-will-api-v2-users-userid-authenticators-be-documented/52722
 func (m *UserManager) ListAuthenticators(id string) (enrols []*UserAuthenticator, err error) {
-	err = m.Request("POST", m.URI("users", id, "authenticators"), &enrols)
+	err = m.Request("GET", m.URI("users", id, "authenticators"), &enrols)
 	return enrols, err
 }
