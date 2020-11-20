@@ -438,7 +438,7 @@ func (m *UserManager) Unblock(id string) error {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/get_enrollments
 func (m *UserManager) Enrollments(id string) (enrols []*UserEnrollment, err error) {
-	err = m.request("POST", m.uri("users", id, "enrollments"), &enrols)
+	err = m.request("GET", m.uri("users", id, "enrollments"), &enrols)
 	return enrols, err
 }
 
