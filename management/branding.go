@@ -146,16 +146,16 @@ func (m *BrandingManager) Update(t *Branding, opts ...RequestOption) (err error)
 // Retrieve template for New Universal Login Experience related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login
-func (m *BrandingManager) ReadTemplateUniversalLogin(opts ...RequestOption) (b *BrandingTemplateUniversalLogin, err error) {
-	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &b, opts...)
+func (m *BrandingManager) ReadTemplateUniversalLogin(opts ...RequestOption) (btul *BrandingTemplateUniversalLogin, err error) {
+	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &btul, opts...)
 	return
 }
 
 // Update template for New Universal Login Experience related to branding.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/put_universal_login
-func (m *BrandingManager) UpdateTemplateUniversalLogin(t *BrandingTemplateUniversalLogin, opts ...RequestOption) (err error) {
-	return m.Request("PUT", m.URI("branding", "templates", "universal-login"), t.Body, append(opts, ContentType("text/html"))...)
+func (m *BrandingManager) UpdateTemplateUniversalLogin(btul *BrandingTemplateUniversalLogin, opts ...RequestOption) (err error) {
+	return m.Request("PUT", m.URI("branding", "templates", "universal-login"), &btul.Body, append(opts, ContentType("text/html"))...)
 }
 
 // Delete template for New Universal Login Experience related to branding.
