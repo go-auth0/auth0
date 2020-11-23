@@ -99,6 +99,7 @@ type UserIdentity struct {
 	Provider    *string `json:"provider,omitempty"`
 	IsSocial    *bool   `json:"isSocial,omitempty"`
 	AccessToken *string `json:"access_token,omitempty"`
+	RefreshToken *string `json:"refresh_token,omitempty"`
 }
 
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
