@@ -130,21 +130,21 @@ func TestBrandingColors(t *testing.T) {
 func TestBrandingTemplateUniversalLogin(t *testing.T) {
 	var btul *BrandingTemplateUniversalLogin
 	var err error
+	var merr *managementError
+	var ok bool
 
-	t.Run("ReadTemplateUniversalLogin", func(t *testing.T) {
+	m.Branding.DeleteTemplateUniversalLogin()
+
+	t.Run("TemplateUniversalLogin", func(t *testing.T) {
 		btul, err = m.Branding.ReadTemplateUniversalLogin()
 		if btul != nil {
 			t.Fatalf("unexpected output. have %v, expected %v", btul, nil)
 		}
-		merr, ok := err.(*managementError)
+		merr, ok = err.(*managementError)
 		if !ok {
 			t.Fatal(err)
 		}
 		expect.Expect(t, 404, merr.StatusCode)
-	})
-
-	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
-		defer m.Branding.DeleteTemplateUniversalLogin()
 
 		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingTemplateUniversalLogin{
 			Body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
@@ -159,16 +159,20 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 		}
 		expect.Expect(t, *btul.Body, "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>")
 		t.Logf("%#v\n", btul)
-	})
-
-	t.Run("DeleteTemplateUniversalLogin", func(t *testing.T) {
 
 		err = m.Branding.DeleteTemplateUniversalLogin()
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 
-		btul, _ = m.Branding.ReadTemplateUniversalLogin()
-		t.Logf("%v\n", btul)
+		btul, err = m.Branding.ReadTemplateUniversalLogin()
+		if btul != nil {
+			t.Fatalf("unexpected output. have %v, expected %v", btul, nil)
+		}
+		merr, ok = err.(*managementError)
+		if !ok {
+			t.Fatal(err)
+		}
+		expect.Expect(t, 404, merr.StatusCode)
 	})
 }
