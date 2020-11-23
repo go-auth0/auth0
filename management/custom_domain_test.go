@@ -18,14 +18,20 @@ func TestCustomDomain(t *testing.T) {
 
 	var err error
 
+	// setup
+	c, err = m.CustomDomain.Read(c.GetID())
+	if err != nil {
+		if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
+			t.Skip(err)
+		}
+	} else {
+		m.CustomDomain.Delete(c.GetID())
+	}
+
 	t.Run("Create", func(t *testing.T) {
 		err = m.CustomDomain.Create(c)
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusForbidden {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
@@ -33,11 +39,7 @@ func TestCustomDomain(t *testing.T) {
 	t.Run("Read", func(t *testing.T) {
 		c, err = m.CustomDomain.Read(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
@@ -45,11 +47,7 @@ func TestCustomDomain(t *testing.T) {
 	t.Run("Verify", func(t *testing.T) {
 		c, err := m.CustomDomain.Verify(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
@@ -57,11 +55,7 @@ func TestCustomDomain(t *testing.T) {
 	t.Run("Delete", func(t *testing.T) {
 		err = m.CustomDomain.Delete(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 	})
 }
