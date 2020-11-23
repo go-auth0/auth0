@@ -248,7 +248,24 @@ func (m *Management) NewRequest(method, uri string, payload interface{}, options
 	if err != nil {
 		return nil, err
 	}
-	ContentType("application/json").apply(r)
+	r.Header.Add("Content-Type", "application/json")
+
+	for _, option := range options {
+		option.apply(r)
+	}
+
+	return
+}
+
+// NewHtmlRequest returns a new HTTP request.
+func (m *Management) NewHtmlRequest(method, uri string, html string, options ...RequestOption) (r *http.Request, err error) {
+	buf := bytes.NewBuffer([]byte(html))
+
+	r, err = http.NewRequest(method, uri, buf)
+	if err != nil {
+		return nil, err
+	}
+	r.Header.Add("Content-Type", "text/html")
 
 	for _, option := range options {
 		option.apply(r)
@@ -300,6 +317,28 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Reque
 			return err
 		}
 		return res.Body.Close()
+	}
+
+	return nil
+}
+
+// HtmlRequest combines NewHtmlRequest and Do, while also handling decoding of response
+// payload.
+func (m *Management) HtmlRequest(method, uri string, html string, options ...RequestOption) error {
+
+	req, err := m.NewRequest(method, uri, html, options...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		// event if the request is in html, the answer is in json
+		return newError(res.Body)
 	}
 
 	return nil
@@ -477,13 +516,6 @@ func Parameter(key, value string) RequestOption {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()
-	})
-}
-
-// ContentType configure the Content-Type request header.
-func ContentType(value string) RequestOption {
-	return newRequestOption(func(r *http.Request) {
-		r.Header.Set("Content-Type", value)
 	})
 }
 
