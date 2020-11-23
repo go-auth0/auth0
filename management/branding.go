@@ -155,7 +155,7 @@ func (m *BrandingManager) ReadTemplateUniversalLogin(opts ...RequestOption) (btu
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/put_universal_login
 func (m *BrandingManager) UpdateTemplateUniversalLogin(btul *BrandingTemplateUniversalLogin, opts ...RequestOption) (err error) {
-	return m.Request("PUT", m.URI("branding", "templates", "universal-login"), &btul.Body, append(opts, ContentType("text/html"))...)
+	return m.HtmlRequest("PUT", m.URI("branding", "templates", "universal-login"), *btul.Body, opts...)
 }
 
 // Delete template for New Universal Login Experience related to branding.
