@@ -12,15 +12,22 @@ func TestRole(t *testing.T) {
 	var err error
 
 	r := &Role{
-		Name:        auth0.String("admin"),
+		Name:        auth0.Stringf("admin (%s)", time.Now().Format(time.StampMilli)),
 		Description: auth0.String("Administrator"),
+	}
+
+	c, err := m.Connection.ReadByName("Username-Password-Authentication")
+	if err != nil {
+		t.Error(err)
 	}
 
 	u := &User{
 		Connection: auth0.String("Username-Password-Authentication"),
-		Email:      auth0.String("chuck@chucknorris.com"),
-		Username:   auth0.String("chuck"),
+		Email:      auth0.Stringf("chuck-%d@chucknorris.com", time.Now().UnixNano()),
 		Password:   auth0.String("Passwords hide their Chuck"),
+	}
+	if auth0.BoolValue(c.Options.(*ConnectionOptions).RequiresUsername) {
+		u.Username = auth0.String("example")
 	}
 	err = m.User.Create(u)
 	if err != nil {
@@ -28,10 +35,10 @@ func TestRole(t *testing.T) {
 	}
 	defer m.User.Delete(auth0.StringValue(u.ID))
 
+	identifier := auth0.Stringf("https://api.example.com/role/%d", time.Now().UnixNano())
 	s := &ResourceServer{
-		Name: auth0.Stringf("Test Role (%s)",
-			time.Now().Format(time.StampMilli)),
-		Identifier: auth0.String("https://api.example.com/role"),
+		Name: auth0.Stringf("Test Role (%s)", time.Now().Format(time.StampMilli)),
+		Identifier: identifier,
 		Scopes: []*ResourceServerScope{
 			{
 				Value:       auth0.String("read:resource"),
@@ -104,8 +111,8 @@ func TestRole(t *testing.T) {
 
 	t.Run("AssociatePermissions", func(t *testing.T) {
 		ps := []*Permission{
-			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
-			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: identifier},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: identifier},
 		}
 		err = m.Role.AssociatePermissions(auth0.StringValue(r.ID), ps)
 		if err != nil {
@@ -123,8 +130,8 @@ func TestRole(t *testing.T) {
 
 	t.Run("RemovePermissions", func(t *testing.T) {
 		ps := []*Permission{
-			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
-			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: identifier},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: identifier},
 		}
 		err = m.Role.RemovePermissions(auth0.StringValue(r.ID), ps)
 		if err != nil {
