@@ -38,8 +38,27 @@ func TestUser(t *testing.T) {
 
 	var err error
 
+	c, err := m.Connection.ReadByName("Username-Password-Authentication")
+	if err != nil {
+		t.Error(err)
+	}
+	requireUsername := c.Options.(*ConnectionOptions).RequiresUsername
+	err = m.Connection.Update(c.GetID(), &Connection{
+		Options: &ConnectionOptions{
+			RequiresUsername: auth0.Bool(true),
+		},
+	})
+	if err != nil {
+		t.Error(err)
+	}
+	defer m.Connection.Update(c.GetID(), &Connection{
+		Options: &ConnectionOptions{
+			RequiresUsername: requireUsername,
+		},
+	})
+
 	r1 := &Role{
-		Name:        auth0.String("admin"),
+		Name:        auth0.Stringf("admin (%s)", time.Now().Format(time.StampMilli)),
 		Description: auth0.String("Administrator"),
 	}
 	err = m.Role.Create(r1)
@@ -48,7 +67,7 @@ func TestUser(t *testing.T) {
 	}
 
 	r2 := &Role{
-		Name:        auth0.String("user"),
+		Name:        auth0.Stringf("user (%s)", time.Now().Format(time.StampMilli)),
 		Description: auth0.String("User"),
 	}
 	err = m.Role.Create(r2)
@@ -59,10 +78,11 @@ func TestUser(t *testing.T) {
 	defer m.Role.Delete(auth0.StringValue(r1.ID))
 	defer m.Role.Delete(auth0.StringValue(r2.ID))
 
+	identifier := auth0.Stringf("https://api.example.com/role/%d", time.Now().UnixNano())
 	s := &ResourceServer{
 		Name: auth0.Stringf("Test Role (%s)",
 			time.Now().Format(time.StampMilli)),
-		Identifier: auth0.String("https://api.example.com/role"),
+		Identifier: identifier,
 		Scopes: []*ResourceServerScope{
 			{
 				Value:       auth0.String("read:resource"),
@@ -164,8 +184,8 @@ func TestUser(t *testing.T) {
 
 	t.Run("AssignPermissions", func(t *testing.T) {
 		permissions := []*Permission{
-			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
-			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: identifier},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: identifier},
 		}
 		err = m.User.AssignPermissions(auth0.StringValue(u.ID), permissions)
 		if err != nil {
@@ -175,8 +195,8 @@ func TestUser(t *testing.T) {
 
 	t.Run("RemovePermissions", func(t *testing.T) {
 		permissions := []*Permission{
-			{Name: auth0.String("read:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
-			{Name: auth0.String("update:resource"), ResourceServerIdentifier: auth0.String("https://api.example.com/role")},
+			{Name: auth0.String("read:resource"), ResourceServerIdentifier: identifier},
+			{Name: auth0.String("update:resource"), ResourceServerIdentifier: identifier},
 		}
 		err = m.User.RemovePermissions(auth0.StringValue(u.ID), permissions)
 		if err != nil {
