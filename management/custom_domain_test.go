@@ -18,14 +18,41 @@ func TestCustomDomain(t *testing.T) {
 
 	var err error
 
+	err = m.CustomDomain.Create(c)
+	if err != nil {
+		err, ok := err.(Error)
+		if ok && err.Status() == http.StatusForbidden {
+			// skip for free testing tenant
+			t.Skip(err)
+		} else if ok && err.Status() == http.StatusConflict {
+			// only one custom domain available
+			cs, err := m.CustomDomain.List()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(cs) > 0 {
+				m.CustomDomain.Delete(cs[0].GetID())
+				defer func () {
+					c := &CustomDomain{
+						Domain:             cs[0].Domain,
+						Type:               cs[0].Type,
+						VerificationMethod: cs[0].VerificationMethod,
+					}
+					m.CustomDomain.Create(c)
+					m.CustomDomain.Verify(c.GetID())
+				}()
+			}
+		} else {
+			t.Error(err)
+		}
+	} else {
+		m.CustomDomain.Delete(c.GetID())
+	}
+
 	t.Run("Create", func(t *testing.T) {
 		err = m.CustomDomain.Create(c)
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusForbidden {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
@@ -33,23 +60,15 @@ func TestCustomDomain(t *testing.T) {
 	t.Run("Read", func(t *testing.T) {
 		c, err = m.CustomDomain.Read(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
 
 	t.Run("Verify", func(t *testing.T) {
-		c, err := m.CustomDomain.Verify(c.GetID())
+		c, err = m.CustomDomain.Verify(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 		t.Logf("%v\n", c)
 	})
@@ -57,11 +76,7 @@ func TestCustomDomain(t *testing.T) {
 	t.Run("Delete", func(t *testing.T) {
 		err = m.CustomDomain.Delete(c.GetID())
 		if err != nil {
-			if err, ok := err.(Error); ok && err.Status() == http.StatusNotFound {
-				t.Skip(err)
-			} else {
-				t.Error(err)
-			}
+			t.Error(err)
 		}
 	})
 }
