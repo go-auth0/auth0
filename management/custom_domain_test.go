@@ -32,7 +32,7 @@ func TestCustomDomain(t *testing.T) {
 			}
 			if len(cs) > 0 {
 				m.CustomDomain.Delete(cs[0].GetID())
-				defer func () {
+				defer func() {
 					c := &CustomDomain{
 						Domain:             cs[0].Domain,
 						Type:               cs[0].Type,

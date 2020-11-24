@@ -37,7 +37,7 @@ func TestRole(t *testing.T) {
 
 	identifier := auth0.Stringf("https://api.example.com/role/%d", time.Now().UnixNano())
 	s := &ResourceServer{
-		Name: auth0.Stringf("Test Role (%s)", time.Now().Format(time.StampMilli)),
+		Name:       auth0.Stringf("Test Role (%s)", time.Now().Format(time.StampMilli)),
 		Identifier: identifier,
 		Scopes: []*ResourceServerScope{
 			{
