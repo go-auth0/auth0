@@ -27,8 +27,8 @@ func TestTenant(t *testing.T) {
 			SupportURL:            auth0.String("https://support.example.com"),
 			SupportEmail:          auth0.String("support@example.com"),
 			DefaultRedirectionURI: auth0.String("https://example.com/login"),
-			SessionLifetime:       auth0.Float64(1080),
-			IdleSessionLifetime:   auth0.Float64(720.2), // will be rounded off
+			SessionLifetime:       auth0.Float64(720),
+			IdleSessionLifetime:   auth0.Float64(72.2), // will be rounded off
 		})
 		if err != nil {
 			t.Error(err)
