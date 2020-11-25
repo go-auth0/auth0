@@ -14,7 +14,6 @@ func TestJob(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("%v\n", c)
 	connectionID := auth0.StringValue(c.ID)
 
 	u := &User{
@@ -29,7 +28,6 @@ func TestJob(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("%v\n", u)
 	userID := auth0.StringValue(u.ID)
 
 	defer m.User.Delete(userID)
