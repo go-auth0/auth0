@@ -42,6 +42,7 @@ jobs:
 
     - name: Send code coverage report
       uses: aktions/codeclimate-test-reporter@v1.1.0
+      if: ${{ github.repository_owner == 'go-auth0' }}
       with:
         codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
         codeclimate-test-reporter-version: latest
