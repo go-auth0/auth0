@@ -135,7 +135,7 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 
 	m.Branding.DeleteTemplateUniversalLogin()
 
-	t.Run("TemplateUniversalLogin", func(t *testing.T) {
+	t.Run("ReadTemplateUniversalLogin", func(t *testing.T) {
 		btul, err = m.Branding.ReadTemplateUniversalLogin()
 		if btul != nil {
 			t.Fatalf("unexpected output. have %v, expected %v", btul, nil)
@@ -145,7 +145,9 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 			t.Fatal(err)
 		}
 		expect.Expect(t, 404, merr.StatusCode)
+	})
 
+	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
 		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingTemplateUniversalLogin{
 			Body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
 		})
@@ -159,7 +161,9 @@ func TestBrandingTemplateUniversalLogin(t *testing.T) {
 		}
 		expect.Expect(t, *btul.Body, "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>")
 		t.Logf("%#v\n", btul)
+	})
 
+	t.Run("DeleteTemplateUniversalLogin", func(t *testing.T) {
 		err = m.Branding.DeleteTemplateUniversalLogin()
 		if err != nil {
 			t.Fatal(err)
