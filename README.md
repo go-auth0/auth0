@@ -25,7 +25,7 @@ import (
 Initialize a new client using a domain, client ID and secret.
 
 ```go
-m, err := management.New(domain, id, secret)
+m, err := management.New(domain, management.WithClientCredentials(id, secret))
 if err != nil {
 	// handle err
 }
