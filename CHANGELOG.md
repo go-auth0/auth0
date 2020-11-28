@@ -1,3 +1,9 @@
+## v5.3.0
+
+* `management.ConnectionOptions`: unmarshal options only if not nil ([#165](https://github.com/go-auth0/auth0/pull/165)).
+* `management.HookManager.List`: was using the wrong endpoint ([162](https://github.com/go-auth0/auth0/pull/162)).
+* `management.ResourceServerManager.List`: was using the wrong endpoint.
+
 ## v5.2.2
 
 * `management.UserIdentity`: Add `AccessToken` field ([#113](https://github.com/go-auth0/auth0/pull/113)).
