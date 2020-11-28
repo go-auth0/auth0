@@ -150,9 +150,11 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = make(map[string]interface{})
 		}
 
-		err = json.Unmarshal(w.RawOptions, &v)
-		if err != nil {
-			return err
+		if w.RawOptions != nil {
+			err = json.Unmarshal(w.RawOptions, &v)
+			if err != nil {
+				return err
+			}
 		}
 
 		c.Options = v
