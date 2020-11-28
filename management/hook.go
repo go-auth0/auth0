@@ -77,7 +77,7 @@ func (m *HookManager) Delete(id string) error {
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_hooks
 func (m *HookManager) List(opts ...ListOption) (r *HookList, err error) {
 	opts = m.defaults(opts)
-	err = m.get(m.uri("roles")+m.q(opts), &r)
+	err = m.get(m.uri("hooks")+m.q(opts), &r)
 	return
 }
 
