@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -257,23 +258,6 @@ func (m *Management) NewRequest(method, uri string, payload interface{}, options
 	return
 }
 
-// NewHtmlRequest returns a new HTTP request.
-func (m *Management) NewHtmlRequest(method, uri string, html string, options ...RequestOption) (r *http.Request, err error) {
-	buf := bytes.NewBuffer([]byte(html))
-
-	r, err = http.NewRequest(method, uri, buf)
-	if err != nil {
-		return nil, err
-	}
-	r.Header.Add("Content-Type", "text/html")
-
-	for _, option := range options {
-		option.apply(r)
-	}
-
-	return
-}
-
 // Do sends an HTTP request and returns an HTTP response, handling any context
 // cancellations or timeouts.
 func (m *Management) Do(req *http.Request) (*http.Response, error) {
@@ -317,28 +301,6 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Reque
 			return err
 		}
 		return res.Body.Close()
-	}
-
-	return nil
-}
-
-// HtmlRequest combines NewHtmlRequest and Do, while also handling decoding of response
-// payload.
-func (m *Management) HtmlRequest(method, uri string, html string, options ...RequestOption) error {
-
-	req, err := m.NewRequest(method, uri, html, options...)
-	if err != nil {
-		return err
-	}
-
-	res, err := m.Do(req)
-	if err != nil {
-		return err
-	}
-
-	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
-		// event if the request is in html, the answer is in json
-		return newError(res.Body)
 	}
 
 	return nil
@@ -509,13 +471,27 @@ func Query(s string) RequestOption {
 	})
 }
 
-// Parameter is a generic configuration to add arbitrary query parameters to
-// requests made to Auth0.
+// Parameter configures a request to add arbitrary query parameters to requests
+// made to Auth0.
 func Parameter(key, value string) RequestOption {
 	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// Header configures a request to add HTTP headers to requests made to Auth0.
+func Header(key, value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Header.Set(key, value)
+	})
+}
+
+// Body configures a requests body.
+func Body(b []byte) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Body = ioutil.NopCloser(bytes.NewReader(b))
 	})
 }
 

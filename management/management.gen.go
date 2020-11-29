@@ -128,15 +128,15 @@ func (b *BrandingPageBackgroundGradient) String() string {
 }
 
 // GetBody returns the Body field if it's non-nil, zero value otherwise.
-func (b *BrandingTemplateUniversalLogin) GetBody() string {
+func (b *BrandingUniversalLogin) GetBody() string {
 	if b == nil || b.Body == nil {
 		return ""
 	}
 	return *b.Body
 }
 
-// String returns a string representation of BrandingTemplateUniversalLogin.
-func (b *BrandingTemplateUniversalLogin) String() string {
+// String returns a string representation of BrandingUniversalLogin.
+func (b *BrandingUniversalLogin) String() string {
 	return Stringify(b)
 }
 

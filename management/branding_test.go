@@ -3,6 +3,7 @@ package management
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/internal/testing/expect"
@@ -67,6 +68,57 @@ func TestBranding(t *testing.T) {
 			t.Logf("%v\n", branding)
 		})
 	})
+
+	c := &CustomDomain{
+		Domain: auth0.Stringf("%d.auth.uat.alexkappa.com", time.Now().UTC().Unix()),
+		Type:   auth0.String("auth0_managed_certs"),
+	}
+
+	err = m.CustomDomain.Create(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Cleanup(func() {
+		m.CustomDomain.Delete(c.GetID())
+		m.Branding.DeleteUniversalLogin()
+	})
+
+	t.Run("SetUniversalLogin", func(t *testing.T) {
+
+		body := `<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>`
+
+		ul := &BrandingUniversalLogin{
+			Body: auth0.String(body),
+		}
+
+		err = m.Branding.SetUniversalLogin(ul)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expect.Expect(t, body, ul.GetBody())
+
+		t.Logf("%s\n", ul.GetBody())
+	})
+
+	t.Run("ReadUniversalLogin", func(t *testing.T) {
+
+		ul, err := m.Branding.UniversalLogin()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("%s\n", ul.GetBody())
+	})
+
+	t.Run("DeleteUniversalLogin", func(t *testing.T) {
+
+		err = m.Branding.DeleteUniversalLogin()
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
 }
 
 func TestBrandingColors(t *testing.T) {
@@ -125,58 +177,4 @@ func TestBrandingColors(t *testing.T) {
 			expect.Expect(t, &colors, tt.colors)
 		})
 	}
-}
-
-func TestBrandingTemplateUniversalLogin(t *testing.T) {
-	var btul *BrandingTemplateUniversalLogin
-	var err error
-	var merr *managementError
-	var ok bool
-
-	m.Branding.DeleteTemplateUniversalLogin()
-
-	t.Run("ReadTemplateUniversalLogin", func(t *testing.T) {
-		btul, err = m.Branding.ReadTemplateUniversalLogin()
-		if btul != nil {
-			t.Fatalf("unexpected output. have %v, expected %v", btul, nil)
-		}
-		merr, ok = err.(*managementError)
-		if !ok {
-			t.Fatal(err)
-		}
-		expect.Expect(t, 404, merr.StatusCode)
-	})
-
-	t.Run("UpdateTemplateUniversalLogin", func(t *testing.T) {
-		err = m.Branding.UpdateTemplateUniversalLogin(&BrandingTemplateUniversalLogin{
-			Body: auth0.String("<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>"),
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		btul, err = m.Branding.ReadTemplateUniversalLogin()
-		if err != nil {
-			t.Fatal(err)
-		}
-		expect.Expect(t, *btul.Body, "<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>")
-		t.Logf("%#v\n", btul)
-	})
-
-	t.Run("DeleteTemplateUniversalLogin", func(t *testing.T) {
-		err = m.Branding.DeleteTemplateUniversalLogin()
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		btul, err = m.Branding.ReadTemplateUniversalLogin()
-		if btul != nil {
-			t.Fatalf("unexpected output. have %v, expected %v", btul, nil)
-		}
-		merr, ok = err.(*managementError)
-		if !ok {
-			t.Fatal(err)
-		}
-		expect.Expect(t, 404, merr.StatusCode)
-	})
 }

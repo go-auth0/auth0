@@ -3,6 +3,7 @@ package management
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 type Branding struct {
@@ -116,7 +117,7 @@ type BrandingFont struct {
 	URL *string `json:"url,omitempty"`
 }
 
-type BrandingTemplateUniversalLogin struct {
+type BrandingUniversalLogin struct {
 	Body *string `json:"body,omitempty"`
 }
 
@@ -143,24 +144,39 @@ func (m *BrandingManager) Update(t *Branding, opts ...RequestOption) (err error)
 	return m.Request("PATCH", m.URI("branding"), t, opts...)
 }
 
-// Retrieve template for New Universal Login Experience related to branding.
+// Retrieve template for New Universal Login Experience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login
-func (m *BrandingManager) ReadTemplateUniversalLogin(opts ...RequestOption) (btul *BrandingTemplateUniversalLogin, err error) {
-	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &btul, opts...)
+func (m *BrandingManager) UniversalLogin(opts ...RequestOption) (ul *BrandingUniversalLogin, err error) {
+	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &ul, opts...)
 	return
 }
 
-// Update template for New Universal Login Experience related to branding.
+// Set template for the New Universal Login Experience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/put_universal_login
-func (m *BrandingManager) UpdateTemplateUniversalLogin(btul *BrandingTemplateUniversalLogin, opts ...RequestOption) (err error) {
-	return m.HtmlRequest("PUT", m.URI("branding", "templates", "universal-login"), *btul.Body, opts...)
+func (m *BrandingManager) SetUniversalLogin(ul *BrandingUniversalLogin, opts ...RequestOption) (err error) {
+
+	req, err := m.NewRequest("PUT", m.URI("branding", "templates", "universal-login"), ul.Body, opts...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode >= http.StatusBadRequest {
+		return newError(res.Body)
+	}
+
+	return nil
 }
 
-// Delete template for New Universal Login Experience related to branding.
+// Delete template for New Universal Login Experience.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Branding/delete_universal_login
-func (m *BrandingManager) DeleteTemplateUniversalLogin(opts ...RequestOption) (err error) {
+func (m *BrandingManager) DeleteUniversalLogin(opts ...RequestOption) (err error) {
 	return m.Request("DELETE", m.URI("branding", "templates", "universal-login"), nil, opts...)
 }
