@@ -1,3 +1,7 @@
+## v5.4.0
+
+* `management.Branding`: add support for `BrandingUniversalLogin` ([#161](https://github.com/go-auth0/auth0/pull/161)).
+
 ## v5.3.0
 
 * `management.ConnectionOptions`: unmarshal options only if not nil ([#165](https://github.com/go-auth0/auth0/pull/165)).

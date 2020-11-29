@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -470,13 +471,27 @@ func Query(s string) RequestOption {
 	})
 }
 
-// Parameter is a generic configuration to add arbitrary query parameters to
-// requests made to Auth0.
+// Parameter configures a request to add arbitrary query parameters to requests
+// made to Auth0.
 func Parameter(key, value string) RequestOption {
 	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// Header configures a request to add HTTP headers to requests made to Auth0.
+func Header(key, value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Header.Set(key, value)
+	})
+}
+
+// Body configures a requests body.
+func Body(b []byte) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Body = ioutil.NopCloser(bytes.NewReader(b))
 	})
 }
 

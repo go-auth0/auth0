@@ -127,6 +127,19 @@ func (b *BrandingPageBackgroundGradient) String() string {
 	return Stringify(b)
 }
 
+// GetBody returns the Body field if it's non-nil, zero value otherwise.
+func (b *BrandingUniversalLogin) GetBody() string {
+	if b == nil || b.Body == nil {
+		return ""
+	}
+	return *b.Body
+}
+
+// String returns a string representation of BrandingUniversalLogin.
+func (b *BrandingUniversalLogin) String() string {
+	return Stringify(b)
+}
+
 // GetAppType returns the AppType field if it's non-nil, zero value otherwise.
 func (c *Client) GetAppType() string {
 	if c == nil || c.AppType == nil {
@@ -4374,6 +4387,14 @@ func (u *UserBlock) GetIP() string {
 // String returns a string representation of UserBlock.
 func (u *UserBlock) String() string {
 	return Stringify(u)
+}
+
+// GetAccessToken returns the AccessToken field if it's non-nil, zero value otherwise.
+func (u *UserIdentity) GetAccessToken() string {
+	if u == nil || u.AccessToken == nil {
+		return ""
+	}
+	return *u.AccessToken
 }
 
 // GetConnection returns the Connection field if it's non-nil, zero value otherwise.
