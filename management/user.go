@@ -52,6 +52,9 @@ type User struct {
 	// The last time the user has logged in.
 	LastLogin *time.Time `json:"last_login,omitempty"`
 
+	// The last time the user's password was reset/changed. Only available for Database connections.
+	LastPasswordReset *time.Time `json:"last_password_reset,omitempty"`
+
 	// UserMetadata holds data that the user has read/write access to (e.g.
 	// color_preference, blog_url, etc).
 	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
