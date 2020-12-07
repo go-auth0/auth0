@@ -4050,6 +4050,14 @@ func (u *User) GetLastLogin() time.Time {
 	return *u.LastLogin
 }
 
+// GetLastPasswordReset returns the LastPasswordReset field if it's non-nil, zero value otherwise.
+func (u *User) GetLastPasswordReset() time.Time {
+	if u == nil || u.LastPasswordReset == nil {
+		return time.Time{}
+	}
+	return *u.LastPasswordReset
+}
+
 // GetName returns the Name field if it's non-nil, zero value otherwise.
 func (u *User) GetName() string {
 	if u == nil || u.Name == nil {
@@ -4127,6 +4135,59 @@ func (u *User) String() string {
 	return Stringify(u)
 }
 
+// GetConfirmed returns the Confirmed field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetConfirmed() bool {
+	if u == nil || u.Confirmed == nil {
+		return false
+	}
+	return *u.Confirmed
+}
+
+// GetCreatedAt returns the CreatedAt field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetCreatedAt() time.Time {
+	if u == nil || u.CreatedAt == nil {
+		return time.Time{}
+	}
+	return *u.CreatedAt
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetID() string {
+	if u == nil || u.ID == nil {
+		return ""
+	}
+	return *u.ID
+}
+
+// GetLastAuthAt returns the LastAuthAt field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetLastAuthAt() time.Time {
+	if u == nil || u.LastAuthAt == nil {
+		return time.Time{}
+	}
+	return *u.LastAuthAt
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetName() string {
+	if u == nil || u.Name == nil {
+		return ""
+	}
+	return *u.Name
+}
+
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (u *UserAuthenticator) GetType() string {
+	if u == nil || u.Type == nil {
+		return ""
+	}
+	return *u.Type
+}
+
+// String returns a string representation of UserAuthenticator.
+func (u *UserAuthenticator) String() string {
+	return Stringify(u)
+}
+
 // GetIdentifier returns the Identifier field if it's non-nil, zero value otherwise.
 func (u *UserBlock) GetIdentifier() string {
 	if u == nil || u.Identifier == nil {
@@ -4145,6 +4206,83 @@ func (u *UserBlock) GetIP() string {
 
 // String returns a string representation of UserBlock.
 func (u *UserBlock) String() string {
+	return Stringify(u)
+}
+
+// GetAuthMethod returns the AuthMethod field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetAuthMethod() string {
+	if u == nil || u.AuthMethod == nil {
+		return ""
+	}
+	return *u.AuthMethod
+}
+
+// GetEnrolledAt returns the EnrolledAt field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetEnrolledAt() time.Time {
+	if u == nil || u.EnrolledAt == nil {
+		return time.Time{}
+	}
+	return *u.EnrolledAt
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetID() string {
+	if u == nil || u.ID == nil {
+		return ""
+	}
+	return *u.ID
+}
+
+// GetIdentifier returns the Identifier field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetIdentifier() string {
+	if u == nil || u.Identifier == nil {
+		return ""
+	}
+	return *u.Identifier
+}
+
+// GetLastAuth returns the LastAuth field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetLastAuth() time.Time {
+	if u == nil || u.LastAuth == nil {
+		return time.Time{}
+	}
+	return *u.LastAuth
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetName() string {
+	if u == nil || u.Name == nil {
+		return ""
+	}
+	return *u.Name
+}
+
+// GetPhoneNumber returns the PhoneNumber field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetPhoneNumber() string {
+	if u == nil || u.PhoneNumber == nil {
+		return ""
+	}
+	return *u.PhoneNumber
+}
+
+// GetStatus returns the Status field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetStatus() string {
+	if u == nil || u.Status == nil {
+		return ""
+	}
+	return *u.Status
+}
+
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (u *UserEnrollment) GetType() string {
+	if u == nil || u.Type == nil {
+		return ""
+	}
+	return *u.Type
+}
+
+// String returns a string representation of UserEnrollment.
+func (u *UserEnrollment) String() string {
 	return Stringify(u)
 }
 
