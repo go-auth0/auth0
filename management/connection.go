@@ -650,6 +650,9 @@ type ConnectionOptionsSAML struct {
 	RequestTemplate    *string                            `json:"requestTemplate,omitempty"`
 	UserIDAttribute    *string                            `json:"user_id_attribute,omitempty"`
 	LogoURL            *string                            `json:"icon_url,omitempty"`
+	
+	// Set to on_first_login to avoid setting user attributes at each login.
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
 type ConnectionOptionsSAMLIdpInitiated struct {
