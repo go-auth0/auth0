@@ -76,7 +76,7 @@ type GuardianManager struct {
 
 func newGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{
-		&EnrollmentManager{},
+		&EnrollmentManager{m},
 		&MultiFactorManager{m,
 			&MultiFactorSMS{m},
 			&MultiFactorPush{m},
