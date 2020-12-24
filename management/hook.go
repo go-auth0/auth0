@@ -34,14 +34,38 @@ type HookList struct {
 type HookSecrets map[string]string
 
 // Keys gets the configured hook secret keys
-func (s *HookSecrets) Keys() []string {
-	keys := make([]string, len(*s))
+func (s HookSecrets) Keys() []string {
+	keys := make([]string, len(s))
 	i := 0
-	for k := range *s {
+	for k := range s {
 		keys[i] = k
 		i++
 	}
 	return keys
+}
+
+// Difference returns a new map containing only keys which are present in s that
+// are missing from other.
+func (s HookSecrets) difference(other HookSecrets) HookSecrets {
+	d := make(HookSecrets)
+	for k, v := range s {
+		if _, ok := other[k]; !ok {
+			d[k] = v
+		}
+	}
+	return d
+}
+
+// Intersection returns a new map containing only keys which are present in both
+// s and other.
+func (s HookSecrets) intersection(other HookSecrets) HookSecrets {
+	i := make(HookSecrets)
+	for k, v := range s {
+		if _, ok := other[k]; ok {
+			i[k] = v
+		}
+	}
+	return i
 }
 
 type HookManager struct {
@@ -95,15 +119,37 @@ func (m *HookManager) List(opts ...RequestOption) (l *HookList, err error) {
 // maximum of 20 secrets.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/post_secrets
-func (m *HookManager) CreateSecrets(hookID string, s *HookSecrets, opts ...RequestOption) (err error) {
-	return m.Request("POST", m.URI("hooks", hookID, "secrets"), s, opts...)
+func (m *HookManager) CreateSecrets(hookID string, s HookSecrets, opts ...RequestOption) (err error) {
+	return m.Request("POST", m.URI("hooks", hookID, "secrets"), &s, opts...)
 }
 
 // UpdateSecrets updates one or more existing secrets for an existing hook.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Hooks/patch_secrets
-func (m *HookManager) UpdateSecrets(hookID string, s *HookSecrets, opts ...RequestOption) (err error) {
-	return m.Request("PATCH", m.URI("hooks", hookID, "secrets"), s, opts...)
+func (m *HookManager) UpdateSecrets(hookID string, s HookSecrets, opts ...RequestOption) (err error) {
+	return m.Request("PATCH", m.URI("hooks", hookID, "secrets"), &s, opts...)
+}
+
+// ReplaceSecrets replaces existing secrets with the provided ones.
+//
+// Note: ReplaceSecrets is a wrapper method and will internally call Secrets,
+// CreateSecrets, UpdateSecrets or RemoveSecrets as needed in order to replicate
+// PUT semantics.
+func (m *HookManager) ReplaceSecrets(hookID string, s HookSecrets, opts ...RequestOption) (err error) {
+	o, err := m.Secrets(hookID, opts...)
+	if err != nil {
+		return err
+	}
+	if add := s.difference(o); len(add) > 0 {
+		err = m.CreateSecrets(hookID, add, opts...)
+	}
+	if update := s.intersection(o); len(update) > 0 {
+		err = m.UpdateSecrets(hookID, update, opts...)
+	}
+	if rm := o.difference(s); len(rm) > 0 {
+		err = m.RemoveSecrets(hookID, rm.Keys(), opts...)
+	}
+	return err
 }
 
 // Secrets retrieves a hook's secrets by the ID of the hook.
@@ -112,7 +158,7 @@ func (m *HookManager) UpdateSecrets(hookID string, s *HookSecrets, opts ...Reque
 // execution (they all appear as "_VALUE_NOT_SHOWN_").
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Hooks/get_secrets
-func (m *HookManager) Secrets(hookID string, opts ...RequestOption) (s *HookSecrets, err error) {
+func (m *HookManager) Secrets(hookID string, opts ...RequestOption) (s HookSecrets, err error) {
 	err = m.Request("GET", m.URI("hooks", hookID, "secrets"), &s, opts...)
 	return
 }
