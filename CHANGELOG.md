@@ -1,6 +1,7 @@
 ## v5.5.0
 
-* `management.HookManager`: Marshal/unmarshal branding colors correctly ([#177](https://github.com/go-auth0/auth0/pull/177))
+* `management.HookSecrets`: `HookSecrets` are not a pointer anymore ([#176](https://github.com/go-auth0/auth0/pull/176))
+* `management.HookManager`: `ReplaceSecrets` is introduced to enable PUT semantics for hook secrets ([#176](https://github.com/go-auth0/auth0/pull/176))
 * `management.TenantUniversalLoginColors`: Marshal/unmarshal branding colors correctly ([#177](https://github.com/go-auth0/auth0/pull/177))
 
 ## v5.4.0
