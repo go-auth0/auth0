@@ -23,14 +23,16 @@ type BrandingColors struct {
 	// Accent color
 	Primary *string `json:"primary,omitempty"`
 
-	// Page background color
-	// Only one of PageBackground and PageBackgroundGradient should be set.
-	// If both fields are set, PageBackground takes priority.
+	// Page background color.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
 	PageBackground *string `json:"-"`
 
-	// Page background gradient
-	// Only one of PageBackground and PageBackgroundGradient should be set.
-	// If both fields are set, PageBackground takes priority.
+	// Page background gradient.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
 	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"-"`
 }
 
