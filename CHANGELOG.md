@@ -1,3 +1,8 @@
+## v5.5.0
+
+* `management.HookManager`: Marshal/unmarshal branding colors correctly ([#177](https://github.com/go-auth0/auth0/pull/177))
+* `management.TenantUniversalLoginColors`: Marshal/unmarshal branding colors correctly ([#177](https://github.com/go-auth0/auth0/pull/177))
+
 ## v5.4.0
 
 * `management.Branding`: add support for `BrandingUniversalLogin` ([#161](https://github.com/go-auth0/auth0/pull/161)).
