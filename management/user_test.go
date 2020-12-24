@@ -260,6 +260,37 @@ func TestUser(t *testing.T) {
 		}
 		t.Logf("%v\n", us)
 	})
+
+	t.Run("Link", func(t *testing.T) {
+		ulAlice, err := m.User.Search(Query(`email:"alice@example.com"`))
+		if err != nil {
+			t.Error(err)
+		}
+		if len(ulAlice.Users) != 1 {
+			t.Error("unexpected number of users found")
+		}
+		ulBob, err := m.User.Search(Query(`email:"bob@example.com"`))
+		if err != nil {
+			t.Error(err)
+		}
+		if len(ulBob.Users) != 1 {
+			t.Error("unexpected number of users found")
+		}
+
+		cs, err := m.Connection.ReadByName("Username-Password-Authentication")
+		if err != nil {
+			t.Error(err)
+		}
+
+		// Make Bob to be a secondary identity of Alice
+		if err := m.User.Link(ulAlice.Users[0].GetID(), &IdentityLink{
+			Provider:     "auth0",
+			UserID:       ulBob.Users[0].GetID(),
+			ConnectionID: cs.ID,
+		}); err != nil {
+			t.Error(err)
+		}
+	})
 }
 
 func TestUserIdentity(t *testing.T) {
