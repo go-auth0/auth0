@@ -306,6 +306,35 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Reque
 	return nil
 }
 
+// RequestWithCustomResponse replicates the behaviour of Request but allows to decode
+// the response into a different type than the one on the request.
+func (m *Management) RequestWithCustomResponse(method, uri string, payload interface{}, response interface{}, options ...RequestOption) error {
+
+	req, err := m.NewRequest(method, uri, payload, options...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		return newError(res.Body)
+	}
+
+	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
+		err := json.NewDecoder(res.Body).Decode(response)
+		if err != nil {
+			return err
+		}
+		return res.Body.Close()
+	}
+
+	return nil
+}
+
 // Error is an interface describing any error which could be returned by the
 // Auth0 Management API.
 type Error interface {

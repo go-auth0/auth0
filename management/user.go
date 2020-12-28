@@ -93,6 +93,16 @@ type User struct {
 	LoginsCount *int64 `json:"logins_count,omitempty"`
 }
 
+// UserIdentityLink contains the data needed for linking an identity to a given user.
+type UserIdentityLink struct {
+	// Connection id of the secondary user account being linked when more than one auth0 database provider exists.
+	ConnectionID *string `json:"connection_id,omitempty"`
+	// Secondary account user id.
+	UserID string `json:"user_id"`
+	// Identity provider of the secondary user account being linked.
+	Provider string `json:"provider"`
+}
+
 type UserIdentity struct {
 	Connection  *string `json:"connection,omitempty"`
 	UserID      *string `json:"-"`
@@ -347,15 +357,6 @@ func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 // Link links two user accounts together forming a primary and secondary relationship.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_identities
-func (m *UserManager) Link(id string, il *IdentityLink, opts ...RequestOption) (err error) {
-	return m.Request("POST", m.URI("users", id, "identities"), il, opts...)
-}
-
-// IdentityLink contains the data needed for linking an identity to a given user.
-//
-// Note: connection_id param is needed just to identify a particular database connection for the 'auth0' provider.
-type IdentityLink struct {
-	ConnectionID *string `json:"connection_id,omitempty"`
-	UserID       string  `json:"user_id"`
-	Provider     string  `json:"provider"`
+func (m *UserManager) Link(id string, il *UserIdentityLink, opts ...RequestOption) (resp []UserIdentity, err error) {
+	return resp, m.RequestWithCustomResponse("POST", m.URI("users", id, "identities"), il, &resp, opts...)
 }
