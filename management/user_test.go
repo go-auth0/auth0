@@ -273,8 +273,7 @@ func TestUser(t *testing.T) {
 			Password:   auth0.String("72aae3e7-1b9b-4ff4-8806-c4b0ce0ca424"),
 			Connection: cs.Name,
 		}
-		err := m.User.Create(bruceWayne)
-		if err != nil {
+		if err := m.User.Create(bruceWayne); err != nil {
 			t.Error(err)
 		}
 
@@ -284,15 +283,14 @@ func TestUser(t *testing.T) {
 			Password:   auth0.String("3665df77-7ebe-4448-84cb-cd7238f680e9"),
 			Connection: cs.Name,
 		}
-		err := m.User.Create(batman)
-		if err != nil {
+		if err := m.User.Create(batman); err != nil {
 			t.Error(err)
 		}
 
 		// Make Bob to be a secondary identity of Alice
 		bruceIdentities, err := m.User.Link(bruceWayne.GetID(), &UserIdentityLink{
-			Provider:     "auth0",
-			UserID:       batman.GetID(),
+			Provider:     auth0.String("auth0"),
+			UserID:       batman.ID,
 			ConnectionID: cs.ID,
 		})
 		if err != nil {

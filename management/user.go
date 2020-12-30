@@ -2,6 +2,7 @@ package management
 
 import (
 	"encoding/json"
+	"net/http"
 	"reflect"
 	"strconv"
 	"time"
@@ -98,9 +99,13 @@ type UserIdentityLink struct {
 	// Connection id of the secondary user account being linked when more than one auth0 database provider exists.
 	ConnectionID *string `json:"connection_id,omitempty"`
 	// Secondary account user id.
-	UserID string `json:"user_id"`
+	UserID *string `json:"user_id,omitempty"`
 	// Identity provider of the secondary user account being linked.
-	Provider string `json:"provider"`
+	Provider *string `json:"provider,omitempty"`
+	// LinkWith requires the authenticated primary account's JWT in the Authorization header.
+	// Must be a JWT for the secondary account being linked. If sending this parameter,
+	// provider, user_id, and connection_id must not be sent.
+	LinkWith *string `json:"link_with,omitempty"`
 }
 
 type UserIdentity struct {
@@ -357,6 +362,28 @@ func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 // Link links two user accounts together forming a primary and secondary relationship.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_identities
-func (m *UserManager) Link(id string, il *UserIdentityLink, opts ...RequestOption) (resp []UserIdentity, err error) {
-	return resp, m.RequestWithCustomResponse("POST", m.URI("users", id, "identities"), il, &resp, opts...)
+func (m *UserManager) Link(id string, il *UserIdentityLink, opts ...RequestOption) (uIDs []UserIdentity, err error) {
+	req, err := m.NewRequest("POST", m.URI("users", id, "identities"), il, opts...)
+	if err != nil {
+		return uIDs, err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return uIDs, err
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		return uIDs, newError(res.Body)
+	}
+
+	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
+		err := json.NewDecoder(res.Body).Decode(&uIDs)
+		if err != nil {
+			return uIDs, err
+		}
+		return uIDs, res.Body.Close()
+	}
+
+	return uIDs, nil
 }
