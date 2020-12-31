@@ -287,7 +287,6 @@ func TestUser(t *testing.T) {
 			t.Error(err)
 		}
 
-		// Make Bob to be a secondary identity of Alice
 		bruceIdentities, err := m.User.Link(bruceWayne.GetID(), &UserIdentityLink{
 			Provider:     auth0.String("auth0"),
 			UserID:       batman.ID,
