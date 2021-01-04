@@ -4166,6 +4166,14 @@ func (t *Ticket) GetMarkEmailAsVerified() bool {
 	return *t.MarkEmailAsVerified
 }
 
+// GetIncludeEmailInRedirect returns the IncludeEmailInRedirect field if it's non-nil, zero value otherwise.
+func (t *Ticket) GetIncludeEmailInRedirect() bool {
+	if t == nil || t.IncludeEmailInRedirect == nil {
+		return false
+	}
+	return *t.IncludeEmailInRedirect
+}
+
 // GetResultURL returns the ResultURL field if it's non-nil, zero value otherwise.
 func (t *Ticket) GetResultURL() string {
 	if t == nil || t.ResultURL == nil {
