@@ -22,7 +22,7 @@ func TestUser(t *testing.T) {
 		UserMetadata: map[string]interface{}{
 			"favourite_attack": "roundhouse_kick",
 		},
-		EmailVerified: auth0.NewBoolString(true),
+		EmailVerified: auth0.Bool(true),
 		VerifyEmail:   auth0.Bool(false),
 		AppMetadata: map[string]interface{}{
 			"facts": []string{
@@ -79,6 +79,35 @@ func TestUser(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for u, expected := range map[*User]string{
+			{}:                                 `{}`,
+			{EmailVerified: auth0.Bool(true)}:  `{"user_id":"true"}`,
+			{EmailVerified: auth0.Bool(false)}: `{"user_id":false}`,
+		} {
+			b, err := json.Marshal(u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, string(b), expected)
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		for b, expected := range map[string]*User{
+			`{}`:                  {EmailVerified: nil},
+			`{"user_id":true}`:    {EmailVerified: auth0.Bool(true)},
+			`{"user_id":"false"}`: {EmailVerified: auth0.Bool(false)},
+		} {
+			var u User
+			err := json.Unmarshal([]byte(b), &u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, u.GetEmailVerified(), expected.GetEmailVerified())
+		}
+	})
 
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
