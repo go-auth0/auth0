@@ -63,7 +63,7 @@ type User struct {
 	// True if the user's email is verified, false otherwise. If it is true then
 	// the user will not receive a verification email, unless verify_email: true
 	// was specified.
-	EmailVerified *bool `json:"email_verified,omitempty"`
+	EmailVerified *bool `json:"-"`
 
 	// If true, the user will receive a verification email after creation, even
 	// if created with email_verified set to true. If false, the user will not
@@ -92,6 +92,58 @@ type User struct {
 
 	// Total number of logins this user has performed. Read only, cannot be modified.
 	LoginsCount *int64 `json:"logins_count,omitempty"`
+}
+
+// UnmarshalJSON is a custom deserializer for the User type.
+//
+// We have to use a custom one due to possible inconsistencies in value types.
+func (u *User) UnmarshalJSON(b []byte) error {
+
+	type user User
+	type userAlias struct {
+		*user
+		RawEmailVerified interface{} `json:"email_verified,omitempty"`
+	}
+
+	alias := &userAlias{(*user)(u), nil}
+
+	err := json.Unmarshal(b, alias)
+	if err != nil {
+		return err
+	}
+
+	if alias.RawEmailVerified != nil {
+		var emailVerified bool
+		switch rawEmailVerified := alias.RawEmailVerified.(type) {
+		case bool:
+			emailVerified = rawEmailVerified
+		case string:
+			emailVerified, err = strconv.ParseBool(rawEmailVerified)
+			if err != nil {
+				return err
+			}
+		default:
+			panic(reflect.TypeOf(rawEmailVerified))
+		}
+		alias.EmailVerified = &emailVerified
+	}
+
+	return nil
+}
+func (u *User) MarshalJSON() ([]byte, error) {
+
+	type user User
+	type userAlias struct {
+		*user
+		RawEmailVerified interface{} `json:"email_verified,omitempty"`
+	}
+
+	alias := &userAlias{user: (*user)(u)}
+	if u.EmailVerified != nil {
+		alias.RawEmailVerified = u.EmailVerified
+	}
+
+	return json.Marshal(alias)
 }
 
 // UserIdentityLink contains the data needed for linking an identity to a given user.
