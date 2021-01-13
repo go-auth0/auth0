@@ -1,3 +1,8 @@
+## v5.7.0
+
+* `management.ClientRefreshToken`: Add `InfiniteTokenLifetime`, `InfiniteIdleTokenLifetime` and `IdleTokenLifetime` fields ([#184](https://github.com/go-auth0/auth0/pull/184)).
+* `management.User`: Fix possible inconsistencies with `EmailVerified` field ([#181](https://github.com/go-auth0/auth0/pull/181)).
+
 ## v5.6.0
 
 * `management.UserManager`: `Link()` links two user accounts together ([#178](https://github.com/go-auth0/auth0/pull/178)).
