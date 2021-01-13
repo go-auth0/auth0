@@ -126,6 +126,16 @@ type ClientRefreshToken struct {
 
 	// Period in seconds for which refresh tokens will remain valid
 	TokenLifetime *int `json:"token_lifetime,omitempty"`
+
+	// Whether or not refresh tokens should remain valid indefinitely. If false,
+	// "TokenLifetime" should be set
+	InfiniteTokenLifetime *bool `json:"infinite_token_lifetime,omitempty"`
+
+	// Whether or not inactive refresh tokens should be remain valid indefinitely
+	InfiniteIdleTokenLifetime *bool `json:"infinite_idle_token_lifetime,omitempty"`
+
+	// Period in seconds after which inactive refresh tokens will expire
+	IdleTokenLifetime *int `json:"idle_token_lifetime,omitempty"`
 }
 
 type ClientList struct {
