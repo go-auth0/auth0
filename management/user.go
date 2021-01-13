@@ -63,7 +63,7 @@ type User struct {
 	// True if the user's email is verified, false otherwise. If it is true then
 	// the user will not receive a verification email, unless verify_email: true
 	// was specified.
-	EmailVerified *bool `json:"-,omitempty"`
+	EmailVerified *bool `json:"-"`
 
 	// If true, the user will receive a verification email after creation, even
 	// if created with email_verified set to true. If false, the user will not

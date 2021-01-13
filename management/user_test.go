@@ -83,7 +83,7 @@ func TestUser(t *testing.T) {
 	t.Run("MarshalJSON", func(t *testing.T) {
 		for u, expected := range map[*User]string{
 			{}:                                 `{}`,
-			{EmailVerified: auth0.Bool(true)}:  `{"user_id":"true"}`,
+			{EmailVerified: auth0.Bool(true)}:  `{"user_id":true}`,
 			{EmailVerified: auth0.Bool(false)}: `{"user_id":false}`,
 		} {
 			b, err := json.Marshal(u)
@@ -98,6 +98,8 @@ func TestUser(t *testing.T) {
 		for b, expected := range map[string]*User{
 			`{}`:                  {EmailVerified: nil},
 			`{"user_id":true}`:    {EmailVerified: auth0.Bool(true)},
+			`{"user_id":false}`:   {EmailVerified: auth0.Bool(false)},
+			`{"user_id":"true"}`:  {EmailVerified: auth0.Bool(true)},
 			`{"user_id":"false"}`: {EmailVerified: auth0.Bool(false)},
 		} {
 			var u User
