@@ -16,11 +16,13 @@ func TestTicket(t *testing.T) {
 		Username:   auth0.String("chuck"),
 		Password:   auth0.String("I have a password and its a secret"),
 	}
-	m.User.Create(u)
+	if err = m.User.Create(u); err != nil {
+		t.Fatal(err)
+	}
 
-	userID := auth0.StringValue(u.ID)
+	userID := u.GetID()
 
-	defer m.User.Delete(userID)
+	t.Cleanup(func() { m.User.Delete(userID) })
 
 	t.Run("VerifyEmail", func(t *testing.T) {
 
