@@ -33,6 +33,9 @@ type Ticket struct {
 	// Whether to set the email_verified attribute to true (true) or whether it
 	// should not be updated
 	MarkEmailAsVerified *bool `json:"mark_email_as_verified,omitempty"`
+
+	// Whether to include the email address as part of the returnUrl in the reset_email (true), or not (false - default).
+	IncludeEmailInRedirect *bool `json:"includeEmailInRedirect,omitempty"`
 }
 
 type TicketManager struct {
