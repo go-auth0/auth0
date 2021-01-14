@@ -104,6 +104,7 @@ func TestLogStream(t *testing.T) {
 		}
 	})
 }
+
 func TestLogStreamSink(t *testing.T) {
 
 	t.Run("AmazonEventBridge", func(t *testing.T) {
@@ -235,6 +236,7 @@ func TestLogStreamSink(t *testing.T) {
 
 		t.Logf("%s\n", l)
 	})
+
 	t.Run("Splunk", func(t *testing.T) {
 		l := &LogStream{
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
@@ -268,6 +270,7 @@ func TestLogStreamSink(t *testing.T) {
 
 		t.Logf("%s\n", l)
 	})
+
 	t.Run("Sumo", func(t *testing.T) {
 		l := &LogStream{
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
