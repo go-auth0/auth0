@@ -3330,6 +3330,19 @@ func (l *LogStreamSinkSplunk) String() string {
 	return Stringify(l)
 }
 
+// GetSourceAddress returns the SourceAddress field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSumo) GetSourceAddress() string {
+	if l == nil || l.SourceAddress == nil {
+		return ""
+	}
+	return *l.SourceAddress
+}
+
+// String returns a string representation of LogStreamSinkSumo.
+func (l *LogStreamSinkSumo) String() string {
+	return Stringify(l)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (m *MultiFactor) GetEnabled() bool {
 	if m == nil || m.Enabled == nil {

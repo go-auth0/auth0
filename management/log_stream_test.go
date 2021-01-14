@@ -62,6 +62,8 @@ func TestLogStream(t *testing.T) {
 				_, ok = ls.Sink.(*LogStreamSinkDatadog)
 			case LogStreamTypeSplunk:
 				_, ok = ls.Sink.(*LogStreamSinkSplunk)
+			case LogStreamTypeSumo:
+				_, ok = ls.Sink.(*LogStreamSinkSumo)
 			default:
 				_, ok = ls.Sink.(map[string]interface{})
 			}
@@ -102,6 +104,7 @@ func TestLogStream(t *testing.T) {
 		}
 	})
 }
+
 func TestLogStreamSink(t *testing.T) {
 
 	t.Run("AmazonEventBridge", func(t *testing.T) {
@@ -233,6 +236,7 @@ func TestLogStreamSink(t *testing.T) {
 
 		t.Logf("%s\n", l)
 	})
+
 	t.Run("Splunk", func(t *testing.T) {
 		l := &LogStream{
 			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
@@ -263,6 +267,34 @@ func TestLogStreamSink(t *testing.T) {
 		expect.Expect(t, s.GetPort(), "8080")
 		expect.Expect(t, s.GetSecure(), true)
 		expect.Expect(t, s.GetToken(), "12a34ab5-c6d7-8901-23ef-456b7c89d0c1")
+
+		t.Logf("%s\n", l)
+	})
+
+	t.Run("Sumo", func(t *testing.T) {
+		l := &LogStream{
+			Name: auth0.Stringf("Test-LogStream-%d", time.Now().Unix()),
+			Type: auth0.String(LogStreamTypeSumo),
+			Sink: &LogStreamSinkSumo{
+				SourceAddress: auth0.String("https://example.com"),
+			},
+		}
+
+		defer func() { m.LogStream.Delete(l.GetID()) }()
+
+		err := m.LogStream.Create(l)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		s, ok := l.Sink.(*LogStreamSinkSumo)
+		if !ok {
+			t.Fatalf("unexpected type %T", s)
+		}
+
+		expect.Expect(t, l.GetStatus(), "active")
+		expect.Expect(t, l.GetType(), LogStreamTypeSumo)
+		expect.Expect(t, s.GetSourceAddress(), "https://example.com")
 
 		t.Logf("%s\n", l)
 	})

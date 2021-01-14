@@ -8,6 +8,7 @@ const (
 	LogStreamTypeHTTP              = "http"
 	LogStreamTypeDatadog           = "datadog"
 	LogStreamTypeSplunk            = "splunk"
+	LogStreamTypeSumo              = "sumo"
 )
 
 type LogStream struct {
@@ -80,6 +81,8 @@ func (ls *LogStream) UnmarshalJSON(b []byte) error {
 			v = &LogStreamSinkDatadog{}
 		case LogStreamTypeSplunk:
 			v = &LogStreamSinkSplunk{}
+		case LogStreamTypeSumo:
+			v = &LogStreamSinkSumo{}
 		default:
 			v = make(map[string]interface{})
 		}
@@ -144,6 +147,11 @@ type LogStreamSinkSplunk struct {
 	Port *string `json:"splunkPort,omitempty"`
 	// Splunk Secure
 	Secure *bool `json:"splunkSecure,omitempty"`
+}
+
+type LogStreamSinkSumo struct {
+	// Sumo Source Address
+	SourceAddress *string `json:"sumoSourceAddress,omitempty"`
 }
 
 type LogStreamManager struct {
