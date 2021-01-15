@@ -2748,6 +2748,67 @@ func (e *EmailTemplate) String() string {
 	return Stringify(e)
 }
 
+// GetEnrolledAt returns the EnrolledAt field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetEnrolledAt() time.Time {
+	if e == nil || e.EnrolledAt == nil {
+		return time.Time{}
+	}
+	return *e.EnrolledAt
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetID() string {
+	if e == nil || e.ID == nil {
+		return ""
+	}
+	return *e.ID
+}
+
+// GetIdentifier returns the Identifier field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetIdentifier() string {
+	if e == nil || e.Identifier == nil {
+		return ""
+	}
+	return *e.Identifier
+}
+
+// GetLastAuth returns the LastAuth field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetLastAuth() time.Time {
+	if e == nil || e.LastAuth == nil {
+		return time.Time{}
+	}
+	return *e.LastAuth
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetName() string {
+	if e == nil || e.Name == nil {
+		return ""
+	}
+	return *e.Name
+}
+
+// GetPhoneNumber returns the PhoneNumber field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetPhoneNumber() string {
+	if e == nil || e.PhoneNumber == nil {
+		return ""
+	}
+	return *e.PhoneNumber
+}
+
+// GetStatus returns the Status field if it's non-nil, zero value otherwise.
+func (e *Enrollment) GetStatus() string {
+	if e == nil || e.Status == nil {
+		return ""
+	}
+	return *e.Status
+}
+
+// String returns a string representation of Enrollment.
+func (e *Enrollment) String() string {
+	return Stringify(e)
+}
+
 // GetAudience returns the Audience field if it's non-nil, zero value otherwise.
 func (g *Grant) GetAudience() string {
 	if g == nil || g.Audience == nil {
@@ -3263,6 +3324,14 @@ func (p *ProfileData) GetGivenName() string {
 		return ""
 	}
 	return *p.GivenName
+}
+
+// GetLastPasswordReset returns the LastPasswordReset field if it's non-nil, zero value otherwise.
+func (p *ProfileData) GetLastPasswordReset() time.Time {
+	if p == nil || p.LastPasswordReset == nil {
+		return time.Time{}
+	}
+	return *p.LastPasswordReset
 }
 
 // GetName returns the Name field if it's non-nil, zero value otherwise.

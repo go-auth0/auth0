@@ -143,13 +143,14 @@ type UserIdentity struct {
 }
 
 type ProfileData struct {
-	Email         *string             `json:"email,omitempty"`
-	EmailVerified *ConvertibleBoolean `json:"email_verified,omitempty"`
-	Name          *string             `json:"name,omitempty"`
-	GivenName     *string             `json:"given_name,omitempty"`
-	PhoneNumber   *string             `json:"phone_number,omitempty"`
-	PhoneVerified *bool               `json:"phone_verified,omitempty"`
-	FamilyName    *string             `json:"family_name,omitempty"`
+	Email             *string             `json:"email,omitempty"`
+	EmailVerified     *ConvertibleBoolean `json:"email_verified,omitempty"`
+	Name              *string             `json:"name,omitempty"`
+	GivenName         *string             `json:"given_name,omitempty"`
+	PhoneNumber       *string             `json:"phone_number,omitempty"`
+	PhoneVerified     *bool               `json:"phone_verified,omitempty"`
+	FamilyName        *string             `json:"family_name,omitempty"`
+	LastPasswordReset *time.Time          `json:"last_password_reset,omitempty"`
 }
 
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
