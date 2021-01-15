@@ -1,3 +1,8 @@
+## v5.8.0
+
+* `management.Ticket`: Add field `IncludeEmailInRedirect` ([#180](https://github.com/go-auth0/auth0/pull/180))
+* `management.UserIdentity`: Add field `RefreshToken` ([#167](https://github.com/go-auth0/auth0/pull/167))
+
 ## v5.7.0
 
 * `management.ClientRefreshToken`: Add `InfiniteTokenLifetime`, `InfiniteIdleTokenLifetime` and `IdleTokenLifetime` fields ([#184](https://github.com/go-auth0/auth0/pull/184)).
