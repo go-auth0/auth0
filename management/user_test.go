@@ -83,8 +83,8 @@ func TestUser(t *testing.T) {
 	t.Run("MarshalJSON", func(t *testing.T) {
 		for u, expected := range map[*User]string{
 			{}:                                 `{}`,
-			{EmailVerified: auth0.Bool(true)}:  `{"user_id":true}`,
-			{EmailVerified: auth0.Bool(false)}: `{"user_id":false}`,
+			{EmailVerified: auth0.Bool(true)}:  `{"email_verified":true}`,
+			{EmailVerified: auth0.Bool(false)}: `{"email_verified":false}`,
 		} {
 			b, err := json.Marshal(u)
 			if err != nil {
@@ -96,11 +96,11 @@ func TestUser(t *testing.T) {
 
 	t.Run("UnmarshalJSON", func(t *testing.T) {
 		for b, expected := range map[string]*User{
-			`{}`:                  {EmailVerified: nil},
-			`{"user_id":true}`:    {EmailVerified: auth0.Bool(true)},
-			`{"user_id":false}`:   {EmailVerified: auth0.Bool(false)},
-			`{"user_id":"true"}`:  {EmailVerified: auth0.Bool(true)},
-			`{"user_id":"false"}`: {EmailVerified: auth0.Bool(false)},
+			`{}`:                         {EmailVerified: nil},
+			`{"email_verified":true}`:    {EmailVerified: auth0.Bool(true)},
+			`{"email_verified":false}`:   {EmailVerified: auth0.Bool(false)},
+			`{"email_verified":"true"}`:  {EmailVerified: auth0.Bool(true)},
+			`{"email_verified":"false"}`: {EmailVerified: auth0.Bool(false)},
 		} {
 			var u User
 			err := json.Unmarshal([]byte(b), &u)
@@ -223,7 +223,7 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", b)
 	})
 
-	t.Run("Blocks", func(t *testing.T) {
+	t.Run("Unblock", func(t *testing.T) {
 		err := m.User.Unblock(u.GetID())
 		if err != nil {
 			t.Fatal(err)
