@@ -128,6 +128,24 @@ func TestConnection(t *testing.T) {
 		}
 		t.Logf("%v\n", cs)
 	})
+
+	t.Run("ReadByNameEmptyName", func(t *testing.T) {
+		cs, err := m.Connection.ReadByName("")
+		if err == nil {
+			t.Fail()
+		}
+		mgmtError, ok := err.(*managementError)
+		if !ok {
+			t.Fail()
+		}
+		if mgmtError.StatusCode != 400 {
+			t.Fail()
+		}
+		if cs != nil {
+			t.Fail()
+		}
+		t.Logf("%v\n", cs)
+	})
 }
 func TestConnectionOptions(t *testing.T) {
 
