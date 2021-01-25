@@ -1,5 +1,4 @@
-// module gopkg.in/auth0.v5
-module github.com/turcottedanny/auth0
+module gopkg.in/auth0.v5
 
 go 1.12
 
@@ -9,4 +8,4 @@ require (
 	gopkg.in/auth0.v5 v5.8.0
 )
 
-replace gopkg.in/auth0.v5 => ./
+// replace gopkg.in/auth0.v5 => ./
