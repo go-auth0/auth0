@@ -8,3 +8,5 @@ require (
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
 	gopkg.in/auth0.v5 v5.8.0
 )
+
+replace gopkg.in/auth0.v5 => ./
