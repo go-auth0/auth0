@@ -1,7 +1,6 @@
 package management
 
 import (
-	"net/url"
 	"time"
 )
 
@@ -77,12 +76,12 @@ type ActionManager struct {
 }
 
 func (m *ActionManager) Create(a *Action) error {
-	return m.post(m.uri("actions", "actions"), a)
+	return m.Request("POST", m.URI("actions", "actions"), a)
 }
 
 func (m *ActionManager) Read(id string) (*Action, error) {
 	var a Action
-	err := m.get(m.uri("actions", "actions", id), &a)
+	err := m.Request("GET", m.URI("actions", "actions", id), &a)
 	return &a, err
 }
 
@@ -92,24 +91,22 @@ func (m *ActionManager) Update(id string, a *Action) error {
 	a.ID = ""
 	a.CreatedAt = nil
 	a.UpdatedAt = nil
-	return m.patch(m.uri("actions", "actions", id), a)
+	return m.Request("PATCH", m.URI("actions", "actions", id), a)
 }
 
-func (m *ActionManager) Delete(id string) error {
-	return m.delete(m.uri("actions", "actions", id))
+func (m *ActionManager) Delete(id string, opts ...RequestOption) error {
+	return m.Request("DELETE", m.URI("actions", "actions", id), nil, opts...)
 }
 
-func WithTriggerID(id TriggerID) ListOption {
-	return func(v url.Values) {
-		v.Set("triggerId", string(id))
-	}
-}
+// func WithTriggerID(id TriggerID) RequestOption {
+// 	return func(v url.Values) {
+// 		v.Set("triggerId", string(id))
+// 	}
+// }
 
-// TODO(cyx): do the standard m.q(opts) here supporting per_page, etc.
-func (m *ActionManager) List(opts ...ListOption) (*ActionList, error) {
-	var list ActionList
-	err := m.get(m.uri("actions", "actions")+m.q(opts), &list)
-	return &list, err
+func (m *ActionManager) List(opts ...RequestOption) (c *ActionList, err error) {
+	err = m.Request("GET", m.URI("actions", "actions"), &c, applyListDefaults(opts))
+	return
 }
 
 type ActionVersionManager struct {
@@ -117,36 +114,34 @@ type ActionVersionManager struct {
 }
 
 func (m *ActionVersionManager) Create(actionID string, v *ActionVersion) error {
-	return m.post(m.uri("actions", "actions", actionID, "versions"), v)
+	return m.Request("POST", m.URI("actions", "actions", actionID, "versions"), v)
 }
 
 // TODO(cyx): This isn't implemented yet.
 func (m *ActionVersionManager) Update(actionID string, v *ActionVersion) error {
-	return m.patch(m.uri("actions", "actions", actionID, "versions", "draft"), v)
+	return m.Request("PATCH", m.URI("actions", "actions", actionID, "versions", "draft"), v)
 }
 
 func (m *ActionVersionManager) Read(actionID, id string) (*ActionVersion, error) {
 	var v ActionVersion
-	err := m.get(m.uri("actions", "actions", actionID, "versions", id), &v)
+	err := m.Request("GET", m.URI("actions", "actions", actionID, "versions", id), &v)
 	return &v, err
 }
 
-func (m *ActionVersionManager) Delete(actionID, id string) error {
-	return m.delete(m.uri("actions", "actions", actionID, "versions", id))
+func (m *ActionVersionManager) Delete(actionID, id string, opts ...RequestOption) error {
+	return m.Request("DELETE", m.URI("actions", "actions", actionID, "versions", id), nil, opts...)
 }
 
-func (m *ActionVersionManager) List(actionID string, opts ...ListOption) (*ActionVersionList, error) {
-	var list ActionVersionList
-	opts = m.defaults(opts)
-	err := m.get(m.uri("actions", "actions", actionID, "versions")+m.q(opts), &list)
-	return &list, err
+func (m *ActionVersionManager) List(actionID string, opts ...RequestOption) (c *ActionVersionList, err error) {
+	err = m.Request("GET", m.URI("actions", "actions", actionID, "versions"), &c, applyListDefaults(opts))
+	return
 }
 
 // TODO(cyx): might call this `activate` instead later. Still fleshing out the
 // name.
 func (m *ActionVersionManager) Promote(actionID, id string) (*ActionVersion, error) {
 	var v ActionVersion
-	err := m.post(m.uri("actions", "actions", actionID, "versions", id, "promote"), &v)
+	err := m.Request("POST", m.URI("actions", "actions", actionID, "versions", id, "promote"), &v)
 	return &v, err
 }
 
@@ -154,6 +149,6 @@ func (m *ActionVersionManager) Promote(actionID, id string) (*ActionVersion, err
 // `draft` in place of the ID?
 func (m *ActionVersionManager) Test(actionID, id string, payload Object) (Object, error) {
 	v := Object{"payload": payload}
-	err := m.post(m.uri("actions", "actions", actionID, "versions", id, "test"), &v)
+	err := m.Request("POST", m.URI("actions", "actions", actionID, "versions", id, "test"), &v)
 	return v, err
 }
