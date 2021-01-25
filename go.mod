@@ -1,5 +1,5 @@
 // module gopkg.in/auth0.v5
-module turcottedanny/auth0
+module github.com/turcottedanny/auth0
 
 go 1.12
 
