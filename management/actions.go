@@ -175,7 +175,7 @@ func (m *ActionVersionManager) List(actionID string, opts ...RequestOption) (c *
 // name.
 func (m *ActionVersionManager) Promote(actionID, id string) (*ActionVersion, error) {
 	var v ActionVersion
-	err := m.Request("POST", m.URI("actions", "actions", actionID, "versions", id, "promote"), &v)
+	err := m.Request("POST", m.URI("actions", "actions", actionID, "versions", id, "deploy"), &v)
 	return &v, err
 }
 
