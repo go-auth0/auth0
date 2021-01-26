@@ -129,6 +129,10 @@ type ActionVersionManager struct {
 	*Management
 }
 
+func newActionVersionManager(m *Management) *ActionVersionManager {
+	return &ActionVersionManager{m}
+}
+
 func (m *ActionVersionManager) Create(actionID string, v *ActionVersion) error {
 	return m.Request("POST", m.URI("actions", "actions", actionID, "versions"), v)
 }
