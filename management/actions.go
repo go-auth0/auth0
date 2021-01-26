@@ -152,8 +152,7 @@ func (m *ActionVersionManager) Create(actionID string, v *ActionVersion) error {
 	return m.Request("POST", m.URI("actions", "actions", actionID, "versions"), v)
 }
 
-// TODO(cyx): This isn't implemented yet.
-func (m *ActionVersionManager) Update(actionID string, v *ActionVersion) error {
+func (m *ActionVersionManager) UpsertDraft(actionID string, v *ActionVersion) error {
 	return m.Request("PATCH", m.URI("actions", "actions", actionID, "versions", "draft"), v)
 }
 
