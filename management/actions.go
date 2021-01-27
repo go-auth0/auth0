@@ -156,6 +156,12 @@ func (m *ActionVersionManager) UpsertDraft(actionID string, v *ActionVersion) er
 	return m.Request("PATCH", m.URI("actions", "actions", actionID, "versions", "draft"), v)
 }
 
+func (m *ActionVersionManager) ReadDraft(actionID string) (*ActionVersion, error) {
+	var v ActionVersion
+	err := m.Request("GET", m.URI("actions", "actions", actionID, "versions", "draft"), &v)
+	return &v, err
+}
+
 func (m *ActionVersionManager) Read(actionID, id string) (*ActionVersion, error) {
 	var v ActionVersion
 	err := m.Request("GET", m.URI("actions", "actions", actionID, "versions", id), &v)
