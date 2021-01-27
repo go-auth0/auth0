@@ -80,6 +80,37 @@ func TestUser(t *testing.T) {
 	}
 	defer m.ResourceServer.Delete(auth0.StringValue(s.ID))
 
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for u, expected := range map[*User]string{
+			{}:                                 `{}`,
+			{EmailVerified: auth0.Bool(true)}:  `{"email_verified":true}`,
+			{EmailVerified: auth0.Bool(false)}: `{"email_verified":false}`,
+		} {
+			b, err := json.Marshal(u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, string(b), expected)
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		for b, expected := range map[string]*User{
+			`{}`:                         {EmailVerified: nil},
+			`{"email_verified":true}`:    {EmailVerified: auth0.Bool(true)},
+			`{"email_verified":false}`:   {EmailVerified: auth0.Bool(false)},
+			`{"email_verified":"true"}`:  {EmailVerified: auth0.Bool(true)},
+			`{"email_verified":"false"}`: {EmailVerified: auth0.Bool(false)},
+		} {
+			var u User
+			err := json.Unmarshal([]byte(b), &u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, u.GetEmailVerified(), expected.GetEmailVerified())
+		}
+	})
+
 	t.Run("Create", func(t *testing.T) {
 		err = m.User.Create(u)
 		if err != nil {
@@ -192,7 +223,7 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", b)
 	})
 
-	t.Run("Blocks", func(t *testing.T) {
+	t.Run("Unblock", func(t *testing.T) {
 		err := m.User.Unblock(u.GetID())
 		if err != nil {
 			t.Fatal(err)
@@ -234,7 +265,7 @@ func TestUser(t *testing.T) {
 		{
 			Email:      auth0.String("alice@example.com"),
 			Username:   auth0.String("alice"),
-			Password:   auth0.String("5301111b-b31b-47c4-bf3d-0c26ea57bdf4"),
+			Password:   auth0.String("72aae3e7-1b9b-4ff4-8806-c4b0ce0ca424"),
 			Connection: auth0.String("Username-Password-Authentication"),
 		},
 		{
@@ -258,7 +289,7 @@ func TestUser(t *testing.T) {
 	}
 	defer func() {
 		for _, user := range allUsers {
-			m.User.Delete(auth0.StringValue(user.ID))
+			m.User.Delete(user.GetID())
 		}
 	}()
 
@@ -282,6 +313,48 @@ func TestUser(t *testing.T) {
 			t.Error("unexpected number of users found")
 		}
 		t.Logf("%v\n", us)
+	})
+
+	t.Run("Link", func(t *testing.T) {
+		cs, err := m.Connection.ReadByName("Username-Password-Authentication")
+		if err != nil {
+			t.Error(err)
+		}
+
+		bruceWayne := &User{
+			Email:      auth0.String("bruce@wayne.com"),
+			Username:   auth0.String("rich_boy"),
+			Password:   auth0.String("72aae3e7-1b9b-4ff4-8806-c4b0ce0ca424"),
+			Connection: cs.Name,
+		}
+		if err := m.User.Create(bruceWayne); err != nil {
+			t.Error(err)
+		}
+
+		batman := &User{
+			Email:      auth0.String("batman@example.com"),
+			Username:   auth0.String("dark_boy"),
+			Password:   auth0.String("3665df77-7ebe-4448-84cb-cd7238f680e9"),
+			Connection: cs.Name,
+		}
+		if err := m.User.Create(batman); err != nil {
+			t.Error(err)
+		}
+
+		bruceIdentities, err := m.User.Link(bruceWayne.GetID(), &UserIdentityLink{
+			Provider:     auth0.String("auth0"),
+			UserID:       batman.ID,
+			ConnectionID: cs.ID,
+		})
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", bruceIdentities)
+
+		t.Cleanup(func() {
+			m.User.Delete(bruceWayne.GetID())
+			m.User.Delete(batman.GetID())
+		})
 	})
 }
 

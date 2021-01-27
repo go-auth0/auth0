@@ -104,7 +104,7 @@ func (m *ResourceServerManager) Delete(id string, opts ...RequestOption) (err er
 //
 // See: https://auth0.com/docs/api/management/v2#!/Resource_Servers/get_resource_servers
 func (m *ResourceServerManager) List(opts ...RequestOption) (rl *ResourceServerList, err error) {
-	err = m.Request("GET", m.URI("users"), &rl, applyListDefaults(opts))
+	err = m.Request("GET", m.URI("resource-servers"), &rl, applyListDefaults(opts))
 	return
 }
 

@@ -2,6 +2,7 @@ package management
 
 import (
 	"encoding/json"
+	"net/http"
 	"reflect"
 	"strconv"
 	"time"
@@ -62,7 +63,7 @@ type User struct {
 	// True if the user's email is verified, false otherwise. If it is true then
 	// the user will not receive a verification email, unless verify_email: true
 	// was specified.
-	EmailVerified *bool `json:"email_verified,omitempty"`
+	EmailVerified *bool `json:"-"`
 
 	// If true, the user will receive a verification email after creation, even
 	// if created with email_verified set to true. If false, the user will not
@@ -93,11 +94,79 @@ type User struct {
 	LoginsCount *int64 `json:"logins_count,omitempty"`
 }
 
+// UnmarshalJSON is a custom deserializer for the User type.
+//
+// We have to use a custom one due to possible inconsistencies in value types.
+func (u *User) UnmarshalJSON(b []byte) error {
+
+	type user User
+	type userAlias struct {
+		*user
+		RawEmailVerified interface{} `json:"email_verified,omitempty"`
+	}
+
+	alias := &userAlias{(*user)(u), nil}
+
+	err := json.Unmarshal(b, alias)
+	if err != nil {
+		return err
+	}
+
+	if alias.RawEmailVerified != nil {
+		var emailVerified bool
+		switch rawEmailVerified := alias.RawEmailVerified.(type) {
+		case bool:
+			emailVerified = rawEmailVerified
+		case string:
+			emailVerified, err = strconv.ParseBool(rawEmailVerified)
+			if err != nil {
+				return err
+			}
+		default:
+			panic(reflect.TypeOf(rawEmailVerified))
+		}
+		alias.EmailVerified = &emailVerified
+	}
+
+	return nil
+}
+func (u *User) MarshalJSON() ([]byte, error) {
+
+	type user User
+	type userAlias struct {
+		*user
+		RawEmailVerified interface{} `json:"email_verified,omitempty"`
+	}
+
+	alias := &userAlias{user: (*user)(u)}
+	if u.EmailVerified != nil {
+		alias.RawEmailVerified = u.EmailVerified
+	}
+
+	return json.Marshal(alias)
+}
+
+// UserIdentityLink contains the data needed for linking an identity to a given user.
+type UserIdentityLink struct {
+	// Connection id of the secondary user account being linked when more than one auth0 database provider exists.
+	ConnectionID *string `json:"connection_id,omitempty"`
+	// Secondary account user id.
+	UserID *string `json:"user_id,omitempty"`
+	// Identity provider of the secondary user account being linked.
+	Provider *string `json:"provider,omitempty"`
+	// LinkWith requires the authenticated primary account's JWT in the Authorization header.
+	// Must be a JWT for the secondary account being linked. If sending this parameter,
+	// provider, user_id, and connection_id must not be sent.
+	LinkWith *string `json:"link_with,omitempty"`
+}
+
 type UserIdentity struct {
-	Connection *string `json:"connection,omitempty"`
-	UserID     *string `json:"-"`
-	Provider   *string `json:"provider,omitempty"`
-	IsSocial   *bool   `json:"isSocial,omitempty"`
+	Connection   *string `json:"connection,omitempty"`
+	UserID       *string `json:"-"`
+	Provider     *string `json:"provider,omitempty"`
+	IsSocial     *bool   `json:"isSocial,omitempty"`
+	AccessToken  *string `json:"access_token,omitempty"`
+	RefreshToken *string `json:"refresh_token,omitempty"`
 }
 
 // UnmarshalJSON is a custom deserializer for the UserIdentity type.
@@ -399,4 +468,33 @@ func (m *UserManager) InvalidateRememberBrowser(id string, opts ...RequestOption
 	)
 	err := m.Request("POST", uri, nil, opts...)
 	return err
+}
+
+// Link links two user accounts together forming a primary and secondary relationship.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/post_identities
+func (m *UserManager) Link(id string, il *UserIdentityLink, opts ...RequestOption) (uIDs []UserIdentity, err error) {
+	req, err := m.NewRequest("POST", m.URI("users", id, "identities"), il, opts...)
+	if err != nil {
+		return uIDs, err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return uIDs, err
+	}
+
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
+		return uIDs, newError(res.Body)
+	}
+
+	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
+		err := json.NewDecoder(res.Body).Decode(&uIDs)
+		if err != nil {
+			return uIDs, err
+		}
+		return uIDs, res.Body.Close()
+	}
+
+	return uIDs, nil
 }

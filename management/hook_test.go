@@ -66,9 +66,47 @@ func TestHook(t *testing.T) {
 	})
 }
 
+func TestHookSecretsDifference(t *testing.T) {
+	for _, tc := range []struct {
+		s, other, difference HookSecrets
+	}{
+		{
+			s:          HookSecrets{"foo": "", "bar": ""},
+			other:      HookSecrets{"bar": ""},
+			difference: HookSecrets{"foo": ""},
+		},
+		{
+			s:          HookSecrets{"foo": "", "bar": "", "baz": ""},
+			other:      HookSecrets{"bar": ""},
+			difference: HookSecrets{"foo": "", "baz": ""},
+		},
+	} {
+		expect.Expect(t, tc.difference, tc.s.difference(tc.other))
+	}
+}
+
+func TestHookSecretsIntersection(t *testing.T) {
+	for _, tc := range []struct {
+		s, other, intersection HookSecrets
+	}{
+		{
+			s:            HookSecrets{"foo": "", "bar": ""},
+			other:        HookSecrets{"bar": ""},
+			intersection: HookSecrets{"bar": ""},
+		},
+		{
+			s:            HookSecrets{"foo": "", "bar": "", "baz": ""},
+			other:        HookSecrets{"bar": ""},
+			intersection: HookSecrets{"bar": ""},
+		},
+	} {
+		expect.Expect(t, tc.intersection, tc.s.intersection(tc.other))
+	}
+}
+
 func TestHookSecrets(t *testing.T) {
 
-	r := &HookSecrets{
+	r := HookSecrets{
 		"SECRET1": "value1",
 		"SECRET2": "value2",
 	}
@@ -100,12 +138,35 @@ func TestHookSecrets(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		(*r)["SECRET1"] = "othervalue"
-		delete(*r, "SECRET2") // patch allows only specifying one property
+		r["SECRET1"] = "othervalue"
+		delete(r, "SECRET2") // patch allows only specifying one property
 		err = m.Hook.UpdateSecrets(hook.GetID(), r)
 		if err != nil {
 			t.Fatal(err)
 		}
+		r, err := m.Hook.Secrets(hook.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, r["SECRET1"], "_VALUE_NOT_SHOWN_")
+		expect.Expect(t, r["SECRET2"], "_VALUE_NOT_SHOWN_")
+		t.Logf("%v\n", r)
+	})
+
+	t.Run("Replace", func(t *testing.T) {
+		r["SECRET1"] = "othervalue1"
+		r["SECRET3"] = "othervalue3"
+		err = m.Hook.ReplaceSecrets(hook.GetID(), r)
+		if err != nil {
+			t.Fatal(err)
+		}
+		r, err := m.Hook.Secrets(hook.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, r["SECRET1"], "_VALUE_NOT_SHOWN_")
+		expect.Expect(t, r["SECRET2"], "")
+		expect.Expect(t, r["SECRET3"], "_VALUE_NOT_SHOWN_")
 		t.Logf("%v\n", r)
 	})
 
@@ -114,10 +175,9 @@ func TestHookSecrets(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		expect.Expect(t, result["SECRET1"], "_VALUE_NOT_SHOWN_")
+		expect.Expect(t, result["SECRET3"], "_VALUE_NOT_SHOWN_")
 		t.Logf("%v\n", r)
-
-		expect.Expect(t, (*result)["SECRET1"], "_VALUE_NOT_SHOWN_")
-		expect.Expect(t, (*result)["SECRET2"], "_VALUE_NOT_SHOWN_")
 	})
 
 	t.Run("Delete", func(t *testing.T) {
@@ -125,15 +185,13 @@ func TestHookSecrets(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-
 		result, err := m.Hook.Secrets(hook.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
+		expect.Expect(t, result["SECRET1"], "")
+		expect.Expect(t, result["SECRET3"], "_VALUE_NOT_SHOWN_")
 		t.Logf("%v\n", r)
-
-		expect.Expect(t, (*result)["SECRET1"], "")
-		expect.Expect(t, (*result)["SECRET2"], "_VALUE_NOT_SHOWN_")
 	})
 
 	t.Run("RemoveAllSecrets", func(t *testing.T) {
@@ -141,24 +199,20 @@ func TestHookSecrets(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-
-		r = &HookSecrets{
+		r = HookSecrets{
 			"SECRET3": "secret3",
 		}
-
 		err = m.Hook.CreateSecrets(hook.GetID(), r)
 		if err != nil {
 			t.Fatal(err)
 		}
-
 		result, err := m.Hook.Secrets(hook.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
+		expect.Expect(t, result["SECRET1"], "")
+		expect.Expect(t, result["SECRET2"], "")
+		expect.Expect(t, result["SECRET3"], "_VALUE_NOT_SHOWN_")
 		t.Logf("%v\n", r)
-
-		expect.Expect(t, (*result)["SECRET1"], "")
-		expect.Expect(t, (*result)["SECRET2"], "")
-		expect.Expect(t, (*result)["SECRET3"], "_VALUE_NOT_SHOWN_")
 	})
 }

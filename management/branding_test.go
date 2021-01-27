@@ -3,6 +3,7 @@ package management
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/internal/testing/expect"
@@ -66,6 +67,57 @@ func TestBranding(t *testing.T) {
 			branding, _ = m.Branding.Read()
 			t.Logf("%v\n", branding)
 		})
+	})
+
+	c := &CustomDomain{
+		Domain: auth0.Stringf("%d.auth.uat.alexkappa.com", time.Now().UTC().Unix()),
+		Type:   auth0.String("auth0_managed_certs"),
+	}
+
+	err = m.CustomDomain.Create(c)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Cleanup(func() {
+		m.CustomDomain.Delete(c.GetID())
+		m.Branding.DeleteUniversalLogin()
+	})
+
+	t.Run("SetUniversalLogin", func(t *testing.T) {
+
+		body := `<!DOCTYPE html><html><head>{%- auth0:head -%}</head><body>{%- auth0:widget -%}</body></html>`
+
+		ul := &BrandingUniversalLogin{
+			Body: auth0.String(body),
+		}
+
+		err = m.Branding.SetUniversalLogin(ul)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expect.Expect(t, body, ul.GetBody())
+
+		t.Logf("%s\n", ul.GetBody())
+	})
+
+	t.Run("ReadUniversalLogin", func(t *testing.T) {
+
+		ul, err := m.Branding.UniversalLogin()
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		t.Logf("%s\n", ul.GetBody())
+	})
+
+	t.Run("DeleteUniversalLogin", func(t *testing.T) {
+
+		err = m.Branding.DeleteUniversalLogin()
+		if err != nil {
+			t.Fatal(err)
+		}
 	})
 }
 

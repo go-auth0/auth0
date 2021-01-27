@@ -1,5 +1,13 @@
 package management
 
+import (
+	"encoding/json"
+	"fmt"
+	"math"
+
+	"gopkg.in/auth0.v5"
+)
+
 type Tenant struct {
 	// Change password page settings
 	ChangePassword *TenantChangePassword `json:"change_password,omitempty"`
@@ -39,12 +47,20 @@ type Tenant struct {
 	// A set of URLs that are valid to redirect to after logout from Auth0.
 	AllowedLogoutURLs []interface{} `json:"allowed_logout_urls,omitempty"`
 
-	// Login session lifetime, how long the session will stay valid (unit:
-	// hours).
-	SessionLifetime *int `json:"session_lifetime,omitempty"`
+	// Login session lifetime, how long the session will stay valid (hours).
+	//
+	// When marshalling, values are rounded to the nearest integer. If the value
+	// is smaller than 1, hours are transformed to minutes and marshaled as
+	// session_lifetime_in_minutes instead.
+	SessionLifetime *float64 `json:"session_lifetime,omitempty"`
 
-	// Force a user to login after they have been inactive for the specified number (unit: hours)
-	IdleSessionLifetime *int `json:"idle_session_lifetime,omitempty"`
+	// Force a user to login after they have been inactive for the specified
+	// number (hours).
+	//
+	// When marshalling, values are rounded to the nearest integer. If the value
+	// is smaller than 1, hours are transformed to minutes and marshaled as
+	// idle_session_lifetime_in_minutes instead.
+	IdleSessionLifetime *float64 `json:"idle_session_lifetime,omitempty"`
 
 	// The selected sandbox version to be used for the extensibility environment
 	SandboxVersion *string `json:"sandbox_version,omitempty"`
@@ -58,6 +74,47 @@ type Tenant struct {
 
 	// Supported locales for the UI
 	EnabledLocales []interface{} `json:"enabled_locales,omitempty"`
+}
+
+func (t *Tenant) MarshalJSON() ([]byte, error) {
+
+	type tenant Tenant
+	type tenantWrapper struct {
+		*tenant
+		SessionLifetimeInMinutes     *int `json:"session_lifetime_in_minutes,omitempty"`
+		IdleSessionLifetimeInMinutes *int `json:"idle_session_lifetime_in_minutes,omitempty"`
+	}
+
+	w := &tenantWrapper{(*tenant)(t), nil, nil}
+
+	if t.SessionLifetime != nil {
+
+		sessionLifetime := t.GetSessionLifetime()
+
+		if sessionLifetime < 1 {
+			w.SessionLifetimeInMinutes = auth0.Int(int(math.Round(sessionLifetime * 60.0)))
+			w.SessionLifetime = nil
+			defer func() { w.SessionLifetime = &sessionLifetime }()
+		} else {
+			w.SessionLifetime = auth0.Float64(math.Round(sessionLifetime))
+		}
+	}
+
+	if t.IdleSessionLifetime != nil {
+
+		idleSessionLifetime := t.GetIdleSessionLifetime()
+
+		if idleSessionLifetime < 1 {
+			w.IdleSessionLifetimeInMinutes = auth0.Int(int(math.Round(idleSessionLifetime * 60.0)))
+			w.IdleSessionLifetime = nil
+			defer func() { w.IdleSessionLifetime = &idleSessionLifetime }()
+		} else {
+			w.IdleSessionLifetime = auth0.Float64(math.Round(idleSessionLifetime))
+		}
+
+	}
+
+	return json.Marshal(w)
 }
 
 type TenantChangePassword struct {
@@ -153,8 +210,84 @@ type TenantUniversalLoginColors struct {
 	// Primary button background color
 	Primary *string `json:"primary,omitempty"`
 
-	// Background color of your login pages
-	PageBackground *string `json:"page_background,omitempty"`
+	// Page background color.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
+	PageBackground *string `json:"-"`
+
+	// Page background gradient.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
+	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"-"`
+}
+
+func (c *TenantUniversalLoginColors) MarshalJSON() ([]byte, error) {
+	type colors TenantUniversalLoginColors
+	type colorsWrapper struct {
+		*colors
+		RawPageBackground interface{} `json:"page_background,omitempty"`
+	}
+
+	alias := &colorsWrapper{(*colors)(c), nil}
+
+	if c.PageBackground != nil && c.PageBackgroundGradient != nil {
+		return nil, fmt.Errorf("only one of PageBackground and PageBackgroundGradient is allowed")
+	} else if c.PageBackground != nil {
+		alias.RawPageBackground = c.PageBackground
+	} else if c.PageBackgroundGradient != nil {
+		alias.RawPageBackground = c.PageBackgroundGradient
+	}
+
+	return json.Marshal(alias)
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+//
+// It is required to handle the json field page_background, which can either
+// be a hex color string, or an object describing a gradient.
+func (c *TenantUniversalLoginColors) UnmarshalJSON(data []byte) error {
+
+	type colors BrandingColors
+	type colorsWrapper struct {
+		*colors
+		RawPageBackground json.RawMessage `json:"page_background,omitempty"`
+	}
+
+	alias := &colorsWrapper{(*colors)(c), nil}
+
+	err := json.Unmarshal(data, alias)
+	if err != nil {
+		return err
+	}
+
+	if alias.RawPageBackground != nil {
+
+		var v interface{}
+		err = json.Unmarshal(alias.RawPageBackground, &v)
+		if err != nil {
+			return err
+		}
+
+		switch rawPageBackground := v.(type) {
+		case string:
+			c.PageBackground = &rawPageBackground
+
+		case map[string]interface{}:
+			var gradient BrandingPageBackgroundGradient
+			err = json.Unmarshal(alias.RawPageBackground, &gradient)
+			if err != nil {
+				return err
+			}
+			c.PageBackgroundGradient = &gradient
+
+		default:
+			return fmt.Errorf("unexpected type for field page_background")
+		}
+	}
+
+	return nil
 }
 
 type TenantDeviceFlow struct {

@@ -38,6 +38,23 @@ func TestInt(t *testing.T) {
 	}
 }
 
+func TestFloat64(t *testing.T) {
+	for _, test := range []struct {
+		in       *float64
+		expected float64
+	}{
+		{nil, 0},
+		{Float64(0), 0},
+		{Float64(1), 1},
+		{Float64(-1), -1},
+	} {
+		have := Float64Value(test.in)
+		if have != test.expected {
+			t.Errorf("unexpected output. have %v, expected %v", have, test.expected)
+		}
+	}
+}
+
 func TestString(t *testing.T) {
 	for _, test := range []struct {
 		in       *string

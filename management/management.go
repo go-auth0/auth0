@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -59,6 +60,18 @@ func WithStaticToken(token string) ManagementOption {
 	}
 }
 
+// WithInsecure configures management to not use an authentication token and
+// use HTTP instead of HTTPS.
+//
+// This options is available for testing purposes and should not be used in
+// production.
+func WithInsecure() ManagementOption {
+	return func(m *Management) {
+		m.tokenSource = client.StaticToken("insecure")
+		m.url.Scheme = "http"
+	}
+}
+
 // WithClient configures management to use the provided client.
 func WithClient(client *http.Client) ManagementOption {
 	return func(m *Management) {
@@ -91,6 +104,9 @@ type Management struct {
 
 	// Log reads Auth0 Logs.
 	Log *LogManager
+
+	// LogStream reads Auth0 Logs.
+	LogStream *LogStreamManager
 
 	// RoleManager manages Auth0 Roles.
 	Role *RoleManager
@@ -176,15 +192,16 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	}
 
 	m.http = client.Wrap(m.http, m.tokenSource,
-		client.WithRateLimit(),
+		client.WithDebug(m.debug),
 		client.WithUserAgent(m.userAgent),
-		client.WithDebug(m.debug))
+		client.WithRateLimit())
 
 	m.Client = newClientManager(m)
 	m.ClientGrant = newClientGrantManager(m)
 	m.Connection = newConnectionManager(m)
 	m.CustomDomain = newCustomDomainManager(m)
 	m.Grant = newGrantManager(m)
+	m.LogStream = newLogStreamManager(m)
 	m.Log = newLogManager(m)
 	m.ResourceServer = newResourceServerManager(m)
 	m.Role = newRoleManager(m)
@@ -454,13 +471,27 @@ func Query(s string) RequestOption {
 	})
 }
 
-// Parameter is a generic configuration to add arbitrary query parameters to
-// requests made to Auth0.
+// Parameter configures a request to add arbitrary query parameters to requests
+// made to Auth0.
 func Parameter(key, value string) RequestOption {
 	return newRequestOption(func(r *http.Request) {
 		q := r.URL.Query()
 		q.Set(key, value)
 		r.URL.RawQuery = q.Encode()
+	})
+}
+
+// Header configures a request to add HTTP headers to requests made to Auth0.
+func Header(key, value string) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Header.Set(key, value)
+	})
+}
+
+// Body configures a requests body.
+func Body(b []byte) RequestOption {
+	return newRequestOption(func(r *http.Request) {
+		r.Body = ioutil.NopCloser(bytes.NewReader(b))
 	})
 }
 

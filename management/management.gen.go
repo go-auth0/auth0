@@ -127,6 +127,19 @@ func (b *BrandingPageBackgroundGradient) String() string {
 	return Stringify(b)
 }
 
+// GetBody returns the Body field if it's non-nil, zero value otherwise.
+func (b *BrandingUniversalLogin) GetBody() string {
+	if b == nil || b.Body == nil {
+		return ""
+	}
+	return *b.Body
+}
+
+// String returns a string representation of BrandingUniversalLogin.
+func (b *BrandingUniversalLogin) String() string {
+	return Stringify(b)
+}
+
 // GetAppType returns the AppType field if it's non-nil, zero value otherwise.
 func (c *Client) GetAppType() string {
 	if c == nil || c.AppType == nil {
@@ -2119,6 +2132,14 @@ func (c *ConnectionOptionsSAML) GetRequestTemplate() string {
 	return *c.RequestTemplate
 }
 
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
 // GetSignatureAlgorithm returns the SignatureAlgorithm field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSAML) GetSignatureAlgorithm() string {
 	if c == nil || c.SignatureAlgorithm == nil {
@@ -3111,6 +3132,217 @@ func (l *Log) String() string {
 	return Stringify(l)
 }
 
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetID() string {
+	if l == nil || l.ID == nil {
+		return ""
+	}
+	return *l.ID
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetName() string {
+	if l == nil || l.Name == nil {
+		return ""
+	}
+	return *l.Name
+}
+
+// GetStatus returns the Status field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetStatus() string {
+	if l == nil || l.Status == nil {
+		return ""
+	}
+	return *l.Status
+}
+
+// GetType returns the Type field if it's non-nil, zero value otherwise.
+func (l *LogStream) GetType() string {
+	if l == nil || l.Type == nil {
+		return ""
+	}
+	return *l.Type
+}
+
+// String returns a string representation of LogStream.
+func (l *LogStream) String() string {
+	return Stringify(l)
+}
+
+// GetAccountID returns the AccountID field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetAccountID() string {
+	if l == nil || l.AccountID == nil {
+		return ""
+	}
+	return *l.AccountID
+}
+
+// GetPartnerEventSource returns the PartnerEventSource field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetPartnerEventSource() string {
+	if l == nil || l.PartnerEventSource == nil {
+		return ""
+	}
+	return *l.PartnerEventSource
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAmazonEventBridge) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// String returns a string representation of LogStreamSinkAmazonEventBridge.
+func (l *LogStreamSinkAmazonEventBridge) String() string {
+	return Stringify(l)
+}
+
+// GetPartnerTopic returns the PartnerTopic field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetPartnerTopic() string {
+	if l == nil || l.PartnerTopic == nil {
+		return ""
+	}
+	return *l.PartnerTopic
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// GetResourceGroup returns the ResourceGroup field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetResourceGroup() string {
+	if l == nil || l.ResourceGroup == nil {
+		return ""
+	}
+	return *l.ResourceGroup
+}
+
+// GetSubscriptionID returns the SubscriptionID field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkAzureEventGrid) GetSubscriptionID() string {
+	if l == nil || l.SubscriptionID == nil {
+		return ""
+	}
+	return *l.SubscriptionID
+}
+
+// String returns a string representation of LogStreamSinkAzureEventGrid.
+func (l *LogStreamSinkAzureEventGrid) String() string {
+	return Stringify(l)
+}
+
+// GetAPIKey returns the APIKey field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkDatadog) GetAPIKey() string {
+	if l == nil || l.APIKey == nil {
+		return ""
+	}
+	return *l.APIKey
+}
+
+// GetRegion returns the Region field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkDatadog) GetRegion() string {
+	if l == nil || l.Region == nil {
+		return ""
+	}
+	return *l.Region
+}
+
+// String returns a string representation of LogStreamSinkDatadog.
+func (l *LogStreamSinkDatadog) String() string {
+	return Stringify(l)
+}
+
+// GetAuthorization returns the Authorization field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetAuthorization() string {
+	if l == nil || l.Authorization == nil {
+		return ""
+	}
+	return *l.Authorization
+}
+
+// GetContentFormat returns the ContentFormat field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetContentFormat() string {
+	if l == nil || l.ContentFormat == nil {
+		return ""
+	}
+	return *l.ContentFormat
+}
+
+// GetContentType returns the ContentType field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetContentType() string {
+	if l == nil || l.ContentType == nil {
+		return ""
+	}
+	return *l.ContentType
+}
+
+// GetEndpoint returns the Endpoint field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkHTTP) GetEndpoint() string {
+	if l == nil || l.Endpoint == nil {
+		return ""
+	}
+	return *l.Endpoint
+}
+
+// String returns a string representation of LogStreamSinkHTTP.
+func (l *LogStreamSinkHTTP) String() string {
+	return Stringify(l)
+}
+
+// GetDomain returns the Domain field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetDomain() string {
+	if l == nil || l.Domain == nil {
+		return ""
+	}
+	return *l.Domain
+}
+
+// GetPort returns the Port field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetPort() string {
+	if l == nil || l.Port == nil {
+		return ""
+	}
+	return *l.Port
+}
+
+// GetSecure returns the Secure field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetSecure() bool {
+	if l == nil || l.Secure == nil {
+		return false
+	}
+	return *l.Secure
+}
+
+// GetToken returns the Token field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSplunk) GetToken() string {
+	if l == nil || l.Token == nil {
+		return ""
+	}
+	return *l.Token
+}
+
+// String returns a string representation of LogStreamSinkSplunk.
+func (l *LogStreamSinkSplunk) String() string {
+	return Stringify(l)
+}
+
+// GetSourceAddress returns the SourceAddress field if it's non-nil, zero value otherwise.
+func (l *LogStreamSinkSumo) GetSourceAddress() string {
+	if l == nil || l.SourceAddress == nil {
+		return ""
+	}
+	return *l.SourceAddress
+}
+
+// String returns a string representation of LogStreamSinkSumo.
+func (l *LogStreamSinkSumo) String() string {
+	return Stringify(l)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (m *MultiFactor) GetEnabled() bool {
 	if m == nil || m.Enabled == nil {
@@ -3620,7 +3852,7 @@ func (t *Tenant) GetGuardianMFAPage() *TenantGuardianMFAPage {
 }
 
 // GetIdleSessionLifetime returns the IdleSessionLifetime field if it's non-nil, zero value otherwise.
-func (t *Tenant) GetIdleSessionLifetime() int {
+func (t *Tenant) GetIdleSessionLifetime() float64 {
 	if t == nil || t.IdleSessionLifetime == nil {
 		return 0
 	}
@@ -3644,7 +3876,7 @@ func (t *Tenant) GetSandboxVersion() string {
 }
 
 // GetSessionLifetime returns the SessionLifetime field if it's non-nil, zero value otherwise.
-func (t *Tenant) GetSessionLifetime() int {
+func (t *Tenant) GetSessionLifetime() float64 {
 	if t == nil || t.SessionLifetime == nil {
 		return 0
 	}
@@ -3947,6 +4179,14 @@ func (t *Ticket) GetMarkEmailAsVerified() bool {
 	return *t.MarkEmailAsVerified
 }
 
+// GetIncludeEmailInRedirect returns the IncludeEmailInRedirect field if it's non-nil, zero value otherwise.
+func (t *Ticket) GetIncludeEmailInRedirect() bool {
+	if t == nil || t.IncludeEmailInRedirect == nil {
+		return false
+	}
+	return *t.IncludeEmailInRedirect
+}
+
 // GetResultURL returns the ResultURL field if it's non-nil, zero value otherwise.
 func (t *Ticket) GetResultURL() string {
 	if t == nil || t.ResultURL == nil {
@@ -4168,6 +4408,14 @@ func (u *UserBlock) GetIP() string {
 // String returns a string representation of UserBlock.
 func (u *UserBlock) String() string {
 	return Stringify(u)
+}
+
+// GetAccessToken returns the AccessToken field if it's non-nil, zero value otherwise.
+func (u *UserIdentity) GetAccessToken() string {
+	if u == nil || u.AccessToken == nil {
+		return ""
+	}
+	return *u.AccessToken
 }
 
 // GetConnection returns the Connection field if it's non-nil, zero value otherwise.

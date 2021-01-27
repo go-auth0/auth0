@@ -1,3 +1,51 @@
+## v5.8.0
+
+* `management.Ticket`: Add field `IncludeEmailInRedirect` ([#180](https://github.com/go-auth0/auth0/pull/180))
+* `management.UserIdentity`: Add field `RefreshToken` ([#167](https://github.com/go-auth0/auth0/pull/167))
+
+## v5.7.0
+
+* `management.ClientRefreshToken`: Add `InfiniteTokenLifetime`, `InfiniteIdleTokenLifetime` and `IdleTokenLifetime` fields ([#184](https://github.com/go-auth0/auth0/pull/184)).
+* `management.User`: Fix possible inconsistencies with `EmailVerified` field ([#181](https://github.com/go-auth0/auth0/pull/181)).
+
+## v5.6.0
+
+* `management.UserManager`: `Link()` links two user accounts together ([#178](https://github.com/go-auth0/auth0/pull/178)).
+
+## v5.5.0
+
+* `management.HookSecrets`: `HookSecrets` are not a pointer anymore ([#176](https://github.com/go-auth0/auth0/pull/176)).
+* `management.HookManager`: `ReplaceSecrets` is introduced to enable PUT semantics for hook secrets ([#176](https://github.com/go-auth0/auth0/pull/176)).
+* `management.TenantUniversalLoginColors`: Marshal/unmarshal branding colors correctly ([#177](https://github.com/go-auth0/auth0/pull/177)).
+
+## v5.4.0
+
+* `management.Branding`: add support for `BrandingUniversalLogin` ([#161](https://github.com/go-auth0/auth0/pull/161)).
+
+## v5.3.0
+
+* `management.ConnectionOptions`: unmarshal options only if not nil ([#165](https://github.com/go-auth0/auth0/pull/165)).
+* `management.HookManager.List`: was using the wrong endpoint ([162](https://github.com/go-auth0/auth0/pull/162)).
+* `management.ResourceServerManager.List`: was using the wrong endpoint.
+
+## v5.2.2
+
+* `management.UserIdentity`: Add `AccessToken` field ([#113](https://github.com/go-auth0/auth0/pull/113)).
+* `management.ConnectionOptionsSAML`: Add missing `SetUserAttributes` field ([#159](https://github.com/go-auth0/auth0/pull/159)).
+
+## v5.2.1
+
+* `management.WithInsecure`: allow insecure HTTP scheme to enable testing / mocking.
+
+## v5.2.0
+
+* `management.LogStream`: new resource now available ([#144](https://github.com/go-auth0/auth0/pull/144))
+
+## v5.1.0
+
+* `management.Tenant`: changed `SessionTimeout` and `IdleSessionTimeout` to `float64`. Values smaller than 1 will be marshalled with a `_in_minutes` suffix ([#156](https://github.com/go-auth0/auth0/pull/156)).
+* `management.Connection`: removed `RawOptions` and handle (un-)marshalling internally.
+
 ## v5.0.0
 
 * `management.RequestOption`: renamed from `management.ListOption` and is now used with all requests to the Auth0 Management API ([#151](https://github.com/go-auth0/auth0/pull/151)).

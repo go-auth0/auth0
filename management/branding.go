@@ -3,6 +3,7 @@ package management
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 type Branding struct {
@@ -22,14 +23,16 @@ type BrandingColors struct {
 	// Accent color
 	Primary *string `json:"primary,omitempty"`
 
-	// Page background color
-	// Only one of PageBackground and PageBackgroundGradient should be set.
-	// If both fields are set, PageBackground takes priority.
+	// Page background color.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
 	PageBackground *string `json:"-"`
 
-	// Page background gradient
-	// Only one of PageBackground and PageBackgroundGradient should be set.
-	// If both fields are set, PageBackground takes priority.
+	// Page background gradient.
+	//
+	// Only one of PageBackground and PageBackgroundGradient should be set. If
+	// both fields are set, PageBackground takes priority.
 	PageBackgroundGradient *BrandingPageBackgroundGradient `json:"-"`
 }
 
@@ -116,6 +119,10 @@ type BrandingFont struct {
 	URL *string `json:"url,omitempty"`
 }
 
+type BrandingUniversalLogin struct {
+	Body *string `json:"body,omitempty"`
+}
+
 type BrandingManager struct {
 	*Management
 }
@@ -137,4 +144,41 @@ func (m *BrandingManager) Read(opts ...RequestOption) (b *Branding, err error) {
 // See: https://auth0.com/docs/api/management/v2#!/Branding/patch_branding
 func (m *BrandingManager) Update(t *Branding, opts ...RequestOption) (err error) {
 	return m.Request("PATCH", m.URI("branding"), t, opts...)
+}
+
+// Retrieve template for New Universal Login Experience.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/get_universal_login
+func (m *BrandingManager) UniversalLogin(opts ...RequestOption) (ul *BrandingUniversalLogin, err error) {
+	err = m.Request("GET", m.URI("branding", "templates", "universal-login"), &ul, opts...)
+	return
+}
+
+// Set template for the New Universal Login Experience.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/put_universal_login
+func (m *BrandingManager) SetUniversalLogin(ul *BrandingUniversalLogin, opts ...RequestOption) (err error) {
+
+	req, err := m.NewRequest("PUT", m.URI("branding", "templates", "universal-login"), ul.Body, opts...)
+	if err != nil {
+		return err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode >= http.StatusBadRequest {
+		return newError(res.Body)
+	}
+
+	return nil
+}
+
+// Delete template for New Universal Login Experience.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Branding/delete_universal_login
+func (m *BrandingManager) DeleteUniversalLogin(opts ...RequestOption) (err error) {
+	return m.Request("DELETE", m.URI("branding", "templates", "universal-login"), nil, opts...)
 }
