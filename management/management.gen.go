@@ -402,6 +402,30 @@ func (c *ClientRefreshToken) GetExpirationType() string {
 	return *c.ExpirationType
 }
 
+// GetIdleTokenLifetime returns the IdleTokenLifetime field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetIdleTokenLifetime() int {
+	if c == nil || c.IdleTokenLifetime == nil {
+		return 0
+	}
+	return *c.IdleTokenLifetime
+}
+
+// GetInfiniteIdleTokenLifetime returns the InfiniteIdleTokenLifetime field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetInfiniteIdleTokenLifetime() bool {
+	if c == nil || c.InfiniteIdleTokenLifetime == nil {
+		return false
+	}
+	return *c.InfiniteIdleTokenLifetime
+}
+
+// GetInfiniteTokenLifetime returns the InfiniteTokenLifetime field if it's non-nil, zero value otherwise.
+func (c *ClientRefreshToken) GetInfiniteTokenLifetime() bool {
+	if c == nil || c.InfiniteTokenLifetime == nil {
+		return false
+	}
+	return *c.InfiniteTokenLifetime
+}
+
 // GetLeeway returns the Leeway field if it's non-nil, zero value otherwise.
 func (c *ClientRefreshToken) GetLeeway() int {
 	if c == nil || c.Leeway == nil {
@@ -4142,6 +4166,14 @@ func (t *TenantUniversalLoginColors) GetPageBackground() string {
 	return *t.PageBackground
 }
 
+// GetPageBackgroundGradient returns the PageBackgroundGradient field.
+func (t *TenantUniversalLoginColors) GetPageBackgroundGradient() *BrandingPageBackgroundGradient {
+	if t == nil {
+		return nil
+	}
+	return t.PageBackgroundGradient
+}
+
 // GetPrimary returns the Primary field if it's non-nil, zero value otherwise.
 func (t *TenantUniversalLoginColors) GetPrimary() string {
 	if t == nil || t.Primary == nil {
@@ -4171,20 +4203,20 @@ func (t *Ticket) GetEmail() string {
 	return *t.Email
 }
 
-// GetMarkEmailAsVerified returns the MarkEmailAsVerified field if it's non-nil, zero value otherwise.
-func (t *Ticket) GetMarkEmailAsVerified() bool {
-	if t == nil || t.MarkEmailAsVerified == nil {
-		return false
-	}
-	return *t.MarkEmailAsVerified
-}
-
 // GetIncludeEmailInRedirect returns the IncludeEmailInRedirect field if it's non-nil, zero value otherwise.
 func (t *Ticket) GetIncludeEmailInRedirect() bool {
 	if t == nil || t.IncludeEmailInRedirect == nil {
 		return false
 	}
 	return *t.IncludeEmailInRedirect
+}
+
+// GetMarkEmailAsVerified returns the MarkEmailAsVerified field if it's non-nil, zero value otherwise.
+func (t *Ticket) GetMarkEmailAsVerified() bool {
+	if t == nil || t.MarkEmailAsVerified == nil {
+		return false
+	}
+	return *t.MarkEmailAsVerified
 }
 
 // GetResultURL returns the ResultURL field if it's non-nil, zero value otherwise.
@@ -4442,6 +4474,14 @@ func (u *UserIdentity) GetProvider() string {
 	return *u.Provider
 }
 
+// GetRefreshToken returns the RefreshToken field if it's non-nil, zero value otherwise.
+func (u *UserIdentity) GetRefreshToken() string {
+	if u == nil || u.RefreshToken == nil {
+		return ""
+	}
+	return *u.RefreshToken
+}
+
 // GetUserID returns the UserID field if it's non-nil, zero value otherwise.
 func (u *UserIdentity) GetUserID() string {
 	if u == nil || u.UserID == nil {
@@ -4452,6 +4492,43 @@ func (u *UserIdentity) GetUserID() string {
 
 // String returns a string representation of UserIdentity.
 func (u *UserIdentity) String() string {
+	return Stringify(u)
+}
+
+// GetConnectionID returns the ConnectionID field if it's non-nil, zero value otherwise.
+func (u *UserIdentityLink) GetConnectionID() string {
+	if u == nil || u.ConnectionID == nil {
+		return ""
+	}
+	return *u.ConnectionID
+}
+
+// GetLinkWith returns the LinkWith field if it's non-nil, zero value otherwise.
+func (u *UserIdentityLink) GetLinkWith() string {
+	if u == nil || u.LinkWith == nil {
+		return ""
+	}
+	return *u.LinkWith
+}
+
+// GetProvider returns the Provider field if it's non-nil, zero value otherwise.
+func (u *UserIdentityLink) GetProvider() string {
+	if u == nil || u.Provider == nil {
+		return ""
+	}
+	return *u.Provider
+}
+
+// GetUserID returns the UserID field if it's non-nil, zero value otherwise.
+func (u *UserIdentityLink) GetUserID() string {
+	if u == nil || u.UserID == nil {
+		return ""
+	}
+	return *u.UserID
+}
+
+// String returns a string representation of UserIdentityLink.
+func (u *UserIdentityLink) String() string {
 	return Stringify(u)
 }
 
