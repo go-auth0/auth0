@@ -7,7 +7,7 @@
 
 ## Documentation
 
-Reference documentation can be found at [godoc.org](https://godoc.org/gopkg.in/auth0.v1). For more information about [Auth0](http://auth0.com/) please visit the [Auth0 Docs](http://docs.auth0.com/) page.
+Reference documentation can be found at [pkg.go.dev](https://pkg.go.dev/gopkg.in/auth0.v5). For more information about [Auth0](http://auth0.com/) please visit the [Auth0 Docs](http://docs.auth0.com/) page.
 
 ## Management API
 
