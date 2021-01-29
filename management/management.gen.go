@@ -3898,6 +3898,107 @@ func (r *RuleList) String() string {
 	return Stringify(r)
 }
 
+// GetCert returns the Cert field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetCert() string {
+	if s == nil || s.Cert == nil {
+		return ""
+	}
+	return *s.Cert
+}
+
+// GetCurrent returns the Current field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetCurrent() bool {
+	if s == nil || s.Current == nil {
+		return false
+	}
+	return *s.Current
+}
+
+// GetCurrentSince returns the CurrentSince field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetCurrentSince() time.Time {
+	if s == nil || s.CurrentSince == nil {
+		return time.Time{}
+	}
+	return *s.CurrentSince
+}
+
+// GetCurrentUntil returns the CurrentUntil field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetCurrentUntil() time.Time {
+	if s == nil || s.CurrentUntil == nil {
+		return time.Time{}
+	}
+	return *s.CurrentUntil
+}
+
+// GetFingerprint returns the Fingerprint field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetFingerprint() string {
+	if s == nil || s.Fingerprint == nil {
+		return ""
+	}
+	return *s.Fingerprint
+}
+
+// GetKID returns the KID field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetKID() string {
+	if s == nil || s.KID == nil {
+		return ""
+	}
+	return *s.KID
+}
+
+// GetNext returns the Next field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetNext() bool {
+	if s == nil || s.Next == nil {
+		return false
+	}
+	return *s.Next
+}
+
+// GetPKCS7 returns the PKCS7 field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetPKCS7() string {
+	if s == nil || s.PKCS7 == nil {
+		return ""
+	}
+	return *s.PKCS7
+}
+
+// GetPrevious returns the Previous field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetPrevious() bool {
+	if s == nil || s.Previous == nil {
+		return false
+	}
+	return *s.Previous
+}
+
+// GetRevoked returns the Revoked field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetRevoked() bool {
+	if s == nil || s.Revoked == nil {
+		return false
+	}
+	return *s.Revoked
+}
+
+// GetRevokedAt returns the RevokedAt field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetRevokedAt() time.Time {
+	if s == nil || s.RevokedAt == nil {
+		return time.Time{}
+	}
+	return *s.RevokedAt
+}
+
+// GetThumbprint returns the Thumbprint field if it's non-nil, zero value otherwise.
+func (s *SigningKey) GetThumbprint() string {
+	if s == nil || s.Thumbprint == nil {
+		return ""
+	}
+	return *s.Thumbprint
+}
+
+// String returns a string representation of SigningKey.
+func (s *SigningKey) String() string {
+	return Stringify(s)
+}
+
 // GetChangePassword returns the ChangePassword field.
 func (t *Tenant) GetChangePassword() *TenantChangePassword {
 	if t == nil {

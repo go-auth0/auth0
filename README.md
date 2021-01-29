@@ -77,6 +77,7 @@ The following Auth0 resources are supported:
 - [x] [Tenants](https://auth0.com/docs/api/management/v2#!/Tenants/get_settings)
 - [ ] [Anomaly](https://auth0.com/docs/api/management/v2#!/Anomaly/get_ips_by_id)
 - [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
+- [x] [Signing Keys](https://auth0.com/docs/api/management/v2#!/Keys/get_signing_keys)
 
 ## What is Auth0?
 
