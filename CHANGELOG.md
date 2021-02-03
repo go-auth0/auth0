@@ -1,3 +1,7 @@
+## v5.9.0
+
+* `management.ConnectionOptions`: Add `set_user_attributes` to more connection options ([#192](https://github.com/go-auth0/auth0/pull/192)).
+
 ## v5.8.0
 
 * `management.Ticket`: Add field `IncludeEmailInRedirect` ([#180](https://github.com/go-auth0/auth0/pull/180))
