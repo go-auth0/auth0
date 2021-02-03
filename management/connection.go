@@ -205,6 +205,8 @@ type ConnectionOptions struct {
 	Configuration map[string]interface{} `json:"configuration,omitempty"`
 
 	StrategyVersion *int `json:"strategy_version,omitempty"`
+
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
 type ConnectionOptionsGoogleOAuth2 struct {
