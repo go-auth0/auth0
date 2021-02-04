@@ -561,6 +561,14 @@ func (c *ConnectionOptions) GetRequiresUsername() bool {
 	return *c.RequiresUsername
 }
 
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptions) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
 // GetStrategyVersion returns the StrategyVersion field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptions) GetStrategyVersion() int {
 	if c == nil || c.StrategyVersion == nil {
