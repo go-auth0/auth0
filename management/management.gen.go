@@ -2029,6 +2029,14 @@ func (c *ConnectionOptionsOIDC) GetScope() string {
 	return *c.Scope
 }
 
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOIDC) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
 // GetTenantDomain returns the TenantDomain field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsOIDC) GetTenantDomain() string {
 	if c == nil || c.TenantDomain == nil {

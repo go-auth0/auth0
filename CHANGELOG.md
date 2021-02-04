@@ -1,3 +1,7 @@
+## v5.11.0
+
+* `management.ConnectionOptionsOIDC`: Add `set_user_attributes` to OIDC connection options.
+
 ## v5.10.0
 
 * `management.ConnectionOptions`: Add missing `set_user_attributes` to connection options ([#194](https://github.com/go-auth0/auth0/pull/194)).

@@ -523,6 +523,8 @@ type ConnectionOptionsOIDC struct {
 	TokenEndpoint         *string `json:"token_endpoint"`
 
 	Scope *string `json:"scope,omitempty"`
+
+	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
 }
 
 func (c *ConnectionOptionsOIDC) Scopes() []string {
