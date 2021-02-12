@@ -37,6 +37,15 @@ type User struct {
 	// The user's nickname
 	Nickname *string `json:"nickname,omitempty"`
 
+	// The screen name, handle, or alias that this user identifies themselves with
+	ScreenName *string `json:"screen_name,omitempty"`
+
+	// The user-defined UTF-8 string describing their account
+	Description *string `json:"description,omitempty"`
+
+	// The user-defined location for this account’s profile
+	Location *string `json:"location,omitempty"`
+
 	// The user's password (mandatory for non SMS connections)
 	Password *string `json:"password,omitempty"`
 
@@ -84,6 +93,9 @@ type User struct {
 	// The user's picture url
 	Picture *string `json:"picture,omitempty"`
 
+	// A URL provided by the user in association with their profile
+	URL *string `json:"url,omitempty"`
+
 	// True if the user is blocked from the application, false if the user is enabled
 	Blocked *bool `json:"blocked,omitempty"`
 
@@ -98,7 +110,6 @@ type User struct {
 //
 // We have to use a custom one due to possible inconsistencies in value types.
 func (u *User) UnmarshalJSON(b []byte) error {
-
 	type user User
 	type userAlias struct {
 		*user
@@ -130,8 +141,8 @@ func (u *User) UnmarshalJSON(b []byte) error {
 
 	return nil
 }
-func (u *User) MarshalJSON() ([]byte, error) {
 
+func (u *User) MarshalJSON() ([]byte, error) {
 	type user User
 	type userAlias struct {
 		*user
@@ -176,7 +187,6 @@ type UserIdentity struct {
 //
 // See https://community.auth0.com/t/users-user-id-returns-inconsistent-type-for-identities-user-id/39236
 func (i *UserIdentity) UnmarshalJSON(b []byte) error {
-
 	type userIdentity UserIdentity
 	type userIdentityAlias struct {
 		*userIdentity
@@ -207,7 +217,6 @@ func (i *UserIdentity) UnmarshalJSON(b []byte) error {
 }
 
 func (i *UserIdentity) MarshalJSON() ([]byte, error) {
-
 	type userIdentity UserIdentity
 	type userIdentityAlias struct {
 		*userIdentity

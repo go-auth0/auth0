@@ -4336,6 +4336,14 @@ func (u *User) GetCreatedAt() time.Time {
 	return *u.CreatedAt
 }
 
+// GetDescription returns the Description field if it's non-nil, zero value otherwise.
+func (u *User) GetDescription() string {
+	if u == nil || u.Description == nil {
+		return ""
+	}
+	return *u.Description
+}
+
 // GetEmail returns the Email field if it's non-nil, zero value otherwise.
 func (u *User) GetEmail() string {
 	if u == nil || u.Email == nil {
@@ -4390,6 +4398,14 @@ func (u *User) GetLastLogin() time.Time {
 		return time.Time{}
 	}
 	return *u.LastLogin
+}
+
+// GetLocation returns the Location field if it's non-nil, zero value otherwise.
+func (u *User) GetLocation() string {
+	if u == nil || u.Location == nil {
+		return ""
+	}
+	return *u.Location
 }
 
 // GetLoginsCount returns the LoginsCount field if it's non-nil, zero value otherwise.
@@ -4448,12 +4464,28 @@ func (u *User) GetPicture() string {
 	return *u.Picture
 }
 
+// GetScreenName returns the ScreenName field if it's non-nil, zero value otherwise.
+func (u *User) GetScreenName() string {
+	if u == nil || u.ScreenName == nil {
+		return ""
+	}
+	return *u.ScreenName
+}
+
 // GetUpdatedAt returns the UpdatedAt field if it's non-nil, zero value otherwise.
 func (u *User) GetUpdatedAt() time.Time {
 	if u == nil || u.UpdatedAt == nil {
 		return time.Time{}
 	}
 	return *u.UpdatedAt
+}
+
+// GetURL returns the URL field if it's non-nil, zero value otherwise.
+func (u *User) GetURL() string {
+	if u == nil || u.URL == nil {
+		return ""
+	}
+	return *u.URL
 }
 
 // GetUsername returns the Username field if it's non-nil, zero value otherwise.
