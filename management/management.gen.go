@@ -885,14 +885,6 @@ func (c *ConnectionOptionsAzureAD) GetNestedGroups() bool {
 	return *c.NestedGroups
 }
 
-// GetSetEmailVerified returns the SetEmailVerified field if it's non-nil, zero value otherwise.
-func (c *ConnectionOptionsAzureAD) GetSetEmailVerified() string {
-	if c == nil || c.SetEmailVerified == nil {
-		return ""
-	}
-	return *c.SetEmailVerified
-}
-
 // GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsAzureAD) GetSetUserAttributes() string {
 	if c == nil || c.SetUserAttributes == nil {
@@ -907,6 +899,14 @@ func (c *ConnectionOptionsAzureAD) GetTenantDomain() string {
 		return ""
 	}
 	return *c.TenantDomain
+}
+
+// GetTrustEmailVerified returns the TrustEmailVerified field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetTrustEmailVerified() string {
+	if c == nil || c.TrustEmailVerified == nil {
+		return ""
+	}
+	return *c.TrustEmailVerified
 }
 
 // GetUseCommonEndpoint returns the UseCommonEndpoint field if it's non-nil, zero value otherwise.

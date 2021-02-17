@@ -627,8 +627,8 @@ type ConnectionOptionsAzureAD struct {
 	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty" scope:"ext_agreed_terms"`
 	AssignedPlans   *bool `json:"ext_assigned_plans,omitempty" scope:"ext_assigned_plans"`
 
-	SetUserAttributes *string `json:"set_user_root_attributes,omitempty"`
-	SetEmailVerified  *string `json:"should_trust_email_verified_connection,omitempty"`
+	SetUserAttributes  *string `json:"set_user_root_attributes,omitempty"`
+	TrustEmailVerified *string `json:"should_trust_email_verified_connection,omitempty"`
 }
 
 func (c *ConnectionOptionsAzureAD) Scopes() []string {
