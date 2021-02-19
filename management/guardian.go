@@ -11,6 +11,16 @@ type MultiFactor struct {
 	TrialExpired *bool `json:"trial_expired,omitempty"`
 }
 
+type MultiFactorPolicies []string
+
+type MultiFactorProvider struct {
+	//One of auth0|twilio|phone-message-hook
+	Provider *string `json:"provider,omitempty"`
+}
+
+type MultiFactorMessageTypes struct {
+	MessageTypes *[]string `json:"message_types,omitempty"`
+}
 type MultiFactorSMSTemplate struct {
 	// Message sent to the user when they are invited to enroll with a phone number
 	EnrollmentMessage *string `json:"enrollment_message,omitempty"`
@@ -57,6 +67,7 @@ type GuardianManager struct {
 func newGuardianManager(m *Management) *GuardianManager {
 	return &GuardianManager{
 		&MultiFactorManager{m,
+			&MultiFactorPhone{m},
 			&MultiFactorSMS{m},
 			&MultiFactorPush{m},
 			&MultiFactorEmail{m},
@@ -68,7 +79,7 @@ func newGuardianManager(m *Management) *GuardianManager {
 
 type MultiFactorManager struct {
 	*Management
-
+	Phone *MultiFactorPhone
 	SMS   *MultiFactorSMS
 	Push  *MultiFactorPush
 	Email *MultiFactorEmail
@@ -82,6 +93,60 @@ type MultiFactorManager struct {
 func (m *MultiFactorManager) List(opts ...RequestOption) (mf []*MultiFactor, err error) {
 	err = m.Request("GET", m.URI("guardian", "factors"), &mf, opts...)
 	return
+}
+
+// Get MFA policies
+//
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/get_policies
+func (m *MultiFactorManager) Policy(opts ...RequestOption) (p *MultiFactorPolicies, err error) {
+	err = m.Request("GET", m.URI("guardian", "policies"), p, opts...)
+	return
+}
+
+// Update MFA policies
+//
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/put_policies
+//Expects an array of either ["all-applications"] or ["confidence-score"]
+func (m *MultiFactorManager) UpdatePolicy(p *MultiFactorPolicies, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "policies"), p, opts...)
+}
+
+type MultiFactorPhone struct{ *Management }
+
+// Update MFA Phone to be enabled.
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/put_factors_by_name
+func (m *MultiFactorPhone) Enable(enabled bool, opts ...RequestOption) error {
+	// An endpoint for enabling Phone doesn't exist yet so we go towards
+	// sms endpoint to be consistent with the other methods available for this struct.
+	return m.Request("PUT", m.URI("guardian", "factors", "sms"), &MultiFactor{
+		Enabled: &enabled,
+	}, opts...)
+}
+
+// Retrieves the MFA Phone provider, one of ["auth0" or "twilio" or "phone-message-hook"]
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/get_selected_provider
+func (m *MultiFactorPhone) Provider(opts ...RequestOption) (p *MultiFactorProvider, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors", "phone", "selected-provider"), &p, opts...)
+	return
+}
+
+// Update MFA Phone provider, one of ["auth0" or "twilio" or "phone-message-hook"]
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/put_selected_provider
+func (m *MultiFactorPhone) UpdateProvider(p *MultiFactorProvider, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "phone", "selected-provider"), &p, opts...)
+}
+
+// Retrieves the MFA Phone Message Type
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/get_message_types
+func (m *MultiFactorPhone) MessageType(opts ...RequestOption) (mt *MultiFactorMessageTypes, err error) {
+	err = m.Request("GET", m.URI("guardian", "factors", "phone", "message-types"), &mt, opts...)
+	return
+}
+
+// Update MFA Phone Message Type
+// See: https://auth0.com/docs/api/management/v2/#!/Guardian/put_message_types
+func (m *MultiFactorPhone) UpdateMessageType(mt *MultiFactorMessageTypes, opts ...RequestOption) error {
+	return m.Request("PUT", m.URI("guardian", "factors", "phone", "message-types"), &mt, opts...)
 }
 
 type MultiFactorSMS struct{ *Management }
