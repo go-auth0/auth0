@@ -901,6 +901,14 @@ func (c *ConnectionOptionsAzureAD) GetTenantDomain() string {
 	return *c.TenantDomain
 }
 
+// GetTrustEmailVerified returns the TrustEmailVerified field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetTrustEmailVerified() string {
+	if c == nil || c.TrustEmailVerified == nil {
+		return ""
+	}
+	return *c.TrustEmailVerified
+}
+
 // GetUseCommonEndpoint returns the UseCommonEndpoint field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsAzureAD) GetUseCommonEndpoint() bool {
 	if c == nil || c.UseCommonEndpoint == nil {
