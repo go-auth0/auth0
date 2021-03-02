@@ -71,6 +71,9 @@ type Connection struct {
 	Realms []interface{} `json:"realms,omitempty"`
 
 	Metadata map[string]string `json:"metadata,omitempty"`
+
+	// Provisioning Ticket URL is Ticket URL for Active Directory/LDAP, etc.
+	ProvisioningTicketUrl *string `json:"provisioning_ticket_url,omitempty"`
 }
 
 func (c *Connection) MarshalJSON() ([]byte, error) {

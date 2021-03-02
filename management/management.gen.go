@@ -495,6 +495,14 @@ func (c *Connection) GetName() string {
 	return *c.Name
 }
 
+// GetProvisioningTicketUrl returns the ProvisioningTicketUrl field if it's non-nil, zero value otherwise.
+func (c *Connection) GetProvisioningTicketUrl() string {
+	if c == nil || c.ProvisioningTicketUrl == nil {
+		return ""
+	}
+	return *c.ProvisioningTicketUrl
+}
+
 // GetStrategy returns the Strategy field if it's non-nil, zero value otherwise.
 func (c *Connection) GetStrategy() string {
 	if c == nil || c.Strategy == nil {
