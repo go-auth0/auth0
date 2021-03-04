@@ -18,7 +18,7 @@ type MultiFactorProvider struct {
 	Provider *string `json:"provider,omitempty"`
 }
 
-type MultiFactorMessageTypes struct {
+type PhoneMessageTypes struct {
 	MessageTypes *[]string `json:"message_types,omitempty"`
 }
 type MultiFactorSMSTemplate struct {
@@ -138,14 +138,14 @@ func (m *MultiFactorPhone) UpdateProvider(p *MultiFactorProvider, opts ...Reques
 
 // Retrieves the MFA Phone Message Type
 // See: https://auth0.com/docs/api/management/v2/#!/Guardian/get_message_types
-func (m *MultiFactorPhone) MessageType(opts ...RequestOption) (mt *MultiFactorMessageTypes, err error) {
+func (m *MultiFactorPhone) MessageTypes(opts ...RequestOption) (mt *PhoneMessageTypes, err error) {
 	err = m.Request("GET", m.URI("guardian", "factors", "phone", "message-types"), &mt, opts...)
 	return
 }
 
 // Update MFA Phone Message Type
 // See: https://auth0.com/docs/api/management/v2/#!/Guardian/put_message_types
-func (m *MultiFactorPhone) UpdateMessageType(mt *MultiFactorMessageTypes, opts ...RequestOption) error {
+func (m *MultiFactorPhone) UpdateMessageTypes(mt *PhoneMessageTypes, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("guardian", "factors", "phone", "message-types"), &mt, opts...)
 }
 

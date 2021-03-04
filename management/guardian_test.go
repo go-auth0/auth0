@@ -44,15 +44,15 @@ import (
 					t.Error(err)
 				}
 			})
-			t.Run("Message-type", func (t *testing.T) {
+			t.Run("Message-types", func (t *testing.T) {
 				messageTypes := []string{"voice"}
-				err := m.Guardian.MultiFactor.Phone.UpdateMessageType(&MultiFactorMessageTypes{
+				err := m.Guardian.MultiFactor.Phone.UpdateMessageTypes(&PhoneMessageTypes{
 					MessageTypes: &messageTypes,
 				})
 				if err != nil {
 					t.Error(err)
 				}
-				mt, _ := m.Guardian.MultiFactor.Phone.MessageType()
+				mt, _ := m.Guardian.MultiFactor.Phone.MessageTypes()
 				t.Logf("%v\n", mt)
 
 			})
