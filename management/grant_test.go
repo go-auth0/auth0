@@ -9,7 +9,7 @@ func TestGrant(t *testing.T) {
 	t.Run("List", func(t *testing.T) {
 		var gs []*Grant
 		gs, err = m.Grant.List()
-		if err != nil {
+		if err == nil {
 			t.Fatal(err)
 		}
 		t.Logf("%v\n", gs)
