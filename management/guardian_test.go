@@ -6,7 +6,7 @@ import (
 	"gopkg.in/auth0.v5"
 )
 
-	func TestGuardian(t *testing.T) {
+func TestGuardian(t *testing.T) {
 
 	t.Run("MultiFactor", func(t *testing.T) {
 
@@ -27,10 +27,10 @@ import (
 			p, _ := m.Guardian.MultiFactor.Policy()
 			t.Logf("%v\n", p)
 		})
-		
-		t.Run("Phone", func (t *testing.T){
 
-			t.Run("Provider", func (t *testing.T) {
+		t.Run("Phone", func(t *testing.T) {
+
+			t.Run("Provider", func(t *testing.T) {
 				err := m.Guardian.MultiFactor.Phone.UpdateProvider(&MultiFactorProvider{Provider: auth0.String("phone-message-hook")})
 				if err != nil {
 					t.Error(err)
@@ -38,13 +38,13 @@ import (
 				p, _ := m.Guardian.MultiFactor.Phone.Provider()
 				t.Logf("%v\n", p)
 			})
-			t.Run("Enable", func (t *testing.T) {
+			t.Run("Enable", func(t *testing.T) {
 				err := m.Guardian.MultiFactor.Phone.Enable(false)
 				if err != nil {
 					t.Error(err)
 				}
 			})
-			t.Run("Message-types", func (t *testing.T) {
+			t.Run("Message-types", func(t *testing.T) {
 				messageTypes := []string{"voice"}
 				err := m.Guardian.MultiFactor.Phone.UpdateMessageTypes(&PhoneMessageTypes{
 					MessageTypes: &messageTypes,
