@@ -3175,6 +3175,14 @@ func (l *Log) GetDate() time.Time {
 	return *l.Date
 }
 
+// GetDescription returns the Description field if it's non-nil, zero value otherwise.
+func (l *Log) GetDescription() string {
+	if l == nil || l.Description == nil {
+		return ""
+	}
+	return *l.Description
+}
+
 // GetID returns the ID field if it's non-nil, zero value otherwise.
 func (l *Log) GetID() string {
 	if l == nil || l.ID == nil {

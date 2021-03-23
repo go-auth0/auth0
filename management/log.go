@@ -69,6 +69,9 @@ type Log struct {
 	// The log event type
 	Type *string `json:"type"`
 
+	// The log event description
+	Description *string `json:"description"`
+
 	// The id of the client
 	ClientID *string `json:"client_id"`
 
