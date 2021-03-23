@@ -102,8 +102,9 @@ func TestConnection(t *testing.T) {
 			DisableSignup:        auth0.Bool(true),
 			RequiresUsername:     auth0.Bool(false),
 
-			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
-			Configuration: map[string]interface{}{"foo": "bar"},
+			CustomScripts:      map[string]interface{}{"get_user": "function( { return callback(null) }"},
+			Configuration:      map[string]interface{}{"foo": "bar"},
+			NonPersistentAttrs: &[]string{"ethnicity", "gender"},
 		}
 
 		err = m.Connection.Update(id, c)

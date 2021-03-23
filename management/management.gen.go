@@ -553,6 +553,14 @@ func (c *ConnectionOptions) GetImportMode() bool {
 	return *c.ImportMode
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptions) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetPasswordPolicy returns the PasswordPolicy field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptions) GetPasswordPolicy() string {
 	if c == nil || c.PasswordPolicy == nil {
@@ -630,6 +638,14 @@ func (c *ConnectionOptionsAD) GetLogoURL() string {
 	return *c.LogoURL
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAD) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsAD) GetSetUserAttributes() string {
 	if c == nil || c.SetUserAttributes == nil {
@@ -673,6 +689,14 @@ func (c *ConnectionOptionsADFS) GetLogoURL() string {
 		return ""
 	}
 	return *c.LogoURL
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsADFS) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
@@ -734,6 +758,14 @@ func (c *ConnectionOptionsApple) GetName() bool {
 		return false
 	}
 	return *c.Name
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsApple) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetScope returns the Scope field if it's non-nil, zero value otherwise.
@@ -893,6 +925,14 @@ func (c *ConnectionOptionsAzureAD) GetNestedGroups() bool {
 	return *c.NestedGroups
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsAzureAD) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsAzureAD) GetSetUserAttributes() string {
 	if c == nil || c.SetUserAttributes == nil {
@@ -984,6 +1024,14 @@ func (c *ConnectionOptionsEmail) GetName() string {
 		return ""
 	}
 	return *c.Name
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsEmail) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetOTP returns the OTP field.
@@ -1130,6 +1178,14 @@ func (c *ConnectionOptionsFacebook) GetManagePages() bool {
 		return false
 	}
 	return *c.ManagePages
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsFacebook) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetPagesManageCTA returns the PagesManageCTA field if it's non-nil, zero value otherwise.
@@ -1481,6 +1537,14 @@ func (c *ConnectionOptionsGitHub) GetGist() bool {
 	return *c.Gist
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGitHub) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetNotifications returns the Notifications field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsGitHub) GetNotifications() bool {
 	if c == nil || c.Notifications == nil {
@@ -1782,6 +1846,14 @@ func (c *ConnectionOptionsGoogleOAuth2) GetModerator() bool {
 	return *c.Moderator
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleOAuth2) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetOrkut returns the Orkut field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsGoogleOAuth2) GetOrkut() bool {
 	if c == nil || c.Orkut == nil {
@@ -1899,6 +1971,14 @@ func (c *ConnectionOptionsLinkedin) GetEmail() bool {
 	return *c.Email
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsLinkedin) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetProfile returns the Profile field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsLinkedin) GetProfile() bool {
 	if c == nil || c.Profile == nil {
@@ -1950,6 +2030,14 @@ func (c *ConnectionOptionsOAuth2) GetClientSecret() string {
 		return ""
 	}
 	return *c.ClientSecret
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOAuth2) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetScope returns the Scope field if it's non-nil, zero value otherwise.
@@ -2035,6 +2123,14 @@ func (c *ConnectionOptionsOIDC) GetLogoURL() string {
 		return ""
 	}
 	return *c.LogoURL
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsOIDC) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetScope returns the Scope field if it's non-nil, zero value otherwise.
@@ -2135,6 +2231,14 @@ func (c *ConnectionOptionsSalesforce) GetCommunityBaseURL() string {
 	return *c.CommunityBaseURL
 }
 
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSalesforce) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
 // GetProfile returns the Profile field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSalesforce) GetProfile() bool {
 	if c == nil || c.Profile == nil {
@@ -2218,6 +2322,14 @@ func (c *ConnectionOptionsSAML) GetMetadataXML() string {
 		return ""
 	}
 	return *c.MetadataXML
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetProtocolBinding returns the ProtocolBinding field if it's non-nil, zero value otherwise.
@@ -2335,6 +2447,22 @@ func (c *ConnectionOptionsSAMLIdpInitiated) GetEnabled() bool {
 		return false
 	}
 	return *c.Enabled
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLIdpInitiated) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLIdpInitiated) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
 }
 
 // String returns a string representation of ConnectionOptionsSAMLIdpInitiated.
@@ -2537,6 +2665,14 @@ func (c *ConnectionOptionsWindowsLive) GetFilesUpdate() bool {
 		return false
 	}
 	return *c.FilesUpdate
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsWindowsLive) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
 }
 
 // GetNotes returns the Notes field if it's non-nil, zero value otherwise.
