@@ -3475,6 +3475,24 @@ func (m *MultiFactorOTP) String() string {
 	return Stringify(m)
 }
 
+// String returns a string representation of MultiFactorPhone.
+func (m *MultiFactorPhone) String() string {
+	return Stringify(m)
+}
+
+// GetProvider returns the Provider field if it's non-nil, zero value otherwise.
+func (m *MultiFactorProvider) GetProvider() string {
+	if m == nil || m.Provider == nil {
+		return ""
+	}
+	return *m.Provider
+}
+
+// String returns a string representation of MultiFactorProvider.
+func (m *MultiFactorProvider) String() string {
+	return Stringify(m)
+}
+
 // GetAccessKeyID returns the AccessKeyID field if it's non-nil, zero value otherwise.
 func (m *MultiFactorProviderAmazonSNS) GetAccessKeyID() string {
 	if m == nil || m.AccessKeyID == nil {
@@ -3627,6 +3645,19 @@ func (p *Permission) String() string {
 
 // String returns a string representation of PermissionList.
 func (p *PermissionList) String() string {
+	return Stringify(p)
+}
+
+// GetMessageTypes returns the MessageTypes field if it's non-nil, zero value otherwise.
+func (p *PhoneMessageTypes) GetMessageTypes() []string {
+	if p == nil || p.MessageTypes == nil {
+		return nil
+	}
+	return *p.MessageTypes
+}
+
+// String returns a string representation of PhoneMessageTypes.
+func (p *PhoneMessageTypes) String() string {
 	return Stringify(p)
 }
 
