@@ -29,7 +29,7 @@ func newGrantManager(m *Management) *GrantManager {
 //
 // See: https://auth0.com/docs/api/management/v2#!/Grants/get_grants
 func (m *GrantManager) List(opts ...RequestOption) (g []*Grant, err error) {
-	err = m.Request("GET", m.URI("grants"), &g, opts...)
+	err = m.Request("GET", m.URI("grants"), &g, applyListDefaults(opts))
 	return
 }
 
