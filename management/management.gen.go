@@ -4585,6 +4585,14 @@ func (u *UserIdentity) GetAccessToken() string {
 	return *u.AccessToken
 }
 
+// GetAccessTokenSecret returns the AccessTokenSecret field if it's non-nil, zero value otherwise.
+func (u *UserIdentity) GetAccessTokenSecret() string {
+	if u == nil || u.AccessTokenSecret == nil {
+		return ""
+	}
+	return *u.AccessTokenSecret
+}
+
 // GetConnection returns the Connection field if it's non-nil, zero value otherwise.
 func (u *UserIdentity) GetConnection() string {
 	if u == nil || u.Connection == nil {
