@@ -1,3 +1,24 @@
+## v5.12.0
+* `management.Connection`: Change Metadata property to be string map ([#160](https://github.com/go-auth0/auth0/pull/160))
+* `management.Connection`: Add Auth0 managed `ProvisioningTicketUrl to root connection object ([#201](https://github.com/go-auth0/auth0/pull/201))
+* `management.ConnectionOptions`: Adds missing AzureAD connection `TrustEmailVerified` option ([#198](https://github.com/go-auth0/auth0/pull/198))
+* `management.ConnectionOptions`: Add missing user fields provided by Twitter ([#197](https://github.com/go-auth0/auth0/pull/197))
+* `management.Guardian`: Add MFA Enrollment to Guardian ([#157](https://github.com/go-auth0/auth0/pull/157))
+* `management.Guardian`: Extend MFA SMS Providers ([#200](https://github.com/go-auth0/auth0/pull/200))
+* `management.Log`: Add description field to Logs ([#188](https://github.com/go-auth0/auth0/pull/188))
+* `management.Prompt`: Adds `identifier_first` to New Universal Login Prompt ([#187](https://github.com/go-auth0/auth0/pull/187))
+* `management.UserIdentity`: Add `AccessTokenSecret` to User Identity ([#196](https://github.com/go-auth0/auth0/pull/196))
+* `management.UserIdentity`: Add MFA Enrollments for a User ([#157](https://github.com/go-auth0/auth0/pull/157))
+
+## v5.11.0
+* `management.ConnectionOptions`: Adds SetUserAttributes to ConnectionOptions to connections ([#194](https://github.com/go-auth0/auth0/pull/194))
+
+## v5.10.0
+* `management.ConnectionOptions`: Adds set_user_root_attributes to more connections ([#192](https://github.com/go-auth0/auth0/pull/192))
+
+## v5.9.0 
+* `management.ConnectionManager`: Return nil when ConnectionManager.ReadByName() name field is empty ([#186](https://github.com/go-auth0/auth0/pull/186))
+
 ## v5.8.0
 
 * `management.Ticket`: Add field `IncludeEmailInRedirect` ([#180](https://github.com/go-auth0/auth0/pull/180))
