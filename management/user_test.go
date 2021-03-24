@@ -230,6 +230,29 @@ func TestUser(t *testing.T) {
 		}
 	})
 
+	t.Run("Enrollments", func(t *testing.T) {
+		es, err := m.User.Enrollments(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", es)
+	})
+
+	t.Run("RegenerateRecoveryCode", func(t *testing.T) {
+		r, err := m.User.RegenerateRecoveryCode(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", r)
+	})
+
+	t.Run("InvalidateRememberBrowser", func(t *testing.T) {
+		err := m.User.InvalidateRememberBrowser(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
 	t.Run("Delete", func(t *testing.T) {
 		err = m.User.Delete(u.GetID())
 		if err != nil {
