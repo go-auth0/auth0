@@ -374,4 +374,55 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 		expect.Expect(t, o.GetSignInEndpoint(), "https://saml.identity/provider")
 		expect.Expect(t, o.GetTenantDomain(), "example.com")
 	})
+
+	t.Run("AD", func(t *testing.T) {
+		a := &Connection{
+			Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
+			Strategy: auth0.String("ad"),
+		}
+
+		defer func() { m.Connection.Delete(a.GetID()) }()
+
+		if err := m.Connection.Create(a); err != nil {
+			t.Fatal(err)
+		}
+
+		if a.ProvisioningTicketUrl == nil {
+			t.Fatal("provisioning_ticket_url should be returned")
+		}
+
+		o, ok := a.Options.(*ConnectionOptionsAD)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+
+		expect.Expect(t, o.GetCertAuth(), false)
+		expect.Expect(t, o.GetKerberos(), false)
+		expect.Expect(t, o.GetDisableCache(), false)
+
+		o.DisableCache = auth0.Bool(true)
+		if err := m.Connection.Update(
+			a.GetID(),
+			&Connection{
+				Options: o,
+			},
+		); err != nil {
+			t.Fatal(err)
+		}
+
+		o, _ = a.Options.(*ConnectionOptionsAD)
+		expect.Expect(t, o.GetDisableCache(), true)
+
+		// failed to update with changing provisioning_ticket_url
+		err := m.Connection.Update(
+			a.GetID(),
+			&Connection{
+				ProvisioningTicketUrl: auth0.String("https://invalid-domain.com"),
+				Options:               o,
+			},
+		)
+		if err == nil {
+			t.Fatal("err should be returned")
+		}
+	})
 }
