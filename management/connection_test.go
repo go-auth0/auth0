@@ -1,6 +1,7 @@
 package management
 
 import (
+	"log"
 	"testing"
 	"time"
 
@@ -159,9 +160,10 @@ func TestConnectionOptions(t *testing.T) {
 					"example.com",
 					"api.example.com",
 				},
-				Profile:  auth0.Bool(true),
-				Calendar: auth0.Bool(true),
-				Youtube:  auth0.Bool(false),
+				Profile:            auth0.Bool(true),
+				Calendar:           auth0.Bool(true),
+				Youtube:            auth0.Bool(false),
+				NonPersistentAttrs: &[]string{"gender", "ethnicity", "favorite_color"},
 			},
 		}
 
@@ -171,16 +173,33 @@ func TestConnectionOptions(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-
-		o, ok := g.Options.(*ConnectionOptionsGoogleOAuth2)
+		c, err := m.Connection.Read(g.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		o, ok := c.Options.(*ConnectionOptionsGoogleOAuth2)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
 		expect.Expect(t, o.GetProfile(), true)
 		expect.Expect(t, o.GetCalendar(), true)
 		expect.Expect(t, o.GetYoutube(), false)
 		expect.Expect(t, o.Scopes(), []string{"email", "profile", "calendar"})
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
+
+		o.NonPersistentAttrs = &[]string{""}
+		g.Options = o
+		err = m.Connection.Update(g.GetID(), g)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c, err = m.Connection.Read(g.GetID())
+		if err != nil {
+			log.Fatal(err)
+		}
+		o, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{""})
 
 		t.Logf("%s\n", g)
 	})
@@ -196,15 +215,20 @@ func TestConnectionOptions(t *testing.T) {
 		o.SetScopes(false, "baz")
 		expect.Expect(t, len(o.Scopes()), 2)
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
+
 	})
 
 	t.Run("OAuth2", func(t *testing.T) {
 		o := &ConnectionOptionsOAuth2{
-			Scripts:          map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
-			TokenURL:         auth0.String("https://example.com/oauth2/token"),
-			AuthorizationURL: auth0.String("https://example.com/oauth2/authorize"),
-			ClientID:         auth0.String("test-client"),
-			ClientSecret:     auth0.String("superSecretKey"),
+			Scripts:            map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			TokenURL:           auth0.String("https://example.com/oauth2/token"),
+			AuthorizationURL:   auth0.String("https://example.com/oauth2/authorize"),
+			ClientID:           auth0.String("test-client"),
+			ClientSecret:       auth0.String("superSecretKey"),
+			NonPersistentAttrs: &[]string{"gender", "ethnicity", "favorite_color"},
 		}
 		expect.Expect(t, len(o.Scopes()), 0)
 
@@ -215,7 +239,10 @@ func TestConnectionOptions(t *testing.T) {
 		o.SetScopes(false, "baz")
 		expect.Expect(t, len(o.Scopes()), 2)
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
 
+		o.NonPersistentAttrs = &[]string{"foo", "bar"}
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"foo", "bar"})
 	})
 
 	t.Run("Email", func(t *testing.T) {
@@ -249,7 +276,6 @@ func TestConnectionOptions(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-
 		o, ok := e.Options.(*ConnectionOptionsEmail)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
