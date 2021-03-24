@@ -1,3 +1,6 @@
+## v5.13.0
+* `management.ConnectionOptionsOIDC`: Add `SetUserAttributes` to OIDC Strategy
+
 ## v5.12.0
 * `management.Connection`: Change Metadata property to be string map ([#160](https://github.com/go-auth0/auth0/pull/160))
 * `management.Connection`: Add Auth0 managed `ProvisioningTicketUrl to root connection object ([#201](https://github.com/go-auth0/auth0/pull/201))
