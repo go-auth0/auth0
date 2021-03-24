@@ -3738,6 +3738,14 @@ func (p *PhoneMessageTypes) String() string {
 	return Stringify(p)
 }
 
+// GetIdentifierFirst returns the IdentifierFirst field if it's non-nil, zero value otherwise.
+func (p *Prompt) GetIdentifierFirst() bool {
+	if p == nil || p.IdentifierFirst == nil {
+		return false
+	}
+	return *p.IdentifierFirst
+}
+
 // String returns a string representation of Prompt.
 func (p *Prompt) String() string {
 	return Stringify(p)
