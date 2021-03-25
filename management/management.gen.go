@@ -2971,6 +2971,11 @@ func (g *Grant) String() string {
 	return Stringify(g)
 }
 
+// String returns a string representation of GrantList.
+func (g *GrantList) String() string {
+	return Stringify(g)
+}
+
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
 func (h *Hook) GetEnabled() bool {
 	if h == nil || h.Enabled == nil {
