@@ -2640,6 +2640,11 @@ func (c *ConnectionOptionsWindowsLive) String() string {
 	return Stringify(c)
 }
 
+// String returns a string representation of CreateEnrollmentTicket.
+func (c *CreateEnrollmentTicket) String() string {
+	return Stringify(c)
+}
+
 // GetDomain returns the Domain field if it's non-nil, zero value otherwise.
 func (c *CustomDomain) GetDomain() string {
 	if c == nil || c.Domain == nil {
@@ -3008,6 +3013,11 @@ func (e *Enrollment) GetStatus() string {
 
 // String returns a string representation of Enrollment.
 func (e *Enrollment) String() string {
+	return Stringify(e)
+}
+
+// String returns a string representation of EnrollmentTicket.
+func (e *EnrollmentTicket) String() string {
 	return Stringify(e)
 }
 
