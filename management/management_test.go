@@ -22,6 +22,10 @@ var (
 )
 
 func init() {
+	initTestManagement()
+}
+
+func initTestManagement() {
 	var err error
 	m, err = New(domain,
 		WithClientCredentials(clientID, clientSecret),
