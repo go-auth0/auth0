@@ -39,6 +39,3 @@ vendor/
 # Ignore all local history of files
 .history
 .ionide
-
-## Vim ##
-*.swp
