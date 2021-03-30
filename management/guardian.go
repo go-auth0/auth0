@@ -1,6 +1,10 @@
 package management
 
-import "time"
+import (
+	"encoding/json"
+	"net/http"
+	"time"
+)
 
 type Enrollment struct {
 	// ID for this enrollment
@@ -33,7 +37,7 @@ type MultiFactor struct {
 type MultiFactorPolicies []string
 
 type MultiFactorProvider struct {
-	//One of auth0|twilio|phone-message-hook
+	// One of auth0|twilio|phone-message-hook
 	Provider *string `json:"provider,omitempty"`
 }
 
@@ -100,6 +104,48 @@ func newGuardianManager(m *Management) *GuardianManager {
 
 type EnrollmentManager struct {
 	*Management
+}
+
+type CreateEnrollmentTicket struct {
+	// UserID is the user_id for the enrollment ticket.
+	UserID string `json:"user_id,omitempty"`
+	// Email is an alternate email address to which the enrollment email will
+	// be sent. If empty, the email will be sent to the user's default email
+	// address.
+	Email string `json:"email,omitempty"`
+	// SendMail indicates whether to send an email to the user to start the
+	// multi-factor authentication enrollment process.
+	SendMail bool `json:"send_mail,omitempty"`
+}
+
+type EnrollmentTicket struct {
+	TicketID  string `json:"ticket_id"`
+	TicketURL string `json:"ticket_url"`
+}
+
+// CreateTicket creates a multi-factor authentication enrollment ticket for
+// a specified user.
+//
+// See: https://auth0.com/docs/api/management/v2#!/Guardian/post_ticket
+func (m *EnrollmentManager) CreateTicket(t *CreateEnrollmentTicket, opts ...RequestOption) (EnrollmentTicket, error) {
+	req, err := m.NewRequest("POST", m.URI("guardian", "enrollments", "ticket"), t, opts...)
+	if err != nil {
+		return EnrollmentTicket{}, err
+	}
+
+	res, err := m.Do(req)
+	if err != nil {
+		return EnrollmentTicket{}, err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return EnrollmentTicket{}, newError(res.Body)
+	}
+
+	var out EnrollmentTicket
+	err = json.NewDecoder(res.Body).Decode(&out)
+	return out, err
 }
 
 // Get retrieves an enrollment (including its status and type).
