@@ -429,7 +429,8 @@ func (m *UserManager) RemovePermissions(id string, permissions []*Permission, op
 	return m.Request("DELETE", m.URI("users", id, "permissions"), &p, opts...)
 }
 
-// Blocks retrieves a list of blocked IP addresses of a particular user.
+// Blocks retrieves a list of blocked IP addresses of a particular user using the
+// user ID.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks_by_id
 func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, error) {
@@ -438,14 +439,36 @@ func (m *UserManager) Blocks(id string, opts ...RequestOption) ([]*UserBlock, er
 	return b.BlockedFor, err
 }
 
+// Blocks retrieves a list of blocked IP addresses of a particular user using
+// any of the user identifiers: username, phone number or email.
+//
+// See: https://auth0.com/docs/api/management/v2#!/User_Blocks/get_user_blocks
+func (m *UserManager) BlocksByIdentifier(identifier string, opts ...RequestOption) ([]*UserBlock, error) {
+	b := new(userBlock)
+	opts = append(opts, Parameter("identifier", identifier))
+	err := m.Request("GET", m.URI("user-blocks"), &b, opts...)
+	return b.BlockedFor, err
+}
+
 // Unblock a user that was blocked due to an excessive amount of incorrectly
-// provided credentials.
+// provided credentials using the user ID.
 //
 // Note: This endpoint does not unblock users that were blocked by admins.
 //
 // See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks_by_id
 func (m *UserManager) Unblock(id string, opts ...RequestOption) error {
 	return m.Request("DELETE", m.URI("user-blocks", id), nil, opts...)
+}
+
+// Unblock a user that was blocked due to an excessive amount of incorrectly
+// provided credentials using any of the user identifiers: username, phone number or email.
+//
+// Note: This endpoint does not unblock users that were blocked by admins.
+//
+// See: https://auth0.com/docs/api/management/v2#!/User_Blocks/delete_user_blocks
+func (m *UserManager) UnblockByIdentifier(identifier string, opts ...RequestOption) error {
+	opts = append(opts, Parameter("identifier", identifier))
+	return m.Request("DELETE", m.URI("user-blocks"), nil, opts...)
 }
 
 // Enrollments retrieves all Guardian enrollments for a user.

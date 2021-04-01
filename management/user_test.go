@@ -223,8 +223,23 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", b)
 	})
 
+	t.Run("BlocksByIdentifier", func(t *testing.T) {
+		b, err := m.User.BlocksByIdentifier(u.GetUsername())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", b)
+	})
+
 	t.Run("Unblock", func(t *testing.T) {
 		err := m.User.Unblock(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("UnblockByIdentifier", func(t *testing.T) {
+		err := m.User.UnblockByIdentifier(u.GetUsername())
 		if err != nil {
 			t.Fatal(err)
 		}
