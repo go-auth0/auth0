@@ -161,10 +161,9 @@ func TestConnectionOptions(t *testing.T) {
 					"example.com",
 					"api.example.com",
 				},
-				Profile:            auth0.Bool(true),
-				Calendar:           auth0.Bool(true),
-				Youtube:            auth0.Bool(false),
-				NonPersistentAttrs: &[]string{"gender", "ethnicity", "favorite_color"},
+				Profile:  auth0.Bool(true),
+				Calendar: auth0.Bool(true),
+				Youtube:  auth0.Bool(false),
 			},
 		}
 
@@ -190,11 +189,22 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.GetCalendar(), true)
 		expect.Expect(t, o.GetYoutube(), false)
 		expect.Expect(t, o.Scopes(), []string{"email", "profile", "calendar"})
+
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		c, _ = m.Connection.Read(g.GetID())
+		o, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
 		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
 
 		o.NonPersistentAttrs = &[]string{""}
-		g.Options = o
-		err = m.Connection.Update(g.GetID(), g)
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -300,6 +310,17 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.GetDisableSignup(), true)
 		expect.Expect(t, o.GetName(), "Test-Connection-Email")
 
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		err = m.Connection.Update(e.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		e, _ = m.Connection.Read(e.GetID())
+		o, ok = e.Options.(*ConnectionOptionsEmail)
+
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
 		t.Logf("%s\n", e)
 	})
 

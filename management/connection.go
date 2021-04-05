@@ -524,17 +524,17 @@ type ConnectionOptionsOIDC struct {
 	DomainAliases []interface{} `json:"domain_aliases,omitempty"`
 	LogoURL       *string       `json:"icon_url,omitempty"`
 
-	DiscoveryURL          *string   `json:"discovery_url"`
-	AuthorizationEndpoint *string   `json:"authorization_endpoint"`
-	Issuer                *string   `json:"issuer"`
-	JWKSURI               *string   `json:"jwks_uri"`
-	Type                  *string   `json:"type"`
-	UserInfoEndpoint      *string   `json:"userinfo_endpoint"`
-	TokenEndpoint         *string   `json:"token_endpoint"`
-	Scope                 *string   `json:"scope,omitempty"`
+	DiscoveryURL          *string `json:"discovery_url"`
+	AuthorizationEndpoint *string `json:"authorization_endpoint"`
+	Issuer                *string `json:"issuer"`
+	JWKSURI               *string `json:"jwks_uri"`
+	Type                  *string `json:"type"`
+	UserInfoEndpoint      *string `json:"userinfo_endpoint"`
+	TokenEndpoint         *string `json:"token_endpoint"`
+	Scope                 *string `json:"scope,omitempty"`
 
-	SetUserAttributes     *string   `json:"set_user_root_attributes,omitempty"`
-	NonPersistentAttrs    *[]string `json:"non_persistent_attrs,omitempty"`
+	SetUserAttributes  *string   `json:"set_user_root_attributes,omitempty"`
+	NonPersistentAttrs *[]string `json:"non_persistent_attrs,omitempty"`
 }
 
 func (c *ConnectionOptionsOIDC) Scopes() []string {
