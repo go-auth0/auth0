@@ -1,6 +1,7 @@
 package management
 
 import (
+	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
 	"time"
@@ -167,7 +168,11 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() {
+			m.Connection.Delete(g.GetID())
+			assertDeleted(t, g)
+
+		}()
 
 		err := m.Connection.Create(g)
 		if err != nil {
@@ -270,7 +275,10 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(e.GetID()) }()
+		defer func() {
+			m.Connection.Delete(e.GetID())
+			assertDeleted(t, e)
+		}()
 
 		err := m.Connection.Create(e)
 		if err != nil {
@@ -320,7 +328,10 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(s.GetID()) }()
+		defer func() {
+			m.Connection.Delete(s.GetID())
+			assertDeleted(t, s)
+		}()
 
 		err := m.Connection.Create(s)
 		if err != nil {
@@ -386,7 +397,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 				},
 			},
 		}
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() {
+			m.Connection.Delete(g.GetID())
+			assertDeleted(t, g)
+		}()
 
 		err := m.Connection.Create(g)
 		if err != nil {
@@ -408,7 +422,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 			Strategy: auth0.String("ad"),
 		}
 
-		defer func() { m.Connection.Delete(a.GetID()) }()
+		defer func() {
+			m.Connection.Delete(a.GetID())
+			assertDeleted(t, a)
+		}()
 
 		if err := m.Connection.Create(a); err != nil {
 			t.Fatal(err)
@@ -452,4 +469,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 			t.Fatal("err should be returned")
 		}
 	})
+}
+
+func assertDeleted(t *testing.T, c *Connection) {
+	c, err := m.Connection.Read(c.GetID())
+	assert.Nil(t, c)
+	assert.EqualError(t, err, "404 Not Found: The connection does not exist")
 }
