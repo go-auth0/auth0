@@ -1,6 +1,8 @@
 package management
 
 import (
+	"github.com/stretchr/testify/assert"
+	"log"
 	"testing"
 	"time"
 
@@ -102,8 +104,9 @@ func TestConnection(t *testing.T) {
 			DisableSignup:        auth0.Bool(true),
 			RequiresUsername:     auth0.Bool(false),
 
-			CustomScripts: map[string]interface{}{"get_user": "function( { return callback(null) }"},
-			Configuration: map[string]interface{}{"foo": "bar"},
+			CustomScripts:      map[string]interface{}{"get_user": "function( { return callback(null) }"},
+			Configuration:      map[string]interface{}{"foo": "bar"},
+			NonPersistentAttrs: &[]string{"ethnicity", "gender"},
 		}
 
 		err = m.Connection.Update(id, c)
@@ -164,22 +167,54 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() {
+			m.Connection.Delete(g.GetID())
+			assertDeleted(t, g)
+
+		}()
 
 		err := m.Connection.Create(g)
 		if err != nil {
 			t.Fatal(err)
 		}
-
-		o, ok := g.Options.(*ConnectionOptionsGoogleOAuth2)
+		c, err := m.Connection.Read(g.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		o, ok := c.Options.(*ConnectionOptionsGoogleOAuth2)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
 		}
-
 		expect.Expect(t, o.GetProfile(), true)
 		expect.Expect(t, o.GetCalendar(), true)
 		expect.Expect(t, o.GetYoutube(), false)
 		expect.Expect(t, o.Scopes(), []string{"email", "profile", "calendar"})
+
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		c, _ = m.Connection.Read(g.GetID())
+		o, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
+
+		o.NonPersistentAttrs = &[]string{""}
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c, err = m.Connection.Read(g.GetID())
+		if err != nil {
+			log.Fatal(err)
+		}
+		o, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{""})
 
 		t.Logf("%s\n", g)
 	})
@@ -195,15 +230,20 @@ func TestConnectionOptions(t *testing.T) {
 		o.SetScopes(false, "baz")
 		expect.Expect(t, len(o.Scopes()), 2)
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
+
 	})
 
 	t.Run("OAuth2", func(t *testing.T) {
 		o := &ConnectionOptionsOAuth2{
-			Scripts:          map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
-			TokenURL:         auth0.String("https://example.com/oauth2/token"),
-			AuthorizationURL: auth0.String("https://example.com/oauth2/authorize"),
-			ClientID:         auth0.String("test-client"),
-			ClientSecret:     auth0.String("superSecretKey"),
+			Scripts:            map[string]interface{}{"fetchUserProfile": "function( { return callback(null) }"},
+			TokenURL:           auth0.String("https://example.com/oauth2/token"),
+			AuthorizationURL:   auth0.String("https://example.com/oauth2/authorize"),
+			ClientID:           auth0.String("test-client"),
+			ClientSecret:       auth0.String("superSecretKey"),
+			NonPersistentAttrs: &[]string{"gender", "ethnicity", "favorite_color"},
 		}
 		expect.Expect(t, len(o.Scopes()), 0)
 
@@ -214,7 +254,10 @@ func TestConnectionOptions(t *testing.T) {
 		o.SetScopes(false, "baz")
 		expect.Expect(t, len(o.Scopes()), 2)
 		expect.Expect(t, o.Scopes(), []string{"bar", "foo"})
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
 
+		o.NonPersistentAttrs = &[]string{"foo", "bar"}
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"foo", "bar"})
 	})
 
 	t.Run("Email", func(t *testing.T) {
@@ -242,13 +285,15 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(e.GetID()) }()
+		defer func() {
+			m.Connection.Delete(e.GetID())
+			assertDeleted(t, e)
+		}()
 
 		err := m.Connection.Create(e)
 		if err != nil {
 			t.Fatal(err)
 		}
-
 		o, ok := e.Options.(*ConnectionOptionsEmail)
 		if !ok {
 			t.Fatalf("unexpected type %T", o)
@@ -265,6 +310,17 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.GetDisableSignup(), true)
 		expect.Expect(t, o.GetName(), "Test-Connection-Email")
 
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		err = m.Connection.Update(e.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		e, _ = m.Connection.Read(e.GetID())
+		o, ok = e.Options.(*ConnectionOptionsEmail)
+
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
 		t.Logf("%s\n", e)
 	})
 
@@ -293,7 +349,10 @@ func TestConnectionOptions(t *testing.T) {
 			},
 		}
 
-		defer func() { m.Connection.Delete(s.GetID()) }()
+		defer func() {
+			m.Connection.Delete(s.GetID())
+			assertDeleted(t, s)
+		}()
 
 		err := m.Connection.Create(s)
 		if err != nil {
@@ -359,7 +418,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 				},
 			},
 		}
-		defer func() { m.Connection.Delete(g.GetID()) }()
+		defer func() {
+			m.Connection.Delete(g.GetID())
+			assertDeleted(t, g)
+		}()
 
 		err := m.Connection.Create(g)
 		if err != nil {
@@ -381,7 +443,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 			Strategy: auth0.String("ad"),
 		}
 
-		defer func() { m.Connection.Delete(a.GetID()) }()
+		defer func() {
+			m.Connection.Delete(a.GetID())
+			assertDeleted(t, a)
+		}()
 
 		if err := m.Connection.Create(a); err != nil {
 			t.Fatal(err)
@@ -425,4 +490,10 @@ ZsUkLw2I7zI/dNlWdB8Xp7v+3w9sX5N3J/WuJ1KOO5m26kRlHQo7EzT3974g
 			t.Fatal("err should be returned")
 		}
 	})
+}
+
+func assertDeleted(t *testing.T, c *Connection) {
+	c, err := m.Connection.Read(c.GetID())
+	assert.Nil(t, c)
+	assert.EqualError(t, err, "404 Not Found: The connection does not exist")
 }
