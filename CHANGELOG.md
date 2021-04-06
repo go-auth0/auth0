@@ -1,3 +1,10 @@
+## v5.14.0
+* `management.SigningKey`: Add support for listing, reading, rotating and revoking an Auth0 Tenant's signing key ([#191](https://github.com/go-auth0/auth0/pull/191))
+* `management.Grant`: Support pagination response when listing Grants ([#205](https://github.com/go-auth0/auth0/pull/205))
+* `management.Guardian`: Support to create a MFA enrollment ticket ([#207](https://github.com/go-auth0/auth0/pull/207))
+* `management.User`: Support to retrieve blocked IP addresses & unblock users using username, phone number or email ([#208](https://github.com/go-auth0/auth0/pull/208))
+* `management.Connection`: Support deny list (non persistent attributes) of attributes Auth0 stores per connection object ([#203](https://github.com/go-auth0/auth0/pull/203))
+
 ## v5.13.0
 * `management.ConnectionOptionsOIDC`: Add `SetUserAttributes` to OIDC Strategy
 
