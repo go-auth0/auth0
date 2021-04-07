@@ -1,3 +1,6 @@
+## v5.14.1
+* `management.Connection`: Add support for Auth0 SAML connection entityId option ([#209](https://github.com/go-auth0/auth0/pull/209))
+
 ## v5.14.0
 * `management.SigningKey`: Add support for listing, reading, rotating and revoking an Auth0 Tenant's signing key ([#191](https://github.com/go-auth0/auth0/pull/191))
 * `management.Grant`: Support pagination response when listing Grants ([#205](https://github.com/go-auth0/auth0/pull/205))
