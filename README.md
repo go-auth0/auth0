@@ -79,6 +79,17 @@ The following Auth0 resources are supported:
 - [x] [Tickets](https://auth0.com/docs/api/management/v2#!/Tickets/post_email_verification)
 - [x] [Signing Keys](https://auth0.com/docs/api/management/v2#!/Keys/get_signing_keys)
 
+### Tests
+
+The tests must run against an Auth0 tenant. They also need an [M2M app](https://auth0.com/docs/applications/set-up-an-application/register-machine-to-machine-applications) in that tenant that has been authorized to call the Management API. You can easily set one of these up by creating an [API Explorer Application](https://auth0.com/docs/tokens/management-api-access-tokens/create-and-authorize-a-machine-to-machine-application) in your tenant.
+
+Then simply create a local `.env` file with the following settings:
+
+* `AUTH0_DOMAIN`: The **Domain** of the M2M app
+* `AUTH0_CLIENT_ID`: The **Client ID** of the M2M app
+* `AUTH0_CLIENT_SECRET`: The **Client Secret** of the M2M app
+* `AUTH0_DEBUG`: Set to `true` to call the Management API in debug mode, which dumps the HTTP requests and responses to the output
+
 ## What is Auth0?
 
 Auth0 helps you to:
