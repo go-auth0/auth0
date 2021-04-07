@@ -2284,6 +2284,14 @@ func (c *ConnectionOptionsSAML) GetDigestAglorithm() string {
 	return *c.DigestAglorithm
 }
 
+// GetEntityID returns the EntityID field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAML) GetEntityID() string {
+	if c == nil || c.EntityID == nil {
+		return ""
+	}
+	return *c.EntityID
+}
+
 // GetExpires returns the Expires field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsSAML) GetExpires() string {
 	if c == nil || c.Expires == nil {
