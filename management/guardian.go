@@ -186,7 +186,7 @@ func (m *MultiFactorManager) List(opts ...RequestOption) (mf []*MultiFactor, err
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Guardian/get_policies
 func (m *MultiFactorManager) Policy(opts ...RequestOption) (p *MultiFactorPolicies, err error) {
-	err = m.Request("GET", m.URI("guardian", "policies"), p, opts...)
+	err = m.Request("GET", m.URI("guardian", "policies"), &p, opts...)
 	return
 }
 
