@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"gopkg.in/auth0.v5/internal/testing/expect"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 var m *Management
