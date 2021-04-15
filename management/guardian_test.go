@@ -24,7 +24,10 @@ func TestGuardian(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			p, _ := m.Guardian.MultiFactor.Policy()
+			p, err := m.Guardian.MultiFactor.Policy()
+			if err != nil {
+				t.Error(err)
+			}
 			t.Logf("%v\n", p)
 		})
 
