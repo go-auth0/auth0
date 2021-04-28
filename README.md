@@ -49,7 +49,7 @@ fmt.Printf("Created client %s\n", c.ClientID)
 
 The following Auth0 resources are supported:
 
-- [ ] [Actions](https://auth0.com/docs/api/management/v2/#!/Actions/get_actions
+- [ ] [Actions](https://auth0.com/docs/api/management/v2/#!/Actions/get_actions)
 - [x] [Branding](https://auth0.com/docs/api/management/v2/#!/Branding/get_branding)
 - [x] [Clients (Applications)](https://auth0.com/docs/api/management/v2#!/Clients/get_clients)
 - [x] [Client Grants](https://auth0.com/docs/api/management/v2#!/Client_Grants/get_client_grants)
