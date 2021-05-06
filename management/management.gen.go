@@ -1662,6 +1662,115 @@ func (c *ConnectionOptionsGitHub) String() string {
 	return Stringify(c)
 }
 
+// GetAdmin returns the Admin field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetAdmin() bool {
+	if c == nil || c.Admin == nil {
+		return false
+	}
+	return *c.Admin
+}
+
+// GetAgreedTerms returns the AgreedTerms field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetAgreedTerms() bool {
+	if c == nil || c.AgreedTerms == nil {
+		return false
+	}
+	return *c.AgreedTerms
+}
+
+// GetBasicProfile returns the BasicProfile field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetBasicProfile() bool {
+	if c == nil || c.BasicProfile == nil {
+		return false
+	}
+	return *c.BasicProfile
+}
+
+// GetClientID returns the ClientID field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetClientID() string {
+	if c == nil || c.ClientID == nil {
+		return ""
+	}
+	return *c.ClientID
+}
+
+// GetClientSecret returns the ClientSecret field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetClientSecret() string {
+	if c == nil || c.ClientSecret == nil {
+		return ""
+	}
+	return *c.ClientSecret
+}
+
+// GetDomain returns the Domain field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetDomain() string {
+	if c == nil || c.Domain == nil {
+		return ""
+	}
+	return *c.Domain
+}
+
+// GetEnableUsersAPI returns the EnableUsersAPI field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetEnableUsersAPI() bool {
+	if c == nil || c.EnableUsersAPI == nil {
+		return false
+	}
+	return *c.EnableUsersAPI
+}
+
+// GetExtendedProfile returns the ExtendedProfile field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetExtendedProfile() bool {
+	if c == nil || c.ExtendedProfile == nil {
+		return false
+	}
+	return *c.ExtendedProfile
+}
+
+// GetGroups returns the Groups field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetGroups() bool {
+	if c == nil || c.Groups == nil {
+		return false
+	}
+	return *c.Groups
+}
+
+// GetIsSuspended returns the IsSuspended field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetIsSuspended() bool {
+	if c == nil || c.IsSuspended == nil {
+		return false
+	}
+	return *c.IsSuspended
+}
+
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetLogoURL() string {
+	if c == nil || c.LogoURL == nil {
+		return ""
+	}
+	return *c.LogoURL
+}
+
+// GetNonPersistentAttrs returns the NonPersistentAttrs field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetNonPersistentAttrs() []string {
+	if c == nil || c.NonPersistentAttrs == nil {
+		return nil
+	}
+	return *c.NonPersistentAttrs
+}
+
+// GetSetUserAttributes returns the SetUserAttributes field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsGoogleApps) GetSetUserAttributes() string {
+	if c == nil || c.SetUserAttributes == nil {
+		return ""
+	}
+	return *c.SetUserAttributes
+}
+
+// String returns a string representation of ConnectionOptionsGoogleApps.
+func (c *ConnectionOptionsGoogleApps) String() string {
+	return Stringify(c)
+}
+
 // GetAdsenseManagement returns the AdsenseManagement field if it's non-nil, zero value otherwise.
 func (c *ConnectionOptionsGoogleOAuth2) GetAdsenseManagement() bool {
 	if c == nil || c.AdsenseManagement == nil {
