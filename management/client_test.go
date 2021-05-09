@@ -1,11 +1,13 @@
 package management
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
 	"gopkg.in/auth0.v5"
+	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestClient(t *testing.T) {
@@ -77,4 +79,36 @@ func TestClient(t *testing.T) {
 			t.Error(err)
 		}
 	})
+}
+
+func TestJWTConfiguration(t *testing.T) {
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		for u, expected := range map[*ClientJWTConfiguration]string{
+			{}:                                   `{}`,
+			{LifetimeInSeconds: auth0.Int(1000)}: `{"lifetime_in_seconds":1000}`,
+		} {
+			b, err := json.Marshal(u)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, string(b), expected)
+		}
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		for b, expected := range map[string]*ClientJWTConfiguration{
+			`{}`:                             {LifetimeInSeconds: nil},
+			`{"lifetime_in_seconds":1000}`:   {LifetimeInSeconds: auth0.Int(1000)},
+			`{"lifetime_in_seconds":"1000"}`: {LifetimeInSeconds: auth0.Int(1000)},
+		} {
+			var jc ClientJWTConfiguration
+			err := json.Unmarshal([]byte(b), &jc)
+			if err != nil {
+				t.Error(err)
+			}
+			expect.Expect(t, jc.GetLifetimeInSeconds(), expected.GetLifetimeInSeconds())
+		}
+	})
+
 }
