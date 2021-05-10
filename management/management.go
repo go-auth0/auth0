@@ -156,6 +156,9 @@ type Management struct {
 	// SigningKey manages Auth0 Application Signing Keys.
 	SigningKey *SigningKeyManager
 
+	// Anomaly manages the IP blocks
+	Anomaly *AnomalyManager
+
 	url         *url.URL
 	basePath    string
 	userAgent   string
@@ -223,6 +226,7 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	m.Prompt = newPromptManager(m)
 	m.Blacklist = newBlacklistManager(m)
 	m.SigningKey = newSigningKeyManager(m)
+	m.Anomaly = newAnomalyManager(m)
 
 	return m, nil
 }
