@@ -13,7 +13,7 @@ func TestAnomaly(t *testing.T) {
 			t.Error(err)
 		}
 		if isBlocked {
-			t.Error(fmt.Errorf("Ip should not be blocked"))
+			t.Error(fmt.Errorf("IP should not be blocked"))
 		}
 	})
 
