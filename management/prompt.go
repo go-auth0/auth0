@@ -263,30 +263,30 @@ type ScreenLogin struct {
 	//Documented but not supported
 	//CaptchaCodePlaceholder        string `json:"captchaCodePlaceholder,omitempty"`
 	//CaptchaMatchExprPlaceholder   string `json:"captchaMatchExprPlaceholder,omitempty"`
-	EmailPlaceholder              string `json:"emailPlaceholder,omitempty"`
-	EditEmailText                 string `json:"editEmailText,omitempty"`
-	AlertListTitle                string `json:"alertListTitle,omitempty"`
-	InvitationTitle               string `json:"invitationTitle,omitempty"`
-	InvitationDescription         string `json:"invitationDescription,omitempty"`
-	WrongCredentials              string `json:"wrong-credentials,omitempty"`
+	EmailPlaceholder      string `json:"emailPlaceholder,omitempty"`
+	EditEmailText         string `json:"editEmailText,omitempty"`
+	AlertListTitle        string `json:"alertListTitle,omitempty"`
+	InvitationTitle       string `json:"invitationTitle,omitempty"`
+	InvitationDescription string `json:"invitationDescription,omitempty"`
+	WrongCredentials      string `json:"wrong-credentials,omitempty"`
 	//Documented but not supported
 	//WrongCaptcha                  string `json:"wrong-captcha,omitempty"`
-	InvalidCode                   string `json:"invalid-code,omitempty"`
-	InvalidExpiredCode            string `json:"invalid-expired-code,omitempty"`
-	InvalidEmailFormat            string `json:"invalid-email-format,omitempty"`
-	WrongEmailCredentials         string `json:"wrong-email-credentials,omitempty"`
-	CustomScriptErrorCode         string `json:"custom-script-error-code,omitempty"`
-	Auth0UsersValidation          string `json:"auth0-users-validation,omitempty"`
-	AuthenticationFailure         string `json:"authentication-failure,omitempty"`
-	InvalidConnection             string `json:"invalid-connection,omitempty"`
-	IpBlocked                     string `json:"ip-blocked,omitempty"`
-	NoDbConnection                string `json:"no-db-connection,omitempty"`
-	PasswordBreached              string `json:"password-breached,omitempty"`
-	UserBlocked                   string `json:"user-blocked,omitempty"`
-	SameUserLogin                 string `json:"same-user-login,omitempty"`
-	NoEmail                       string `json:"no-email,omitempty"`
-	NoPassword                    string `json:"no-password,omitempty"`
-	NoUsername                    string `json:"no-username,omitempty"`
+	InvalidCode           string `json:"invalid-code,omitempty"`
+	InvalidExpiredCode    string `json:"invalid-expired-code,omitempty"`
+	InvalidEmailFormat    string `json:"invalid-email-format,omitempty"`
+	WrongEmailCredentials string `json:"wrong-email-credentials,omitempty"`
+	CustomScriptErrorCode string `json:"custom-script-error-code,omitempty"`
+	Auth0UsersValidation  string `json:"auth0-users-validation,omitempty"`
+	AuthenticationFailure string `json:"authentication-failure,omitempty"`
+	InvalidConnection     string `json:"invalid-connection,omitempty"`
+	IpBlocked             string `json:"ip-blocked,omitempty"`
+	NoDbConnection        string `json:"no-db-connection,omitempty"`
+	PasswordBreached      string `json:"password-breached,omitempty"`
+	UserBlocked           string `json:"user-blocked,omitempty"`
+	SameUserLogin         string `json:"same-user-login,omitempty"`
+	NoEmail               string `json:"no-email,omitempty"`
+	NoPassword            string `json:"no-password,omitempty"`
+	NoUsername            string `json:"no-username,omitempty"`
 }
 
 type PromptLogin struct {
@@ -597,12 +597,12 @@ type ScreenMfaOtpEnrollmentQr struct {
 	Placeholder           string `json:"placeholder,omitempty"`
 	//Documented but not supported
 	//SeparatorText         string `json:"separatorText,omitempty"`
-	InvalidOtpCodeFormat  string `json:"invalid-otp-code-format,omitempty"`
-	InvalidCode           string `json:"invalid-code,omitempty"`
-	InvalidExpiredCode    string `json:"invalid-expired-code,omitempty"`
-	TooManyFailures       string `json:"too-many-failures,omitempty"`
-	TransactionNotFound   string `json:"transaction-not-found,omitempty"`
-	UserAlreadyEnrolled   string `json:"user-already-enrolled,omitempty"`
+	InvalidOtpCodeFormat string `json:"invalid-otp-code-format,omitempty"`
+	InvalidCode          string `json:"invalid-code,omitempty"`
+	InvalidExpiredCode   string `json:"invalid-expired-code,omitempty"`
+	TooManyFailures      string `json:"too-many-failures,omitempty"`
+	TransactionNotFound  string `json:"transaction-not-found,omitempty"`
+	UserAlreadyEnrolled  string `json:"user-already-enrolled,omitempty"`
 }
 
 type ScreenMfaOtpEnrollmentCode struct {
@@ -739,9 +739,9 @@ type ScreenMfaPushEnrollmentQr struct {
 }
 
 type ScreenMfaPushChallengePush struct {
-	PageTitle                          string `json:"pageTitle,omitempty"`
-	Title                              string `json:"title,omitempty"`
-	Description                        string `json:"description,omitempty"`
+	PageTitle   string `json:"pageTitle,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
 	//Documented but not supported
 	//AwaitingConfirmation               string `json:"awaitingConfirmation,omitempty"`
 	ButtonText                         string `json:"buttonText,omitempty"`
@@ -986,14 +986,14 @@ func (m *CustomTextManager) SetMfaVoice(language string, p *PromptMfaVoice, opts
 // See: https://auth0.com/docs/universal-login/prompt-organization-selection
 
 type ScreenOrganizationSelection struct {
-	PageTitle                string `json:"pageTitle,omitempty"`
-	Title                    string `json:"title,omitempty"`
-	Description              string `json:"description,omitempty"`
-	ButtonText               string `json:"buttonText,omitempty"`
-	Placeholder              string `json:"placeholder,omitempty"`
+	PageTitle   string `json:"pageTitle,omitempty"`
+	Title       string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+	ButtonText  string `json:"buttonText,omitempty"`
+	Placeholder string `json:"placeholder,omitempty"`
 	//Documented but not supported
 	//ErrorInvalidOrganization string `json:"error_invalid-organization,omitempty"`
-	LogoAltText              string `json:"logoAltText,omitempty"`
+	LogoAltText string `json:"logoAltText,omitempty"`
 }
 
 type PromptOrganizations struct {
@@ -1040,10 +1040,10 @@ type ScreenResetPasswordRequest struct {
 }
 
 type ScreenResetPasswordEmail struct {
-	PageTitle           string `json:"pageTitle,omitempty"`
-	Title               string `json:"title,omitempty"`
-	EmailDescription    string `json:"emailDescription,omitempty"`
-	ResendLinkText      string `json:"resendLinkText,omitempty"`
+	PageTitle        string `json:"pageTitle,omitempty"`
+	Title            string `json:"title,omitempty"`
+	EmailDescription string `json:"emailDescription,omitempty"`
+	ResendLinkText   string `json:"resendLinkText,omitempty"`
 	//Documented but not supported
 	//ResendText          string `json:"resendText,omitempty"`
 	UsernameDescription string `json:"usernameDescription,omitempty"`
@@ -1232,15 +1232,15 @@ func (m *CustomTextManager) SetSignupId(language string, p *PromptSignupId, opts
 // See: https://auth0.com/docs/universal-login/prompt-signup-password
 
 type ScreenSignupPassword struct {
-	PageTitle                        string `json:"pageTitle,omitempty"`
-	Title                            string `json:"title,omitempty"`
-	Description                      string `json:"description,omitempty"`
-	SeparatorText                    string `json:"separatorText,omitempty"`
-	ButtonText                       string `json:"buttonText,omitempty"`
-	EmailPlaceholder                 string `json:"emailPlaceholder,omitempty"`
-	FederatedConnectionButtonText    string `json:"federatedConnectionButtonText,omitempty"`
-	LoginActionLinkText              string `json:"loginActionLinkText,omitempty"`
-	LoginActionText                  string `json:"loginActionText,omitempty"`
+	PageTitle                     string `json:"pageTitle,omitempty"`
+	Title                         string `json:"title,omitempty"`
+	Description                   string `json:"description,omitempty"`
+	SeparatorText                 string `json:"separatorText,omitempty"`
+	ButtonText                    string `json:"buttonText,omitempty"`
+	EmailPlaceholder              string `json:"emailPlaceholder,omitempty"`
+	FederatedConnectionButtonText string `json:"federatedConnectionButtonText,omitempty"`
+	LoginActionLinkText           string `json:"loginActionLinkText,omitempty"`
+	LoginActionText               string `json:"loginActionText,omitempty"`
 	//Documented but not supported
 	//LoginLinkText                    string `json:"loginLinkText,omitempty"`
 	InvitationTitle                  string `json:"invitationTitle,omitempty"`
