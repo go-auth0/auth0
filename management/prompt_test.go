@@ -1,7 +1,6 @@
 package management
 
 import (
-	"fmt"
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/internal/testing/expect"
 	"testing"
@@ -70,8 +69,7 @@ func TestConsentCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetConsent(Language, StartVal)
 		if err != nil {
-			// fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
+			t.Fatal(err)
 		}
 		ReturnVal, err := m.CustomText.ReadConsent(Language)
 		if err != nil {
@@ -81,7 +79,7 @@ func TestConsentCustomText(t *testing.T) {
 	})
 
 	SetVal := PromptConsent{
-		Consent: ScreenConsent{
+		Consent: &ScreenConsent{
 			PageTitle:              "PageTitle",
 			Title:                  "Title",
 			MessageMultipleTenants: "MessageMultipleTenants",
@@ -116,19 +114,17 @@ func TestDeviceFlowCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetDeviceFlow(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadDeviceFlow(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadDeviceFlow(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptDeviceFlow{
-		DeviceCodeActivation: ScreenDeviceCodeActivation{
+		DeviceCodeActivation: &ScreenDeviceCodeActivation{
 			PageTitle:          "PageTitle",
 			ButtonText:         "ButtonText",
 			Description:        "Description",
@@ -138,17 +134,17 @@ func TestDeviceFlowCustomText(t *testing.T) {
 			NoCode:             "NoCode",
 			InvalidCode:        "InvalidCode",
 		},
-		DeviceCodeActivationAllowed: ScreenDeviceCodeActivationAllowed{
+		DeviceCodeActivationAllowed: &ScreenDeviceCodeActivationAllowed{
 			PageTitle:   "PageTitle",
 			Description: "Description",
 			EventTitle:  "EventTitle",
 		},
-		DeviceCodeActivationDenied: ScreenDeviceCodeActivationDenied{
+		DeviceCodeActivationDenied: &ScreenDeviceCodeActivationDenied{
 			PageTitle:   "PageTitle",
 			Description: "Description",
 			EventTitle:  "EventTitle",
 		},
-		DeviceCodeConfirmation: ScreenDeviceCodeConfirmation{
+		DeviceCodeConfirmation: &ScreenDeviceCodeConfirmation{
 			PageTitle:         "PageTitle",
 			Description:       "Description",
 			InputCodeLabel:    "InputCodeLabel",
@@ -180,19 +176,17 @@ func TestEmailOtpChallengeCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetEmailOtpChallenge(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadEmailOtpChallenge(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadEmailOtpChallenge(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptEmailOtpChallenge{
-		EmailOtpChallenge: ScreenEmailOtpChallenge{
+		EmailOtpChallenge: &ScreenEmailOtpChallenge{
 			PageTitle:            "PageTitle",
 			ButtonText:           "ButtonText",
 			Description:          "Description",
@@ -229,19 +223,17 @@ func TestEmailVerificationCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetEmailVerification(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadEmailVerification(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadEmailVerification(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptEmailVerification{
-		EmailVerificationResult: ScreenEmailVerificationResult{
+		EmailVerificationResult: &ScreenEmailVerificationResult{
 			PageTitle:                       "PageTitle",
 			VerifiedTitle:                   "VerifiedTitle",
 			ErrorTitle:                      "ErrorTitle",
@@ -278,19 +270,17 @@ func TestInvitationCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetInvitation(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadInvitation(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadInvitation(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptInvitation{
-		AcceptInvitation: ScreenAcceptInvitation{
+		AcceptInvitation: &ScreenAcceptInvitation{
 			PageTitle:   "PageTitle",
 			Title:       "Title",
 			Description: "Description",
@@ -320,19 +310,17 @@ func TestLoginCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetLogin(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadLogin(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadLogin(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptLogin{
-		Login: ScreenLogin{
+		Login: &ScreenLogin{
 			PageTitle:                     "PageTitle",
 			Title:                         "Title",
 			Description:                   "Description",
@@ -395,19 +383,17 @@ func TestLoginIdCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetLoginId(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadLoginId(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadLoginId(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptLoginId{
-		LoginId: ScreenLoginId{
+		LoginId: &ScreenLoginId{
 			PageTitle:                     "PageTitle",
 			Title:                         "Title",
 			Description:                   "Description",
@@ -464,19 +450,17 @@ func TestLoginPasswordCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetLoginPassword(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadLoginPassword(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadLoginPassword(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptLoginPassword{
-		LoginPassword: ScreenLoginPassword{
+		LoginPassword: &ScreenLoginPassword{
 			PageTitle:                     "PageTitle",
 			Title:                         "Title",
 			Description:                   "Description",
@@ -532,19 +516,17 @@ func TestLoginEmailVerificationCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetLoginEmailVerification(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadLoginEmailVerification(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadLoginEmailVerification(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptLoginEmailVerification{
-		LoginEmailVerification: ScreenLoginEmailVerification{
+		LoginEmailVerification: &ScreenLoginEmailVerification{
 			PageTitle:            "PageTitle",
 			ButtonText:           "ButtonText",
 			Description:          "Description",
@@ -581,19 +563,17 @@ func TestMfaCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfa(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfa(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfa(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfa{
-		MfaEnrollResult: ScreenMfaEnrollResult{
+		MfaEnrollResult: &ScreenMfaEnrollResult{
 			PageTitle:                  "PageTitle",
 			EnrolledTitle:              "EnrolledTitle",
 			EnrolledDescription:        "EnrolledDescription",
@@ -606,7 +586,7 @@ func TestMfaCustomText(t *testing.T) {
 			AlreadyEnrolledDescription: "AlreadyEnrolledDescription",
 			GenericError:               "GenericError",
 		},
-		MfaLoginOptions: ScreenMfaLoginOptions{
+		MfaLoginOptions: &ScreenMfaLoginOptions{
 			PageTitle:                          "PageTitle",
 			BackText:                           "BackText",
 			Title:                              "Title",
@@ -621,7 +601,7 @@ func TestMfaCustomText(t *testing.T) {
 			//In online documentation but not supported
 			// AuthenticatorNamesWebauthnPlatform: "authenticatorNamesWebauthnPlatform",
 		},
-		MfaBeginEnrollOptions: ScreenMfaBeginEnrollOptions{
+		MfaBeginEnrollOptions: &ScreenMfaBeginEnrollOptions{
 			PageTitle:                          "PageTitle",
 			BackText:                           "BackText",
 			Title:                              "Title",
@@ -662,19 +642,17 @@ func TestMfaEmailCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaEmail(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaEmail(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaEmail(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaEmail{
-		MfaEmailChallenge: ScreenMfaEmailChallenge{
+		MfaEmailChallenge: &ScreenMfaEmailChallenge{
 			PageTitle:                           "PageTitle",
 			BackText:                            "BackText",
 			ButtonText:                          "ButtonText",
@@ -694,7 +672,7 @@ func TestMfaEmailCustomText(t *testing.T) {
 			TransactionNotFound:                 "TransactionNotFound",
 			MfaEmailChallengeAuthenticatorError: "MfaEmailChallengeAuthenticatorError",
 		},
-		MfaEmailList: ScreenMfaEmailList{
+		MfaEmailList: &ScreenMfaEmailList{
 			PageTitle: "PageTitle",
 			BackText:  "BackText",
 			Title:     "Title",
@@ -722,19 +700,17 @@ func TestMfaOtpCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaOtp(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaOtp(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaOtp(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaOtp{
-		MfaOtpEnrollmentQr: ScreenMfaOtpEnrollmentQr{
+		MfaOtpEnrollmentQr: &ScreenMfaOtpEnrollmentQr{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -751,7 +727,7 @@ func TestMfaOtpCustomText(t *testing.T) {
 			TransactionNotFound:  "TransactionNotFound",
 			UserAlreadyEnrolled:  "UserAlreadyEnrolled",
 		},
-		MfaOtpEnrollmentCode: ScreenMfaOtpEnrollmentCode{
+		MfaOtpEnrollmentCode: &ScreenMfaOtpEnrollmentCode{
 			PageTitle:             "PageTitle",
 			BackText:              "BackText",
 			ButtonText:            "ButtonText",
@@ -764,7 +740,7 @@ func TestMfaOtpCustomText(t *testing.T) {
 			TooManyFailures:       "TooManyFailures",
 			TransactionNotFound:   "TransactionNotFound",
 		},
-		MfaOtpEnrollmentChallenge: ScreenMfaOtpEnrollmentChallenge{
+		MfaOtpEnrollmentChallenge: &ScreenMfaOtpEnrollmentChallenge{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -799,19 +775,17 @@ func TestMfaPhoneCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaPhone(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaPhone(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaPhone(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaPhone{
-		MfaPhoneChallenge: ScreenMfaPhoneChallenge{
+		MfaPhoneChallenge: &ScreenMfaPhoneChallenge{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -829,7 +803,7 @@ func TestMfaPhoneCustomText(t *testing.T) {
 			TransactionNotFound:   "TransactionNotFound",
 			NoPhone:               "NoPhone",
 		},
-		MfaPhoneEnrollment: ScreenMfaPhoneEnrollment{
+		MfaPhoneEnrollment: &ScreenMfaPhoneEnrollment{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -870,19 +844,17 @@ func TestMfaPushCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaPush(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaPush(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaPush(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaPush{
-		MfaPushWelcome: ScreenMfaPushWelcome{
+		MfaPushWelcome: &ScreenMfaPushWelcome{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -891,7 +863,7 @@ func TestMfaPushCustomText(t *testing.T) {
 			IosButtonText:         "IosButtonText",
 			PickAuthenticatorText: "PickAuthenticatorText",
 		},
-		MfaPushEnrollmentQr: ScreenMfaPushEnrollmentQr{
+		MfaPushEnrollmentQr: &ScreenMfaPushEnrollmentQr{
 			PageTitle:                    "PageTitle",
 			Title:                        "Title",
 			Description:                  "Description",
@@ -899,7 +871,7 @@ func TestMfaPushCustomText(t *testing.T) {
 			ButtonText:                   "ButtonText",
 			EnrollmentTransactionPending: "EnrollmentTransactionPending",
 		},
-		MfaPushChallengePush: ScreenMfaPushChallengePush{
+		MfaPushChallengePush: &ScreenMfaPushChallengePush{
 			PageTitle:   "PageTitle",
 			Title:       "Title",
 			Description: "Description",
@@ -921,7 +893,7 @@ func TestMfaPushCustomText(t *testing.T) {
 			MfaPushChallengeAuthenticatorError: "MfaPushChallengeAuthenticatorError",
 			TransactionRejected:                "TransactionRejected",
 		},
-		MfaPushList: ScreenMfaPushList{
+		MfaPushList: &ScreenMfaPushList{
 			PageTitle: "PageTitle",
 			BackText:  "BackText",
 			Title:     "Title",
@@ -949,19 +921,17 @@ func TestMfaRecoveryCodeCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaRecoveryCode(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaRecoveryCode(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaRecoveryCode(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaRecoveryCode{
-		MfaRecoveryCodeEnrollment: ScreenMfaRecoveryCodeEnrollment{
+		MfaRecoveryCodeEnrollment: &ScreenMfaRecoveryCodeEnrollment{
 			PageTitle:          "PageTitle",
 			Title:              "Title",
 			Description:        "Description",
@@ -971,7 +941,7 @@ func TestMfaRecoveryCodeCustomText(t *testing.T) {
 			CopyCodeButtonText: "CopyCodeButtonText",
 			NoConfirmation:     "NoConfirmation",
 		},
-		MfaRecoveryCodeChallenge: ScreenMfaRecoveryCodeChallenge{
+		MfaRecoveryCodeChallenge: &ScreenMfaRecoveryCodeChallenge{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -1009,24 +979,22 @@ func TestMfaSmsCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaSms(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaSms(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaSms(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaSms{
-		MfaCountryCodes: ScreenMfaCountryCodes{
+		MfaCountryCodes: &ScreenMfaCountryCodes{
 			PageTitle: "PageTitle",
 			BackText:  "BackText",
 			Title:     "Title",
 		},
-		MfaSmsEnrollment: ScreenMfaSmsEnrollment{
+		MfaSmsEnrollment: &ScreenMfaSmsEnrollment{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -1040,7 +1008,7 @@ func TestMfaSmsCustomText(t *testing.T) {
 			TransactionNotFound:   "TransactionNotFound",
 			NoPhone:               "NoPhone",
 		},
-		MfaSmsChallenge: ScreenMfaSmsChallenge{
+		MfaSmsChallenge: &ScreenMfaSmsChallenge{
 			PageTitle:                            "PageTitle",
 			Title:                                "Title",
 			Description:                          "Description",
@@ -1065,7 +1033,7 @@ func TestMfaSmsCustomText(t *testing.T) {
 			TooManySms:                           "TooManySms",
 			TransactionNotFound:                  "TransactionNotFound",
 		},
-		MfaSmsList: ScreenMfaSmsList{
+		MfaSmsList: &ScreenMfaSmsList{
 			PageTitle: "PageTitle",
 			BackText:  "BackText",
 			Title:     "Title",
@@ -1093,19 +1061,17 @@ func TestMfaVoiceCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetMfaVoice(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadMfaVoice(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadMfaVoice(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptMfaVoice{
-		MfaVoiceEnrollment: ScreenMfaVoiceEnrollment{
+		MfaVoiceEnrollment: &ScreenMfaVoiceEnrollment{
 			PageTitle:             "PageTitle",
 			Title:                 "Title",
 			Description:           "Description",
@@ -1119,7 +1085,7 @@ func TestMfaVoiceCustomText(t *testing.T) {
 			TransactionNotFound:   "TransactionNotFound",
 			NoPhone:               "NoPhone",
 		},
-		MfaVoiceChallenge: ScreenMfaVoiceChallenge{
+		MfaVoiceChallenge: &ScreenMfaVoiceChallenge{
 			PageTitle:                          "PageTitle",
 			Title:                              "Title",
 			Description:                        "Description",
@@ -1167,19 +1133,17 @@ func TestOrganizationsCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetOrganizations(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadOrganizations(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadOrganizations(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptOrganizations{
-		OrganizationSelection: ScreenOrganizationSelection{
+		OrganizationSelection: &ScreenOrganizationSelection{
 			PageTitle:   "PageTitle",
 			Title:       "Title",
 			Description: "Description",
@@ -1212,19 +1176,17 @@ func TestResetPasswordCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetResetPassword(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadResetPassword(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadResetPassword(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptResetPassword{
-		ResetPasswordRequest: ScreenResetPasswordRequest{
+		ResetPasswordRequest: &ScreenResetPasswordRequest{
 			PageTitle:               "PageTitle",
 			Title:                   "Title",
 			BackToLoginLinkText:     "BackToLoginLinkText",
@@ -1243,7 +1205,7 @@ func TestResetPasswordCustomText(t *testing.T) {
 			NoEmail:                 "NoEmail",
 			NoUsername:              "NoUsername",
 		},
-		ResetPasswordEmail: ScreenResetPasswordEmail{
+		ResetPasswordEmail: &ScreenResetPasswordEmail{
 			PageTitle:        "PageTitle",
 			Title:            "Title",
 			EmailDescription: "EmailDescription",
@@ -1252,7 +1214,7 @@ func TestResetPasswordCustomText(t *testing.T) {
 			//ResendText:              "ResendText",
 			UsernameDescription: "UsernameDescription",
 		},
-		ResetPassword: ScreenResetPassword{
+		ResetPassword: &ScreenResetPassword{
 			PageTitle:                  "PageTitle",
 			Title:                      "Title",
 			Description:                "Description",
@@ -1266,13 +1228,13 @@ func TestResetPasswordCustomText(t *testing.T) {
 			Auth0UsersValidation:       "Auth0UsersValidation",
 			NoReEnterPassword:          "NoReEnterPassword",
 		},
-		ResetPasswordSuccess: ScreenResetPasswordSuccess{
+		ResetPasswordSuccess: &ScreenResetPasswordSuccess{
 			PageTitle:   "PageTitle",
 			EventTitle:  "EventTitle",
 			Description: "Description",
 			ButtonText:  "ButtonText",
 		},
-		ResetPasswordError: ScreenResetPasswordError{
+		ResetPasswordError: &ScreenResetPasswordError{
 			PageTitle:               "PageTitle",
 			BackToLoginLinkText:     "BackToLoginLinkText",
 			DescriptionExpired:      "DescriptionExpired",
@@ -1309,19 +1271,17 @@ func TestSignupCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetSignup(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadSignup(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadSignup(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptSignup{
-		Signup: ScreenSignup{
+		Signup: &ScreenSignup{
 			PageTitle:                        "PageTitle",
 			Title:                            "Title",
 			Description:                      "Description",
@@ -1352,7 +1312,7 @@ func TestSignupCustomText(t *testing.T) {
 			IpSignupBlocked:                  "IpSignupBlocked",
 			NoDbConnection:                   "NoDbConnection",
 			NoEmail:                          "NoEmail",
-			NoPasswordd:                      "NoPasswordd",
+			NoPassword:                       "NoPassword",
 			NoReEnterPassword:                "NoReEnterPassword",
 			NoUsername:                       "NoUsername",
 		},
@@ -1379,19 +1339,17 @@ func TestSignupIdCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetSignupId(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadSignupId(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadSignupId(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptSignupId{
-		SignupId: ScreenSignupId{
+		SignupId: &ScreenSignupId{
 			PageTitle:                        "PageTitle",
 			Title:                            "Title",
 			Description:                      "Description",
@@ -1451,19 +1409,17 @@ func TestSignupPasswordCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		err = m.CustomText.SetSignupPassword(Language, StartVal)
 		if err != nil {
-			// cleanup fails if StartVal is empty object
-			fmt.Printf("Warning, Set-StartVal failed: %q", err)
-		} else {
-			ReturnVal, err := m.CustomText.ReadSignupPassword(Language)
-			if err != nil {
-				t.Fatal(err)
-			}
-			expect.Expect(t, ReturnVal, StartVal)
+			t.Fatal(err)
 		}
+		ReturnVal, err := m.CustomText.ReadSignupPassword(Language)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expect.Expect(t, ReturnVal, StartVal)
 	})
 
 	SetVal := PromptSignupPassword{
-		SignupPassword: ScreenSignupPassword{
+		SignupPassword: &ScreenSignupPassword{
 			PageTitle:                     "PageTitle",
 			Title:                         "Title",
 			Description:                   "Description",

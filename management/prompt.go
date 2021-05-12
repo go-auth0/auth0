@@ -65,7 +65,7 @@ type ScreenConsent struct {
 }
 
 type PromptConsent struct {
-	Consent ScreenConsent `json:"consent"`
+	Consent *ScreenConsent `json:"consent,omitempty"`
 }
 
 // ReadConsent reads consent custom text
@@ -120,10 +120,10 @@ type ScreenDeviceCodeConfirmation struct {
 }
 
 type PromptDeviceFlow struct {
-	DeviceCodeActivation        ScreenDeviceCodeActivation        `json:"device-code-activation,omitempty"`
-	DeviceCodeActivationAllowed ScreenDeviceCodeActivationAllowed `json:"device-code-activation-allowed,omitempty"`
-	DeviceCodeActivationDenied  ScreenDeviceCodeActivationDenied  `json:"device-code-activation-denied,omitempty"`
-	DeviceCodeConfirmation      ScreenDeviceCodeConfirmation      `json:"device-code-confirmation"`
+	DeviceCodeActivation        *ScreenDeviceCodeActivation        `json:"device-code-activation,omitempty"`
+	DeviceCodeActivationAllowed *ScreenDeviceCodeActivationAllowed `json:"device-code-activation-allowed,omitempty"`
+	DeviceCodeActivationDenied  *ScreenDeviceCodeActivationDenied  `json:"device-code-activation-denied,omitempty"`
+	DeviceCodeConfirmation      *ScreenDeviceCodeConfirmation      `json:"device-code-confirmation"`
 }
 
 // ReadDeviceFlow reads device-flow custom text
@@ -160,7 +160,7 @@ type ScreenEmailOtpChallenge struct {
 }
 
 type PromptEmailOtpChallenge struct {
-	EmailOtpChallenge ScreenEmailOtpChallenge `json:"email-otp-challenge"`
+	EmailOtpChallenge *ScreenEmailOtpChallenge `json:"email-otp-challenge,omitempty"`
 }
 
 // ReadEmailOtpChallenge reads email-otp-challenge custom text
@@ -197,7 +197,7 @@ type ScreenEmailVerificationResult struct {
 }
 
 type PromptEmailVerification struct {
-	EmailVerificationResult ScreenEmailVerificationResult `json:"email-verification-result"`
+	EmailVerificationResult *ScreenEmailVerificationResult `json:"email-verification-result,omitempty"`
 }
 
 // ReadEmailVerification reads email-verification custom text
@@ -227,7 +227,7 @@ type ScreenAcceptInvitation struct {
 }
 
 type PromptInvitation struct {
-	AcceptInvitation ScreenAcceptInvitation `json:"accept-invitation"`
+	AcceptInvitation *ScreenAcceptInvitation `json:"accept-invitation,omitempty"`
 }
 
 // ReadInvitation reads invitation custom text
@@ -290,7 +290,7 @@ type ScreenLogin struct {
 }
 
 type PromptLogin struct {
-	Login ScreenLogin `json:"login"`
+	Login *ScreenLogin `json:"login,omitempty"`
 }
 
 // ReadLogin reads login custom text
@@ -347,7 +347,7 @@ type ScreenLoginId struct {
 }
 
 type PromptLoginId struct {
-	LoginId ScreenLoginId `json:"login-id"`
+	LoginId *ScreenLoginId `json:"login-id,omitempty"`
 }
 
 // ReadLoginId reads login-id custom text
@@ -406,7 +406,7 @@ type ScreenLoginPassword struct {
 }
 
 type PromptLoginPassword struct {
-	LoginPassword ScreenLoginPassword `json:"login-password"`
+	LoginPassword *ScreenLoginPassword `json:"login-password,omitempty"`
 }
 
 // ReadLoginPassword reads login-password custom text
@@ -443,7 +443,7 @@ type ScreenLoginEmailVerification struct {
 }
 
 type PromptLoginEmailVerification struct {
-	LoginEmailVerification ScreenLoginEmailVerification `json:"login-email-verification"`
+	LoginEmailVerification *ScreenLoginEmailVerification `json:"login-email-verification,omitempty"`
 }
 
 // ReadLoginEmailVerification reads login-email-verification custom text
@@ -514,9 +514,9 @@ type ScreenMfaBeginEnrollOptions struct {
 }
 
 type PromptMfa struct {
-	MfaEnrollResult ScreenMfaEnrollResult `json:"mfa-enroll-result"`
-	MfaLoginOptions ScreenMfaLoginOptions `json:"mfa-login-options"`
-	MfaBeginEnrollOptions ScreenMfaBeginEnrollOptions `json:"mfa-begin-enroll-options"`
+	MfaEnrollResult       *ScreenMfaEnrollResult       `json:"mfa-enroll-result,omitempty"`
+	MfaLoginOptions       *ScreenMfaLoginOptions       `json:"mfa-login-options,omitempty"`
+	MfaBeginEnrollOptions *ScreenMfaBeginEnrollOptions `json:"mfa-begin-enroll-options,omitempty"`
 }
 
 // ReadMfa reads mfa custom text
@@ -565,8 +565,8 @@ type ScreenMfaEmailList struct {
 }
 
 type PromptMfaEmail struct {
-	MfaEmailChallenge ScreenMfaEmailChallenge `json:"mfa-email-challenge"`
-	MfaEmailList      ScreenMfaEmailList      `json:"mfa-email-list"`
+	MfaEmailChallenge *ScreenMfaEmailChallenge `json:"mfa-email-challenge,omitempty"`
+	MfaEmailList      *ScreenMfaEmailList      `json:"mfa-email-list,omitempty"`
 }
 
 // ReadMfaEmail reads mfa-email custom text
@@ -633,9 +633,9 @@ type ScreenMfaOtpEnrollmentChallenge struct {
 }
 
 type PromptMfaOtp struct {
-	MfaOtpEnrollmentQr ScreenMfaOtpEnrollmentQr `json:"mfa-otp-enrollment-qr"`
-	MfaOtpEnrollmentCode ScreenMfaOtpEnrollmentCode `json:"mfa-otp-enrollment-code"`
-	MfaOtpEnrollmentChallenge ScreenMfaOtpEnrollmentChallenge `json:"mfa-otp-challenge"`
+	MfaOtpEnrollmentQr        *ScreenMfaOtpEnrollmentQr        `json:"mfa-otp-enrollment-qr,omitempty"`
+	MfaOtpEnrollmentCode      *ScreenMfaOtpEnrollmentCode      `json:"mfa-otp-enrollment-code,omitempty"`
+	MfaOtpEnrollmentChallenge *ScreenMfaOtpEnrollmentChallenge `json:"mfa-otp-challenge,omitempty"`
 }
 
 // ReadMfaOtp reads mfa-otp custom text
@@ -697,8 +697,8 @@ type ScreenMfaPhoneEnrollment struct {
 }
 
 type PromptMfaPhone struct {
-	MfaPhoneChallenge ScreenMfaPhoneChallenge `json:"mfa-phone-challenge"`
-	MfaPhoneEnrollment ScreenMfaPhoneEnrollment `json:"mfa-phone-enrollment"`
+	MfaPhoneChallenge  *ScreenMfaPhoneChallenge  `json:"mfa-phone-challenge,omitempty"`
+	MfaPhoneEnrollment *ScreenMfaPhoneEnrollment `json:"mfa-phone-enrollment,omitempty"`
 }
 
 // ReadMfaPhone reads mfa-phone custom text
@@ -768,10 +768,10 @@ type ScreenMfaPushList struct {
 }
 
 type PromptMfaPush struct {
-	MfaPushWelcome ScreenMfaPushWelcome `json:"mfa-push-welcome"`
-	MfaPushEnrollmentQr ScreenMfaPushEnrollmentQr `json:"mfa-push-enrollment-qr"`
-	MfaPushChallengePush ScreenMfaPushChallengePush `json:"mfa-push-challenge-push"`
-	MfaPushList ScreenMfaPushList `json:"mfa-push-list"`
+	MfaPushWelcome       *ScreenMfaPushWelcome       `json:"mfa-push-welcome,omitempty"`
+	MfaPushEnrollmentQr  *ScreenMfaPushEnrollmentQr  `json:"mfa-push-enrollment-qr,omitempty"`
+	MfaPushChallengePush *ScreenMfaPushChallengePush `json:"mfa-push-challenge-push,omitempty"`
+	MfaPushList          *ScreenMfaPushList          `json:"mfa-push-list,omitempty"`
 }
 
 // ReadMfaPush reads mfa-push custom text
@@ -820,8 +820,8 @@ type ScreenMfaRecoveryCodeChallenge struct {
 }
 
 type PromptMfaRecoveryCode struct {
-	MfaRecoveryCodeEnrollment ScreenMfaRecoveryCodeEnrollment `json:"mfa-recovery-code-enrollment"`
-	MfaRecoveryCodeChallenge ScreenMfaRecoveryCodeChallenge `json:"mfa-recovery-code-challenge"`
+	MfaRecoveryCodeEnrollment *ScreenMfaRecoveryCodeEnrollment `json:"mfa-recovery-code-enrollment,omitempty"`
+	MfaRecoveryCodeChallenge  *ScreenMfaRecoveryCodeChallenge  `json:"mfa-recovery-code-challenge,omitempty"`
 }
 
 // ReadMfaRecoveryCode reads mfa-recovery-code custom text
@@ -896,10 +896,10 @@ type ScreenMfaSmsList struct {
 }
 
 type PromptMfaSms struct {
-	MfaCountryCodes  ScreenMfaCountryCodes  `json:"mfa-country-codes"`
-	MfaSmsEnrollment ScreenMfaSmsEnrollment `json:"mfa-sms-enrollment"`
-	MfaSmsChallenge  ScreenMfaSmsChallenge  `json:"mfa-sms-challenge"`
-	MfaSmsList       ScreenMfaSmsList       `json:"mfa-sms-list"`
+	MfaCountryCodes  *ScreenMfaCountryCodes  `json:"mfa-country-codes,omitempty"`
+	MfaSmsEnrollment *ScreenMfaSmsEnrollment `json:"mfa-sms-enrollment,omitempty"`
+	MfaSmsChallenge  *ScreenMfaSmsChallenge  `json:"mfa-sms-challenge,omitempty"`
+	MfaSmsList       *ScreenMfaSmsList       `json:"mfa-sms-list,omitempty"`
 }
 
 // ReadMfaSms reads mfa-sms custom text
@@ -963,8 +963,8 @@ type ScreenMfaVoiceChallenge struct {
 }
 
 type PromptMfaVoice struct {
-	MfaVoiceEnrollment ScreenMfaVoiceEnrollment `json:"mfa-voice-enrollment"`
-	MfaVoiceChallenge  ScreenMfaVoiceChallenge  `json:"mfa-voice-challenge"`
+	MfaVoiceEnrollment *ScreenMfaVoiceEnrollment `json:"mfa-voice-enrollment,omitempty"`
+	MfaVoiceChallenge  *ScreenMfaVoiceChallenge  `json:"mfa-voice-challenge,omitempty"`
 }
 
 // ReadMfaVoice reads mfa-voice custom text
@@ -997,7 +997,7 @@ type ScreenOrganizationSelection struct {
 }
 
 type PromptOrganizations struct {
-	OrganizationSelection ScreenOrganizationSelection `json:"organization-selection"`
+	OrganizationSelection *ScreenOrganizationSelection `json:"organization-selection,omitempty"`
 }
 
 // ReadOrganizations reads organizations custom text
@@ -1087,11 +1087,11 @@ type ScreenResetPasswordError struct {
 }
 
 type PromptResetPassword struct {
-	ResetPasswordRequest ScreenResetPasswordRequest `json:"reset-password-request,omitempty"`
-	ResetPasswordEmail ScreenResetPasswordEmail `json:"reset-password-email,omitempty"`
-	ResetPassword ScreenResetPassword `json:"reset-password"`
-	ResetPasswordSuccess ScreenResetPasswordSuccess `json:"reset-password-success"`
-	ResetPasswordError ScreenResetPasswordError `json:"reset-password-error"`
+	ResetPasswordRequest *ScreenResetPasswordRequest `json:"reset-password-request,omitempty"`
+	ResetPasswordEmail   *ScreenResetPasswordEmail   `json:"reset-password-email,omitempty"`
+	ResetPassword        *ScreenResetPassword        `json:"reset-password,omitempty"`
+	ResetPasswordSuccess *ScreenResetPasswordSuccess `json:"reset-password-success,omitempty"`
+	ResetPasswordError   *ScreenResetPasswordError   `json:"reset-password-error,omitempty"`
 }
 
 // ReadResetPassword reads reset-password custom text
@@ -1144,13 +1144,13 @@ type ScreenSignup struct {
 	IpSignupBlocked                  string `json:"ip-signup-blocked,omitempty"`
 	NoDbConnection                   string `json:"no-db-connection,omitempty"`
 	NoEmail                          string `json:"no-email,omitempty"`
-	NoPasswordd                       string `json:"no-password,omitempty"`
+	NoPassword                       string `json:"no-password,omitempty"`
 	NoReEnterPassword                string `json:"no-re-enter-password,omitempty"`
 	NoUsername                       string `json:"no-username,omitempty"`
 }
 
 type PromptSignup struct {
-	Signup ScreenSignup `json:"signup"`
+	Signup *ScreenSignup `json:"signup,omitempty"`
 }
 
 // ReadSignup reads signup custom text
@@ -1210,7 +1210,7 @@ type ScreenSignupId struct {
 }
 
 type PromptSignupId struct {
-	SignupId ScreenSignupId `json:"signup-id"`
+	SignupId *ScreenSignupId `json:"signup-id,omitempty"`
 }
 
 // ReadSignupId reads signup-id custom text
@@ -1274,7 +1274,7 @@ type ScreenSignupPassword struct {
 }
 
 type PromptSignupPassword struct {
-	SignupPassword ScreenSignupPassword `json:"signup-password"`
+	SignupPassword *ScreenSignupPassword `json:"signup-password,omitempty"`
 }
 
 // ReadSignupPassword reads signup-password custom text
