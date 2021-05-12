@@ -1,10 +1,11 @@
 package management
 
 import (
-	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/internal/testing/expect"
@@ -77,6 +78,8 @@ func TestConnection(t *testing.T) {
 				_, ok = c.Options.(*ConnectionOptionsAzureAD)
 			case ConnectionStrategySAML:
 				_, ok = c.Options.(*ConnectionOptionsSAML)
+			case ConnectionStrategyGoogleApps:
+				_, ok = c.Options.(*ConnectionOptionsGoogleApps)
 			default:
 				_, ok = c.Options.(map[string]interface{})
 			}

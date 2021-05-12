@@ -26,6 +26,7 @@ const (
 	ConnectionStrategyAD                  = "ad"
 	ConnectionStrategyAzureAD             = "waad"
 	ConnectionStrategySAML                = "samlp"
+	ConnectionStrategyGoogleApps          = "google-apps"
 )
 
 type Connection struct {
@@ -149,6 +150,8 @@ func (c *Connection) UnmarshalJSON(b []byte) error {
 			v = &ConnectionOptionsAzureAD{}
 		case ConnectionStrategySAML:
 			v = &ConnectionOptionsSAML{}
+		case ConnectionStrategyGoogleApps:
+			v = &ConnectionOptionsGoogleApps{}
 		default:
 			v = make(map[string]interface{})
 		}
@@ -702,6 +705,26 @@ type ConnectionOptionsSAMLIdpInitiated struct {
 
 	SetUserAttributes  *string   `json:"set_user_root_attributes,omitempty"`
 	NonPersistentAttrs *[]string `json:"non_persistent_attrs,omitempty"`
+}
+
+type ConnectionOptionsGoogleApps struct {
+	ClientID     *string `json:"client_id,omitempty"`
+	ClientSecret *string `json:"client_secret,omitempty"`
+	Domain       *string `json:"domain,omitempty"`
+
+	EnableUsersAPI  *bool `json:"api_enable_users,omitempty"`
+	BasicProfile    *bool `json:"basic_profile,omitempty" scope:"basic_profile"`
+	ExtendedProfile *bool `json:"ext_profile,omitempty" scope:"ext_profile"`
+	Groups          *bool `json:"ext_groups,omitempty" scope:"ext_groups"`
+	Admin           *bool `json:"ext_admin,omitempty" scope:"ext_admin"`
+	IsSuspended     *bool `json:"ext_is_suspended,omitempty" scope:"ext_is_suspended"`
+	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty" scope:"ext_agreed_terms"`
+
+	SetUserAttributes  *string   `json:"set_user_root_attributes,omitempty"`
+	NonPersistentAttrs *[]string `json:"non_persistent_attrs,omitempty"`
+
+	DomainAliases []interface{} `json:"domain_aliases,omitempty"`
+	LogoURL       *string       `json:"icon_url,omitempty"`
 }
 
 type ConnectionManager struct {

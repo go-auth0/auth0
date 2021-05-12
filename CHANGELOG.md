@@ -1,3 +1,6 @@
+## v5.16.0
+* `management.Connection`: Add support for Google Apps enterprise connection ([#212](https://github.com/go-auth0/auth0/pull/212))
+
 ## v5.15.0
 * `management.Guardian`: Fixed minor bug when unmarshalling Policy string array ([#211](https://github.com/go-auth0/auth0/pull/211))
 
