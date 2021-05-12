@@ -4027,6 +4027,460 @@ func (p *Prompt) String() string {
 	return Stringify(p)
 }
 
+// GetConsent returns the Consent field.
+func (p *PromptConsent) GetConsent() *ScreenConsent {
+	if p == nil {
+		return nil
+	}
+	return p.Consent
+}
+
+// String returns a string representation of PromptConsent.
+func (p *PromptConsent) String() string {
+	return Stringify(p)
+}
+
+// GetDeviceCodeActivation returns the DeviceCodeActivation field.
+func (p *PromptDeviceFlow) GetDeviceCodeActivation() *ScreenDeviceCodeActivation {
+	if p == nil {
+		return nil
+	}
+	return p.DeviceCodeActivation
+}
+
+// GetDeviceCodeActivationAllowed returns the DeviceCodeActivationAllowed field.
+func (p *PromptDeviceFlow) GetDeviceCodeActivationAllowed() *ScreenDeviceCodeActivationAllowed {
+	if p == nil {
+		return nil
+	}
+	return p.DeviceCodeActivationAllowed
+}
+
+// GetDeviceCodeActivationDenied returns the DeviceCodeActivationDenied field.
+func (p *PromptDeviceFlow) GetDeviceCodeActivationDenied() *ScreenDeviceCodeActivationDenied {
+	if p == nil {
+		return nil
+	}
+	return p.DeviceCodeActivationDenied
+}
+
+// GetDeviceCodeConfirmation returns the DeviceCodeConfirmation field.
+func (p *PromptDeviceFlow) GetDeviceCodeConfirmation() *ScreenDeviceCodeConfirmation {
+	if p == nil {
+		return nil
+	}
+	return p.DeviceCodeConfirmation
+}
+
+// String returns a string representation of PromptDeviceFlow.
+func (p *PromptDeviceFlow) String() string {
+	return Stringify(p)
+}
+
+// GetEmailOtpChallenge returns the EmailOtpChallenge field.
+func (p *PromptEmailOtpChallenge) GetEmailOtpChallenge() *ScreenEmailOtpChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.EmailOtpChallenge
+}
+
+// String returns a string representation of PromptEmailOtpChallenge.
+func (p *PromptEmailOtpChallenge) String() string {
+	return Stringify(p)
+}
+
+// GetEmailVerificationResult returns the EmailVerificationResult field.
+func (p *PromptEmailVerification) GetEmailVerificationResult() *ScreenEmailVerificationResult {
+	if p == nil {
+		return nil
+	}
+	return p.EmailVerificationResult
+}
+
+// String returns a string representation of PromptEmailVerification.
+func (p *PromptEmailVerification) String() string {
+	return Stringify(p)
+}
+
+// GetAcceptInvitation returns the AcceptInvitation field.
+func (p *PromptInvitation) GetAcceptInvitation() *ScreenAcceptInvitation {
+	if p == nil {
+		return nil
+	}
+	return p.AcceptInvitation
+}
+
+// String returns a string representation of PromptInvitation.
+func (p *PromptInvitation) String() string {
+	return Stringify(p)
+}
+
+// GetLogin returns the Login field.
+func (p *PromptLogin) GetLogin() *ScreenLogin {
+	if p == nil {
+		return nil
+	}
+	return p.Login
+}
+
+// String returns a string representation of PromptLogin.
+func (p *PromptLogin) String() string {
+	return Stringify(p)
+}
+
+// GetLoginEmailVerification returns the LoginEmailVerification field.
+func (p *PromptLoginEmailVerification) GetLoginEmailVerification() *ScreenLoginEmailVerification {
+	if p == nil {
+		return nil
+	}
+	return p.LoginEmailVerification
+}
+
+// String returns a string representation of PromptLoginEmailVerification.
+func (p *PromptLoginEmailVerification) String() string {
+	return Stringify(p)
+}
+
+// GetLoginId returns the LoginId field.
+func (p *PromptLoginId) GetLoginId() *ScreenLoginId {
+	if p == nil {
+		return nil
+	}
+	return p.LoginId
+}
+
+// String returns a string representation of PromptLoginId.
+func (p *PromptLoginId) String() string {
+	return Stringify(p)
+}
+
+// GetLoginPassword returns the LoginPassword field.
+func (p *PromptLoginPassword) GetLoginPassword() *ScreenLoginPassword {
+	if p == nil {
+		return nil
+	}
+	return p.LoginPassword
+}
+
+// String returns a string representation of PromptLoginPassword.
+func (p *PromptLoginPassword) String() string {
+	return Stringify(p)
+}
+
+// GetMfaBeginEnrollOptions returns the MfaBeginEnrollOptions field.
+func (p *PromptMfa) GetMfaBeginEnrollOptions() *ScreenMfaBeginEnrollOptions {
+	if p == nil {
+		return nil
+	}
+	return p.MfaBeginEnrollOptions
+}
+
+// GetMfaEnrollResult returns the MfaEnrollResult field.
+func (p *PromptMfa) GetMfaEnrollResult() *ScreenMfaEnrollResult {
+	if p == nil {
+		return nil
+	}
+	return p.MfaEnrollResult
+}
+
+// GetMfaLoginOptions returns the MfaLoginOptions field.
+func (p *PromptMfa) GetMfaLoginOptions() *ScreenMfaLoginOptions {
+	if p == nil {
+		return nil
+	}
+	return p.MfaLoginOptions
+}
+
+// String returns a string representation of PromptMfa.
+func (p *PromptMfa) String() string {
+	return Stringify(p)
+}
+
+// GetMfaEmailChallenge returns the MfaEmailChallenge field.
+func (p *PromptMfaEmail) GetMfaEmailChallenge() *ScreenMfaEmailChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaEmailChallenge
+}
+
+// GetMfaEmailList returns the MfaEmailList field.
+func (p *PromptMfaEmail) GetMfaEmailList() *ScreenMfaEmailList {
+	if p == nil {
+		return nil
+	}
+	return p.MfaEmailList
+}
+
+// String returns a string representation of PromptMfaEmail.
+func (p *PromptMfaEmail) String() string {
+	return Stringify(p)
+}
+
+// GetMfaOtpEnrollmentChallenge returns the MfaOtpEnrollmentChallenge field.
+func (p *PromptMfaOtp) GetMfaOtpEnrollmentChallenge() *ScreenMfaOtpEnrollmentChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaOtpEnrollmentChallenge
+}
+
+// GetMfaOtpEnrollmentCode returns the MfaOtpEnrollmentCode field.
+func (p *PromptMfaOtp) GetMfaOtpEnrollmentCode() *ScreenMfaOtpEnrollmentCode {
+	if p == nil {
+		return nil
+	}
+	return p.MfaOtpEnrollmentCode
+}
+
+// GetMfaOtpEnrollmentQr returns the MfaOtpEnrollmentQr field.
+func (p *PromptMfaOtp) GetMfaOtpEnrollmentQr() *ScreenMfaOtpEnrollmentQr {
+	if p == nil {
+		return nil
+	}
+	return p.MfaOtpEnrollmentQr
+}
+
+// String returns a string representation of PromptMfaOtp.
+func (p *PromptMfaOtp) String() string {
+	return Stringify(p)
+}
+
+// GetMfaPhoneChallenge returns the MfaPhoneChallenge field.
+func (p *PromptMfaPhone) GetMfaPhoneChallenge() *ScreenMfaPhoneChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPhoneChallenge
+}
+
+// GetMfaPhoneEnrollment returns the MfaPhoneEnrollment field.
+func (p *PromptMfaPhone) GetMfaPhoneEnrollment() *ScreenMfaPhoneEnrollment {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPhoneEnrollment
+}
+
+// String returns a string representation of PromptMfaPhone.
+func (p *PromptMfaPhone) String() string {
+	return Stringify(p)
+}
+
+// GetMfaPushChallengePush returns the MfaPushChallengePush field.
+func (p *PromptMfaPush) GetMfaPushChallengePush() *ScreenMfaPushChallengePush {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPushChallengePush
+}
+
+// GetMfaPushEnrollmentQr returns the MfaPushEnrollmentQr field.
+func (p *PromptMfaPush) GetMfaPushEnrollmentQr() *ScreenMfaPushEnrollmentQr {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPushEnrollmentQr
+}
+
+// GetMfaPushList returns the MfaPushList field.
+func (p *PromptMfaPush) GetMfaPushList() *ScreenMfaPushList {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPushList
+}
+
+// GetMfaPushWelcome returns the MfaPushWelcome field.
+func (p *PromptMfaPush) GetMfaPushWelcome() *ScreenMfaPushWelcome {
+	if p == nil {
+		return nil
+	}
+	return p.MfaPushWelcome
+}
+
+// String returns a string representation of PromptMfaPush.
+func (p *PromptMfaPush) String() string {
+	return Stringify(p)
+}
+
+// GetMfaRecoveryCodeChallenge returns the MfaRecoveryCodeChallenge field.
+func (p *PromptMfaRecoveryCode) GetMfaRecoveryCodeChallenge() *ScreenMfaRecoveryCodeChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaRecoveryCodeChallenge
+}
+
+// GetMfaRecoveryCodeEnrollment returns the MfaRecoveryCodeEnrollment field.
+func (p *PromptMfaRecoveryCode) GetMfaRecoveryCodeEnrollment() *ScreenMfaRecoveryCodeEnrollment {
+	if p == nil {
+		return nil
+	}
+	return p.MfaRecoveryCodeEnrollment
+}
+
+// String returns a string representation of PromptMfaRecoveryCode.
+func (p *PromptMfaRecoveryCode) String() string {
+	return Stringify(p)
+}
+
+// GetMfaCountryCodes returns the MfaCountryCodes field.
+func (p *PromptMfaSms) GetMfaCountryCodes() *ScreenMfaCountryCodes {
+	if p == nil {
+		return nil
+	}
+	return p.MfaCountryCodes
+}
+
+// GetMfaSmsChallenge returns the MfaSmsChallenge field.
+func (p *PromptMfaSms) GetMfaSmsChallenge() *ScreenMfaSmsChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaSmsChallenge
+}
+
+// GetMfaSmsEnrollment returns the MfaSmsEnrollment field.
+func (p *PromptMfaSms) GetMfaSmsEnrollment() *ScreenMfaSmsEnrollment {
+	if p == nil {
+		return nil
+	}
+	return p.MfaSmsEnrollment
+}
+
+// GetMfaSmsList returns the MfaSmsList field.
+func (p *PromptMfaSms) GetMfaSmsList() *ScreenMfaSmsList {
+	if p == nil {
+		return nil
+	}
+	return p.MfaSmsList
+}
+
+// String returns a string representation of PromptMfaSms.
+func (p *PromptMfaSms) String() string {
+	return Stringify(p)
+}
+
+// GetMfaVoiceChallenge returns the MfaVoiceChallenge field.
+func (p *PromptMfaVoice) GetMfaVoiceChallenge() *ScreenMfaVoiceChallenge {
+	if p == nil {
+		return nil
+	}
+	return p.MfaVoiceChallenge
+}
+
+// GetMfaVoiceEnrollment returns the MfaVoiceEnrollment field.
+func (p *PromptMfaVoice) GetMfaVoiceEnrollment() *ScreenMfaVoiceEnrollment {
+	if p == nil {
+		return nil
+	}
+	return p.MfaVoiceEnrollment
+}
+
+// String returns a string representation of PromptMfaVoice.
+func (p *PromptMfaVoice) String() string {
+	return Stringify(p)
+}
+
+// GetOrganizationSelection returns the OrganizationSelection field.
+func (p *PromptOrganizations) GetOrganizationSelection() *ScreenOrganizationSelection {
+	if p == nil {
+		return nil
+	}
+	return p.OrganizationSelection
+}
+
+// String returns a string representation of PromptOrganizations.
+func (p *PromptOrganizations) String() string {
+	return Stringify(p)
+}
+
+// GetResetPassword returns the ResetPassword field.
+func (p *PromptResetPassword) GetResetPassword() *ScreenResetPassword {
+	if p == nil {
+		return nil
+	}
+	return p.ResetPassword
+}
+
+// GetResetPasswordEmail returns the ResetPasswordEmail field.
+func (p *PromptResetPassword) GetResetPasswordEmail() *ScreenResetPasswordEmail {
+	if p == nil {
+		return nil
+	}
+	return p.ResetPasswordEmail
+}
+
+// GetResetPasswordError returns the ResetPasswordError field.
+func (p *PromptResetPassword) GetResetPasswordError() *ScreenResetPasswordError {
+	if p == nil {
+		return nil
+	}
+	return p.ResetPasswordError
+}
+
+// GetResetPasswordRequest returns the ResetPasswordRequest field.
+func (p *PromptResetPassword) GetResetPasswordRequest() *ScreenResetPasswordRequest {
+	if p == nil {
+		return nil
+	}
+	return p.ResetPasswordRequest
+}
+
+// GetResetPasswordSuccess returns the ResetPasswordSuccess field.
+func (p *PromptResetPassword) GetResetPasswordSuccess() *ScreenResetPasswordSuccess {
+	if p == nil {
+		return nil
+	}
+	return p.ResetPasswordSuccess
+}
+
+// String returns a string representation of PromptResetPassword.
+func (p *PromptResetPassword) String() string {
+	return Stringify(p)
+}
+
+// GetSignup returns the Signup field.
+func (p *PromptSignup) GetSignup() *ScreenSignup {
+	if p == nil {
+		return nil
+	}
+	return p.Signup
+}
+
+// String returns a string representation of PromptSignup.
+func (p *PromptSignup) String() string {
+	return Stringify(p)
+}
+
+// GetSignupId returns the SignupId field.
+func (p *PromptSignupId) GetSignupId() *ScreenSignupId {
+	if p == nil {
+		return nil
+	}
+	return p.SignupId
+}
+
+// String returns a string representation of PromptSignupId.
+func (p *PromptSignupId) String() string {
+	return Stringify(p)
+}
+
+// GetSignupPassword returns the SignupPassword field.
+func (p *PromptSignupPassword) GetSignupPassword() *ScreenSignupPassword {
+	if p == nil {
+		return nil
+	}
+	return p.SignupPassword
+}
+
+// String returns a string representation of PromptSignupPassword.
+func (p *PromptSignupPassword) String() string {
+	return Stringify(p)
+}
+
 // GetAllowOfflineAccess returns the AllowOfflineAccess field if it's non-nil, zero value otherwise.
 func (r *ResourceServer) GetAllowOfflineAccess() bool {
 	if r == nil || r.AllowOfflineAccess == nil {
@@ -4257,6 +4711,221 @@ func (r *RuleConfig) String() string {
 // String returns a string representation of RuleList.
 func (r *RuleList) String() string {
 	return Stringify(r)
+}
+
+// String returns a string representation of ScreenAcceptInvitation.
+func (s *ScreenAcceptInvitation) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenConsent.
+func (s *ScreenConsent) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenDeviceCodeActivation.
+func (s *ScreenDeviceCodeActivation) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenDeviceCodeActivationAllowed.
+func (s *ScreenDeviceCodeActivationAllowed) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenDeviceCodeActivationDenied.
+func (s *ScreenDeviceCodeActivationDenied) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenDeviceCodeConfirmation.
+func (s *ScreenDeviceCodeConfirmation) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenEmailOtpChallenge.
+func (s *ScreenEmailOtpChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenEmailVerificationResult.
+func (s *ScreenEmailVerificationResult) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenLogin.
+func (s *ScreenLogin) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenLoginEmailVerification.
+func (s *ScreenLoginEmailVerification) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenLoginId.
+func (s *ScreenLoginId) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenLoginPassword.
+func (s *ScreenLoginPassword) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaBeginEnrollOptions.
+func (s *ScreenMfaBeginEnrollOptions) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaCountryCodes.
+func (s *ScreenMfaCountryCodes) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaEmailChallenge.
+func (s *ScreenMfaEmailChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaEmailList.
+func (s *ScreenMfaEmailList) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaEnrollResult.
+func (s *ScreenMfaEnrollResult) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaLoginOptions.
+func (s *ScreenMfaLoginOptions) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaOtpEnrollmentChallenge.
+func (s *ScreenMfaOtpEnrollmentChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaOtpEnrollmentCode.
+func (s *ScreenMfaOtpEnrollmentCode) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaOtpEnrollmentQr.
+func (s *ScreenMfaOtpEnrollmentQr) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPhoneChallenge.
+func (s *ScreenMfaPhoneChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPhoneEnrollment.
+func (s *ScreenMfaPhoneEnrollment) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPushChallengePush.
+func (s *ScreenMfaPushChallengePush) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPushEnrollmentQr.
+func (s *ScreenMfaPushEnrollmentQr) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPushList.
+func (s *ScreenMfaPushList) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaPushWelcome.
+func (s *ScreenMfaPushWelcome) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaRecoveryCodeChallenge.
+func (s *ScreenMfaRecoveryCodeChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaRecoveryCodeEnrollment.
+func (s *ScreenMfaRecoveryCodeEnrollment) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaSmsChallenge.
+func (s *ScreenMfaSmsChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaSmsEnrollment.
+func (s *ScreenMfaSmsEnrollment) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaSmsList.
+func (s *ScreenMfaSmsList) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaVoiceChallenge.
+func (s *ScreenMfaVoiceChallenge) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenMfaVoiceEnrollment.
+func (s *ScreenMfaVoiceEnrollment) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenOrganizationSelection.
+func (s *ScreenOrganizationSelection) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenResetPassword.
+func (s *ScreenResetPassword) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenResetPasswordEmail.
+func (s *ScreenResetPasswordEmail) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenResetPasswordError.
+func (s *ScreenResetPasswordError) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenResetPasswordRequest.
+func (s *ScreenResetPasswordRequest) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenResetPasswordSuccess.
+func (s *ScreenResetPasswordSuccess) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenSignup.
+func (s *ScreenSignup) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenSignupId.
+func (s *ScreenSignupId) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of ScreenSignupPassword.
+func (s *ScreenSignupPassword) String() string {
+	return Stringify(s)
 }
 
 // GetCert returns the Cert field if it's non-nil, zero value otherwise.
