@@ -35,19 +35,8 @@ func (m *PromptManager) Update(p *Prompt, opts ...RequestOption) error {
 	return m.Request("PATCH", m.URI("prompts"), p, opts...)
 }
 
-//////////////////////////////////////////////////////////////////////
-// Get custom text for a prompt, Set custom text for a specific prompt
+// PromptConsent stores consent custom text
 //
-
-type CustomTextManager struct {
-	*Management
-}
-
-func newCustomTextManager(m *Management) *CustomTextManager {
-	return &CustomTextManager{m}
-}
-
-// prompt: consent
 // See: https://auth0.com/docs/universal-login/prompt-consent
 
 type ScreenConsent struct {
@@ -68,22 +57,23 @@ type PromptConsent struct {
 	Consent *ScreenConsent `json:"consent,omitempty"`
 }
 
-// ReadConsent reads consent custom text
+// ReadPromptConsent retrieves consent custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadConsent(language string, opts ...RequestOption) (p *PromptConsent, err error) {
+func (m *PromptManager) ReadPromptConsent(language string, opts ...RequestOption) (p *PromptConsent, err error) {
 	err = m.Request("GET", m.URI("prompts", "consent", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetConsent sets consent custom text
+// ReplacePromptConsent replaces consent custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetConsent(language string, p *PromptConsent, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptConsent(language string, p *PromptConsent, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "consent", "custom-text", language), p, opts...)
 }
 
-// prompt: device-flow
+// PromptDeviceFlow stores device-flow custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-device-flow
 
 type ScreenDeviceCodeActivation struct {
@@ -126,22 +116,23 @@ type PromptDeviceFlow struct {
 	DeviceCodeConfirmation      *ScreenDeviceCodeConfirmation      `json:"device-code-confirmation"`
 }
 
-// ReadDeviceFlow reads device-flow custom text
+// ReadPromptDeviceFlow retrieves device-flow custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadDeviceFlow(language string, opts ...RequestOption) (p *PromptDeviceFlow, err error) {
+func (m *PromptManager) ReadPromptDeviceFlow(language string, opts ...RequestOption) (p *PromptDeviceFlow, err error) {
 	err = m.Request("GET", m.URI("prompts", "device-flow", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetDeviceFlow sets device-flow custom text
+// ReplacePromptDeviceFlow replaces device-flow custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetDeviceFlow(language string, p *PromptDeviceFlow, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptDeviceFlow(language string, p *PromptDeviceFlow, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "device-flow", "custom-text", language), p, opts...)
 }
 
-// prompt: email-otp-challenge
+// PromptEmailOtpChallenge stores email-otp-challenge custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-email-otp-challenge
 
 type ScreenEmailOtpChallenge struct {
@@ -163,22 +154,23 @@ type PromptEmailOtpChallenge struct {
 	EmailOtpChallenge *ScreenEmailOtpChallenge `json:"email-otp-challenge,omitempty"`
 }
 
-// ReadEmailOtpChallenge reads email-otp-challenge custom text
+// ReadPromptEmailOtpChallenge retrieves email-otp-challenge custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadEmailOtpChallenge(language string, opts ...RequestOption) (p *PromptEmailOtpChallenge, err error) {
+func (m *PromptManager) ReadPromptEmailOtpChallenge(language string, opts ...RequestOption) (p *PromptEmailOtpChallenge, err error) {
 	err = m.Request("GET", m.URI("prompts", "email-otp-challenge", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetEmailOtpChallenge sets email-otp-challenge custom text
+// ReplacePromptEmailOtpChallenge replaces email-otp-challenge custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetEmailOtpChallenge(language string, p *PromptEmailOtpChallenge, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptEmailOtpChallenge(language string, p *PromptEmailOtpChallenge, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "email-otp-challenge", "custom-text", language), p, opts...)
 }
 
-// prompt: email-verification
+// PromptEmailVerification stores email-verification custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-email-verification
 
 type ScreenEmailVerificationResult struct {
@@ -200,22 +192,23 @@ type PromptEmailVerification struct {
 	EmailVerificationResult *ScreenEmailVerificationResult `json:"email-verification-result,omitempty"`
 }
 
-// ReadEmailVerification reads email-verification custom text
+// ReadPromptEmailVerification retrieves email-verification custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadEmailVerification(language string, opts ...RequestOption) (p *PromptEmailVerification, err error) {
+func (m *PromptManager) ReadPromptEmailVerification(language string, opts ...RequestOption) (p *PromptEmailVerification, err error) {
 	err = m.Request("GET", m.URI("prompts", "email-verification", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetEmailVerification sets email-verification custom text
+// ReplacePromptEmailVerification replaces email-verification custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetEmailVerification(language string, p *PromptEmailVerification, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptEmailVerification(language string, p *PromptEmailVerification, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "email-verification", "custom-text", language), p, opts...)
 }
 
-// prompt: invitation
+// PromptAcceptInvitation stores accept-invitation custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-accept-invitation
 
 type ScreenAcceptInvitation struct {
@@ -226,26 +219,27 @@ type ScreenAcceptInvitation struct {
 	LogoAltText string `json:"logoAltText,omitempty"`
 }
 
-type PromptInvitation struct {
+type PromptAcceptInvitation struct {
 	AcceptInvitation *ScreenAcceptInvitation `json:"accept-invitation,omitempty"`
 }
 
-// ReadInvitation reads invitation custom text
+// ReadPromptAcceptInvitation retrieves invitation custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadInvitation(language string, opts ...RequestOption) (p *PromptInvitation, err error) {
+func (m *PromptManager) ReadPromptAcceptInvitation(language string, opts ...RequestOption) (p *PromptAcceptInvitation, err error) {
 	err = m.Request("GET", m.URI("prompts", "invitation", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetInvitation sets invitation custom text
+// ReplacePromptAcceptInvitation replaces invitation custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetInvitation(language string, p *PromptInvitation, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptAcceptInvitation(language string, p *PromptAcceptInvitation, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "invitation", "custom-text", language), p, opts...)
 }
 
-// prompt: login
+// PromptLogin stores login custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-login
 
 type ScreenLogin struct {
@@ -293,22 +287,23 @@ type PromptLogin struct {
 	Login *ScreenLogin `json:"login,omitempty"`
 }
 
-// ReadLogin reads login custom text
+// ReadPromptLogin retrieves login custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadLogin(language string, opts ...RequestOption) (p *PromptLogin, err error) {
+func (m *PromptManager) ReadPromptLogin(language string, opts ...RequestOption) (p *PromptLogin, err error) {
 	err = m.Request("GET", m.URI("prompts", "login", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetLogin sets login custom text
+// ReplacePromptLogin replaces login custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetLogin(language string, p *PromptLogin, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptLogin(language string, p *PromptLogin, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "login", "custom-text", language), p, opts...)
 }
 
-// prompt: login-id
+// PromptLoginId stores login-id custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-login-id
 
 type ScreenLoginId struct {
@@ -350,22 +345,23 @@ type PromptLoginId struct {
 	LoginId *ScreenLoginId `json:"login-id,omitempty"`
 }
 
-// ReadLoginId reads login-id custom text
+// ReadPromptLoginId retrieves login-id custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadLoginId(language string, opts ...RequestOption) (p *PromptLoginId, err error) {
+func (m *PromptManager) ReadPromptLoginId(language string, opts ...RequestOption) (p *PromptLoginId, err error) {
 	err = m.Request("GET", m.URI("prompts", "login-id", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetLoginId sets login-id custom text
+// ReplacePromptLoginId replaces login-id custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetLoginId(language string, p *PromptLoginId, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptLoginId(language string, p *PromptLoginId, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "login-id", "custom-text", language), p, opts...)
 }
 
-// prompt: login-password
+// PromptLoginPassword stores login-password custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-login-password
 
 type ScreenLoginPassword struct {
@@ -409,22 +405,23 @@ type PromptLoginPassword struct {
 	LoginPassword *ScreenLoginPassword `json:"login-password,omitempty"`
 }
 
-// ReadLoginPassword reads login-password custom text
+// ReadPromptLoginPassword retrieves login-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadLoginPassword(language string, opts ...RequestOption) (p *PromptLoginPassword, err error) {
+func (m *PromptManager) ReadPromptLoginPassword(language string, opts ...RequestOption) (p *PromptLoginPassword, err error) {
 	err = m.Request("GET", m.URI("prompts", "login-password", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetLoginPassword sets login-password custom text
+// ReplacePromptLoginPassword replaces login-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetLoginPassword(language string, p *PromptLoginPassword, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptLoginPassword(language string, p *PromptLoginPassword, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "login-password", "custom-text", language), p, opts...)
 }
 
-// prompt: login-email-verification
+// PromptLoginEmailVerification stores login-email-verification custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-login-email-verification
 
 type ScreenLoginEmailVerification struct {
@@ -446,22 +443,23 @@ type PromptLoginEmailVerification struct {
 	LoginEmailVerification *ScreenLoginEmailVerification `json:"login-email-verification,omitempty"`
 }
 
-// ReadLoginEmailVerification reads login-email-verification custom text
+// ReadPromptLoginEmailVerification retrieves login-email-verification custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadLoginEmailVerification(language string, opts ...RequestOption) (p *PromptLoginEmailVerification, err error) {
+func (m *PromptManager) ReadPromptLoginEmailVerification(language string, opts ...RequestOption) (p *PromptLoginEmailVerification, err error) {
 	err = m.Request("GET", m.URI("prompts", "login-email-verification", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetLoginEmailVerification sets login-email-verification custom text
+// ReplacePromptLoginEmailVerification replaces login-email-verification custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetLoginEmailVerification(language string, p *PromptLoginEmailVerification, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptLoginEmailVerification(language string, p *PromptLoginEmailVerification, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "login-email-verification", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa
+// PromptMfa stores mfa custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa
 
 type ScreenMfaEnrollResult struct {
@@ -519,22 +517,23 @@ type PromptMfa struct {
 	MfaBeginEnrollOptions *ScreenMfaBeginEnrollOptions `json:"mfa-begin-enroll-options,omitempty"`
 }
 
-// ReadMfa reads mfa custom text
+// ReadPromptMfa retrieves mfa custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfa(language string, opts ...RequestOption) (p *PromptMfa, err error) {
+func (m *PromptManager) ReadPromptMfa(language string, opts ...RequestOption) (p *PromptMfa, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfa sets mfa custom text
+// ReplacePromptMfa replaces mfa custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfa(language string, p *PromptMfa, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfa(language string, p *PromptMfa, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-email
+// PromptMfaEmail stores mfa-email custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-email
 
 type ScreenMfaEmailChallenge struct {
@@ -569,22 +568,23 @@ type PromptMfaEmail struct {
 	MfaEmailList      *ScreenMfaEmailList      `json:"mfa-email-list,omitempty"`
 }
 
-// ReadMfaEmail reads mfa-email custom text
+// ReadPromptMfaEmail retrieves mfa-email custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaEmail(language string, opts ...RequestOption) (p *PromptMfaEmail, err error) {
+func (m *PromptManager) ReadPromptMfaEmail(language string, opts ...RequestOption) (p *PromptMfaEmail, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-email", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaEmail sets mfa-email custom text
+// ReplacePromptMfaEmail replaces mfa-email custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaEmail(language string, p *PromptMfaEmail, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaEmail(language string, p *PromptMfaEmail, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-email", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-otp
+// PromptMfaOtp stores mfa-otp custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-otp
 
 type ScreenMfaOtpEnrollmentQr struct {
@@ -638,22 +638,23 @@ type PromptMfaOtp struct {
 	MfaOtpEnrollmentChallenge *ScreenMfaOtpEnrollmentChallenge `json:"mfa-otp-challenge,omitempty"`
 }
 
-// ReadMfaOtp reads mfa-otp custom text
+// ReadPromptMfaOtp retrieves mfa-otp custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaOtp(language string, opts ...RequestOption) (p *PromptMfaOtp, err error) {
+func (m *PromptManager) ReadPromptMfaOtp(language string, opts ...RequestOption) (p *PromptMfaOtp, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-otp", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaOtp sets mfa-otp custom text
+// ReplacePromptMfaOtp replaces mfa-otp custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaOtp(language string, p *PromptMfaOtp, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaOtp(language string, p *PromptMfaOtp, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-otp", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-phone
+// PromptMfaPhone stores mfa-phone custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-phone
 
 type ScreenMfaPhoneChallenge struct {
@@ -701,22 +702,23 @@ type PromptMfaPhone struct {
 	MfaPhoneEnrollment *ScreenMfaPhoneEnrollment `json:"mfa-phone-enrollment,omitempty"`
 }
 
-// ReadMfaPhone reads mfa-phone custom text
+// ReadPromptMfaPhone retrieves mfa-phone custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaPhone(language string, opts ...RequestOption) (p *PromptMfaPhone, err error) {
+func (m *PromptManager) ReadPromptMfaPhone(language string, opts ...RequestOption) (p *PromptMfaPhone, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-phone", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaPhone sets mfa-phone custom text
+// ReplacePromptMfaPhone replaces mfa-phone custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaPhone(language string, p *PromptMfaPhone, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaPhone(language string, p *PromptMfaPhone, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-phone", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-push
+// PromptMfaPush stores mfa-push custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-push
 
 type ScreenMfaPushWelcome struct {
@@ -774,22 +776,23 @@ type PromptMfaPush struct {
 	MfaPushList          *ScreenMfaPushList          `json:"mfa-push-list,omitempty"`
 }
 
-// ReadMfaPush reads mfa-push custom text
+// ReadPromptMfaPush retrieves mfa-push custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaPush(language string, opts ...RequestOption) (p *PromptMfaPush, err error) {
+func (m *PromptManager) ReadPromptMfaPush(language string, opts ...RequestOption) (p *PromptMfaPush, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-push", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaPush sets mfa-push custom text
+// ReplacePromptMfaPush replaces mfa-push custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaPush(language string, p *PromptMfaPush, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaPush(language string, p *PromptMfaPush, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-push", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-recovery-code
+// PromptMfaRecoveryCode stores mfa-recovery-code custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-recovery-code
 
 type ScreenMfaRecoveryCodeEnrollment struct {
@@ -824,22 +827,23 @@ type PromptMfaRecoveryCode struct {
 	MfaRecoveryCodeChallenge  *ScreenMfaRecoveryCodeChallenge  `json:"mfa-recovery-code-challenge,omitempty"`
 }
 
-// ReadMfaRecoveryCode reads mfa-recovery-code custom text
+// ReadPromptMfaRecoveryCode retrieves mfa-recovery-code custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaRecoveryCode(language string, opts ...RequestOption) (p *PromptMfaRecoveryCode, err error) {
+func (m *PromptManager) ReadPromptMfaRecoveryCode(language string, opts ...RequestOption) (p *PromptMfaRecoveryCode, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-recovery-code", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaRecoveryCode sets mfa-recovery-code custom text
+// ReplacePromptMfaRecoveryCode replaces mfa-recovery-code custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaRecoveryCode(language string, p *PromptMfaRecoveryCode, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaRecoveryCode(language string, p *PromptMfaRecoveryCode, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-recovery-code", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-sms
+// PromptMfaSms stores mfa-sms custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-sms
 
 type ScreenMfaCountryCodes struct {
@@ -902,22 +906,23 @@ type PromptMfaSms struct {
 	MfaSmsList       *ScreenMfaSmsList       `json:"mfa-sms-list,omitempty"`
 }
 
-// ReadMfaSms reads mfa-sms custom text
+// ReadPromptMfaSms retrieves mfa-sms custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaSms(language string, opts ...RequestOption) (p *PromptMfaSms, err error) {
+func (m *PromptManager) ReadPromptMfaSms(language string, opts ...RequestOption) (p *PromptMfaSms, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-sms", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaSms sets mfa-sms custom text
+// ReplacePromptMfaSms replaces mfa-sms custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaSms(language string, p *PromptMfaSms, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaSms(language string, p *PromptMfaSms, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-sms", "custom-text", language), p, opts...)
 }
 
-// prompt: mfa-voice
+// PromptMfaVoice store mfa-voice custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-mfa-voice
 
 type ScreenMfaVoiceEnrollment struct {
@@ -967,22 +972,23 @@ type PromptMfaVoice struct {
 	MfaVoiceChallenge  *ScreenMfaVoiceChallenge  `json:"mfa-voice-challenge,omitempty"`
 }
 
-// ReadMfaVoice reads mfa-voice custom text
+// ReadPromptMfaVoice retrieves mfa-voice custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadMfaVoice(language string, opts ...RequestOption) (p *PromptMfaVoice, err error) {
+func (m *PromptManager) ReadPromptMfaVoice(language string, opts ...RequestOption) (p *PromptMfaVoice, err error) {
 	err = m.Request("GET", m.URI("prompts", "mfa-voice", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetMfaVoice sets mfa-voice custom text
+// ReplacePromptMfaVoice replaces mfa-voice custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetMfaVoice(language string, p *PromptMfaVoice, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptMfaVoice(language string, p *PromptMfaVoice, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "mfa-voice", "custom-text", language), p, opts...)
 }
 
-// prompt: organizations
+// PromptOrganizationSelection store organization-selection custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-organization-selection
 
 type ScreenOrganizationSelection struct {
@@ -996,26 +1002,27 @@ type ScreenOrganizationSelection struct {
 	LogoAltText string `json:"logoAltText,omitempty"`
 }
 
-type PromptOrganizations struct {
+type PromptOrganizationSelection struct {
 	OrganizationSelection *ScreenOrganizationSelection `json:"organization-selection,omitempty"`
 }
 
-// ReadOrganizations reads organizations custom text
+// ReadPromptOrganizations retrieves organizations custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadOrganizations(language string, opts ...RequestOption) (p *PromptOrganizations, err error) {
+func (m *PromptManager) ReadPromptOrganizations(language string, opts ...RequestOption) (p *PromptOrganizationSelection, err error) {
 	err = m.Request("GET", m.URI("prompts", "organizations", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetOrganizations sets organizations custom text
+// ReplacePromptOrganizations replaces organizations custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetOrganizations(language string, p *PromptOrganizations, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptOrganizations(language string, p *PromptOrganizationSelection, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "organizations", "custom-text", language), p, opts...)
 }
 
-// prompt: reset-password
+// PromptResetPassword stores reset-password custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-reset-password
 
 type ScreenResetPasswordRequest struct {
@@ -1094,22 +1101,23 @@ type PromptResetPassword struct {
 	ResetPasswordError   *ScreenResetPasswordError   `json:"reset-password-error,omitempty"`
 }
 
-// ReadResetPassword reads reset-password custom text
+// ReadPromptResetPassword retrieves reset-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadResetPassword(language string, opts ...RequestOption) (p *PromptResetPassword, err error) {
+func (m *PromptManager) ReadPromptResetPassword(language string, opts ...RequestOption) (p *PromptResetPassword, err error) {
 	err = m.Request("GET", m.URI("prompts", "reset-password", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetResetPassword sets reset-password custom text
+// ReplacePromptResetPassword replaces reset-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetResetPassword(language string, p *PromptResetPassword, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptResetPassword(language string, p *PromptResetPassword, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "reset-password", "custom-text", language), p, opts...)
 }
 
-// prompt: signup
+// PromptSignup stores signup custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-signup
 
 type ScreenSignup struct {
@@ -1153,22 +1161,23 @@ type PromptSignup struct {
 	Signup *ScreenSignup `json:"signup,omitempty"`
 }
 
-// ReadSignup reads signup custom text
+// ReadPromptSignup retrieves signup custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadSignup(language string, opts ...RequestOption) (p *PromptSignup, err error) {
+func (m *PromptManager) ReadPromptSignup(language string, opts ...RequestOption) (p *PromptSignup, err error) {
 	err = m.Request("GET", m.URI("prompts", "signup", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetSignup sets signup custom text
+// ReplacePromptSignup replaces signup custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetSignup(language string, p *PromptSignup, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptSignup(language string, p *PromptSignup, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "signup", "custom-text", language), p, opts...)
 }
 
-// prompt: signup-id
+// PromptSignupId store signup-id custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-signup-id
 
 type ScreenSignupId struct {
@@ -1213,22 +1222,23 @@ type PromptSignupId struct {
 	SignupId *ScreenSignupId `json:"signup-id,omitempty"`
 }
 
-// ReadSignupId reads signup-id custom text
+// ReadPromptSignupId retrieves signup-id custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadSignupId(language string, opts ...RequestOption) (p *PromptSignupId, err error) {
+func (m *PromptManager) ReadPromptSignupId(language string, opts ...RequestOption) (p *PromptSignupId, err error) {
 	err = m.Request("GET", m.URI("prompts", "signup-id", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetSignupId sets signup-id custom text
+// ReplacePromptSignupId replaces signup-id custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetSignupId(language string, p *PromptSignupId, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptSignupId(language string, p *PromptSignupId, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "signup-id", "custom-text", language), p, opts...)
 }
 
-// prompt: signup-password
+// PromptSignupPassword stores signup-password custom text
+//
 // See: https://auth0.com/docs/universal-login/prompt-signup-password
 
 type ScreenSignupPassword struct {
@@ -1277,17 +1287,17 @@ type PromptSignupPassword struct {
 	SignupPassword *ScreenSignupPassword `json:"signup-password,omitempty"`
 }
 
-// ReadSignupPassword reads signup-password custom text
+// ReadPromptSignupPassword retrieves signup-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/get_custom_text_by_language
-func (m *CustomTextManager) ReadSignupPassword(language string, opts ...RequestOption) (p *PromptSignupPassword, err error) {
+func (m *PromptManager) ReadPromptSignupPassword(language string, opts ...RequestOption) (p *PromptSignupPassword, err error) {
 	err = m.Request("GET", m.URI("prompts", "signup-password", "custom-text", language), &p, opts...)
 	return
 }
 
-// SetSignupPassword sets signup-password custom text
+// ReplacePromptSignupPassword replaces signup-password custom text
 //
 // See: https://auth0.com/docs/api/management/v2#!/Prompts/put_custom_text_by_language
-func (m *CustomTextManager) SetSignupPassword(language string, p *PromptSignupPassword, opts ...RequestOption) error {
+func (m *PromptManager) ReplacePromptSignupPassword(language string, p *PromptSignupPassword, opts ...RequestOption) error {
 	return m.Request("PUT", m.URI("prompts", "signup-password", "custom-text", language), p, opts...)
 }

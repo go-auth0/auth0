@@ -4027,6 +4027,19 @@ func (p *Prompt) String() string {
 	return Stringify(p)
 }
 
+// GetAcceptInvitation returns the AcceptInvitation field.
+func (p *PromptAcceptInvitation) GetAcceptInvitation() *ScreenAcceptInvitation {
+	if p == nil {
+		return nil
+	}
+	return p.AcceptInvitation
+}
+
+// String returns a string representation of PromptAcceptInvitation.
+func (p *PromptAcceptInvitation) String() string {
+	return Stringify(p)
+}
+
 // GetConsent returns the Consent field.
 func (p *PromptConsent) GetConsent() *ScreenConsent {
 	if p == nil {
@@ -4100,19 +4113,6 @@ func (p *PromptEmailVerification) GetEmailVerificationResult() *ScreenEmailVerif
 
 // String returns a string representation of PromptEmailVerification.
 func (p *PromptEmailVerification) String() string {
-	return Stringify(p)
-}
-
-// GetAcceptInvitation returns the AcceptInvitation field.
-func (p *PromptInvitation) GetAcceptInvitation() *ScreenAcceptInvitation {
-	if p == nil {
-		return nil
-	}
-	return p.AcceptInvitation
-}
-
-// String returns a string representation of PromptInvitation.
-func (p *PromptInvitation) String() string {
 	return Stringify(p)
 }
 
@@ -4385,15 +4385,15 @@ func (p *PromptMfaVoice) String() string {
 }
 
 // GetOrganizationSelection returns the OrganizationSelection field.
-func (p *PromptOrganizations) GetOrganizationSelection() *ScreenOrganizationSelection {
+func (p *PromptOrganizationSelection) GetOrganizationSelection() *ScreenOrganizationSelection {
 	if p == nil {
 		return nil
 	}
 	return p.OrganizationSelection
 }
 
-// String returns a string representation of PromptOrganizations.
-func (p *PromptOrganizations) String() string {
+// String returns a string representation of PromptOrganizationSelection.
+func (p *PromptOrganizationSelection) String() string {
 	return Stringify(p)
 }
 

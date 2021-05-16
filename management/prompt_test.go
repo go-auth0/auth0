@@ -50,28 +50,21 @@ func TestPrompt(t *testing.T) {
 	expect.Expect(t, ps.IdentifierFirst, auth0.Bool(false))
 }
 
-// CustomText tests
-//
-// instructions:
-// install go: https://golang.org/doc/install
-// $ cd auth0/management
-// $ go test -run CustomText
-
 // Language to use with tests
 const Language = "en"
 
-func TestConsentCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadConsent(Language)
+func TestPromptConsent(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptConsent(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetConsent(Language, StartVal)
+		err = m.Prompt.ReplacePromptConsent(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadConsent(Language)
+		ReturnVal, err := m.Prompt.ReadPromptConsent(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -93,30 +86,30 @@ func TestConsentCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetConsent(Language, &SetVal)
+	err = m.Prompt.ReplacePromptConsent(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadConsent(Language)
+	ReturnVal, err := m.Prompt.ReadPromptConsent(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestDeviceFlowCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadDeviceFlow(Language)
+func TestPromptDeviceFlow(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptDeviceFlow(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetDeviceFlow(Language, StartVal)
+		err = m.Prompt.ReplacePromptDeviceFlow(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadDeviceFlow(Language)
+		ReturnVal, err := m.Prompt.ReadPromptDeviceFlow(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -155,30 +148,30 @@ func TestDeviceFlowCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetDeviceFlow(Language, &SetVal)
+	err = m.Prompt.ReplacePromptDeviceFlow(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadDeviceFlow(Language)
+	ReturnVal, err := m.Prompt.ReadPromptDeviceFlow(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestEmailOtpChallengeCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadEmailOtpChallenge(Language)
+func TestPromptEmailOtpChallenge(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptEmailOtpChallenge(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetEmailOtpChallenge(Language, StartVal)
+		err = m.Prompt.ReplacePromptEmailOtpChallenge(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadEmailOtpChallenge(Language)
+		ReturnVal, err := m.Prompt.ReadPromptEmailOtpChallenge(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -202,30 +195,30 @@ func TestEmailOtpChallengeCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetEmailOtpChallenge(Language, &SetVal)
+	err = m.Prompt.ReplacePromptEmailOtpChallenge(Language, &SetVal)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadEmailOtpChallenge(Language)
+	ReturnVal, err := m.Prompt.ReadPromptEmailOtpChallenge(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestEmailVerificationCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadEmailVerification(Language)
+func TestPromptEmailVerification(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptEmailVerification(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetEmailVerification(Language, StartVal)
+		err = m.Prompt.ReplacePromptEmailVerification(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadEmailVerification(Language)
+		ReturnVal, err := m.Prompt.ReadPromptEmailVerification(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -249,37 +242,37 @@ func TestEmailVerificationCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetEmailVerification(Language, &SetVal)
+	err = m.Prompt.ReplacePromptEmailVerification(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadEmailVerification(Language)
+	ReturnVal, err := m.Prompt.ReadPromptEmailVerification(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestInvitationCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadInvitation(Language)
+func TestPromptAcceptInvitation(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptAcceptInvitation(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetInvitation(Language, StartVal)
+		err = m.Prompt.ReplacePromptAcceptInvitation(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadInvitation(Language)
+		ReturnVal, err := m.Prompt.ReadPromptAcceptInvitation(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
 		expect.Expect(t, ReturnVal, StartVal)
 	})
 
-	SetVal := PromptInvitation{
+	SetVal := PromptAcceptInvitation{
 		AcceptInvitation: &ScreenAcceptInvitation{
 			PageTitle:   "PageTitle",
 			Title:       "Title",
@@ -289,30 +282,30 @@ func TestInvitationCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetInvitation(Language, &SetVal)
+	err = m.Prompt.ReplacePromptAcceptInvitation(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadInvitation(Language)
+	ReturnVal, err := m.Prompt.ReadPromptAcceptInvitation(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestLoginCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadLogin(Language)
+func TestPromptLogin(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptLogin(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetLogin(Language, StartVal)
+		err = m.Prompt.ReplacePromptLogin(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadLogin(Language)
+		ReturnVal, err := m.Prompt.ReadPromptLogin(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -362,30 +355,30 @@ func TestLoginCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetLogin(Language, &SetVal)
+	err = m.Prompt.ReplacePromptLogin(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadLogin(Language)
+	ReturnVal, err := m.Prompt.ReadPromptLogin(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestLoginIdCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadLoginId(Language)
+func TestPromptLoginId(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptLoginId(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetLoginId(Language, StartVal)
+		err = m.Prompt.ReplacePromptLoginId(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadLoginId(Language)
+		ReturnVal, err := m.Prompt.ReadPromptLoginId(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -429,30 +422,30 @@ func TestLoginIdCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetLoginId(Language, &SetVal)
+	err = m.Prompt.ReplacePromptLoginId(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadLoginId(Language)
+	ReturnVal, err := m.Prompt.ReadPromptLoginId(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestLoginPasswordCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadLoginPassword(Language)
+func TestPromptLoginPassword(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptLoginPassword(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetLoginPassword(Language, StartVal)
+		err = m.Prompt.ReplacePromptLoginPassword(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadLoginPassword(Language)
+		ReturnVal, err := m.Prompt.ReadPromptLoginPassword(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -495,30 +488,30 @@ func TestLoginPasswordCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetLoginPassword(Language, &SetVal)
+	err = m.Prompt.ReplacePromptLoginPassword(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadLoginPassword(Language)
+	ReturnVal, err := m.Prompt.ReadPromptLoginPassword(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestLoginEmailVerificationCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadLoginEmailVerification(Language)
+func TestPromptLoginEmailVerification(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptLoginEmailVerification(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetLoginEmailVerification(Language, StartVal)
+		err = m.Prompt.ReplacePromptLoginEmailVerification(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadLoginEmailVerification(Language)
+		ReturnVal, err := m.Prompt.ReadPromptLoginEmailVerification(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -542,30 +535,30 @@ func TestLoginEmailVerificationCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetLoginEmailVerification(Language, &SetVal)
+	err = m.Prompt.ReplacePromptLoginEmailVerification(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadLoginEmailVerification(Language)
+	ReturnVal, err := m.Prompt.ReadPromptLoginEmailVerification(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfa(Language)
+func TestPromptMfa(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfa(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfa(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfa(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfa(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfa(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -621,30 +614,30 @@ func TestMfaCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfa(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfa(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfa(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfa(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaEmailCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaEmail(Language)
+func TestPromptMfaEmail(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaEmail(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaEmail(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaEmail(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaEmail(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaEmail(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -679,30 +672,30 @@ func TestMfaEmailCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaEmail(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaEmail(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaEmail(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaEmail(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaOtpCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaOtp(Language)
+func TestPromptMfaOtp(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaOtp(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaOtp(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaOtp(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaOtp(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaOtp(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -754,30 +747,30 @@ func TestMfaOtpCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaOtp(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaOtp(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaOtp(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaOtp(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaPhoneCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaPhone(Language)
+func TestPromptMfaPhone(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaPhone(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaPhone(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaPhone(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaPhone(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaPhone(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -823,30 +816,30 @@ func TestMfaPhoneCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaPhone(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaPhone(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaPhone(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaPhone(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaPushCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaPush(Language)
+func TestPromptMfaPush(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaPush(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaPush(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaPush(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaPush(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaPush(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -900,30 +893,30 @@ func TestMfaPushCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaPush(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaPush(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaPush(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaPush(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaRecoveryCodeCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaRecoveryCode(Language)
+func TestPromptMfaRecoveryCode(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaRecoveryCode(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaRecoveryCode(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaRecoveryCode(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaRecoveryCode(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaRecoveryCode(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -958,30 +951,30 @@ func TestMfaRecoveryCodeCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaRecoveryCode(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaRecoveryCode(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaRecoveryCode(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaRecoveryCode(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaSmsCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaSms(Language)
+func TestPromptMfaSms(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaSms(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaSms(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaSms(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaSms(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaSms(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1040,30 +1033,30 @@ func TestMfaSmsCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaSms(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaSms(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaSms(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaSms(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestMfaVoiceCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadMfaVoice(Language)
+func TestPromptMfaVoice(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptMfaVoice(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetMfaVoice(Language, StartVal)
+		err = m.Prompt.ReplacePromptMfaVoice(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadMfaVoice(Language)
+		ReturnVal, err := m.Prompt.ReadPromptMfaVoice(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1112,37 +1105,37 @@ func TestMfaVoiceCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetMfaVoice(Language, &SetVal)
+	err = m.Prompt.ReplacePromptMfaVoice(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadMfaVoice(Language)
+	ReturnVal, err := m.Prompt.ReadPromptMfaVoice(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestOrganizationsCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadOrganizations(Language)
+func TestPromptOrganizations(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptOrganizations(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetOrganizations(Language, StartVal)
+		err = m.Prompt.ReplacePromptOrganizations(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadOrganizations(Language)
+		ReturnVal, err := m.Prompt.ReadPromptOrganizations(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
 		expect.Expect(t, ReturnVal, StartVal)
 	})
 
-	SetVal := PromptOrganizations{
+	SetVal := PromptOrganizationSelection{
 		OrganizationSelection: &ScreenOrganizationSelection{
 			PageTitle:   "PageTitle",
 			Title:       "Title",
@@ -1155,30 +1148,30 @@ func TestOrganizationsCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetOrganizations(Language, &SetVal)
+	err = m.Prompt.ReplacePromptOrganizations(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadOrganizations(Language)
+	ReturnVal, err := m.Prompt.ReadPromptOrganizations(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestResetPasswordCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadResetPassword(Language)
+func TestPromptResetPassword(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptResetPassword(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetResetPassword(Language, StartVal)
+		err = m.Prompt.ReplacePromptResetPassword(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadResetPassword(Language)
+		ReturnVal, err := m.Prompt.ReadPromptResetPassword(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1250,30 +1243,30 @@ func TestResetPasswordCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetResetPassword(Language, &SetVal)
+	err = m.Prompt.ReplacePromptResetPassword(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadResetPassword(Language)
+	ReturnVal, err := m.Prompt.ReadPromptResetPassword(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestSignupCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadSignup(Language)
+func TestPromptSignup(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptSignup(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetSignup(Language, StartVal)
+		err = m.Prompt.ReplacePromptSignup(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadSignup(Language)
+		ReturnVal, err := m.Prompt.ReadPromptSignup(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1318,30 +1311,30 @@ func TestSignupCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetSignup(Language, &SetVal)
+	err = m.Prompt.ReplacePromptSignup(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadSignup(Language)
+	ReturnVal, err := m.Prompt.ReadPromptSignup(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestSignupIdCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadSignupId(Language)
+func TestPromptSignupId(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptSignupId(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetSignupId(Language, StartVal)
+		err = m.Prompt.ReplacePromptSignupId(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadSignupId(Language)
+		ReturnVal, err := m.Prompt.ReadPromptSignupId(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1388,30 +1381,30 @@ func TestSignupIdCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetSignupId(Language, &SetVal)
+	err = m.Prompt.ReplacePromptSignupId(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadSignupId(Language)
+	ReturnVal, err := m.Prompt.ReadPromptSignupId(Language)
 	if err != nil {
 		t.Error(err)
 	}
 	expect.Expect(t, *ReturnVal, SetVal)
 }
 
-func TestSignupPasswordCustomText(t *testing.T) {
-	StartVal, err := m.CustomText.ReadSignupPassword(Language)
+func TestPromptSignupPassword(t *testing.T) {
+	StartVal, err := m.Prompt.ReadPromptSignupPassword(Language)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	t.Cleanup(func() {
-		err = m.CustomText.SetSignupPassword(Language, StartVal)
+		err = m.Prompt.ReplacePromptSignupPassword(Language, StartVal)
 		if err != nil {
 			t.Fatal(err)
 		}
-		ReturnVal, err := m.CustomText.ReadSignupPassword(Language)
+		ReturnVal, err := m.Prompt.ReadPromptSignupPassword(Language)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -1462,12 +1455,12 @@ func TestSignupPasswordCustomText(t *testing.T) {
 		},
 	}
 
-	err = m.CustomText.SetSignupPassword(Language, &SetVal)
+	err = m.Prompt.ReplacePromptSignupPassword(Language, &SetVal)
 	if err != nil {
 		t.Error(err)
 	}
 
-	ReturnVal, err := m.CustomText.ReadSignupPassword(Language)
+	ReturnVal, err := m.Prompt.ReadPromptSignupPassword(Language)
 	if err != nil {
 		t.Error(err)
 	}

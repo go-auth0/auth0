@@ -150,9 +150,6 @@ type Management struct {
 	// Prompt manages your prompt settings.
 	Prompt *PromptManager
 
-	// CustomText manages your custom text settings.
-	CustomText *CustomTextManager
-
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
@@ -227,7 +224,6 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	m.Branding = newBrandingManager(m)
 	m.Guardian = newGuardianManager(m)
 	m.Prompt = newPromptManager(m)
-	m.CustomText = newCustomTextManager(m)
 	m.Blacklist = newBlacklistManager(m)
 	m.SigningKey = newSigningKeyManager(m)
 	m.Anomaly = newAnomalyManager(m)
