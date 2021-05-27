@@ -54,6 +54,7 @@ type ScreenConsent struct {
 }
 
 type PromptConsent struct {
+	Language string `json:"language,omitempty"`
 	Consent *ScreenConsent `json:"consent,omitempty"`
 }
 
