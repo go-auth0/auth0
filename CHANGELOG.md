@@ -1,3 +1,7 @@
+# v5.18.0
+
+* `management.Actions`: Support for Auth0 ([Actions](https://auth0.com/docs/actions)) ([#219](https://github.com/go-auth0/auth0/pull/219))
+
 ## v5.17.0
 
 * `management.AnomalyManager`: Support for `CheckIP` and `UnblockIP` ([#214](https://github.com/go-auth0/auth0/pull/214))
