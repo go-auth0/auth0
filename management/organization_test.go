@@ -11,12 +11,28 @@ import (
 func TestOrganization(t *testing.T) {
 	var err error
 
+	ts := time.Now().Format("20060102150405")
+
+	client := &Client{
+		Name:              auth0.String(fmt.Sprintf("testclient%v", ts)),
+		AppType:           auth0.String("regular_web"),
+		GrantTypes:        []interface{}{"client_credentials"},
+		OrganizationUsage: auth0.String("allow"),
+	}
+	err = m.Client.Create(client)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	defer m.Client.Delete(auth0.StringValue(client.ClientID))
+
 	conn := &Connection{
-		Name:        auth0.String(fmt.Sprintf("testconn%v", time.Now().Format("20060102150405"))),
-		DisplayName: auth0.String(fmt.Sprintf("Test Connection %v", time.Now().Format("20060102150405"))),
+		Name:        auth0.String(fmt.Sprintf("testconn%v", ts)),
+		DisplayName: auth0.String(fmt.Sprintf("Test Connection %v", ts)),
 		Strategy:    auth0.String(ConnectionStrategyAuth0),
 		EnabledClients: []interface{}{
 			os.Getenv("AUTH0_CLIENT_ID"),
+			client.ClientID,
 		},
 	}
 	err = m.Connection.Create(conn)
@@ -68,7 +84,7 @@ func TestOrganization(t *testing.T) {
 	defer m.Role.Delete(role.GetID())
 
 	o := &Organization{
-		Name:        auth0.String(fmt.Sprintf("testorganization%v", time.Now().Format("20060102150405"))),
+		Name:        auth0.String(fmt.Sprintf("testorganization%v", ts)),
 		DisplayName: auth0.String("Test Organization"),
 		Branding:    &OrganizationBranding{
 			LogoUrl: auth0.String("https://example.com/logo.gif"),
@@ -82,7 +98,7 @@ func TestOrganization(t *testing.T) {
 		Invitee: &OrganizationInvitationInvitee{
 			Email: auth0.String("test@example.com"),
 		},
-		ClientID: auth0.String(os.Getenv("AUTH0_CLIENT_ID")),
+		ClientID: client.ClientID,
 	}
 
 	oc := &OrganizationConnection{
