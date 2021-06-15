@@ -3407,6 +3407,22 @@ func (c *CustomDomainVerification) String() string {
 	return Stringify(c)
 }
 
+// GetTLSPolicy returns the TLSPolicy field if it's non-nil, zero value otherwise.
+func (c *CustomDomain) GetTLSPolicy() string {
+	if c == nil || c.TLSPolicy == nil {
+		return ""
+	}
+	return *c.TLSPolicy
+}
+
+// GetCustomClientIPHeader returns the CustomClientIPHeader field if it's non-nil, zero value otherwise.
+func (c *CustomDomain) GetCustomClientIPHeader() string {
+	if c == nil || c.CustomClientIPHeader == nil {
+		return ""
+	}
+	return *c.CustomClientIPHeader
+}
+
 // GetCreatedAt returns the CreatedAt field if it's non-nil, zero value otherwise.
 func (d *DailyStat) GetCreatedAt() time.Time {
 	if d == nil || d.CreatedAt == nil {
