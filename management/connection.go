@@ -727,6 +727,14 @@ type ConnectionOptionsGoogleApps struct {
 	LogoURL       *string       `json:"icon_url,omitempty"`
 }
 
+func (c *ConnectionOptionsGoogleApps) Scopes() []string {
+	return tag.Scopes(c)
+}
+
+func (c *ConnectionOptionsGoogleApps) SetScopes(enable bool, scopes ...string) {
+	tag.SetScopes(c, enable, scopes...)
+}
+
 type ConnectionManager struct {
 	*Management
 }
