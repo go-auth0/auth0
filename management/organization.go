@@ -14,7 +14,7 @@ type Organization struct {
 	Branding *OrganizationBranding `json:"branding,omitempty"`
 
 	// Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed.
-	Metadata interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
 type OrganizationBranding struct {
@@ -22,7 +22,7 @@ type OrganizationBranding struct {
 	LogoUrl *string `json:"logo_url,omitempty"`
 
 	// Color scheme used to customize the login pages
-	Colors interface{} `json:"colors,omitempty"`
+	Colors map[string]string `json:"colors,omitempty"`
 }
 
 type OrganizationMember struct {
@@ -88,10 +88,10 @@ type OrganizationInvitation struct {
 	ConnectionID *string `json:"connection_id,omitempty"`
 
 	// Data related to the user that does affect the application's core functionality.
-	AppMetadata interface{} `json:"app_metadata,omitempty"`
+	AppMetadata map[string]interface{} `json:"app_metadata,omitempty"`
 
 	// Data related to the user that does not affect the application's core functionality.
-	UserMetadata interface{} `json:"user_metadata,omitempty"`
+	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
 
 	// List of roles IDs to associated with the user.
 	Roles []string `json:"roles,omitempty"`
