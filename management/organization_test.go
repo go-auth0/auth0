@@ -24,7 +24,9 @@ func TestOrganization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer m.Client.Delete(auth0.StringValue(client.ClientID))
+	t.Cleanup(func() {
+		m.Client.Delete(auth0.StringValue(client.ClientID))
+	})
 
 	conn := &Connection{
 		Name:        auth0.String(fmt.Sprintf("testconn%v", ts)),
@@ -40,7 +42,9 @@ func TestOrganization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer m.Connection.Delete(conn.GetID())
+	t.Cleanup(func() {
+		m.Connection.Delete(conn.GetID())
+	})
 
 	user := &User{
 		Connection: conn.Name,
@@ -70,7 +74,9 @@ func TestOrganization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer m.User.Delete(user.GetID())
+	t.Cleanup(func() {
+		m.User.Delete(user.GetID())
+	})
 
 	role := &Role{
 		Name:        auth0.String("admin"),
@@ -81,7 +87,9 @@ func TestOrganization(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	defer m.Role.Delete(role.GetID())
+	t.Cleanup(func() {
+		m.Role.Delete(role.GetID())
+	})
 
 	o := &Organization{
 		Name:        auth0.String(fmt.Sprintf("testorganization%v", ts)),
@@ -124,8 +132,8 @@ func TestOrganization(t *testing.T) {
 		t.Logf("%v\n", ol)
 	})
 
-	t.Run("GetByID", func(t *testing.T) {
-		o, err = m.Organization.GetByID(o.GetID())
+	t.Run("ReadByID", func(t *testing.T) {
+		o, err = m.Organization.ReadByID(o.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -140,8 +148,8 @@ func TestOrganization(t *testing.T) {
 		t.Logf("%v\n", o)
 	})
 
-	t.Run("GetByName", func(t *testing.T) {
-		o, err = m.Organization.GetByName(o.GetName())
+	t.Run("ReadByName", func(t *testing.T) {
+		o, err = m.Organization.ReadByName(o.GetName())
 		if err != nil {
 			t.Error(err)
 		}
@@ -165,8 +173,8 @@ func TestOrganization(t *testing.T) {
 		t.Logf("%v\n", oc)
 	})
 
-	t.Run("GetConnection", func(t *testing.T) {
-		oc, err = m.Organization.GetConnection(o.GetID(), oc.GetConnectionID())
+	t.Run("Connection", func(t *testing.T) {
+		oc, err = m.Organization.Connection(o.GetID(), oc.GetConnectionID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -198,9 +206,9 @@ func TestOrganization(t *testing.T) {
 		t.Logf("%v\n", oi)
 	})
 
-	t.Run("GetInvitation", func(t *testing.T) {
+	t.Run("Invitation", func(t *testing.T) {
 		var i *OrganizationInvitation
-		i, err = m.Organization.GetInvitation(o.GetID(), oi.GetID())
+		i, err = m.Organization.Invitation(o.GetID(), oi.GetID())
 		if err != nil {
 			t.Error(err)
 		}

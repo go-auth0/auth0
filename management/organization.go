@@ -164,7 +164,7 @@ func (m *OrganizationManager) Create(o *Organization, opts ...RequestOption) (er
 // Get a specific organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_organizations_by_id
-func (m *OrganizationManager) GetByID(id string, opts ...RequestOption) (o *Organization, err error) {
+func (m *OrganizationManager) ReadByID(id string, opts ...RequestOption) (o *Organization, err error) {
 	err = m.Request("GET", m.URI("organizations", id), &o, opts...)
 	return
 }
@@ -193,7 +193,7 @@ func (m *OrganizationManager) Update(o *Organization, opts ...RequestOption) (er
 // Get a specific organization by name
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_name_by_name
-func (m *OrganizationManager) GetByName(name string, opts ...RequestOption) (o *Organization, err error) {
+func (m *OrganizationManager) ReadByName(name string, opts ...RequestOption) (o *Organization, err error) {
 	err = m.Request("GET", m.URI("organizations", "name", name), &o, opts...)
 	return
 }
@@ -217,7 +217,7 @@ func (m *OrganizationManager) AddConnection(id string, c *OrganizationConnection
 // Get an enabled connection for an organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_enabled_connections_by_connectionId
-func (m *OrganizationManager) GetConnection(id string, connectionID string, opts ...RequestOption) (c *OrganizationConnection, err error) {
+func (m *OrganizationManager) Connection(id string, connectionID string, opts ...RequestOption) (c *OrganizationConnection, err error) {
 	err = m.Request("GET", m.URI("organizations", id, "enabled_connections", connectionID), &c, opts...)
 	return
 }
@@ -264,7 +264,7 @@ func (m *OrganizationManager) CreateInvitation(i *OrganizationInvitation, opts .
 // Get an invitation to organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_invitations_by_invitation_id
-func (m *OrganizationManager) GetInvitation(id string, invitationID string, opts ...RequestOption) (i *OrganizationInvitation, err error) {
+func (m *OrganizationManager) Invitation(id string, invitationID string, opts ...RequestOption) (i *OrganizationInvitation, err error) {
 	err = m.Request("GET", m.URI("organizations", id, "invitations", invitationID), &i, opts...)
 	return
 }
