@@ -34,7 +34,6 @@ func TestCustomDomain(t *testing.T) {
 
 	t.Run("Update", func(t *testing.T) {
 		c.TLSPolicy = auth0.String("compatible")
-		c.CustomClientIPHeader = auth0.String("X-Connecting-IP")
 
 		err = m.CustomDomain.Update(c.GetID(), c)
 		if err != nil {
