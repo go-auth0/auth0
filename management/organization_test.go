@@ -133,7 +133,7 @@ func TestOrganization(t *testing.T) {
 	})
 
 	t.Run("ReadByID", func(t *testing.T) {
-		o, err = m.Organization.ReadByID(o.GetID())
+		o, err = m.Organization.Read(o.GetID())
 		if err != nil {
 			t.Error(err)
 		}

@@ -164,7 +164,7 @@ func (m *OrganizationManager) Create(o *Organization, opts ...RequestOption) (er
 // Get a specific organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_organizations_by_id
-func (m *OrganizationManager) ReadByID(id string, opts ...RequestOption) (o *Organization, err error) {
+func (m *OrganizationManager) Read(id string, opts ...RequestOption) (o *Organization, err error) {
 	err = m.Request("GET", m.URI("organizations", id), &o, opts...)
 	return
 }
