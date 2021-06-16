@@ -78,6 +78,10 @@ type OrganizationInvitation struct {
 	// The ISO 8601 formatted timestamp representing the creation time of the invitation.
 	CreatedAt *string `json:"created_at,omitempty"`
 
+	// Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this
+	// value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+	TTLSec *int `json:"ttl_sec,omitempty"`
+
 	// The ISO 8601 formatted timestamp representing the expiration time of the invitation.
 	ExpiresAt *string `json:"expires_at,omitempty"`
 
@@ -98,6 +102,9 @@ type OrganizationInvitation struct {
 
 	// The id of the invitation ticket
 	TicketID *string `json:"ticket_id,omitempty"`
+
+	// Whether the user will receive an invitation email (true) or no email (false), true by default
+	SendInvitationEmail *bool `json:"send_invitation_email,omitempty"`
 }
 
 type OrganizationMemberRole struct {
