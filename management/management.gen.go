@@ -3341,6 +3341,14 @@ func (c *CreateEnrollmentTicket) String() string {
 	return Stringify(c)
 }
 
+// GetCustomClientIPHeader returns the CustomClientIPHeader field if it's non-nil, zero value otherwise.
+func (c *CustomDomain) GetCustomClientIPHeader() string {
+	if c == nil || c.CustomClientIPHeader == nil {
+		return ""
+	}
+	return *c.CustomClientIPHeader
+}
+
 // GetDomain returns the Domain field if it's non-nil, zero value otherwise.
 func (c *CustomDomain) GetDomain() string {
 	if c == nil || c.Domain == nil {
@@ -3371,6 +3379,14 @@ func (c *CustomDomain) GetStatus() string {
 		return ""
 	}
 	return *c.Status
+}
+
+// GetTLSPolicy returns the TLSPolicy field if it's non-nil, zero value otherwise.
+func (c *CustomDomain) GetTLSPolicy() string {
+	if c == nil || c.TLSPolicy == nil {
+		return ""
+	}
+	return *c.TLSPolicy
 }
 
 // GetType returns the Type field if it's non-nil, zero value otherwise.
