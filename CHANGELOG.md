@@ -1,3 +1,7 @@
+# v5.19.1
+
+* Update README.md to reflect Actions and Organizations support.
+
 # v5.19.0
 
 * `management.Organizations`: Support for Auth0 [Organizations](https://auth0.com/docs/organizations) ([#216](https://github.com/go-auth0/auth0/pull/216))
