@@ -1,6 +1,6 @@
 # v5.19.0
 
-* `management.Organizations`: Support for Auth0 [Actions](https://auth0.com/docs/organizations) ([#216](https://github.com/go-auth0/auth0/pull/216))
+* `management.Organizations`: Support for Auth0 [Organizations](https://auth0.com/docs/organizations) ([#216](https://github.com/go-auth0/auth0/pull/216))
 * `management.CustomDomains`: Support for TLS Policy & Custom Domain IP Header ([#222](https://github.com/go-auth0/auth0/pull/222))
 
 # v5.18.0
