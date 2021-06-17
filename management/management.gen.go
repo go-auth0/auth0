@@ -727,6 +727,22 @@ func (c *Client) GetOIDCConformant() bool {
 	return *c.OIDCConformant
 }
 
+// GetOrganizationRequireBehavior returns the OrganizationRequireBehavior field if it's non-nil, zero value otherwise.
+func (c *Client) GetOrganizationRequireBehavior() string {
+	if c == nil || c.OrganizationRequireBehavior == nil {
+		return ""
+	}
+	return *c.OrganizationRequireBehavior
+}
+
+// GetOrganizationUsage returns the OrganizationUsage field if it's non-nil, zero value otherwise.
+func (c *Client) GetOrganizationUsage() string {
+	if c == nil || c.OrganizationUsage == nil {
+		return ""
+	}
+	return *c.OrganizationUsage
+}
+
 // GetRefreshToken returns the RefreshToken field.
 func (c *Client) GetRefreshToken() *ClientRefreshToken {
 	if c == nil {
@@ -4595,12 +4611,28 @@ func (o *OrganizationInvitation) GetOrganizationID() string {
 	return *o.OrganizationID
 }
 
+// GetSendInvitationEmail returns the SendInvitationEmail field if it's non-nil, zero value otherwise.
+func (o *OrganizationInvitation) GetSendInvitationEmail() bool {
+	if o == nil || o.SendInvitationEmail == nil {
+		return false
+	}
+	return *o.SendInvitationEmail
+}
+
 // GetTicketID returns the TicketID field if it's non-nil, zero value otherwise.
 func (o *OrganizationInvitation) GetTicketID() string {
 	if o == nil || o.TicketID == nil {
 		return ""
 	}
 	return *o.TicketID
+}
+
+// GetTTLSec returns the TTLSec field if it's non-nil, zero value otherwise.
+func (o *OrganizationInvitation) GetTTLSec() int {
+	if o == nil || o.TTLSec == nil {
+		return 0
+	}
+	return *o.TTLSec
 }
 
 // String returns a string representation of OrganizationInvitation.
