@@ -153,6 +153,7 @@ func TestConnection(t *testing.T) {
 		t.Logf("%v\n", cs)
 	})
 }
+
 func TestConnectionOptions(t *testing.T) {
 
 	t.Run("GoogleOAuth2", func(t *testing.T) {
@@ -217,6 +218,71 @@ func TestConnectionOptions(t *testing.T) {
 			log.Fatal(err)
 		}
 		o, ok = c.Options.(*ConnectionOptionsGoogleOAuth2)
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{""})
+
+		t.Logf("%s\n", g)
+	})
+
+	t.Run("GoogleApps", func(t *testing.T) {
+		g := &Connection{
+			Name:     auth0.Stringf("Test-Connection-%d", time.Now().Unix()),
+			Strategy: auth0.String("google-apps"),
+			Options: &ConnectionOptionsGoogleApps{
+				Domain:          auth0.String("example.com"),
+				BasicProfile:    auth0.Bool(true),
+				ExtendedProfile: auth0.Bool(true),
+				Groups:          auth0.Bool(true),
+			},
+		}
+
+		defer func() {
+			m.Connection.Delete(g.GetID())
+			assertDeleted(t, g)
+
+		}()
+
+		err := m.Connection.Create(g)
+		if err != nil {
+			t.Fatal(err)
+		}
+		c, err := m.Connection.Read(g.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		o, ok := c.Options.(*ConnectionOptionsGoogleApps)
+		if !ok {
+			t.Fatalf("unexpected type %T", o)
+		}
+		expect.Expect(t, o.GetBasicProfile(), true)
+		expect.Expect(t, o.GetExtendedProfile(), true)
+		expect.Expect(t, o.GetGroups(), true)
+		expect.Expect(t, o.GetAdmin(), false)
+		expect.Expect(t, o.Scopes(), []string{"basic_profile", "ext_profile", "ext_groups"})
+
+		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		c, _ = m.Connection.Read(g.GetID())
+		o, ok = c.Options.(*ConnectionOptionsGoogleApps)
+		expect.Expect(t, o.GetNonPersistentAttrs(), []string{"gender", "ethnicity", "favorite_color"})
+
+		o.NonPersistentAttrs = &[]string{""}
+		err = m.Connection.Update(g.GetID(), &Connection{
+			Options: o,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		c, err = m.Connection.Read(g.GetID())
+		if err != nil {
+			log.Fatal(err)
+		}
+		o, ok = c.Options.(*ConnectionOptionsGoogleApps)
 		expect.Expect(t, o.GetNonPersistentAttrs(), []string{""})
 
 		t.Logf("%s\n", g)
