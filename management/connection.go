@@ -710,7 +710,8 @@ type ConnectionOptionsSAMLIdpInitiated struct {
 type ConnectionOptionsGoogleApps struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
-	Domain       *string `json:"tenant_domain,omitempty"`
+	Domain       *string `json:"domain,omitempty"`
+	TenantDomain *string `json:"tenant_domain,omitempty"`
 
 	EnableUsersAPI  *bool `json:"api_enable_users,omitempty"`
 	BasicProfile    *bool `json:"basic_profile,omitempty" scope:"basic_profile"`

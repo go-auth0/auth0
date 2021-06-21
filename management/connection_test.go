@@ -229,6 +229,7 @@ func TestConnectionOptions(t *testing.T) {
 			Strategy: auth0.String("google-apps"),
 			Options: &ConnectionOptionsGoogleApps{
 				Domain:          auth0.String("example.com"),
+				TenantDomain:    auth0.String("example.com"),
 				BasicProfile:    auth0.Bool(true),
 				ExtendedProfile: auth0.Bool(true),
 				Groups:          auth0.Bool(true),
