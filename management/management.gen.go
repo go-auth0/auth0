@@ -3373,6 +3373,11 @@ func (c *CustomDomain) GetCustomClientIPHeader() string {
 	return *c.CustomClientIPHeader
 }
 
+// String returns a string representation of ConsentScreens.
+func (c *ConsentScreens) String() string {
+	return Stringify(c)
+}
+
 // GetDomain returns the Domain field if it's non-nil, zero value otherwise.
 func (c *CustomDomain) GetDomain() string {
 	if c == nil || c.Domain == nil {
@@ -3500,6 +3505,11 @@ func (d *DailyStat) String() string {
 	return Stringify(d)
 }
 
+// String returns a string representation of DeviceFlowScreens.
+func (d *DeviceFlowScreens) String() string {
+	return Stringify(d)
+}
+
 // GetCredentials returns the Credentials field.
 func (e *Email) GetCredentials() *EmailCredentials {
 	if e == nil {
@@ -3619,6 +3629,11 @@ func (e *EmailCredentials) GetSMTPUser() string {
 
 // String returns a string representation of EmailCredentials.
 func (e *EmailCredentials) String() string {
+	return Stringify(e)
+}
+
+// String returns a string representation of EmailOtpChallengeScreens.
+func (e *EmailOtpChallengeScreens) String() string {
 	return Stringify(e)
 }
 
@@ -3754,6 +3769,11 @@ func (e *Enrollment) String() string {
 
 // String returns a string representation of EnrollmentTicket.
 func (e *EnrollmentTicket) String() string {
+	return Stringify(e)
+}
+
+// String returns a string representation of EmailVerificationScreens.
+func (e *EmailVerificationScreens) String() string {
 	return Stringify(e)
 }
 
@@ -4056,6 +4076,16 @@ func (l *Log) String() string {
 	return Stringify(l)
 }
 
+// String returns a string representation of LoginEmailVerificationScreens.
+func (l *LoginEmailVerificationScreens) String() string {
+	return Stringify(l)
+}
+
+// String returns a string representation of LoginScreens.
+func (l *LoginScreens) String() string {
+	return Stringify(l)
+}
+
 // GetID returns the ID field if it's non-nil, zero value otherwise.
 func (l *LogStream) GetID() string {
 	if l == nil || l.ID == nil {
@@ -4265,6 +4295,46 @@ func (l *LogStreamSinkSumo) GetSourceAddress() string {
 // String returns a string representation of LogStreamSinkSumo.
 func (l *LogStreamSinkSumo) String() string {
 	return Stringify(l)
+}
+
+// String returns a string representation of MfaEmailScreens.
+func (m *MfaEmailScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaOtpScreens.
+func (m *MfaOtpScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaPhoneScreens.
+func (m *MfaPhoneScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaPushScreens.
+func (m *MfaPushScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaRecoveryCodeScreens.
+func (m *MfaRecoveryCodeScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaScreens.
+func (m *MfaScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaSmsScreens.
+func (m *MfaSmsScreens) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MfaVoiceScreens.
+func (m *MfaVoiceScreens) String() string {
+	return Stringify(m)
 }
 
 // GetEnabled returns the Enabled field if it's non-nil, zero value otherwise.
@@ -4828,6 +4898,16 @@ func (p *Prompt) String() string {
 	return Stringify(p)
 }
 
+// String returns a string representation of PromptCustomText.
+func (p *PromptCustomText) String() string {
+	return Stringify(p)
+}
+
+// String returns a string representation of ResetPasswordScreens.
+func (r *ResetPasswordScreens) String() string {
+	return Stringify(r)
+}
+
 // GetAllowOfflineAccess returns the AllowOfflineAccess field if it's non-nil, zero value otherwise.
 func (r *ResourceServer) GetAllowOfflineAccess() bool {
 	if r == nil || r.AllowOfflineAccess == nil {
@@ -5158,6 +5238,11 @@ func (s *SigningKey) GetThumbprint() string {
 
 // String returns a string representation of SigningKey.
 func (s *SigningKey) String() string {
+	return Stringify(s)
+}
+
+// String returns a string representation of SignupScreens.
+func (s *SignupScreens) String() string {
 	return Stringify(s)
 }
 
