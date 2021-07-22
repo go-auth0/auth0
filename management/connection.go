@@ -437,6 +437,14 @@ type ConnectionOptionsOTP struct {
 	Length   *int `json:"length,omitempty"`
 }
 
+type ConnectionGatewayAuthentication struct {
+	Method              *string `json:"method,omitempty"`
+	Subject             *string `json:"subject,omitempty"`
+	Audience            *string `json:"audience,omitempty"`
+	Secret              *string `json:"secret,omitempty"`
+	SecretBase64Encoded *bool   `json:"secret_base64_encoded,omitempty"`
+}
+
 type ConnectionOptionsSMS struct {
 	Name     *string `json:"name,omitempty"`
 	From     *string `json:"from,omitempty"`
@@ -447,9 +455,14 @@ type ConnectionOptionsSMS struct {
 
 	AuthParams map[string]string `json:"authParams,omitempty"`
 
-	TwilioSID           *string `json:"twilio_sid"`
-	TwilioToken         *string `json:"twilio_token"`
-	MessagingServiceSID *string `json:"messaging_service_sid"`
+	TwilioSID           *string `json:"twilio_sid,omitempty"`
+	TwilioToken         *string `json:"twilio_token,omitempty"`
+	MessagingServiceSID *string `json:"messaging_service_sid,omitempty"`
+
+	Provider              *string                          `json:"provider,omitempty"`
+	GatewayUrl            *string                          `json:"gateway_url,omitempty"`
+	GatewayAuthentication *ConnectionGatewayAuthentication `json:"gateway_authentication,omitempty"`
+	ForwardRequestInfo    *bool                            `json:"forward_request_info,omitempty"`
 
 	DisableSignup        *bool `json:"disable_signup,omitempty"`
 	BruteForceProtection *bool `json:"brute_force_protection,omitempty"`
