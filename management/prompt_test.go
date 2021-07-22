@@ -7,7 +7,6 @@ import (
 
 	"testing"
 
-	"gopkg.in/auth0.v5/internal/testing/expect"
 )
 
 func TestPrompt(t *testing.T) {
