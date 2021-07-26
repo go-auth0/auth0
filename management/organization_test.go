@@ -94,7 +94,7 @@ func TestOrganization(t *testing.T) {
 	o := &Organization{
 		Name:        auth0.String(fmt.Sprintf("testorganization%v", ts)),
 		DisplayName: auth0.String("Test Organization"),
-		Branding:    &OrganizationBranding{
+		Branding: &OrganizationBranding{
 			LogoUrl: auth0.String("https://example.com/logo.gif"),
 		},
 	}
