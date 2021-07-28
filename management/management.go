@@ -257,7 +257,7 @@ func (m *Management) NewRequest(method, uri string, payload interface{}, options
 	if payload != nil {
 		err := json.NewEncoder(&buf).Encode(payload)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error encoding request payload: %w", err)
 		}
 	}
 
@@ -314,7 +314,7 @@ func (m *Management) Request(method, uri string, v interface{}, options ...Reque
 	if res.StatusCode != http.StatusNoContent && res.StatusCode != http.StatusAccepted {
 		err := json.NewDecoder(res.Body).Decode(v)
 		if err != nil {
-			return err
+			return fmt.Errorf("error decoding response payload: %w", err)
 		}
 		return res.Body.Close()
 	}
