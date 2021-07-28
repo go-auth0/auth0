@@ -4442,6 +4442,16 @@ func (m *MultiFactorSMSTemplate) String() string {
 	return Stringify(m)
 }
 
+// String returns a string representation of MultiFactorWebAuthnPlatform.
+func (m *MultiFactorWebAuthnPlatform) String() string {
+	return Stringify(m)
+}
+
+// String returns a string representation of MultiFactorWebAuthnRoaming.
+func (m *MultiFactorWebAuthnRoaming) String() string {
+	return Stringify(m)
+}
+
 // GetBranding returns the Branding field.
 func (o *Organization) GetBranding() *OrganizationBranding {
 	if o == nil {
