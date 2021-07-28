@@ -153,6 +153,18 @@ type Management struct {
 	// Blacklist manages the auth0 blacklists
 	Blacklist *BlacklistManager
 
+	// SigningKey manages Auth0 Application Signing Keys.
+	SigningKey *SigningKeyManager
+
+	// Anomaly manages the IP blocks
+	Anomaly *AnomalyManager
+
+	// Actions manages Actions extensibility
+	Action *ActionManager
+
+	// Organization manages Auth0 Organizations.
+	Organization *OrganizationManager
+
 	url         *url.URL
 	basePath    string
 	userAgent   string
@@ -219,6 +231,10 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	m.Guardian = newGuardianManager(m)
 	m.Prompt = newPromptManager(m)
 	m.Blacklist = newBlacklistManager(m)
+	m.SigningKey = newSigningKeyManager(m)
+	m.Anomaly = newAnomalyManager(m)
+	m.Action = newActionManager(m)
+	m.Organization = newOrganizationManager(m)
 
 	return m, nil
 }

@@ -17,7 +17,49 @@ func TestGuardian(t *testing.T) {
 			}
 			t.Logf("%v\n", mfa)
 		})
+		t.Run("Policy", func(t *testing.T) {
+			// Has to be one of "all-applications" or "confidence-score", but not both.
+			// If omitted, it removes all policies.
+			err := m.Guardian.MultiFactor.UpdatePolicy(&MultiFactorPolicies{"all-applications"})
+			if err != nil {
+				t.Error(err)
+			}
+			p, err := m.Guardian.MultiFactor.Policy()
+			if err != nil {
+				t.Error(err)
+			}
+			t.Logf("%v\n", p)
+		})
 
+		t.Run("Phone", func(t *testing.T) {
+
+			t.Run("Provider", func(t *testing.T) {
+				err := m.Guardian.MultiFactor.Phone.UpdateProvider(&MultiFactorProvider{Provider: auth0.String("phone-message-hook")})
+				if err != nil {
+					t.Error(err)
+				}
+				p, _ := m.Guardian.MultiFactor.Phone.Provider()
+				t.Logf("%v\n", p)
+			})
+			t.Run("Enable", func(t *testing.T) {
+				err := m.Guardian.MultiFactor.Phone.Enable(false)
+				if err != nil {
+					t.Error(err)
+				}
+			})
+			t.Run("Message-types", func(t *testing.T) {
+				messageTypes := []string{"voice"}
+				err := m.Guardian.MultiFactor.Phone.UpdateMessageTypes(&PhoneMessageTypes{
+					MessageTypes: &messageTypes,
+				})
+				if err != nil {
+					t.Error(err)
+				}
+				mt, _ := m.Guardian.MultiFactor.Phone.MessageTypes()
+				t.Logf("%v\n", mt)
+
+			})
+		})
 		t.Run("SMS", func(t *testing.T) {
 
 			t.Run("Enable", func(t *testing.T) {
@@ -162,6 +204,31 @@ func TestGuardian(t *testing.T) {
 				mfa, _ := m.Guardian.MultiFactor.List()
 				t.Logf("%v\n", mfa)
 			})
+		})
+	})
+
+	t.Run("Enrollment", func(t *testing.T) {
+		t.Run("CreateTicket", func(t *testing.T) {
+			u := &User{
+				Connection: auth0.String("Username-Password-Authentication"),
+				Email:      auth0.String("chuck@chucknorris.com"),
+				Username:   auth0.String("chuck"),
+				Password:   auth0.String("I have a password and its a secret"),
+			}
+			if err := m.User.Create(u); err != nil {
+				t.Fatal(err)
+			}
+			userID := u.GetID()
+			t.Cleanup(func() { m.User.Delete(userID) })
+
+			ticket, err := m.Guardian.Enrollment.CreateTicket(&CreateEnrollmentTicket{
+				UserID:   userID,
+				SendMail: false,
+			})
+			if err != nil {
+				t.Error(err)
+			}
+			t.Logf("%v", ticket)
 		})
 	})
 }

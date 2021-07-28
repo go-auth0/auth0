@@ -223,8 +223,46 @@ func TestUser(t *testing.T) {
 		t.Logf("%v\n", b)
 	})
 
+	t.Run("BlocksByIdentifier", func(t *testing.T) {
+		b, err := m.User.BlocksByIdentifier(u.GetUsername())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", b)
+	})
+
 	t.Run("Unblock", func(t *testing.T) {
 		err := m.User.Unblock(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("UnblockByIdentifier", func(t *testing.T) {
+		err := m.User.UnblockByIdentifier(u.GetUsername())
+		if err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("Enrollments", func(t *testing.T) {
+		es, err := m.User.Enrollments(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", es)
+	})
+
+	t.Run("RegenerateRecoveryCode", func(t *testing.T) {
+		r, err := m.User.RegenerateRecoveryCode(u.GetID())
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf("%v\n", r)
+	})
+
+	t.Run("InvalidateRememberBrowser", func(t *testing.T) {
+		err := m.User.InvalidateRememberBrowser(u.GetID())
 		if err != nil {
 			t.Fatal(err)
 		}
