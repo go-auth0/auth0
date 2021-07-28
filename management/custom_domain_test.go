@@ -33,9 +33,7 @@ func TestCustomDomain(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		c.TLSPolicy = auth0.String("compatible")
-
-		err = m.CustomDomain.Update(c.GetID(), c)
+		err = m.CustomDomain.Update(c.GetID(), &CustomDomain{TLSPolicy: auth0.String("recommended")})
 		if err != nil {
 			if err, ok := err.(Error); ok && err.Status() == http.StatusForbidden {
 				t.Skip(err)

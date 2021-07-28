@@ -1,4 +1,4 @@
-# v5.19.1
+# v5.19.2
 
 * `management.RoleManager`: `Delete` would result in an `json.Unmarshal(nil)` error ([#232](https://github.com/go-auth0/auth0/pull/232))
 
