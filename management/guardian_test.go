@@ -205,6 +205,36 @@ func TestGuardian(t *testing.T) {
 				t.Logf("%v\n", mfa)
 			})
 		})
+
+		t.Run("WebAuthn Roaming", func(t *testing.T) {
+
+			t.Run("Enable", func(t *testing.T) {
+				defer m.Guardian.MultiFactor.WebAuthnRoaming.Enable(false)
+
+				err := m.Guardian.MultiFactor.WebAuthnRoaming.Enable(true)
+				if err != nil {
+					t.Error(err)
+				}
+
+				mfa, _ := m.Guardian.MultiFactor.List()
+				t.Logf("%v\n", mfa)
+			})
+		})
+
+		t.Run("WebAuthn Platform", func(t *testing.T) {
+
+			t.Run("Enable", func(t *testing.T) {
+				defer m.Guardian.MultiFactor.WebAuthnPlatform.Enable(false)
+
+				err := m.Guardian.MultiFactor.WebAuthnPlatform.Enable(true)
+				if err != nil {
+					t.Error(err)
+				}
+
+				mfa, _ := m.Guardian.MultiFactor.List()
+				t.Logf("%v\n", mfa)
+			})
+		})
 	})
 
 	t.Run("Enrollment", func(t *testing.T) {
