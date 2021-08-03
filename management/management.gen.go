@@ -495,6 +495,14 @@ func (c *Connection) GetName() string {
 	return *c.Name
 }
 
+// GetShowAsButton returns the ShowAsButton field if it's non-nil, zero value otherwise.
+func (c *Connection) GetShowAsButton() bool {
+	if c == nil || c.ShowAsButton == nil {
+		return false
+	}
+	return *c.ShowAsButton
+}
+
 // GetStrategy returns the Strategy field if it's non-nil, zero value otherwise.
 func (c *Connection) GetStrategy() string {
 	if c == nil || c.Strategy == nil {

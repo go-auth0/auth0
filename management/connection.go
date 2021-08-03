@@ -57,6 +57,9 @@ type Connection struct {
 	// True if the connection is domain level
 	IsDomainConnection *bool `json:"is_domain_connection,omitempty"`
 
+	// True to display a button for the connection in the login page
+	ShowAsButton *bool `json:"show_as_button,omitempty"`
+
 	// Options for validation.
 	Options interface{} `json:"-"`
 
