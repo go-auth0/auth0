@@ -3062,6 +3062,22 @@ func (c *ConnectionOptionsSAMLIdpInitiated) String() string {
 	return Stringify(c)
 }
 
+// GetCert returns the Cert field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLSigningKey) GetCert() string {
+	if c == nil || c.Cert == nil {
+		return ""
+	}
+	return *c.Cert
+}
+
+// GetKey returns the Key field if it's non-nil, zero value otherwise.
+func (c *ConnectionOptionsSAMLSigningKey) GetKey() string {
+	if c == nil || c.Key == nil {
+		return ""
+	}
+	return *c.Key
+}
+
 // String returns a string representation of ConnectionOptionsSAMLSigningKey.
 func (c *ConnectionOptionsSAMLSigningKey) String() string {
 	return Stringify(c)
