@@ -134,6 +134,10 @@ func Wrap(base *http.Client, tokenSource oauth2.TokenSource, options ...Option) 
 			Source: tokenSource,
 		},
 	}
+	if tr, ok := base.Transport.(*oauth2.Transport); ok {
+		// If the base already has a TokenSource, use that instead.
+		client.Transport = tr
+	}
 	for _, option := range options {
 		option(client)
 	}
