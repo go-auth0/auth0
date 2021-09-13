@@ -88,6 +88,9 @@ type User struct {
 
 	// True if the user is blocked from the application, false if the user is enabled
 	Blocked *bool `json:"blocked,omitempty"`
+
+	// Total number of logins this user has performed
+	LoginsCount *int 	`json:"logins_count,omitempty"`
 }
 
 // ConvertibleBoolean is a custom bool type that is able to unmarshal/marshal from both string and bool types
