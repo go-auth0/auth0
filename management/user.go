@@ -90,7 +90,7 @@ type User struct {
 	Blocked *bool `json:"blocked,omitempty"`
 
 	// Total number of logins this user has performed
-	LoginsCount *int 	`json:"logins_count,omitempty"`
+	LoginsCount *int `json:"logins_count,omitempty"`
 }
 
 // ConvertibleBoolean is a custom bool type that is able to unmarshal/marshal from both string and bool types
