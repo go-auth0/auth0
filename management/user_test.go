@@ -33,8 +33,8 @@ func TestUser(t *testing.T) {
 				"knows_victorias_secret",
 			},
 		},
-		Picture: auth0.String("https://example-picture-url.jpg"),
-		Blocked: auth0.Bool(false),
+		Picture:     auth0.String("https://example-picture-url.jpg"),
+		Blocked:     auth0.Bool(false),
 		LoginsCount: auth0.Int(5),
 	}
 
