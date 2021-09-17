@@ -40,6 +40,13 @@ type Job struct {
 	// A list of fields to be included in the CSV. If omitted, a set of
 	// predefined fields will be exported.
 	Fields []map[string]interface{} `json:"fields,omitempty"`
+	// Summary of completed job results
+	Summary *struct {
+		Failed   int `json:"failed"`
+		Updated  int `json:"updated"`
+		Inserted int `json:"inserted"`
+		Total    int `json:"total"`
+	} `json:"summary,omitempty"`
 
 	// A list of users. Used when importing users in bulk.
 	Users []map[string]interface{} `json:"users,omitempty"`
