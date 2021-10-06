@@ -1,9 +1,10 @@
 package management
 
 import (
+	"testing"
+
 	"gopkg.in/auth0.v5"
 	"gopkg.in/auth0.v5/internal/testing/expect"
-	"testing"
 )
 
 func TestPrompt(t *testing.T) {
@@ -17,35 +18,73 @@ func TestPrompt(t *testing.T) {
 		}
 	})
 
-	// update to the new identifier first experience
-	err := m.Prompt.Update(&Prompt{
-		UniversalLoginExperience: "new",
-		IdentifierFirst:          auth0.Bool(true),
+	t.Run("Update to the new identifier first experience", func(t *testing.T) {
+		err := m.Prompt.Update(&Prompt{
+			UniversalLoginExperience: "new",
+			IdentifierFirst:          auth0.Bool(true),
+		})
+		if err != nil {
+			t.Error(err)
+		}
+
+		ps, err := m.Prompt.Read()
+		if err != nil {
+			t.Error(err)
+		}
+		expect.Expect(t, ps.UniversalLoginExperience, "new")
+		expect.Expect(t, ps.IdentifierFirst, auth0.Bool(true))
 	})
-	if err != nil {
-		t.Error(err)
-	}
 
-	ps, err := m.Prompt.Read()
-	if err != nil {
-		t.Error(err)
-	}
-	expect.Expect(t, ps.UniversalLoginExperience, "new")
-	expect.Expect(t, ps.IdentifierFirst, auth0.Bool(true))
+	t.Run("Update to the classic non identifier first experience", func(t *testing.T) {
+		err := m.Prompt.Update(&Prompt{
+			UniversalLoginExperience: "classic",
+			IdentifierFirst:          auth0.Bool(false),
+		})
+		if err != nil {
+			t.Error(err)
+		}
 
-	// update to the classic non identifier first experience
-	err = m.Prompt.Update(&Prompt{
-		UniversalLoginExperience: "classic",
-		IdentifierFirst:          auth0.Bool(false),
+		ps, err := m.Prompt.Read()
+		if err != nil {
+			t.Error(err)
+		}
+		expect.Expect(t, ps.UniversalLoginExperience, "classic")
+		expect.Expect(t, ps.IdentifierFirst, auth0.Bool(false))
 	})
-	if err != nil {
-		t.Error(err)
-	}
+}
 
-	ps, err = m.Prompt.Read()
-	if err != nil {
-		t.Error(err)
-	}
-	expect.Expect(t, ps.UniversalLoginExperience, "classic")
-	expect.Expect(t, ps.IdentifierFirst, auth0.Bool(false))
+func TestPromptCustomText(t *testing.T) {
+	t.Cleanup(func() {
+		prompt := "login"
+		lang := "en"
+		body := "{}"
+
+		err := m.Prompt.SetCustomText(prompt, lang, &body)
+		if err != nil {
+			t.Error(err)
+		}
+	})
+
+	t.Run("Retrieve custom text", func(t *testing.T) {
+		prompt := "login"
+		lang := "en"
+
+		texts, err := m.Prompt.CustomText(prompt, lang)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", texts)
+	})
+
+	t.Run("Set custom text", func(t *testing.T) {
+		prompt := "login"
+		lang := "en"
+		body := `{ "login": { "title": "Welcome" } }`
+
+		err := m.Prompt.SetCustomText(prompt, lang, &body)
+		if err != nil {
+			t.Error(err)
+		}
+		t.Logf("%v\n", body)
+	})
 }
