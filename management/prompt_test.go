@@ -1,6 +1,7 @@
 package management
 
 import (
+	"encoding/json"
 	"testing"
 
 	"gopkg.in/auth0.v5"
@@ -57,9 +58,14 @@ func TestPromptCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		prompt := "login"
 		lang := "en"
-		body := "{}"
 
-		err := m.Prompt.SetCustomText(prompt, lang, &body)
+		var body map[string]interface{}
+		err := json.Unmarshal([]byte("{}"), &body)
+		if err != nil {
+			t.Error(err)
+		}
+
+		err = m.Prompt.SetCustomText(prompt, lang, body)
 		if err != nil {
 			t.Error(err)
 		}
@@ -79,12 +85,17 @@ func TestPromptCustomText(t *testing.T) {
 	t.Run("Set custom text", func(t *testing.T) {
 		prompt := "login"
 		lang := "en"
-		body := `{ "login": { "title": "Welcome" } }`
 
-		err := m.Prompt.SetCustomText(prompt, lang, &body)
+		var body map[string]interface{}
+		err := json.Unmarshal([]byte(`{ "login": { "title": "Welcome" } }`), &body)
 		if err != nil {
 			t.Error(err)
 		}
-		t.Logf("%v\n", body)
+
+		err = m.Prompt.SetCustomText(prompt, lang, body)
+		if err != nil {
+			t.Error(err)
+		}
+		expect.Expect(t, body["login"].(map[string]string)["title"], "Welcome")
 	})
 }
