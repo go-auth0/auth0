@@ -68,7 +68,7 @@ func (m *PromptManager) CustomText(p string, l string, opts ...RequestOption) (t
 func (m *PromptManager) SetCustomText(p string, l string, b *string, opts ...RequestOption) (err error) {
 	r := &promptCustomText{Text: b}
 	err = m.Request("PUT", m.URI("prompts", p, "custom-text", l), r, opts...)
-	//lint:ignore SA4006 because the only purpose of b is to  be assigned to
+	//lint:ignore SA4006 because the only purpose of 'b' is to be assigned to
 	b = r.Text
 	return
 }
