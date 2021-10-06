@@ -58,14 +58,8 @@ func TestPromptCustomText(t *testing.T) {
 	t.Cleanup(func() {
 		prompt := "login"
 		lang := "en"
-
-		var body map[string]interface{}
-		err := json.Unmarshal([]byte("{}"), &body)
-		if err != nil {
-			t.Error(err)
-		}
-
-		err = m.Prompt.SetCustomText(prompt, lang, body)
+		body := make(map[string]interface{})
+		err := m.Prompt.SetCustomText(prompt, lang, body)
 		if err != nil {
 			t.Error(err)
 		}
