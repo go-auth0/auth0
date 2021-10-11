@@ -674,6 +674,7 @@ type ConnectionOptionsSAML struct {
 	Debug              *bool                              `json:"debug,omitempty"`
 	Expires            *string                            `json:"expires,omitempty"`
 	IdpInitiated       *ConnectionOptionsSAMLIdpInitiated `json:"idpinitiated,omitempty"`
+	SigningKey         *ConnectionOptionsSAMLSigningKey   `json:"signing_key,omitempty"`
 	SigningCert        *string                            `json:"signingCert,omitempty"`
 	Thumbprints        []interface{}                      `json:"thumbprints,omitempty"`
 	ProtocolBinding    *string                            `json:"protocolBinding,omitempty"`
@@ -705,6 +706,11 @@ type ConnectionOptionsSAMLIdpInitiated struct {
 
 	SetUserAttributes  *string   `json:"set_user_root_attributes,omitempty"`
 	NonPersistentAttrs *[]string `json:"non_persistent_attrs,omitempty"`
+}
+
+type ConnectionOptionsSAMLSigningKey struct {
+	Key   *string `json:"key,omitempty"`
+	Cert  *string `json:"cert,omitempty"`
 }
 
 type ConnectionOptionsGoogleApps struct {
