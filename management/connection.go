@@ -722,8 +722,8 @@ type ConnectionOptionsSAMLIdpInitiated struct {
 }
 
 type ConnectionOptionsSAMLSigningKey struct {
-	Key   *string `json:"key,omitempty"`
-	Cert  *string `json:"cert,omitempty"`
+	Key  *string `json:"key,omitempty"`
+	Cert *string `json:"cert,omitempty"`
 }
 
 type ConnectionOptionsGoogleApps struct {
