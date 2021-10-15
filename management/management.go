@@ -165,6 +165,9 @@ type Management struct {
 	// Organization manages Auth0 Organizations.
 	Organization *OrganizationManager
 
+	// Captcha manages Auth0 captcha settings
+	Captcha *CaptchaManager
+
 	url         *url.URL
 	basePath    string
 	userAgent   string
@@ -235,6 +238,7 @@ func New(domain string, options ...ManagementOption) (*Management, error) {
 	m.Anomaly = newAnomalyManager(m)
 	m.Action = newActionManager(m)
 	m.Organization = newOrganizationManager(m)
+	m.Captcha = newCaptchaManager(m)
 
 	return m, nil
 }
