@@ -90,6 +90,6 @@ func TestPromptCustomText(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		expect.Expect(t, body["login"].(map[string]string)["title"], "Welcome")
+		expect.Expect(t, body["login"].(map[string]interface{})["title"], "Welcome")
 	})
 }
