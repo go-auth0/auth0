@@ -583,6 +583,39 @@ func (b *BrandingUniversalLogin) String() string {
 	return Stringify(b)
 }
 
+// String returns a string representation of CaptchaProviderAuth0.
+func (c *CaptchaProviderAuth0) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of CaptchaProviderRecaptchaEnterprise.
+func (c *CaptchaProviderRecaptchaEnterprise) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of CaptchaProviderRecaptchaV2.
+func (c *CaptchaProviderRecaptchaV2) String() string {
+	return Stringify(c)
+}
+
+// String returns a string representation of CaptchaProviders.
+func (c *CaptchaProviders) String() string {
+	return Stringify(c)
+}
+
+// GetProviders returns the Providers field.
+func (c *CaptchaSettings) GetProviders() *CaptchaProviders {
+	if c == nil {
+		return nil
+	}
+	return c.Providers
+}
+
+// String returns a string representation of CaptchaSettings.
+func (c *CaptchaSettings) String() string {
+	return Stringify(c)
+}
+
 // GetAppType returns the AppType field if it's non-nil, zero value otherwise.
 func (c *Client) GetAppType() string {
 	if c == nil || c.AppType == nil {
