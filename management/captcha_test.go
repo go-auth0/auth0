@@ -16,9 +16,9 @@ func TestCaptcha(t *testing.T) {
 			Selected: "auth0",
 			Policy:   "off",
 			Providers: &CaptchaProviders{
-				Auth0:               &CaptchaProviderAuth0{},
-				RecaptchaV2:         &CaptchaProviderRecaptchaV2{},
-				RecaptchaEnterprise: &CaptchaProviderRecaptchaEnterprise{},
+				Auth0:               CaptchaProviderAuth0{},
+				RecaptchaV2:         CaptchaProviderRecaptchaV2{},
+				RecaptchaEnterprise: CaptchaProviderRecaptchaEnterprise{},
 			},
 		})
 	})
@@ -28,7 +28,7 @@ func TestCaptcha(t *testing.T) {
 			Selected: "recaptcha_v2",
 			Policy:   "high_risk",
 			Providers: &CaptchaProviders{
-				RecaptchaV2: &CaptchaProviderRecaptchaV2{
+				RecaptchaV2: CaptchaProviderRecaptchaV2{
 					SiteKey: "foo",
 					Secret:  "bar",
 				},

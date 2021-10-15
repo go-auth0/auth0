@@ -17,9 +17,9 @@ type CaptchaSettings struct {
 }
 
 type CaptchaProviders struct {
-	Auth0               *CaptchaProviderAuth0               `json:"auth0"`
-	RecaptchaV2         *CaptchaProviderRecaptchaV2         `json:"recaptcha_v2"`
-	RecaptchaEnterprise *CaptchaProviderRecaptchaEnterprise `json:"recaptcha_enterprise"`
+	Auth0               CaptchaProviderAuth0               `json:"auth0"`
+	RecaptchaV2         CaptchaProviderRecaptchaV2         `json:"recaptcha_v2"`
+	RecaptchaEnterprise CaptchaProviderRecaptchaEnterprise `json:"recaptcha_enterprise"`
 }
 
 type CaptchaProviderAuth0 struct{}
@@ -37,7 +37,7 @@ type CaptchaProviderRecaptchaEnterprise struct {
 
 // Get captcha settings for the auth0 tenant
 func (m *CaptchaManager) GetCaptchaSettings(opts ...RequestOption) (c *CaptchaSettings, err error) {
-	err = m.Request("GET", m.URI("anomaly", "captchas"), c, opts...)
+	err = m.Request("GET", m.URI("anomaly", "captchas"), &c, opts...)
 	return
 }
 
