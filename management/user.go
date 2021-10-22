@@ -539,3 +539,11 @@ func (m *UserManager) Organizations(id string, opts ...RequestOption) (p *Organi
 	err = m.Request("GET", m.URI("users", id, "organizations"), &p, applyListDefaults(opts))
 	return
 }
+
+// List user's log entries
+//
+// See: https://auth0.com/docs/api/management/v2#!/Users/get_logs_by_user
+func (m *UserManager) Logs(id string, opts ...RequestOption) (l []*Log, err error) {
+	err = m.Request("GET", m.URI("users", id, "logs"), &l, opts...)
+	return
+}
