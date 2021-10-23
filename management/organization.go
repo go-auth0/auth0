@@ -13,16 +13,17 @@ type Organization struct {
 	// Branding defines how to style the login pages
 	Branding *OrganizationBranding `json:"branding,omitempty"`
 
-	// Metadata associated with the organization, in the form of an object with string values (max 255 chars). Maximum of 10 metadata properties allowed.
+	// Metadata associated with the organization, in the form of an object with
+	// string values (max 255 chars). Maximum of 10 metadata properties allowed.
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
 type OrganizationBranding struct {
 	// URL of logo to display on login page
-	LogoUrl *string `json:"logo_url,omitempty"`
+	LogoURL *string `json:"logo_url,omitempty"`
 
 	// Color scheme used to customize the login pages
-	Colors map[string]string `json:"colors,omitempty"`
+	Colors map[string]interface{} `json:"colors,omitempty"`
 }
 
 type OrganizationMember struct {
@@ -73,7 +74,7 @@ type OrganizationInvitation struct {
 	Invitee *OrganizationInvitationInvitee `json:"invitee,omitempty"`
 
 	// The invitation url to be send to the invitee.
-	InvitationUrl *string `json:"invitation_url,omitempty"`
+	InvitationURL *string `json:"invitation_url,omitempty"`
 
 	// The ISO 8601 formatted timestamp representing the creation time of the invitation.
 	CreatedAt *string `json:"created_at,omitempty"`
@@ -163,7 +164,6 @@ func (m *OrganizationManager) List(opts ...RequestOption) (o *OrganizationList, 
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/post_organizations
 func (m *OrganizationManager) Create(o *Organization, opts ...RequestOption) (err error) {
-	o.ID = nil
 	err = m.Request("POST", m.URI("organizations"), &o, opts...)
 	return
 }
@@ -187,12 +187,7 @@ func (m *OrganizationManager) Delete(id string, opts ...RequestOption) (err erro
 // Modify an organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/patch_organizations_by_id
-func (m *OrganizationManager) Update(o *Organization, opts ...RequestOption) (err error) {
-	id := o.GetID()
-	if o != nil {
-		o.ID = nil
-		o.Name = nil
-	}
+func (m *OrganizationManager) Update(id string, o *Organization, opts ...RequestOption) (err error) {
 	err = m.Request("PATCH", m.URI("organizations", id), &o, opts...)
 	return
 }
@@ -240,12 +235,7 @@ func (m *OrganizationManager) DeleteConnection(id string, connectionID string, o
 // Modify an enabled_connection belonging to an Organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/patch_enabled_connections_by_connectionId
-func (m *OrganizationManager) UpdateConnection(id string, c *OrganizationConnection, opts ...RequestOption) (err error) {
-	connectionID := c.GetConnectionID()
-	if c != nil {
-		c.ConnectionID = nil
-		c.Connection = nil
-	}
+func (m *OrganizationManager) UpdateConnection(id string, connectionID string, c *OrganizationConnection, opts ...RequestOption) (err error) {
 	err = m.Request("PATCH", m.URI("organizations", id, "enabled_connections", connectionID), &c, opts...)
 	return
 }
@@ -261,10 +251,8 @@ func (m *OrganizationManager) Invitations(id string, opts ...RequestOption) (i *
 // Create invitations to organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/post_invitations
-func (m *OrganizationManager) CreateInvitation(i *OrganizationInvitation, opts ...RequestOption) (err error) {
-	organizationID := i.GetOrganizationID()
-	i.OrganizationID = nil
-	err = m.Request("POST", m.URI("organizations", organizationID, "invitations"), &i, opts...)
+func (m *OrganizationManager) CreateInvitation(id string, i *OrganizationInvitation, opts ...RequestOption) (err error) {
+	err = m.Request("POST", m.URI("organizations", id, "invitations"), &i, opts...)
 	return
 }
 
@@ -321,33 +309,33 @@ func (m *OrganizationManager) DeleteMember(id string, memberIDs []string, opts .
 // Get the roles assigned to an organization member
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/get_organization_member_roles
-func (m *OrganizationManager) MemberRoles(id string, userID string, opts ...RequestOption) (r *OrganizationMemberRoleList, err error) {
-	err = m.Request("GET", m.URI("organizations", id, "members", userID, "roles"), &r, applyListDefaults(opts))
+func (m *OrganizationManager) MemberRoles(id string, memberID string, opts ...RequestOption) (r *OrganizationMemberRoleList, err error) {
+	err = m.Request("GET", m.URI("organizations", id, "members", memberID, "roles"), &r, applyListDefaults(opts))
 	return
 }
 
 // Assign one or more roles to a given user that will be applied in the context of the provided organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/post_organization_member_roles
-func (m *OrganizationManager) AssignMemberRoles(id string, userID string, roles []string, opts ...RequestOption) (err error) {
+func (m *OrganizationManager) AssignMemberRoles(id string, memberID string, roles []string, opts ...RequestOption) (err error) {
 	body := struct {
 		Roles []string `json:"roles"`
 	}{
 		Roles: roles,
 	}
-	err = m.Request("POST", m.URI("organizations", id, "members", userID, "roles"), &body, opts...)
+	err = m.Request("POST", m.URI("organizations", id, "members", memberID, "roles"), &body, opts...)
 	return
 }
 
 // Remove one or more roles from a given user in the context of the provided organization
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Organizations/delete_organization_member_roles
-func (m *OrganizationManager) DeleteMemberRoles(id string, userID string, roles []string, opts ...RequestOption) (err error) {
+func (m *OrganizationManager) DeleteMemberRoles(id string, memberID string, roles []string, opts ...RequestOption) (err error) {
 	body := struct {
 		Roles []string `json:"roles"`
 	}{
 		Roles: roles,
 	}
-	err = m.Request("DELETE", m.URI("organizations", id, "members", userID, "roles"), &body, opts...)
+	err = m.Request("DELETE", m.URI("organizations", id, "members", memberID, "roles"), &body, opts...)
 	return
 }
