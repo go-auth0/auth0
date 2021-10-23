@@ -4595,12 +4595,12 @@ func (o *Organization) String() string {
 	return Stringify(o)
 }
 
-// GetLogoUrl returns the LogoUrl field if it's non-nil, zero value otherwise.
-func (o *OrganizationBranding) GetLogoUrl() string {
-	if o == nil || o.LogoUrl == nil {
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (o *OrganizationBranding) GetLogoURL() string {
+	if o == nil || o.LogoURL == nil {
 		return ""
 	}
-	return *o.LogoUrl
+	return *o.LogoURL
 }
 
 // String returns a string representation of OrganizationBranding.
@@ -4703,12 +4703,12 @@ func (o *OrganizationInvitation) GetID() string {
 	return *o.ID
 }
 
-// GetInvitationUrl returns the InvitationUrl field if it's non-nil, zero value otherwise.
-func (o *OrganizationInvitation) GetInvitationUrl() string {
-	if o == nil || o.InvitationUrl == nil {
+// GetInvitationURL returns the InvitationURL field if it's non-nil, zero value otherwise.
+func (o *OrganizationInvitation) GetInvitationURL() string {
+	if o == nil || o.InvitationURL == nil {
 		return ""
 	}
-	return *o.InvitationUrl
+	return *o.InvitationURL
 }
 
 // GetInvitee returns the Invitee field.

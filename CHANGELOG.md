@@ -1,3 +1,14 @@
+# v5.20.0
+
+* `management.OrganizationBranding`: `LogoUrl` field renamed to `LogoURL`
+* `management.OrganizationBranding`: `Colors` type changed to `map[string]interface{}`
+* `management.OrganizationInvitation`: `InvitationUrl` field renamed to `InvitationURL`
+* `management.OrganizationManager`: `Create` method doesn't clear ID
+* `management.OrganizationManager`: `Update` method accepts an `id` parameter as first argument and doesn't clear `ID`, `Name`
+* `management.OrganizationManager`: `UpdateConnection` method accepts an `connectionID` parameter and doesn't clear `ConnectionID`, `Connection`
+* `management.OrganizationManager`: `CreateInvitation` method accepts an `id` parameter as first argument and doesn't clear `ConnectionID`
+
+OrganizationInvitation.InvitationURL
 # v5.19.2
 
 * `management.RoleManager`: `Delete` would result in an `json.Unmarshal(nil)` error ([#232](https://github.com/go-auth0/auth0/pull/232))
