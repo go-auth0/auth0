@@ -1,3 +1,8 @@
+# v5.21.0
+
+* `management.ActionManager`: Update methods to adhere with conventions ([#247](https://github.com/go-auth0/auth0/pull/247))
+* `management.Action`: Nested structs use pointers.
+
 # v5.20.0
 
 * `management.OrganizationBranding`: `LogoUrl` field renamed to `LogoURL` ([#246](https://github.com/go-auth0/auth0/pull/246))
