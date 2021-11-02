@@ -37,7 +37,10 @@ type OrganizationConnection struct {
 	// ID of the connection.
 	ConnectionID *string `json:"connection_id,omitempty"`
 
-	// When true, all users that log in with this connection will be automatically granted membership in the organization. When false, users must be granted membership in the organization before logging in with this connection.
+	// When true, all users that log in with this connection will be
+	// automatically granted membership in the organization. When false, users
+	// must be granted membership in the organization before logging in with
+	// this connection.
 	AssignMembershipOnLogin *bool `json:"assign_membership_on_login,omitempty"`
 
 	// Connection details
@@ -76,26 +79,32 @@ type OrganizationInvitation struct {
 	// The invitation url to be send to the invitee.
 	InvitationURL *string `json:"invitation_url,omitempty"`
 
-	// The ISO 8601 formatted timestamp representing the creation time of the invitation.
+	// The ISO 8601 formatted timestamp representing the creation time of the
+	// invitation.
 	CreatedAt *string `json:"created_at,omitempty"`
 
-	// Number of seconds for which the invitation is valid before expiration. If unspecified or set to 0, this
-	// value defaults to 604800 seconds (7 days). Max value: 2592000 seconds (30 days).
+	// Number of seconds for which the invitation is valid before expiration. If
+	// unspecified or set to 0, this value defaults to 604800 seconds (7 days).
+	// Max value: 2592000 seconds (30 days).
 	TTLSec *int `json:"ttl_sec,omitempty"`
 
-	// The ISO 8601 formatted timestamp representing the expiration time of the invitation.
+	// The ISO 8601 formatted timestamp representing the expiration time of the
+	// invitation.
 	ExpiresAt *string `json:"expires_at,omitempty"`
 
-	// Auth0 client ID. Used to resolve the application's login initiation endpoint.
+	// Auth0 client ID. Used to resolve the application's login initiation
+	// endpoint.
 	ClientID *string `json:"client_id,omitempty"`
 
 	// The id of the connection to force invitee to authenticate with.
 	ConnectionID *string `json:"connection_id,omitempty"`
 
-	// Data related to the user that does affect the application's core functionality.
+	// Data related to the user that does affect the application's core
+	// functionality.
 	AppMetadata map[string]interface{} `json:"app_metadata,omitempty"`
 
-	// Data related to the user that does not affect the application's core functionality.
+	// Data related to the user that does not affect the application's core
+	// functionality.
 	UserMetadata map[string]interface{} `json:"user_metadata,omitempty"`
 
 	// List of roles IDs to associated with the user.
@@ -104,7 +113,8 @@ type OrganizationInvitation struct {
 	// The id of the invitation ticket
 	TicketID *string `json:"ticket_id,omitempty"`
 
-	// Whether the user will receive an invitation email (true) or no email (false), true by default
+	// Whether the user will receive an invitation email (true) or no email
+	// (false), true by default
 	SendInvitationEmail *bool `json:"send_invitation_email,omitempty"`
 }
 
