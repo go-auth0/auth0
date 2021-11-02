@@ -48,20 +48,33 @@ const (
 )
 
 type Action struct {
-	ID   *string `json:"id,omitempty"`
+	// ID of the action
+	ID *string `json:"id,omitempty"`
+	// The name of an action
 	Name *string `json:"name"`
-	Code *string `json:"code,omitempty"` // nil in embedded Action in ActionVersion
-
-	SupportedTriggers []ActionTrigger    `json:"supported_triggers"`
-	Dependencies      []ActionDependency `json:"dependencies,omitempty"`
-	Secrets           []ActionSecret     `json:"secrets,omitempty"`
-
-	DeployedVersion    *ActionVersion `json:"deployed_version,omitempty"`
-	Status             *string        `json:"status,omitempty"`
-	AllChangesDeployed bool           `json:"all_changes_deployed,omitempty"`
-
-	BuiltAt   *time.Time `json:"built_at,omitempty"`
+	// List of triggers that this action supports. At this time, an action can
+	// only target a single trigger at a time.
+	SupportedTriggers []*ActionTrigger `json:"supported_triggers"`
+	// The source code of the action.
+	Code *string `json:"code,omitempty"`
+	// List of third party npm modules, and their versions, that this action
+	// depends on.
+	Dependencies []*ActionDependency `json:"dependencies,omitempty"`
+	// The Node runtime. For example `node16`, defaults to `node12`
+	Runtime *string `json:"runtime,omitempty"`
+	// List of secrets that are included in an action or a version of an action.
+	Secrets []*ActionSecret `json:"secrets,omitempty"`
+	// Version of the action that is currently deployed.
+	DeployedVersion *ActionVersion `json:"deployed_version,omitempty"`
+	// The build status of this action.
+	Status *string `json:"status,omitempty"`
+	// True if all of an Action's contents have been deployed.
+	AllChangesDeployed bool `json:"all_changes_deployed,omitempty"`
+	// The time when this action was built successfully.
+	BuiltAt *time.Time `json:"built_at,omitempty"`
+	// The time when this action was created.
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// The time when this action was updated.
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
@@ -71,15 +84,15 @@ type ActionList struct {
 }
 
 type ActionVersion struct {
-	ID           *string            `json:"id,omitempty"`
-	Code         *string            `json:"code"`
-	Dependencies []ActionDependency `json:"dependencies,omitempty"`
-	Deployed     bool               `json:"deployed"`
-	Status       *string            `json:"status,omitempty"`
-	Number       int                `json:"number,omitempty"`
+	ID           *string             `json:"id,omitempty"`
+	Code         *string             `json:"code"`
+	Dependencies []*ActionDependency `json:"dependencies,omitempty"`
+	Deployed     bool                `json:"deployed"`
+	Status       *string             `json:"status,omitempty"`
+	Number       int                 `json:"number,omitempty"`
 
-	Errors []ActionVersionError `json:"errors,omitempty"`
-	Action *Action              `json:"action,omitempty"`
+	Errors []*ActionVersionError `json:"errors,omitempty"`
+	Action *Action               `json:"action,omitempty"`
 
 	BuiltAt   *time.Time `json:"built_at,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
@@ -108,7 +121,7 @@ type ActionBinding struct {
 
 	Ref     *ActionBindingReference `json:"ref,omitempty"`
 	Action  *Action                 `json:"action,omitempty"`
-	Secrets []ActionSecret          `json:"secrets,omitempty"`
+	Secrets []*ActionSecret         `json:"secrets,omitempty"`
 
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
@@ -125,13 +138,13 @@ type actionBindingsPerTrigger struct {
 
 type ActionTestPayload map[string]interface{}
 
-type ActionTestRequest struct {
+type actionTestRequest struct {
 	Payload *ActionTestPayload `json:"payload"`
 }
 
 type ActionExecutionResult struct {
-	ActionName *string            `json:"action_name,omitempty"`
-	Error      *map[string]string `json:"error,omitempty"`
+	ActionName *string                `json:"action_name,omitempty"`
+	Error      map[string]interface{} `json:"error,omitempty"`
 
 	StartedAt *time.Time `json:"started_at,omitempty"`
 	EndedAt   *time.Time `json:"ended_at,omitempty"`
@@ -164,12 +177,19 @@ func applyActionsListDefaults(options []RequestOption) RequestOption {
 	})
 }
 
-// ListTriggers available.
+// Triggers lists the available triggers.
 //
 // https://auth0.com/docs/api/management/v2/#!/Actions/get_triggers
-func (m *ActionManager) ListTriggers(opts ...RequestOption) (l *ActionTriggerList, err error) {
+func (m *ActionManager) Triggers(opts ...RequestOption) (l *ActionTriggerList, err error) {
 	err = m.Request("GET", m.URI("actions", "triggers"), &l, opts...)
 	return
+}
+
+// ListTriggers lists the available triggers.
+//
+// Deprecated: use Triggers() instead
+func (m *ActionManager) ListTriggers(opts ...RequestOption) (l *ActionTriggerList, err error) {
+	return m.Triggers(opts...)
 }
 
 // Create a new action.
@@ -209,23 +229,37 @@ func (m *ActionManager) List(opts ...RequestOption) (l *ActionList, err error) {
 	return
 }
 
-// ReadVersion of an action.
+// Version retrieves the version of an action.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Actions/get_action_version
-func (m *ActionManager) ReadVersion(id string, versionId string, opts ...RequestOption) (v *ActionVersion, err error) {
+func (m *ActionManager) Version(id string, versionId string, opts ...RequestOption) (v *ActionVersion, err error) {
 	err = m.Request("GET", m.URI("actions", "actions", id, "versions", versionId), &v, opts...)
+	return
+}
+
+// ReadVersion retrieves the version of an action.
+//
+// Deprecated: use Version() instead.
+func (m *ActionManager) ReadVersion(id string, versionId string, opts ...RequestOption) (v *ActionVersion, err error) {
+	return m.Version(id, versionId, opts...)
+}
+
+// Versions lists all versions of an action.
+//
+// See: https://auth0.com/docs/api/management/v2/#!/Actions/get_action_versions
+func (m *ActionManager) Versions(id string, opts ...RequestOption) (c *ActionVersionList, err error) {
+	err = m.Request("GET", m.URI("actions", "actions", id, "versions"), &c, applyActionsListDefaults(opts))
 	return
 }
 
 // ListVersions of an action.
 //
-// See: https://auth0.com/docs/api/management/v2/#!/Actions/get_action_versions
+// Deprecated: use Versions() instead.
 func (m *ActionManager) ListVersions(id string, opts ...RequestOption) (c *ActionVersionList, err error) {
-	err = m.Request("GET", m.URI("actions", "actions", id, "versions"), &c, applyActionsListDefaults(opts))
-	return
+	return m.Versions(id, opts...)
 }
 
-// UpdateBindings of a trigger
+// UpdateBindings of a trigger.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Actions/patch_bindings
 func (m *ActionManager) UpdateBindings(triggerID string, b []*ActionBinding, opts ...RequestOption) error {
@@ -235,12 +269,19 @@ func (m *ActionManager) UpdateBindings(triggerID string, b []*ActionBinding, opt
 	return m.Request("PATCH", m.URI("actions", "triggers", triggerID, "bindings"), &bl, opts...)
 }
 
-// ListBindings of a trigger
+// Bindings lists the bindings of a trigger.
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Actions/get_bindings
-func (m *ActionManager) ListBindings(triggerID string, opts ...RequestOption) (bl *ActionBindingList, err error) {
+func (m *ActionManager) Bindings(triggerID string, opts ...RequestOption) (bl *ActionBindingList, err error) {
 	err = m.Request("GET", m.URI("actions", "triggers", triggerID, "bindings"), &bl, applyActionsListDefaults(opts))
 	return
+}
+
+// ListBindings lists the bindings of a trigger.
+//
+// Deprecated: use Bindings() instead.
+func (m *ActionManager) ListBindings(triggerID string, opts ...RequestOption) (bl *ActionBindingList, err error) {
+	return m.Bindings(triggerID, opts...)
 }
 
 // Deploy an action
@@ -263,17 +304,24 @@ func (m *ActionManager) DeployVersion(id string, versionId string, opts ...Reque
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Actions/post_test_action
 func (m *ActionManager) Test(id string, payload *ActionTestPayload, opts ...RequestOption) (err error) {
-	r := &ActionTestRequest{
+	r := &actionTestRequest{
 		Payload: payload,
 	}
 	err = m.Request("POST", m.URI("actions", "actions", id, "test"), &r, opts...)
 	return
 }
 
-// ReadExecution of an action
+// Execution retrieves the details of an action execution
 //
 // See: https://auth0.com/docs/api/management/v2/#!/Actions/get_execution
-func (m *ActionManager) ReadExecution(executionId string, opts ...RequestOption) (v *ActionExecution, err error) {
+func (m *ActionManager) Execution(executionId string, opts ...RequestOption) (v *ActionExecution, err error) {
 	err = m.Request("GET", m.URI("actions", "executions", executionId), &v, opts...)
 	return
+}
+
+// ReadExecution retrieves the details of an action execution
+//
+// Deprecated: use Execution() instead
+func (m *ActionManager) ReadExecution(executionId string, opts ...RequestOption) (v *ActionExecution, err error) {
+	return m.Execution(executionId, opts...)
 }

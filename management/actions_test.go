@@ -2,9 +2,10 @@ package management
 
 import (
 	"errors"
-	"gopkg.in/auth0.v5"
 	"testing"
 	"time"
+
+	"gopkg.in/auth0.v5"
 )
 
 func ensureActionBuilt(a *Action) (err error) {
@@ -32,14 +33,24 @@ func TestActions(t *testing.T) {
 	r := &Action{
 		Name: auth0.String("test-action"),
 		Code: auth0.String("exports.onExecutePostLogin = async (event, api) =\u003e {}"),
-		SupportedTriggers: []ActionTrigger{
-			{ID: auth0.String(ActionTriggerPostLogin), Version: auth0.String("v2")},
+		SupportedTriggers: []*ActionTrigger{
+			{
+				ID:      auth0.String(ActionTriggerPostLogin),
+				Version: auth0.String("v2"),
+			},
 		},
-		Dependencies: []ActionDependency{
-			{Name: auth0.String("lodash"), Version: auth0.String("4.0.0"), RegistryURL: auth0.String("https://www.npmjs.com/package/lodash")},
+		Dependencies: []*ActionDependency{
+			{
+				Name:        auth0.String("lodash"),
+				Version:     auth0.String("4.0.0"),
+				RegistryURL: auth0.String("https://www.npmjs.com/package/lodash"),
+			},
 		},
-		Secrets: []ActionSecret{
-			{Name: auth0.String("mySecretName"), Value: auth0.String("mySecretValue")},
+		Secrets: []*ActionSecret{
+			{
+				Name:  auth0.String("mySecretName"),
+				Value: auth0.String("mySecretValue"),
+			},
 		},
 	}
 
@@ -47,8 +58,8 @@ func TestActions(t *testing.T) {
 	var v *ActionVersion
 	var vl *ActionVersionList
 
-	t.Run("ListTriggers", func(t *testing.T) {
-		l, err := m.Action.ListTriggers()
+	t.Run("Triggers", func(t *testing.T) {
+		l, err := m.Action.Triggers()
 		if err != nil {
 			t.Error(err)
 		}
@@ -119,16 +130,16 @@ func TestActions(t *testing.T) {
 		t.Logf("%v\n", v)
 	})
 
-	t.Run("ReadVersion", func(t *testing.T) {
-		v, err := m.Action.ReadVersion(r.GetID(), v.GetID())
+	t.Run("Version", func(t *testing.T) {
+		v, err := m.Action.Version(r.GetID(), v.GetID())
 		if err != nil {
 			t.Error(err)
 		}
 		t.Logf("%v\n", v)
 	})
 
-	t.Run("ListVersions", func(t *testing.T) {
-		vl, err = m.Action.ListVersions(r.GetID())
+	t.Run("Versions", func(t *testing.T) {
+		vl, err = m.Action.Versions(r.GetID())
 		if err != nil {
 			t.Error(err)
 		}
@@ -160,8 +171,8 @@ func TestActions(t *testing.T) {
 		t.Logf("%v\n", b)
 	})
 
-	t.Run("ListBindings", func(t *testing.T) {
-		bl, err := m.Action.ListBindings(ActionTriggerPostLogin)
+	t.Run("Bindings", func(t *testing.T) {
+		bl, err := m.Action.Bindings(ActionTriggerPostLogin)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -185,8 +196,8 @@ func TestActions(t *testing.T) {
 		t.Logf("%v\n", p)
 	})
 
-	t.Run("ReadExecution", func(t *testing.T) {
-		_, err := m.Action.ReadExecution("M9IqRp9wQLaYNrSwz6YPTTIwMjEwNDA0")
+	t.Run("Execution", func(t *testing.T) {
+		_, err := m.Action.Execution("M9IqRp9wQLaYNrSwz6YPTTIwMjEwNDA0")
 		if err != nil {
 			mgmtError, _ := err.(*managementError)
 			if mgmtError.StatusCode != 404 {
