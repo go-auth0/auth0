@@ -379,7 +379,7 @@ func (m *UserManager) Roles(id string, opts ...RequestOption) (r *RoleList, err 
 	return
 }
 
-// AssignRoles assignes roles to a user.
+// AssignRoles assigns roles to a user.
 //
 // See: https://auth0.com/docs/api/management/v2#!/Users/post_user_roles
 func (m *UserManager) AssignRoles(id string, roles []*Role, opts ...RequestOption) error {

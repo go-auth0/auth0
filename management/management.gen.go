@@ -54,6 +54,14 @@ func (a *Action) GetName() string {
 	return *a.Name
 }
 
+// GetRuntime returns the Runtime field if it's non-nil, zero value otherwise.
+func (a *Action) GetRuntime() string {
+	if a == nil || a.Runtime == nil {
+		return ""
+	}
+	return *a.Runtime
+}
+
 // GetStatus returns the Status field if it's non-nil, zero value otherwise.
 func (a *Action) GetStatus() string {
 	if a == nil || a.Status == nil {
@@ -252,14 +260,6 @@ func (a *ActionExecutionResult) GetEndedAt() time.Time {
 	return *a.EndedAt
 }
 
-// GetError returns the Error field if it's non-nil, zero value otherwise.
-func (a *ActionExecutionResult) GetError() map[string]string {
-	if a == nil || a.Error == nil {
-		return map[string]string{}
-	}
-	return *a.Error
-}
-
 // GetStartedAt returns the StartedAt field if it's non-nil, zero value otherwise.
 func (a *ActionExecutionResult) GetStartedAt() time.Time {
 	if a == nil || a.StartedAt == nil {
@@ -304,19 +304,6 @@ func (a *ActionSecret) GetValue() string {
 
 // String returns a string representation of ActionSecret.
 func (a *ActionSecret) String() string {
-	return Stringify(a)
-}
-
-// GetPayload returns the Payload field.
-func (a *ActionTestRequest) GetPayload() *ActionTestPayload {
-	if a == nil {
-		return nil
-	}
-	return a.Payload
-}
-
-// String returns a string representation of ActionTestRequest.
-func (a *ActionTestRequest) String() string {
 	return Stringify(a)
 }
 
@@ -4595,12 +4582,12 @@ func (o *Organization) String() string {
 	return Stringify(o)
 }
 
-// GetLogoUrl returns the LogoUrl field if it's non-nil, zero value otherwise.
-func (o *OrganizationBranding) GetLogoUrl() string {
-	if o == nil || o.LogoUrl == nil {
+// GetLogoURL returns the LogoURL field if it's non-nil, zero value otherwise.
+func (o *OrganizationBranding) GetLogoURL() string {
+	if o == nil || o.LogoURL == nil {
 		return ""
 	}
-	return *o.LogoUrl
+	return *o.LogoURL
 }
 
 // String returns a string representation of OrganizationBranding.
@@ -4703,12 +4690,12 @@ func (o *OrganizationInvitation) GetID() string {
 	return *o.ID
 }
 
-// GetInvitationUrl returns the InvitationUrl field if it's non-nil, zero value otherwise.
-func (o *OrganizationInvitation) GetInvitationUrl() string {
-	if o == nil || o.InvitationUrl == nil {
+// GetInvitationURL returns the InvitationURL field if it's non-nil, zero value otherwise.
+func (o *OrganizationInvitation) GetInvitationURL() string {
+	if o == nil || o.InvitationURL == nil {
 		return ""
 	}
-	return *o.InvitationUrl
+	return *o.InvitationURL
 }
 
 // GetInvitee returns the Invitee field.

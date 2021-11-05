@@ -1,3 +1,19 @@
+# v5.21.0
+
+* `management.ActionManager`: Update methods to adhere with conventions ([#247](https://github.com/go-auth0/auth0/pull/247))
+* `management.Action`: Nested structs use pointers.
+
+# v5.20.0
+
+* `management.OrganizationBranding`: `LogoUrl` field renamed to `LogoURL` ([#246](https://github.com/go-auth0/auth0/pull/246))
+* `management.OrganizationBranding`: `Colors` type changed to `map[string]interface{}` 
+* `management.OrganizationInvitation`: `InvitationUrl` field renamed to `InvitationURL`
+* `management.OrganizationManager`: `Create` method doesn't clear ID
+* `management.OrganizationManager`: `Update` method accepts an `id` parameter as first argument and doesn't clear `ID`, `Name`
+* `management.OrganizationManager`: `UpdateConnection` method accepts an `connectionID` parameter and doesn't clear `ConnectionID`, `Connection`
+* `management.OrganizationManager`: `CreateInvitation` method accepts an `id` parameter as first argument and doesn't clear `ConnectionID`
+
+OrganizationInvitation.InvitationURL
 # v5.19.2
 
 * `management.RoleManager`: `Delete` would result in an `json.Unmarshal(nil)` error ([#232](https://github.com/go-auth0/auth0/pull/232))
