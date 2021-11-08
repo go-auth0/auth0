@@ -24,6 +24,7 @@ const (
 	ConnectionStrategyOIDC                = "oidc"
 	ConnectionStrategyOAuth2              = "oauth2"
 	ConnectionStrategyAD                  = "ad"
+	ConnectionStrategyADFS                = "adfs"
 	ConnectionStrategyAzureAD             = "waad"
 	ConnectionStrategySAML                = "samlp"
 	ConnectionStrategyGoogleApps          = "google-apps"
