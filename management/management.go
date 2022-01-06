@@ -28,7 +28,7 @@ func WithDebug(d bool) ManagementOption {
 	}
 }
 
-// WitContext configures the management client to use the provided context
+// WithContext configures the management client to use the provided context
 // instead of the provided one.
 func WithContext(ctx context.Context) ManagementOption {
 	return func(m *Management) {
@@ -63,7 +63,7 @@ func WithStaticToken(token string) ManagementOption {
 // WithInsecure configures management to not use an authentication token and
 // use HTTP instead of HTTPS.
 //
-// This options is available for testing purposes and should not be used in
+// This option is available for testing purposes and should not be used in
 // production.
 func WithInsecure() ManagementOption {
 	return func(m *Management) {
@@ -179,7 +179,7 @@ type Management struct {
 func New(domain string, options ...ManagementOption) (*Management, error) {
 
 	// Ignore the scheme if it was defined in the domain variable. Then prefix
-	// with https as its the only scheme supported by the Auth0 API.
+	// with https as it's the only scheme supported by the Auth0 API.
 	if i := strings.Index(domain, "//"); i != -1 {
 		domain = domain[i+2:]
 	}
