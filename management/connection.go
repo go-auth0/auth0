@@ -737,7 +737,7 @@ type ConnectionOptionsGoogleApps struct {
 	BasicProfile    *bool `json:"basic_profile,omitempty" scope:"basic_profile"`
 	ExtendedProfile *bool `json:"ext_profile,omitempty" scope:"ext_profile"`
 	Groups          *bool `json:"ext_groups,omitempty" scope:"ext_groups"`
-	Admin           *bool `json:"ext_admin,omitempty" scope:"ext_admin"`
+	Admin           *bool `json:"ext_is_admin,omitempty" scope:"ext_is_admin"`
 	IsSuspended     *bool `json:"ext_is_suspended,omitempty" scope:"ext_is_suspended"`
 	AgreedTerms     *bool `json:"ext_agreed_terms,omitempty" scope:"ext_agreed_terms"`
 

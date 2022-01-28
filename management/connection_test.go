@@ -233,6 +233,7 @@ func TestConnectionOptions(t *testing.T) {
 				BasicProfile:    auth0.Bool(true),
 				ExtendedProfile: auth0.Bool(true),
 				Groups:          auth0.Bool(true),
+				Admin:           auth0.Bool(true),
 			},
 		}
 
@@ -257,8 +258,8 @@ func TestConnectionOptions(t *testing.T) {
 		expect.Expect(t, o.GetBasicProfile(), true)
 		expect.Expect(t, o.GetExtendedProfile(), true)
 		expect.Expect(t, o.GetGroups(), true)
-		expect.Expect(t, o.GetAdmin(), false)
-		expect.Expect(t, o.Scopes(), []string{"basic_profile", "ext_profile", "ext_groups"})
+		expect.Expect(t, o.GetAdmin(), true)
+		expect.Expect(t, o.Scopes(), []string{"basic_profile", "ext_profile", "ext_groups", "ext_is_admin"})
 
 		o.NonPersistentAttrs = &[]string{"gender", "ethnicity", "favorite_color"}
 		err = m.Connection.Update(g.GetID(), &Connection{
