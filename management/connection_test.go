@@ -465,7 +465,7 @@ func TestConnectionOptions(t *testing.T) {
 					Length:   auth0.Int(5),
 				},
 				BruteForceProtection: auth0.Bool(true),
-				DisableSignup:        auth0.Bool(false),
+				DisableSignup:        auth0.Bool(true),
 				Name:                 auth0.String("Test-Connection-Custom-SMS"),
 				Provider:             auth0.String("sms_gateway"),
 				GatewayUrl:           auth0.String("https://test.com/sms-gateway"),
