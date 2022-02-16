@@ -1,3 +1,9 @@
+# THIS REPOSITORY HAS MOVED
+
+This repository has moved into the [Auth0](https://github.com/auth0) organization where it will be maintained at
+[github.com/auth0/go-auth0](https://github.com/auth0/go-auth0).
+
+
 # Auth0 Go SDK
 
 [![Go Reference](https://pkg.go.dev/badge/gopkg.in/auth0.v5.svg)](https://pkg.go.dev/gopkg.in/auth0.v5)
