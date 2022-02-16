@@ -2,6 +2,7 @@ package management
 
 import (
 	"encoding/json"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -221,7 +222,7 @@ type ConnectionOptionsGoogleOAuth2 struct {
 	ClientID     *string `json:"client_id,omitempty"`
 	ClientSecret *string `json:"client_secret,omitempty"`
 
-	AllowedAudiences []interface{} `json:"allowed_audiences,omitempty"`
+	AllowedAudiences []interface{} `json:"-"`
 
 	Email                  *bool         `json:"email,omitempty" scope:"email"`
 	Profile                *bool         `json:"profile,omitempty" scope:"profile"`
@@ -256,6 +257,52 @@ type ConnectionOptionsGoogleOAuth2 struct {
 	SetUserAttributes      *string       `json:"set_user_root_attributes,omitempty"`
 	NonPersistentAttrs     *[]string     `json:"non_persistent_attrs,omitempty"`
 	Scope                  []interface{} `json:"scope,omitempty"`
+}
+
+func (c *ConnectionOptionsGoogleOAuth2) MarshalJSON() ([]byte, error) {
+
+	type alias ConnectionOptionsGoogleOAuth2
+	type aliasWrap struct {
+		*alias
+		RawAllowedAudiences interface{} `json:"allowed_audiences,omitempty"`
+	}
+
+	cc := &aliasWrap{(*alias)(c), nil}
+
+	if c.AllowedAudiences != nil {
+		cc.RawAllowedAudiences = c.AllowedAudiences
+	}
+
+	return json.Marshal(cc)
+}
+
+func (c *ConnectionOptionsGoogleOAuth2) UnmarshalJSON(b []byte) error {
+
+	type alias ConnectionOptionsGoogleOAuth2
+	type aliasWrap struct {
+		*alias
+		RawAllowedAudiences interface{} `json:"allowed_audiences,omitempty"`
+	}
+
+	cc := &aliasWrap{(*alias)(c), nil}
+
+	err := json.Unmarshal(b, cc)
+	if err != nil {
+		return err
+	}
+
+	if cc.RawAllowedAudiences != nil {
+		switch v := cc.RawAllowedAudiences.(type) {
+		case []interface{}:
+			c.AllowedAudiences = v
+		case string:
+			c.AllowedAudiences = []interface{}{v}
+		default:
+			return fmt.Errorf("nexpected value for the `allowed_audiences` field")
+		}
+	}
+
+	return nil
 }
 
 func (c *ConnectionOptionsGoogleOAuth2) Scopes() []string {
